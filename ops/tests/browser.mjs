@@ -20,11 +20,11 @@ try{
  await cdp('Runtime.enable');await cdp('Page.enable');
  await cdp('Emulation.setDeviceMetricsOverride',{width:820,height:1180,deviceScaleFactor:1,mobile:true});
  await cdp('Page.navigate',{url:'http://127.0.0.1:5173'});
- for(let i=0;i<50;i++){if(await run("!!document.querySelector('[data-action=start]')"))break;await sleep(100);}
+ for(let i=0;i<50;i++){if(await run("!!document.querySelector('[data-scene=start]')"))break;await sleep(100);}
  const click=s=>run(`document.querySelector(${JSON.stringify(s)}).click()`);
  assert.match(await run('document.title'),/Atelier/);
  assert.equal(await run('document.documentElement.scrollWidth<=innerWidth'),true);
- await click('[data-action=start]');await click('[data-choice="1"]');
+ await click('[data-scene=start]');await click('[data-choice="1"]');
  assert.match(await run("document.querySelector('.feedback').textContent"),/apprend/);
  await click('[data-action=next]');await click('[data-action=help]');
  assert.match(await run("document.querySelector('.tutor').textContent"),/tour d’essayer/);
@@ -36,18 +36,18 @@ try{
  assert.deepEqual(saved.profiles[0].history.map(h=>h.result),['incorrect','help','correct']);
  assert.equal(saved.profiles[1].history.length,0);
  await run("document.querySelector('#profile').value='p2';document.querySelector('#profile').dispatchEvent(new Event('change'))");
- assert.match(await run('document.querySelector("h1").textContent'),/Lectrice 2/);
+ assert.match(await run('document.querySelector(".scene-note").textContent'),/Lectrice 2/);
  await cdp('Page.reload');await sleep(200);
- assert.match(await run('document.querySelector("h1").textContent'),/Lectrice 2/);
+ assert.match(await run('document.querySelector(".scene-note").textContent'),/Lectrice 2/);
  await click('[data-action=parent]');await run("document.querySelector('#name').value='Petite fleur';document.querySelector('#rename').requestSubmit()");
  await run("document.querySelector('#school').value='bateau neige';document.querySelector('#generate').requestSubmit()");
  assert.match(await run("document.querySelector('.preview').textContent"),/bateau/);
  await click('[data-action=assign]');
  saved=JSON.parse(await run("localStorage.getItem('atelier-mots-v1')"));assert.equal(saved.profiles[0].assignments.length,0);assert.equal(saved.profiles[1].assignments.length,2);assert.equal(saved.profiles[1].name,'Petite fleur');
- await click('[data-action=home]');await click('[data-action=start]');
+ await click('[data-action=home]');await click('[data-scene=start][data-child="1"]');
  for(let i=0;i<6;i++){await click('[data-choice="0"]');await click('[data-action=next]');}
  assert.match(await run('document.querySelector("h1").textContent'),/Bravo/);
- await click('[data-action=home]');await click('[data-action=start]');
+ await click('[data-action=home]');await click('[data-scene=start][data-child="1"]');
  assert.match(await run("document.querySelector('.reading').textContent"),/./);
  // Switching or leaving the exercise must stop all microphone tracks.
  await run(`window.__stopped=0;window.__requests=0;Object.defineProperty(navigator,'mediaDevices',{value:{getUserMedia:async()=>{window.__requests++;return {getTracks:()=>[{stop:()=>window.__stopped++}]}}},configurable:true});window.MediaRecorder=class {constructor(){this.state='inactive';this.mimeType='audio/webm'}start(){this.state='recording'}stop(){this.state='inactive';this.onstop?.()}};`);
@@ -76,6 +76,16 @@ try{
  assert.match(await run("document.querySelector('[role=status]').textContent"),/./);
  await click('[data-action=home]');await click('[data-subject="3"]');
  assert.match(await run("document.querySelector('.reading').textContent"),/quartier imaginaire/);
+ await click('[data-action=home]');
+ await run("document.querySelector('.storybook-art').decode()");
+ assert.equal(await run("document.querySelector('.storybook-art').naturalWidth>0"),true);
+ for(const kind of ['sounds','syllables','reading','numbers','talk']){
+  await click(`[data-scene="${kind}"]`);
+  assert.ok(await run("!!document.querySelector('.reading')"));
+  if(kind==='numbers')assert.equal(await run("document.querySelector('.reading').textContent"),'307');
+  if(kind==='talk')assert.ok(await run("!!document.querySelector('#conversation-state')"));
+  await click('[data-action=home]');
+ }
  assert.deepEqual(errors,[]);
  if(process.env.SCREENSHOT){await cdp('Emulation.setDeviceMetricsOverride',{width:820,height:1180,deviceScaleFactor:1,mobile:true});const pic=await cdp('Page.captureScreenshot',{format:'png'});await writeFile(process.env.SCREENSHOT,Buffer.from(pic.data,'base64'));}
  console.log('PASS: production browser flow, correct/incorrect/help, reload, profile isolation, parent review/assignment, full calibration, mic gesture/cleanup, profile/all reset, tablet/mobile layout, no runtime exceptions.');
