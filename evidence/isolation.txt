@@ -1,0 +1,4 @@
+PASS: every staged path is inside projects/lecture-famille.
+Base source: 0a0c2059a61b5fd15e651f0752ec1126c5d2b210
+PASS: byte-identical base voice server, tutor, existing engine/voice tests and VOICE-SETUP.md.
+Checked: server.mjs, server/budget.mjs, server/provider.mjs, server/session.mjs, src/tutor.js, tests/engine.test.mjs, tests/voice.test.mjs, VOICE-SETUP.md

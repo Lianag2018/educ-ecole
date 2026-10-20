@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: bounded audio -> reserve -> STT -> contextual tutor -> TTS, no stored audio
+ok 1 - bounded audio -> reserve -> STT -> contextual tutor -> TTS, no stored audio
+  ---
+  duration_ms: 4.13787
+  type: 'test'
+  ...
+# Subtest: ownership, unknown activity, consent, missing durable storage, invalid WAV reject before provider
+ok 2 - ownership, unknown activity, consent, missing durable storage, invalid WAV reject before provider
+  ---
+  duration_ms: 12.1683
+  type: 'test'
+  ...
+# Subtest: profile context and supplied history are untrusted user data, bounded, never system roles
+ok 3 - profile context and supplied history are untrusted user data, bounded, never system roles
+  ---
+  duration_ms: 0.500488
+  type: 'test'
+  ...
+# Subtest: budget failure does not call provider; TTS failure returns real text; cancellation retains reservation
+ok 4 - budget failure does not call provider; TTS failure returns real text; cancellation retains reservation
+  ---
+  duration_ms: 0.643544
+  type: 'test'
+  ...
+# Subtest: Toronto month boundary and conservative complete price quote
+ok 5 - Toronto month boundary and conservative complete price quote
+  ---
+  duration_ms: 9.747698
+  type: 'test'
+  ...
+# Subtest: provider fixed endpoints, store false, bounded tokens, French transcription and slow speech
+ok 6 - provider fixed endpoints, store false, bounded tokens, French transcription and slow speech
+  ---
+  duration_ms: 15.462353
+  type: 'test'
+  ...
+# Subtest: client short history and reset isolate profiles, interrupted requests cannot surface late replies
+ok 7 - client short history and reset isolate profiles, interrupted requests cannot surface late replies
+  ---
+  duration_ms: 0.631255
+  type: 'test'
+  ...
+# Subtest: client stop cleans microphone acquired after pending permission
+ok 8 - client stop cleans microphone acquired after pending permission
+  ---
+  duration_ms: 0.285683
+  type: 'test'
+  ...
+# Subtest: unconfigured runtime denies login and real voice
+ok 9 - unconfigured runtime denies login and real voice
+  ---
+  duration_ms: 0.441217
+  type: 'test'
+  ...
+# Subtest: mock end-to-end client capture, authenticated runtime, database reservation, three provider calls, playback
+ok 10 - mock end-to-end client capture, authenticated runtime, database reservation, three provider calls, playback
+  ---
+  duration_ms: 6.387083
+  type: 'test'
+  ...
+# Subtest: all four original stories can be discussed with their authored liaison/reading reference
+ok 11 - all four original stories can be discussed with their authored liaison/reading reference
+  ---
+  duration_ms: 0.662813
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 59.381381

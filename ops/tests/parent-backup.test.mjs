@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {parentBackup, progressOnly} from '../supabase/parent-backup.mjs';
+import {fresh, answer} from '../../src/engine.js';
+import {bank} from '../../src/content.js';
+test('backup consent and verified parent Auth required; remote errors stay neutral', async () => {
+  const profile = fresh().profiles[0];
+  let queries = 0;
+  const client = {auth: {getUser: async () => ({data: {user: null}})}, from() {queries++; throw Error('must not query');}};
+  const adapter = parentBackup(client);
+  await assert.rejects(adapter.save(profile), /consent_required/);
+  await assert.rejects(adapter.save(profile, {consent: true}), /parent_auth_required/);
+  await assert.rejects(adapter.list(), /parent_auth_required/);
+  await assert.rejects(adapter.removeAll(), /parent_auth_required/);
+  assert.equal(queries, 0);
+  client.auth.getUser = async () => ({data: {user: {id: 'parent', email_confirmed_at: 'today'}}});
+  client.from = () => ({upsert: () => ({error: {message: 'private payload'}})});
+  await assert.rejects(adapter.save(profile, {consent: true}), /^Error: backup_operation_failed$/);
+});
+test('progress projection excludes names, audio, free text and unknown fields without altering local state', () => {
+  const profile = fresh().profiles[0];
+  answer(profile, bank[0], 'correct', '2026-10-20');
+  profile.audio = new Blob(['audio']); profile.token = 'never';
+  profile.records[bank[0].id].audio = 'never';
+  const before = structuredClone(profile);
+  const output = progressOnly(profile);
+  assert.deepEqual(Object.keys(output).sort(), ['calibrated', 'records']);
+  assert.deepEqual(Object.keys(output.records[bank[0].id]).sort(), ['attempts', 'due', 'result', 'streak']);
+  assert.ok(!JSON.stringify(output).includes('never'));
+  assert.deepEqual(profile, before);
+  assert.throws(() => progressOnly({...profile, id: 'other'}), /invalid_profile/);
+});

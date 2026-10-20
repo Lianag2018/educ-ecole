@@ -1,0 +1,104 @@
+name: EDUC école famille — audit et preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Audit par défaut; preview statique uniquement sur sélection explicite
+        type: choice
+        default: audit
+        options:
+          - audit
+          - preview-static
+          - audit-supabase
+      supabase_project_ref:
+        description: Référence exacte du projet personnel fournie par le superviseur (audit-supabase)
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: educ-ecole-famille-manual
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: famille_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Tests sans secrets
+        run: npm test
+      - name: Isolation RLS PostgreSQL local jetable
+        run: npm run test:rls
+        env:
+          FAMILLE_TEST_DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:5432/famille_test
+      - name: Budget vocal PostgreSQL concurrent et durable
+        run: npm run test:voice-db
+        env:
+          FAMILLE_TEST_DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:5432/famille_test
+      - name: Build statique sans secrets
+        run: npm run build
+
+  vercel:
+    if: inputs.mode == 'audit' || inputs.mode == 'preview-static'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reconstituer le build vérifié sans secret
+        run: npm run build
+      - name: Audit ou preview déterministe Vercel
+        run: node ops/educ-ecole-vercel.mjs
+        env:
+          EDUC_ECOLE_VERCEL: ${{ secrets.EDUC_ECOLE_VERCEL }}
+          EDUC_MODE: ${{ inputs.mode }}
+
+  supabase:
+    if: inputs.mode == 'audit-supabase'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Métadonnées Supabase seulement — token scoped explicite
+        run: node ops/audit-supabase.mjs
+        env:
+          EDUC_ECOLE_SUPABASE: ${{ secrets.EDUC_ECOLE_SUPABASE }}
+          EDUC_SUPABASE_PROJECT_REF: ${{ inputs.supabase_project_ref }}
+

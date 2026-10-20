@@ -1,0 +1,376 @@
+TAP version 13
+# Subtest: default audit is read-only even if project is absent
+ok 1 - default audit is read-only even if project is absent
+  ---
+  duration_ms: 17.258
+  type: 'test'
+  ...
+# Subtest: identity, plan, resource linkage and production guards fail before mutation
+ok 2 - identity, plan, resource linkage and production guards fail before mutation
+  ---
+  duration_ms: 2.919619
+  type: 'test'
+  ...
+# Subtest: explicit preview creates only dedicated project then preview with static files and no environment
+ok 3 - explicit preview creates only dedicated project then preview with static files and no environment
+  ---
+  duration_ms: 5.280893
+  type: 'test'
+  ...
+# Subtest: invalid mode, missing token, missing build fail closed
+ok 4 - invalid mode, missing token, missing build fail closed
+  ---
+  duration_ms: 0.632357
+  type: 'test'
+  ...
+# Subtest: preview remote failure/production response and polling timeout fail closed
+ok 5 - preview remote failure/production response and polling timeout fail closed
+  ---
+  duration_ms: 17.364932
+  type: 'test'
+  ...
+# Subtest: only build index/src assets can be uploaded; reject symlinks/config
+ok 6 - only build index/src assets can be uploaded; reject symlinks/config
+  ---
+  duration_ms: 15.010239
+  type: 'test'
+  ...
+# Subtest: HTTP errors are neutral; no token or remote body in exceptions
+ok 7 - HTTP errors are neutral; no token or remote body in exceptions
+  ---
+  duration_ms: 0.651707
+  type: 'test'
+  ...
+# Subtest: Supabase uses only explicit project metadata endpoint; no API keys/list/writes
+ok 8 - Supabase uses only explicit project metadata endpoint; no API keys/list/writes
+  ---
+  duration_ms: 0.857468
+  type: 'test'
+  ...
+# Subtest: workflow secrets are step-local; build/test precedes secret jobs, no uploads or automated dispatch
+ok 9 - workflow secrets are step-local; build/test precedes secret jobs, no uploads or automated dispatch
+  ---
+  duration_ms: 1.39364
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 66.203221
+TAP version 13
+# Subtest: two independent profiles, records, history and assignments survive persistence
+ok 1 - two independent profiles, records, history and assignments survive persistence
+  ---
+  duration_ms: 2.508998
+  type: 'test'
+  ...
+# Subtest: calibration covers every domain without inferring grade
+ok 2 - calibration covers every domain without inferring grade
+  ---
+  duration_ms: 0.252812
+  type: 'test'
+  ...
+# Subtest: correct answers space reviews; incorrect and help reset streak and become immediately due
+ok 3 - correct answers space reviews; incorrect and help reset streak and become immediately due
+  ---
+  duration_ms: 0.220454
+  type: 'test'
+  ...
+# Subtest: actual answers change selection, harder questions require independent success
+ok 4 - actual answers change selection, harder questions require independent success
+  ---
+  duration_ms: 5.070965
+  type: 'test'
+  ...
+# Subtest: due reviews prioritized, deterministic selection, at most eight activities
+ok 5 - due reviews prioritized, deterministic selection, at most eight activities
+  ---
+  duration_ms: 0.228015
+  type: 'test'
+  ...
+# Subtest: school practice is bounded, literal, isolated and selected after assignment
+ok 6 - school practice is bounded, literal, isolated and selected after assignment
+  ---
+  duration_ms: 0.34971
+  type: 'test'
+  ...
+# Subtest: unavailable storage and damaged data fall back without breaking core
+ok 7 - unavailable storage and damaged data fall back without breaking core
+  ---
+  duration_ms: 0.247565
+  type: 'test'
+  ...
+# Subtest: content integrity: unique ids, every choice has one answer, authored feedback
+ok 8 - content integrity: unique ids, every choice has one answer, authored feedback
+  ---
+  duration_ms: 0.165049
+  type: 'test'
+  ...
+# Subtest: dates cross month/year boundaries without UTC date shift
+ok 9 - dates cross month/year boundaries without UTC date shift
+  ---
+  duration_ms: 0.17177
+  type: 'test'
+  ...
+# Subtest: four independent successes unlock the authored inference story, help lowers tier
+ok 10 - four independent successes unlock the authored inference story, help lowers tier
+  ---
+  duration_ms: 0.964029
+  type: 'test'
+  ...
+# Subtest: future reviews are never presented early
+ok 11 - future reviews are never presented early
+  ---
+  duration_ms: 0.21782
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17.564104
+TAP version 13
+# Subtest: all 90 worksheet values, order, zero decomposition and original grade stories
+ok 1 - all 90 worksheet values, order, zero decomposition and original grade stories
+  ---
+  duration_ms: 1.907307
+  type: 'test'
+  ...
+# Subtest: legacy progress preserved including custom context, assignments, active profile and no shared garden state
+ok 2 - legacy progress preserved including custom context, assignments, active profile and no shared garden state
+  ---
+  duration_ms: 0.68681
+  type: 'test'
+  ...
+# Subtest: Toronto week boundaries including DST, year and UTC Monday before local midnight
+ok 3 - Toronto week boundaries including DST, year and UTC Monday before local midnight
+  ---
+  duration_ms: 9.14436
+  type: 'test'
+  ...
+# Subtest: effort includes help/errors and revisiting; awards need approval and completed week, persisted once per learner/week
+ok 4 - effort includes help/errors and revisiting; awards need approval and completed week, persisted once per learner/week
+  ---
+  duration_ms: 1.649226
+  type: 'test'
+  ...
+# Subtest: an answer after an exposed hint always records help and cannot gain independent scoring
+ok 5 - an answer after an exposed hint always records help and cannot gain independent scoring
+  ---
+  duration_ms: 0.147884
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19.262225
+TAP version 13
+# Subtest: standalone manifest, approved icon and exact iPad/icon sizes
+ok 1 - standalone manifest, approved icon and exact iPad/icon sizes
+  ---
+  duration_ms: 5.101261
+  type: 'test'
+  ...
+# Subtest: Vercel static allowlist includes icons/manifest and excludes API/server/ops
+ok 2 - Vercel static allowlist includes icons/manifest and excludes API/server/ops
+  ---
+  duration_ms: 1.319186
+  type: 'test'
+  ...
+# Subtest: public upload contains approved PNGs and manifest, never server code
+ok 3 - public upload contains approved PNGs and manifest, never server code
+  ---
+  duration_ms: 9.455171
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19.212519
+TAP version 13
+# Subtest: backup consent and verified parent Auth required; remote errors stay neutral
+ok 1 - backup consent and verified parent Auth required; remote errors stay neutral
+  ---
+  duration_ms: 1.671509
+  type: 'test'
+  ...
+# Subtest: progress projection excludes names, audio, free text and unknown fields without altering local state
+ok 2 - progress projection excludes names, audio, free text and unknown fields without altering local state
+  ---
+  duration_ms: 1.696197
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7.55211
+TAP version 13
+# Subtest: bounded audio -> reserve -> STT -> contextual tutor -> TTS, no stored audio
+ok 1 - bounded audio -> reserve -> STT -> contextual tutor -> TTS, no stored audio
+  ---
+  duration_ms: 4.060015
+  type: 'test'
+  ...
+# Subtest: ownership, unknown activity, consent, missing durable storage, invalid WAV reject before provider
+ok 2 - ownership, unknown activity, consent, missing durable storage, invalid WAV reject before provider
+  ---
+  duration_ms: 12.245744
+  type: 'test'
+  ...
+# Subtest: profile context and supplied history are untrusted user data, bounded, never system roles
+ok 3 - profile context and supplied history are untrusted user data, bounded, never system roles
+  ---
+  duration_ms: 0.484894
+  type: 'test'
+  ...
+# Subtest: budget failure does not call provider; TTS failure returns real text; cancellation retains reservation
+ok 4 - budget failure does not call provider; TTS failure returns real text; cancellation retains reservation
+  ---
+  duration_ms: 0.597113
+  type: 'test'
+  ...
+# Subtest: Toronto month boundary and conservative complete price quote
+ok 5 - Toronto month boundary and conservative complete price quote
+  ---
+  duration_ms: 9.767914
+  type: 'test'
+  ...
+# Subtest: provider fixed endpoints, store false, bounded tokens, French transcription and slow speech
+ok 6 - provider fixed endpoints, store false, bounded tokens, French transcription and slow speech
+  ---
+  duration_ms: 14.850667
+  type: 'test'
+  ...
+# Subtest: client short history and reset isolate profiles, interrupted requests cannot surface late replies
+ok 7 - client short history and reset isolate profiles, interrupted requests cannot surface late replies
+  ---
+  duration_ms: 0.604875
+  type: 'test'
+  ...
+# Subtest: client stop cleans microphone acquired after pending permission
+ok 8 - client stop cleans microphone acquired after pending permission
+  ---
+  duration_ms: 0.245261
+  type: 'test'
+  ...
+# Subtest: unconfigured runtime denies login and real voice
+ok 9 - unconfigured runtime denies login and real voice
+  ---
+  duration_ms: 0.392665
+  type: 'test'
+  ...
+# Subtest: mock end-to-end client capture, authenticated runtime, database reservation, three provider calls, playback
+ok 10 - mock end-to-end client capture, authenticated runtime, database reservation, three provider calls, playback
+  ---
+  duration_ms: 5.530521
+  type: 'test'
+  ...
+# Subtest: all four original stories can be discussed with their authored liaison/reading reference
+ok 11 - all four original stories can be discussed with their authored liaison/reading reference
+  ---
+  duration_ms: 0.549272
+  type: 'test'
+  ...
+# Subtest: STT and tutor failures retain debit and never expose upstream diagnostics or synthesize fake replies
+ok 12 - STT and tutor failures retain debit and never expose upstream diagnostics or synthesize fake replies
+  ---
+  duration_ms: 0.833602
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 58.012613
+TAP version 13
+# Subtest: parallel reservations serialize across both children and stop at total cap
+ok 1 - parallel reservations serialize across both children and stop at total cap
+  ---
+  duration_ms: 3.361748
+  type: 'test'
+  ...
+# Subtest: missing storage, invalid amount, missing fees and unknown FX fail closed
+ok 2 - missing storage, invalid amount, missing fees and unknown FX fail closed
+  ---
+  duration_ms: 0.393195
+  type: 'test'
+  ...
+# Subtest: settlement cannot release unknown or under-reserved usage
+ok 3 - settlement cannot release unknown or under-reserved usage
+  ---
+  duration_ms: 0.194995
+  type: 'test'
+  ...
+# Subtest: session requires real verified recent parent authentication and CSRF
+ok 4 - session requires real verified recent parent authentication and CSRF
+  ---
+  duration_ms: 0.21129
+  type: 'test'
+  ...
+# Subtest: profile ownership, fixed request schema and deny-by-default paid issuance
+ok 5 - profile ownership, fixed request schema and deny-by-default paid issuance
+  ---
+  duration_ms: 0.23145
+  type: 'test'
+  ...
+# Subtest: adapter uses official fixed endpoint, ephemeral credentials and manual turn detection
+ok 6 - adapter uses official fixed endpoint, ephemeral credentials and manual turn detection
+  ---
+  duration_ms: 0.292854
+  type: 'test'
+  ...
+# Subtest: unavailable tutor never requests microphone; pending permission is cleaned on exit
+ok 7 - unavailable tutor never requests microphone; pending permission is cleaned on exit
+  ---
+  duration_ms: 0.21833
+  type: 'test'
+  ...
+# Subtest: stop releases tracks, remote connection and playback
+ok 8 - stop releases tracks, remote connection and playback
+  ---
+  duration_ms: 0.109916
+  type: 'test'
+  ...
+# Subtest: school context remains profile isolated and persisted; hint does not reveal answer
+ok 9 - school context remains profile isolated and persisted; hint does not reveal answer
+  ---
+  duration_ms: 0.456341
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12.696637

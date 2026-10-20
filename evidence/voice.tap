@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: parallel reservations serialize across both children and stop at total cap
+ok 1 - parallel reservations serialize across both children and stop at total cap
+  ---
+  duration_ms: 4.171989
+  type: 'test'
+  ...
+# Subtest: missing storage, invalid amount, missing fees and unknown FX fail closed
+ok 2 - missing storage, invalid amount, missing fees and unknown FX fail closed
+  ---
+  duration_ms: 0.495407
+  type: 'test'
+  ...
+# Subtest: settlement cannot release unknown or under-reserved usage
+ok 3 - settlement cannot release unknown or under-reserved usage
+  ---
+  duration_ms: 0.277768
+  type: 'test'
+  ...
+# Subtest: session requires real verified recent parent authentication and CSRF
+ok 4 - session requires real verified recent parent authentication and CSRF
+  ---
+  duration_ms: 0.314544
+  type: 'test'
+  ...
+# Subtest: profile ownership, fixed request schema and deny-by-default paid issuance
+ok 5 - profile ownership, fixed request schema and deny-by-default paid issuance
+  ---
+  duration_ms: 0.286382
+  type: 'test'
+  ...
+# Subtest: adapter uses official fixed endpoint, ephemeral credentials and manual turn detection
+ok 6 - adapter uses official fixed endpoint, ephemeral credentials and manual turn detection
+  ---
+  duration_ms: 0.405652
+  type: 'test'
+  ...
+# Subtest: unavailable tutor never requests microphone; pending permission is cleaned on exit
+ok 7 - unavailable tutor never requests microphone; pending permission is cleaned on exit
+  ---
+  duration_ms: 0.311911
+  type: 'test'
+  ...
+# Subtest: stop releases tracks, remote connection and playback
+ok 8 - stop releases tracks, remote connection and playback
+  ---
+  duration_ms: 0.17271
+  type: 'test'
+  ...
+# Subtest: school context remains profile isolated and persisted; hint does not reveal answer
+ok 9 - school context remains profile isolated and persisted; hint does not reveal answer
+  ---
+  duration_ms: 0.574516
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16.93648

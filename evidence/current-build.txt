@@ -1,0 +1,5 @@
+
+> build
+> node ops/build.mjs
+
+Static production build: dist/

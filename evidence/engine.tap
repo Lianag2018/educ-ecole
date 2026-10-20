@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: two independent profiles, records, history and assignments survive persistence
+ok 1 - two independent profiles, records, history and assignments survive persistence
+  ---
+  duration_ms: 3.125812
+  type: 'test'
+  ...
+# Subtest: calibration covers every domain without inferring grade
+ok 2 - calibration covers every domain without inferring grade
+  ---
+  duration_ms: 0.316397
+  type: 'test'
+  ...
+# Subtest: correct answers space reviews; incorrect and help reset streak and become immediately due
+ok 3 - correct answers space reviews; incorrect and help reset streak and become immediately due
+  ---
+  duration_ms: 0.28542
+  type: 'test'
+  ...
+# Subtest: actual answers change selection, harder questions require independent success
+ok 4 - actual answers change selection, harder questions require independent success
+  ---
+  duration_ms: 6.195118
+  type: 'test'
+  ...
+# Subtest: due reviews prioritized, deterministic selection, at most eight activities
+ok 5 - due reviews prioritized, deterministic selection, at most eight activities
+  ---
+  duration_ms: 0.309246
+  type: 'test'
+  ...
+# Subtest: school practice is bounded, literal, isolated and selected after assignment
+ok 6 - school practice is bounded, literal, isolated and selected after assignment
+  ---
+  duration_ms: 0.483539
+  type: 'test'
+  ...
+# Subtest: unavailable storage and damaged data fall back without breaking core
+ok 7 - unavailable storage and damaged data fall back without breaking core
+  ---
+  duration_ms: 0.46479
+  type: 'test'
+  ...
+# Subtest: content integrity: unique ids, every choice has one answer, authored feedback
+ok 8 - content integrity: unique ids, every choice has one answer, authored feedback
+  ---
+  duration_ms: 0.220222
+  type: 'test'
+  ...
+# Subtest: dates cross month/year boundaries without UTC date shift
+ok 9 - dates cross month/year boundaries without UTC date shift
+  ---
+  duration_ms: 0.236757
+  type: 'test'
+  ...
+# Subtest: four independent successes unlock the authored inference story, help lowers tier
+ok 10 - four independent successes unlock the authored inference story, help lowers tier
+  ---
+  duration_ms: 1.168652
+  type: 'test'
+  ...
+# Subtest: future reviews are never presented early
+ok 11 - future reviews are never presented early
+  ---
+  duration_ms: 0.274674
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22.075576

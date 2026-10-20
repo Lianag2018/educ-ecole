@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: all 90 worksheet values, order, zero decomposition and original grade stories
+ok 1 - all 90 worksheet values, order, zero decomposition and original grade stories
+  ---
+  duration_ms: 1.986985
+  type: 'test'
+  ...
+# Subtest: legacy progress preserved including custom context, assignments, active profile and no shared garden state
+ok 2 - legacy progress preserved including custom context, assignments, active profile and no shared garden state
+  ---
+  duration_ms: 0.751663
+  type: 'test'
+  ...
+# Subtest: Toronto week boundaries including DST, year and UTC Monday before local midnight
+ok 3 - Toronto week boundaries including DST, year and UTC Monday before local midnight
+  ---
+  duration_ms: 11.53639
+  type: 'test'
+  ...
+# Subtest: effort includes help/errors and revisiting; awards need approval and completed week, persisted once per learner/week
+ok 4 - effort includes help/errors and revisiting; awards need approval and completed week, persisted once per learner/week
+  ---
+  duration_ms: 2.283402
+  type: 'test'
+  ...
+# Subtest: an answer after an exposed hint always records help and cannot gain independent scoring
+ok 5 - an answer after an exposed hint always records help and cannot gain independent scoring
+  ---
+  duration_ms: 0.182255
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24.167851
