@@ -1,3 +1,5 @@
+> **Reprise du projet :** lire [AGENTS.md](AGENTS.md), [l’architecture](ARCHITECTURE.md), [l’état courant](ops/PROJECT-STATE.md) et [le parcours d’accès](ops/ACCESS-RUNBOOK.md). Les sections historiques ci-dessous ne prouvent pas l’état de production actuel.
+
 ## État du 21 octobre 2026 — projet personnel en production
 
 L’application est publiée sur https://educ-ecole.vercel.app, depuis `Lianag2018/educ-ecole`. Les sections de livraison du 20 octobre ci-dessous décrivent l’état historique et ne doivent pas être utilisées pour conclure que la lecture audio attend encore une activation.

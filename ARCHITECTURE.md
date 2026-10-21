@@ -1,0 +1,68 @@
+# Architecture de l’Atelier des mots
+
+Référence technique au 21 octobre 2026. État opérationnel daté : [PROJECT-STATE](ops/PROJECT-STATE.md). Accès et exploitation : [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md).
+
+## Périmètre et hébergement
+
+| Élément | Référence | Rôle |
+|---|---|---|
+| Dépôt actif | Lianag2018/educ-ecole, main | Source de l’application personnelle |
+| Site | https://educ-ecole.vercel.app | Interface et endpoints API sur la même origine |
+| Équipe Vercel | lianag2018s-projects | Hébergement personnel |
+| Projet Vercel | educ-ecole | Projet de production, pas educ-ecole-famille |
+| Supabase personnel | Identité distante à vérifier | Auth parent, sauvegardes et budget vocal prévus |
+| Render personnel | Service actif non confirmé | Aucune dépendance Render démontrée pour la lecture publiée |
+| Ancienne source | kenebec-ai/projects/lecture-famille | Provenance historique, pas source active |
+
+Aucun besoin de MongoDB n’est établi dans le code actuel. Ne pas créer une deuxième base ou un deuxième hébergement pour résoudre un défaut d’accès.
+
+## Parcours de lecture
+
+```mermaid
+flowchart TD
+  A["iPad · interface"] --> B["NarrationSpeaker"]
+  B --> C["MP3 du site"]
+  B --> D["Voix système de secours"]
+  C --> E["Repères de lecture"]
+  D --> E
+```
+
+- `src/app.js` : navigation, profils, activités, réponses, commandes audio et affichage.
+- `src/engine.js` : sélection/révision et persistance locale. `src/learning.js` : différenciation des niveaux scolaires.
+- `src/content.js`, `garden.js`, `unicorn-stories.js`, `week-plan.js` : activités, histoires et plan scolaire; `numbers.js` : nombres.
+- `src/narration.js` : MP3 publics déjà générés, annulation des callbacks anciens, voix système si fichier absent.
+- `src/speech.js` : lecture native fr-CA et suppression du séparateur « + » uniquement pour les syllabes.
+- `src/guided-reading.js` : ponctuation, liaisons choisies, surlignage piloté par le média; estimation pour MP3, événements de mots lorsqu’une voix native les fournit.
+- `src/style.css` : interface et effets; respecte la réduction des animations. `icons/accueil-famille.png` : accueil illustré conservé.
+
+Les profils p1 (1re année) et p2 (3e année) ont des activités et progrès distincts. La plage de nombres demandée au profil avancé est 0–1 999. Le plan scolaire peut demander une plage plus large; ne pas annoncer cette extension tant qu’elle n’est pas implémentée.
+
+## Production de la narration
+
+`ops/build.mjs` construit `dist`, puis `ops/generate-narration.mjs` utilise le catalogue borné de `ops/narration-catalog.mjs`. La génération payante n’est autorisée par ce code qu’en build Vercel de production sur main. Elle réutilise les fichiers existants; ne pas lancer plusieurs builds payants simultanément.
+
+Le catalogue connu comprend 395 clips, modèle/voix et instructions fixés dans le code. `/audio/manifest.json` associe textes pédagogiques et fichiers. `/audio/status.json` indique ready/partial/unavailable et les compteurs. Un clic sur Écouter lit un fichier existant; il ne génère pas une nouvelle facture OpenAI. Les textes privés importés ne deviennent pas automatiquement des MP3 publics.
+
+## Conversation et données
+
+La conversation libre est distincte de la lecture :
+`src/conversation.js` → endpoints `api/parent/*` et `api/voice/*` → `ops/server/runtime.mjs` → vérification parent, budget durable et fournisseur.
+
+Les modules `session.mjs`, `budget.mjs`, `turn.mjs`, `provider.mjs`, `pedagogy.mjs` portent les responsabilités serveur. Les migrations `ops/supabase/001-parent-backups.sql` et `002-voice-budget.sql` sont préparées; leur présence ne prouve pas leur application distante. Voir VOICE-SETUP pour les variables et conditions exactes.
+
+| Donnée | Conservation actuelle / limite |
+|---|---|
+| Profils, progrès, cartes locales | localStorage du navigateur; pas de synchronisation automatique démontrée |
+| Enregistrement pour réécoute | Mémoire locale, libéré à la sortie; pas une évaluation automatique |
+| MP3 narratrice | Fichiers publics de textes intégrés |
+| Secrets fournisseur | Environnement serveur/build uniquement |
+| Budget conversation | SQL durable requis avant activation; plafond configuré 40 CAD/mois |
+| Audio/transcription conversation | Traitement serveur conditionnel; protections et rétention à vérifier avant usage réel |
+
+Installation sur écran d’accueil via manifest et icônes; aucun service worker ni fonctionnement hors ligne garanti.
+
+## Validation et livraison
+
+`npm test` et `npm run build` constituent les contrôles locaux. Les tests SQL exigent une base jetable explicitement identifiée; ne pas lancer des fixtures sur la base familiale. Les tests mock ne prouvent ni l’acoustique réelle ni une configuration distante.
+
+Publier l’application complète avec ses fonctions API, pas seulement une ancienne preview statique. Confirmer projet/équipe/SHA, état du build, HTTP des ressources, lecture réelle et interruption. Mettre les preuves dans PROJECT-STATE sans secrets. Conserver la version de production précédente pour retour arrière; ne pas réinitialiser les données des enfants.
