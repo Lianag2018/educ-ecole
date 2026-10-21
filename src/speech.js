@@ -24,7 +24,7 @@ export class ReadingSpeaker {
  speak(text,{preferredURI='',speed,systemVoice=false,onState=()=>{}}={}) {
   this.stop();const epoch=this.epoch;
   if(!this.synth||!this.Utterance){onState('error','Lecture audio indisponible ici. Ouvre l’application dans Safari.');return;}
-  const voice=systemVoice?undefined:chooseReadingVoice(this.synth.getVoices(),preferredURI);
+  const voice=systemVoice||!preferredURI?undefined:chooseReadingVoice(this.synth.getVoices(),preferredURI);
   const u=new this.Utterance(String(text));this.current=u;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
   u.rate=readingRate(speed);u.pitch=1;u.volume=1;
@@ -34,9 +34,8 @@ export class ReadingSpeaker {
   u.onstart=()=>{if(!active())return;this.clearTimer(this.timer);onState('speaking',`Lecture en cours — ${label}.`);};
   u.onend=()=>{if(!active())return;this.clearTimer(this.timer);this.current=null;onState('ended',`Lecture terminée — ${label}.`);};
   u.onerror=e=>fail(e.error==='not-allowed'?'Lecture bloquée par le navigateur. Touche « Tester la voix » pour la relancer.':'La voix sélectionnée est indisponible. Touche « Réessayer avec la voix système ».');
-  onState('starting',`Démarrage de la lecture — ${label}.`);
   this.timer=this.setTimer(()=>fail('La lecture ne démarre pas. Réessaie avec la voix système et vérifie le volume de l’appareil.'),8000);
   // Stay in the tap handler: deferring speak can lose Safari user activation.
-  try{this.synth.resume();this.synth.speak(u);}catch{fail('Le navigateur ne peut pas démarrer la voix. Touche « Réessayer avec la voix système ».');}
+  try{if(this.synth.paused)this.synth.resume();this.synth.speak(u);if(active())onState('starting',`Démarrage de la lecture — ${label}.`);}catch{fail('Le navigateur ne peut pas démarrer la voix. Touche « Réessayer avec la voix système ».');}
  }
 }
