@@ -40,3 +40,9 @@ Après publication, vérifier le SHA, /audio/status.json, la disponibilité de g
 Pour chaque changement : date et fuseau; objectif; SHA et PR; actions réellement exécutées; preuves de tests/déploiement; limites; blocage exact; prochaine action. Ne pas recopier des valeurs de secrets ni des données personnelles d’enfants.
 
 Les anciens CURRENT-DELIVERY.md et DELIVERY.md restent des archives techniques. Leurs affirmations « aucun déploiement » ou « aucun appel OpenAI » ne décrivent plus l’ensemble du projet au 21 octobre.
+
+## Reprise du 21 octobre 2026 — mémoire pédagogique
+
+Ajout préparé sur `feat/learning-memory`, à partir de main `b6a16d1a01e8b8e440961b037c81a069fc8fa5fc` : bilan par profil, deux fenêtres de sept jours, statut de progression fondé sur plusieurs essais/jours, prochaine étape, priorisation de pratique. Les nouvelles réponses identifient la matière pour éviter que les maths augmentent le palier de français. Historique antérieur conservé sans migration destructive.
+
+Validation : suite Node et build local réussis; cinq tests ciblent persistance/isolation, séparation maths/français, répétitions, ordre adaptatif et anciens historiques. Pas de test acoustique/iPad ni de déploiement confirmé pour cet ajout. La mémoire reste dans le navigateur; aucune synchronisation Supabase ou génération continue de contenu n’est prétendue. Prochaine étape opérationnelle inchangée : utiliser le parcours à jeton existant pour publier le SHA personnel vérifié.
