@@ -1,3 +1,4 @@
+import {readingBank} from './learning.js';
 import { bank, skills } from './content.js';
 
 export const KEY = 'atelier-mots-v1';
@@ -29,7 +30,7 @@ export function save(storage, state) {
   } catch { return false; }
 }
 
-export function pool(p) { return [...bank, ...p.assignments]; }
+export function pool(p) { return [...readingBank(p), ...p.assignments]; }
 
 // These are content tiers, not school grades or a reading diagnosis.
 export function level(p, skill) {
