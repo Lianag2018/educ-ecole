@@ -1,3 +1,5 @@
+> **Archive de livraison initiale.** Malgré son ancien nom, ce fichier ne représente plus l’état actuel. Lire [PROJECT-STATE.md](PROJECT-STATE.md) pour reprendre le travail et [ACCESS-RUNBOOK.md](ACCESS-RUNBOOK.md) avant de demander des accès.
+
 # Livraison actuelle — histoires, voix serveur et iPad
 
 Travail concret présent dans le workspace; commit et push laissés au superviseur comme demandé (`.git` en lecture seule). Aucun commit/push, fusion, contournement, clone/bundle, déploiement cloud, migration distante, appel OpenAI payant ou secret réel lu. Aucune modification de l’application pro/Render.
