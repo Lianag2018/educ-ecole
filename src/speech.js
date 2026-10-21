@@ -21,7 +21,7 @@ export class ReadingSpeaker {
   Object.assign(this,{synth,Utterance,setTimer,clearTimer});this.epoch=0;this.current=null;
  }
  stop(){this.epoch++;this.clearTimer(this.timer);this.current=null;this.synth?.cancel();}
- speak(text,{preferredURI='',speed,systemVoice=false,onState=()=>{}}={}) {
+ speak(text,{preferredURI='',speed,systemVoice=false,onState=()=>{},onProgress=()=>{}}={}) {
   this.stop();const epoch=this.epoch;
   if(!this.synth||!this.Utterance){onState('error','Lecture audio indisponible ici. Ouvre l’application dans Safari.');return;}
   const voice=systemVoice||!preferredURI?undefined:chooseReadingVoice(this.synth.getVoices(),preferredURI);
@@ -32,6 +32,7 @@ export class ReadingSpeaker {
   const active=()=>this.epoch===epoch&&this.current===u;
   const fail=message=>{if(!active())return;this.stop();onState('error',message);};
   u.onstart=()=>{if(!active())return;this.clearTimer(this.timer);onState('speaking',`Lecture en cours — ${label}.`);};
+  u.onboundary=e=>{if(active()&&Number.isInteger(e.charIndex))onProgress({charIndex:e.charIndex,approximate:false});};
   u.onend=()=>{if(!active())return;this.clearTimer(this.timer);this.current=null;onState('ended',`Lecture terminée — ${label}.`);};
   u.onerror=e=>fail(e.error==='not-allowed'?'Lecture bloquée par le navigateur. Touche « Tester la voix » pour la relancer.':'La voix sélectionnée est indisponible. Touche « Réessayer avec la voix système ».');
   this.timer=this.setTimer(()=>fail('La lecture ne démarre pas. Réessaie avec la voix système et vérifie le volume de l’appareil.'),8000);
