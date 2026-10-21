@@ -32,5 +32,5 @@ export const mathsFor=p=>advanced(p)?mathCards:youngerMath;
 const youngerSocial=card('g1-social','comprehension','Où peux-tu emprunter un livre?','Dans mon quartier, il y a une école, un parc et une bibliothèque. À la bibliothèque, je choisis un livre et je le rapporte après ma lecture.',['À la bibliothèque','Au parc'],0,'La bibliothèque permet d’emprunter des livres. Nomme un endroit que tu connais dans ton quartier.');
 export const socialFor=p=>advanced(p)?social:youngerSocial;
 const smallRows=Object.fromEntries(Object.keys(rows).map((k,i)=>[k,Array.from({length:10},(_,j)=>i*10+j+1)]));
-export const numberRows=p=>advanced(p)?{...rows,J:[1000,1024,2040,3070,4028,5600,6712,8009,9090,9999]}:smallRows;
+export const numberRows=p=>advanced(p)?{...rows,J:[1000,1001,1010,1024,1100,1208,1370,1500,1809,1999],K:[0,1,9,10,11,20,71,80,91,99]}:smallRows;
 export const firstNumberRow=p=>advanced(p)?'J':'A';
