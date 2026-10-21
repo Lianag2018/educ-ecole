@@ -66,3 +66,11 @@ Installation sur écran d’accueil via manifest et icônes; aucun service worke
 `npm test` et `npm run build` constituent les contrôles locaux. Les tests SQL exigent une base jetable explicitement identifiée; ne pas lancer des fixtures sur la base familiale. Les tests mock ne prouvent ni l’acoustique réelle ni une configuration distante.
 
 Publier l’application complète avec ses fonctions API, pas seulement une ancienne preview statique. Confirmer projet/équipe/SHA, état du build, HTTP des ressources, lecture réelle et interruption. Mettre les preuves dans PROJECT-STATE sans secrets. Conserver la version de production précédente pour retour arrière; ne pas réinitialiser les données des enfants.
+
+## Mémoire pédagogique — ajout du 21 octobre 2026
+
+`src/progress.js` recalcule un portrait par profil depuis l’historique existant : fenêtres de sept jours, réussites sans aide, aides, reprises et prochaine étape. La classification de consolidation exige plusieurs jours et cartes; les répétitions du même jour/carte sont regroupées pour cette classification. Il s’agit de règles explicites, pas d’un diagnostic ni d’une IA qui se réentraîne.
+
+Les nouvelles réponses incluent la matière et le niveau de l’activité. Les réponses Maths/Univers social ne changent plus le palier de lecture. Les anciennes réponses sans matière restent conservées et signalées non classées dans le bilan; la compatibilité de leur ancien calcul de niveau est conservée. La mission de français classe les domaines selon les besoins, tout en gardant les échéances et limites existantes. Les matières ouvertes explicitement commencent par les reprises dues, puis les nouveautés, sans retirer de contenu ni changer l’année scolaire. Cette adaptation utilise la banque existante, sans générer de nouveaux exercices.
+
+Le bilan est recalculé après les réponses lors de son affichage et ne nécessite aucun appel réseau. Persistance locale existante, pas de synchronisation distante livrée. Pas de mise à jour autonome du code : les changements logiciels restent testés et revus.
