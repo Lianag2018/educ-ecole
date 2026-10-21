@@ -1,3 +1,7 @@
+> **Vérification actualisée le 21 octobre 2026 vers 15 h 25 (America/Toronto)** : le statut GitHub Vercel de `2603f255a50c91fd8d79c883ae701a3e0e19b00e` est SUCCESS. Déploiement : https://vercel.com/lianag2018s-projects/educ-ecole/5QsbVqmhELQs9uS5zC63JLjRJJfR . Les fichiers publics `src/progress.js` et `src/guided-reading.js` correspondent exactement aux SHA256 des fichiers locaux testés. `/audio/status.json` retourne ready, 395/395, aucun échec. Les mentions plus bas de publication non confirmée et de 354/395 sont désormais historiques. Aucun test iPad physique ou sauvegarde distante n’est confirmé.
+>
+> **Mémoire distante** : demandée explicitement par le parent. Supabase MCP ne liste encore que les deux projets professionnels, à ne pas utiliser. Agent Codex d’audit/préparation lancé, request_id `7b02e675-497e-4aa9-89af-f1c3dc14d9a1`, run https://github.com/luxurahair/kenebec-ai/actions/runs/39661202849 , zone limitée `projects/educ-ecole-operations`, sans auto-merge. Relire son résultat avant toute nouvelle préparation. Ce job ne prouve pas une synchronisation installée. Les commandes générales deploy-web-backend ciblent le repo professionnel : ne pas les utiliser pour educ-ecole. Le progrès familial reste local actuellement.
+
 # État de reprise — educ-ecole
 
 Mise à jour : 21 octobre 2026, fuseau America/Toronto. Ce document décrit des observations datées; revalider les accès et la production avant toute nouvelle conclusion.
