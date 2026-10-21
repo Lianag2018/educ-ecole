@@ -10,3 +10,13 @@ export function numberWords(n){
  if(n<1000){const c=Math.floor(n/100),r=n%100;return (c===1?'cent':small[c]+' cent'+(!r?'s':''))+(r?' '+numberWords(r):'');}
  return 'mille'+(n%1000?' '+numberWords(n%1000):'');
 }
+// Short spoken groups let every number be heard clearly without 2,000 API calls.
+export function numberParts(n){
+ numberWords(n);
+ if(n===0)return ['zéro'];
+ const parts=[];if(n>=1000)parts.push('mille');
+ const rest=n%1000,hundreds=Math.floor(rest/100)*100,units=rest%100;
+ if(hundreds)parts.push(numberWords(hundreds));
+ if(units)parts.push(numberWords(units));
+ return parts;
+}
