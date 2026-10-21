@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {spokenActivity,chooseReadingVoice} from '../../src/speech.js';
+import {spokenActivity,chooseReadingVoice,readingRate} from '../../src/speech.js';
 test('syllable audio joins the word without saying visual plus signs',()=>{
  assert.equal(spokenActivity({skill:'syllabes',text:'la + pin'}),'lapin');
  assert.equal(spokenActivity({skill:'syllabes',text:'pa + ra + sol'}),'parasol');
@@ -13,3 +13,5 @@ test('prefer Canadian French reading voice and honor parent selection',()=>{
  assert.equal(chooseReadingVoice(voices,'s').voiceURI,'s');
  assert.equal(chooseReadingVoice([]),undefined);
 });
+
+test('reading defaults to slow, with slower sound practice and safe fallback',()=>{assert.equal(readingRate(),.65);assert.equal(readingRate('very-slow'),.45);assert.equal(readingRate('unexpected'),.65);});

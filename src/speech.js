@@ -12,3 +12,5 @@ export function chooseReadingVoice(voices, preferredURI='') {
  const score=v=>(/^fr[-_]CA$/i.test(v.lang)?100:0)+(/am[eé]lie|julie|sylvie|ch[aâ]ntal/i.test(v.name)?40:0)+(/enhanced|premium|améliorée/i.test(v.name)?10:0);
  return french.slice().sort((a,b)=>score(b)-score(a))[0];
 }
+
+export const readingRate = mode => mode==='very-slow' ? .45 : .65;
