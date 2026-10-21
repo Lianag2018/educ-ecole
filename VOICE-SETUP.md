@@ -1,3 +1,5 @@
+> **Reprise et accès :** consulter [PROJECT-STATE](ops/PROJECT-STATE.md) et [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md). Les rubriques datées ci-dessous distinguent l’état récent et les livraisons historiques; ne pas confondre narration et conversation micro.
+
 ## État du 21 octobre 2026 — projet personnel en production
 
 L’application est publiée sur https://educ-ecole.vercel.app, depuis `Lianag2018/educ-ecole`. Les sections de livraison du 20 octobre ci-dessous décrivent l’état historique et ne doivent pas être utilisées pour conclure que la lecture audio attend encore une activation.
