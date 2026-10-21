@@ -1,3 +1,18 @@
+## État du 21 octobre 2026 — projet personnel en production
+
+L’application est publiée sur https://educ-ecole.vercel.app, depuis `Lianag2018/educ-ecole`. Les sections de livraison du 20 octobre ci-dessous décrivent l’état historique et ne doivent pas être utilisées pour conclure que la lecture audio attend encore une activation.
+
+- La narratrice préenregistrée est sélectionnée par défaut. Les fichiers OpenAI sont servis par le site; un clic de lecture ne déclenche aucun appel payant et ne transmet aucune voix d’enfant.
+- `ops/generate-narration.mjs` utilise `EDUC_OPENAI_API_KEY` uniquement lors d’un build de production sur `main`. Les previews et les builds locaux ne font aucun appel payant. Les fichiers déjà publiés sont réutilisés.
+- `/audio/status.json` donne l’état réel (`ready`, `partial` ou `unavailable`), le nombre de fichiers disponibles et un code d’erreur sans secret. `/audio/manifest.json` contient uniquement les textes pédagogiques intégrés et les noms de MP3 publics. Une génération interrompue conserve les fichiers réussis pour la reprise suivante.
+- Le catalogue de 395 enregistrements couvre les exercices intégrés, les histoires et les nombres de 0 à 1 999. Les nombres sans enregistrement entier se lisent en petits groupes (mille, centaines, unités). Ne déclarer la couverture audio complète qu’après vérification du statut publié.
+- La conversation libre au microphone est un service différent. Elle reste soumise à la configuration serveur, à l’authentification parent, au budget durable et à la vérification effective de la rétention fournisseur. La lecture préenregistrée fonctionne indépendamment. Ne pas modifier ces protections pour simuler une activation.
+- Aucun service professionnel n’est à modifier. Les données locales des deux lectrices restent séparées; aucune synchronisation entre appareils ni analyse de prononciation n’est annoncée.
+
+Vérifications réalisées : tests Node et build; MP3 de lapin, 307, 1 999 et d’une histoire valides; lecture complète dans le navigateur pour lapin et 1 000; passage automatique au mot suivant après une bonne réponse. L’écoute sur un iPad physique n’a pas été vérifiée.
+
+---
+
 > Livraison actuelle : conversation vocale tour par tour implémentée côté serveur, activation fermée tant que compte parent, base durable, confidentialité et clé OpenAI ne sont pas vérifiés. Voir [VOICE-SETUP.md](VOICE-SETUP.md). Le contenu ci-dessous décrit aussi la base importée; les mentions de transport « futur » sont remplacées par ce document. Icône hibou approuvée, manifest standalone et aide installation iPad livrés; aucun mode hors ligne.
 
 # Jardin familial — correction de livraison du 20 octobre 2026
