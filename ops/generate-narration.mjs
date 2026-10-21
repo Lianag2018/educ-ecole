@@ -1,7 +1,7 @@
 import {mkdir,writeFile,readFile,copyFile} from 'node:fs/promises';
 import {narrationCatalog,MODEL,VOICE,INSTRUCTIONS} from './narration-catalog.mjs';
 const PUBLIC='https://educ-ecole.vercel.app';
-export async function generateNarration({env=process.env,fetcher=fetch}={}){
+export async function generateNarration({env=process.env,fetcher=fetch,waiter=ms=>new Promise(resolve=>setTimeout(resolve,ms))}={}){
  const catalog=narrationCatalog();
  if(catalog.length>2300||catalog.reduce((n,c)=>n+c.text.length,0)>150000)throw Error('Narration catalog exceeds reviewed generation limit');
  const live=env.VERCEL_ENV==='production'&&env.VERCEL==='1';
@@ -34,9 +34,10 @@ export async function generateNarration({env=process.env,fetcher=fetch}={}){
   }
   let response;
   for(let attempt=0;attempt<3;attempt++){
-   response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:INSTRUCTIONS,response_format:'mp3',speed:0.85})});
+   try{response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:INSTRUCTIONS,response_format:'mp3',speed:0.85})});}
+   catch(e){if(attempt===2||!['TimeoutError','TypeError'].includes(e.name))throw e;await waiter((attempt+1)*1500);continue;}
    if(response.ok||response.status<500||response.status>599||attempt===2)break;
-   await response.body?.cancel();await new Promise(resolve=>setTimeout(resolve,(attempt+1)*1500));
+   await response.body?.cancel();await waiter((attempt+1)*1500);
   }
   if(!response.ok){let code='';try{const data=await response.json();if(/^[a-z_]{1,50}$/.test(data.error?.code))code=' '+data.error.code;}catch{}throw Error('OpenAI narration HTTP '+response.status+code);}
   const b=Buffer.from(await response.arrayBuffer());if(b.length<1000||b.length>4000000)throw Error('Invalid audio size');
@@ -48,7 +49,7 @@ export async function generateNarration({env=process.env,fetcher=fetch}={}){
  if(!key)return publish(Error('missing_production_key'));
  try{await one(catalog[cursor++]);}catch(e){return publish(e);}
  console.log('Narration: first MP3 validated. Catalog size: '+catalog.length);
- const workers=Array.from({length:3},async()=>{while(!failed){if(Date.now()>deadline){failed=true;errors.push(Error('generation_time_budget'));return;}const i=cursor++;if(i>=catalog.length)return;try{await one(catalog[i]);if((generated+reused)%100===0)console.log('Narration: '+(generated+reused)+'/'+catalog.length+' audio files ready');}catch(e){errors.push(e);if(!/^OpenAI narration HTTP 5\d\d/.test(e.message)||errors.length>=3){failed=true;return;}}}});
+ const workers=Array.from({length:3},async()=>{while(!failed){if(Date.now()>deadline){failed=true;errors.push(Error('generation_time_budget'));return;}const i=cursor++;if(i>=catalog.length)return;try{await one(catalog[i]);if((generated+reused)%100===0)console.log('Narration: '+(generated+reused)+'/'+catalog.length+' audio files ready');}catch(e){errors.push(e);const temporary=/^OpenAI narration HTTP 5\d\d/.test(e.message)||['TimeoutError','TypeError'].includes(e.name);if(!temporary||errors.length>=3){failed=true;return;}}}});
  await Promise.all(workers);
  return publish(errors[0]);
 }
