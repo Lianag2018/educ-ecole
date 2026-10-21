@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading} from '../src/learning.js';
-import {stories,mathCards,social} from '../src/garden.js';
+import {stories,mathCards,social,rows} from '../src/garden.js';
 import {tablePractice} from '../src/week-plan.js';
 import {numberWords} from '../src/numbers.js';
 import {spokenActivity} from '../src/speech.js';
@@ -11,13 +11,15 @@ export function narrationCatalog(){
  const cards=[...bank,...olderReading,...stories,...mathCards,social];
  for(let n=1;n<=6;n++)for(const op of ['+','−'])cards.push(...tablePractice(n,op));
  const texts=new Set(['Bonjour! On prend notre temps pour lire ensemble.','Bravo! Tu as bien travaillé.','On prend notre temps. Tu peux réessayer.']);
+ for(const n of [307,1000,1999,1001,1010,1024,1100,1208,1370,1500,1809])texts.add(numberWords(n));
  for(const q of cards){
   // Built-in teaching content only. No profiles, uploads, questions or child audio.
   const text=spokenActivity(q);if(!/Liana|Mely-Ann/i.test(text))texts.add(text);
  }
  // Make daily lessons and the photographed worksheet usable first if a provider
  // interrupts the initial catalog build; hashes do not depend on this order.
- for(const n of [307,1000,1999,251,438,539,915,460,123,763,655,876])texts.add(numberWords(n));
- for(let n=0;n<=1999;n++)texts.add(numberWords(n));
+ for(const n of Object.values(rows).flat())texts.add(numberWords(n));
+ for(let n=0;n<100;n++)texts.add(numberWords(n));
+ for(let n=100;n<=1000;n+=100)texts.add(numberWords(n));
  return [...texts].map(text=>({text,file:createHash('sha256').update(MODEL+'|'+VOICE+'|'+INSTRUCTIONS+'|'+text).digest('hex')+'.mp3'}));
 }
