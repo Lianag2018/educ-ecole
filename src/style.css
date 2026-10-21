@@ -42,3 +42,5 @@ body{background:radial-gradient(ellipse at top,#fff5d8,transparent 65%),#f9f5ed;
 @keyframes reward-pop{from{opacity:0;transform:scale(.4)}70%{transform:scale(1.1)}to{opacity:1;transform:scale(1)}}
 @media(max-width:450px){.family-scene{margin:-16px -16px 20px}.family-hotspot{min-width:24px;min-height:24px!important}.game-player .family-face{width:90px;height:90px}.family-parent{height:8%}.family-first,.family-second{height:9%}}
 @media(prefers-reduced-motion:reduce){.garden-spark,.family-face,.reward-stars{animation:none!important}.game-player:hover .family-face,.game-worlds button:hover span{transform:none}}
+
+.weekly-plan{max-width:600px;margin:24px auto;padding:20px;background:#fff8e5;border:2px solid #e9d7ab;border-radius:24px;text-align:center}.weekly-plan h2{margin:0 0 12px}.weekly-tables{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0}.weekly-tables button{padding:8px;min-height:48px;background:#ebe1fb;border:2px solid white;border-radius:15px;font-size:24px;font-weight:800}.weekly-plan details{text-align:left}.weekly-plan li{margin-bottom:12px}.weekly-plan select{max-width:100%}
