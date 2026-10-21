@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {fresh,answer,save,load,level} from '../../src/engine.js';
+import {learningReport,prioritySkills,adaptiveCards,progressPanel} from '../../src/progress.js';
+const day='2026-10-21',card={id:'a',skill:'mots',level:1};
+test('memory persists and the two learners never share results',()=>{const s=fresh();answer(s.profiles[0],card,'help',day);let data;const storage={setItem(k,v){data=v;},getItem(){return data;}};save(storage,s);const restored=load(storage);assert.equal(learningReport(restored.profiles[0],day).current.help,1);assert.equal(learningReport(restored.profiles[1],day).total,0);});
+test('maths success cannot increase the reading difficulty',()=>{const p=fresh().profiles[0];for(let i=0;i<4;i++)answer(p,{...card,id:'math'+i},'correct',day,'Maths');assert.equal(level(p,'mots'),1);assert.equal(learningReport(p,day).domains[0].subject,'Maths');});
+test('repeated same-day successes are not long-term consolidation',()=>{const p=fresh().profiles[0];for(let i=0;i<20;i++)answer(p,card,'correct',day);assert.equal(learningReport(p,day).domains[0].status,'À découvrir');answer(p,{...card,id:'b'},'correct','2026-10-22');answer(p,card,'correct','2026-10-23');assert.equal(learningReport(p,'2026-10-23').domains[0].status,'À consolider dans le temps');});
+test('help drives the next priority and explicit subjects retain all cards',()=>{const p=fresh().profiles[0];answer(p,card,'help',day);assert.equal(prioritySkills(p,day)[0],'mots');const cards=[{...card,id:'new'},card];assert.deepEqual(adaptiveCards(p,cards,day).map(q=>q.id),['a','new']);assert.equal(cards[0].id,'new');});
+test('weekly windows and legacy history remain honest',()=>{const p=fresh().profiles[0];p.history.push({id:'old',skill:'mots',result:'correct',day:'2026-10-14'});answer(p,card,'help',day);const r=learningReport(p,day);assert.equal(r.previous.independent,1);assert.equal(r.current.help,1);assert.equal(r.legacy,1);assert.ok(progressPanel(p,day).includes('Historique non classé'));assert.equal(p.history.length,2);});
