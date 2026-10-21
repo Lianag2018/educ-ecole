@@ -14,6 +14,6 @@ export function tablePractice(table,operation){
  const other=i+1,addition=operation==='+',result=addition?table+other:other;
  const text=addition?`${table} + ${other}`:`${other+table} − ${table}`;
  const answer=i%3,choices=[result+1,result+2,result+3].map(String);choices[answer]=String(result);
- return {id:`week-20261019-${addition?'add':'sub'}-${table}-${other}`,skill:'mots',level:1,prompt:'Trouve la réponse. Prends ton temps.',text,choices,answer,explanation:addition?`Pars de ${other}, puis ajoute ${table}. Tu arrives à ${result}.`:`Retire ${table} de ${other+table}. Il reste ${result}. Pour vérifier : ${result} + ${table} = ${other+table}.`};
+ return {id:`week-20261019-${addition?'add':'sub'}-${table}-${other}`,skill:'maths',level:1,prompt:'Trouve la réponse. Prends ton temps.',text,choices,answer,explanation:addition?`Pars de ${other}, puis ajoute ${table}. Tu arrives à ${result}.`:`Retire ${table} de ${other+table}. Il reste ${result}. Pour vérifier : ${result} + ${table} = ${other+table}.`};
  });
 }
