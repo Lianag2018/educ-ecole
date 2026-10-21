@@ -15,7 +15,7 @@ export async function generateNarration({env=process.env,fetcher=fetch}={}){
  let previous={};
  try{const r=await fetcher(PUBLIC+'/audio/manifest.json',{redirect:'error',signal:AbortSignal.timeout(15000)});if(r.ok){const m=await r.json();if(m.version===1)previous=m.clips||{};}}catch{}
  const clips={},cache='.vercel/cache/educ-narration';await mkdir(cache,{recursive:true});
- let cursor=0,generated=0,reused=0,failed=false;
+ let cursor=0,generated=0,reused=0,failed=false;const errors=[],deadline=Date.now()+20*60*1000;
  const safeError=e=>/^OpenAI narration HTTP \d{3}(?: [a-z_]+)?$/.test(e?.message)?e.message:e?.name==='TimeoutError'?'audio_request_timeout':e?.message==='missing_production_key'?'missing_production_key':'audio_generation_error';
  async function publish(error){
   const report={state:error?(Object.keys(clips).length?'partial':'unavailable'):'ready',ready:Object.keys(clips).length,total:catalog.length,generated,reused,error:error?safeError(error):null};
@@ -32,7 +32,12 @@ export async function generateNarration({env=process.env,fetcher=fetch}={}){
    if(r.ok&&r.headers.get('content-type')?.startsWith('audio/')){const b=Buffer.from(await r.arrayBuffer());if(b.length>1000&&b.length<4000000){await writeFile(out,b);await writeFile(cached,b);clips[item.text]=item.file;reused++;return;}}
    throw Error('Published audio could not be reused; refusing duplicate paid generation');
   }
-  const response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:INSTRUCTIONS,response_format:'mp3',speed:0.85})});
+  let response;
+  for(let attempt=0;attempt<3;attempt++){
+   response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:INSTRUCTIONS,response_format:'mp3',speed:0.85})});
+   if(response.ok||response.status<500||response.status>599||attempt===2)break;
+   await response.body?.cancel();await new Promise(resolve=>setTimeout(resolve,(attempt+1)*1500));
+  }
   if(!response.ok){let code='';try{const data=await response.json();if(/^[a-z_]{1,50}$/.test(data.error?.code))code=' '+data.error.code;}catch{}throw Error('OpenAI narration HTTP '+response.status+code);}
   const b=Buffer.from(await response.arrayBuffer());if(b.length<1000||b.length>4000000)throw Error('Invalid audio size');
   if(!(b.subarray(0,3).toString()==='ID3'||(b[0]===255&&(b[1]&224)===224)))throw Error('Invalid MP3 response');
@@ -43,7 +48,7 @@ export async function generateNarration({env=process.env,fetcher=fetch}={}){
  if(!key)return publish(Error('missing_production_key'));
  try{await one(catalog[cursor++]);}catch(e){return publish(e);}
  console.log('Narration: first MP3 validated. Catalog size: '+catalog.length);
- const workers=Array.from({length:3},async()=>{while(!failed){const i=cursor++;if(i>=catalog.length)return;try{await one(catalog[i]);if((generated+reused)%100===0)console.log('Narration: '+(generated+reused)+'/'+catalog.length+' audio files ready');}catch(e){failed=true;throw e;}}});
- const results=await Promise.allSettled(workers);const error=results.find(r=>r.status==='rejected');
- return publish(error?.reason);
+ const workers=Array.from({length:3},async()=>{while(!failed){if(Date.now()>deadline){failed=true;errors.push(Error('generation_time_budget'));return;}const i=cursor++;if(i>=catalog.length)return;try{await one(catalog[i]);if((generated+reused)%100===0)console.log('Narration: '+(generated+reused)+'/'+catalog.length+' audio files ready');}catch(e){errors.push(e);if(!/^OpenAI narration HTTP 5\d\d/.test(e.message)||errors.length>=3){failed=true;return;}}}});
+ await Promise.all(workers);
+ return publish(errors[0]);
 }
