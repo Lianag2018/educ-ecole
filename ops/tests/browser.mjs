@@ -67,7 +67,7 @@ try{
  await click('[data-action=home]');
  assert.equal(await run("document.querySelectorAll('[data-subject]').length"),4);
  await click('[data-subject="1"]');
- assert.match(await run("document.querySelector('.reading').textContent"),/chat/);
+ assert.match(await run("document.querySelector('.reading').textContent"),/licornes/);
  await click('[data-action=help]');await click('[data-choice="0"]');
  saved=JSON.parse(await run("localStorage.getItem('atelier-mots-v1')"));
  assert.equal(saved.profiles[0].history.at(-1).result,'help');

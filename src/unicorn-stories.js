@@ -1,0 +1,20 @@
+// Original stories, paired by reading stage. The two sisters are fictional characters.
+const story=(id,grade,title,text,prompt,choices,answer,explanation)=>({id,grade,title,skill:'comprehension',level:grade===1?1:2,text,prompt,choices,answer,explanation});
+export const unicornStories=[
+ story('unicorn-cloud-1',1,'Les deux sœurs et le nuage rose',
+ 'Deux sœurs rêvent. Elles sont des licornes ! La petite a des ailes roses. La grande a des ailes mauves. Elles volent dans le ciel. Un nuage rose passe. La petite rit. Les deux sœurs se posent sur le nuage. Il est doux. Elles font une pause, puis rentrent ensemble.',
+ 'Où les deux sœurs font-elles une pause?', ['Sur un nuage rose','Dans la mer','Sous une table'],0,
+ 'Elles se posent sur le nuage rose. Reprends : « Elles font une pause. » Petits morceaux à lire : li-corne, ro-se. Dans « des ailes », on relie les mots avec le son z. Fais une pause au point et une voix joyeuse pour « Elles sont des licornes ! ».'),
+ story('unicorn-star-1',1,'Une étoile à la maison',
+ 'Les deux sœurs volent ce soir. Une petite étoile est loin de sa maison. Elle a peur. « Viens avec nous ! » dit la grande licorne. La petite lui donne la patte. Elles vont vers la lune. L’étoile retrouve ses amies. Elle brille. Les sœurs sont contentes.',
+ 'Comment les sœurs aident-elles l’étoile?', ['Elles la cachent','Elles la ramènent vers la lune','Elles la mettent dans un sac'],1,
+ 'Elles accompagnent l’étoile vers la lune, où elle retrouve ses amies. Lis lu-ne, puis lune. Dans « ses amies », la liaison se fait avec z. Lis « Viens avec nous ! » avec une voix rassurante.'),
+ story('unicorn-cloud-3',3,'Le pont des nuages',
+ 'Cette nuit-là, les deux sœurs découvrent des ailes sur leur dos. Elles sont devenues des licornes ! La plus jeune trace des boucles roses dans le ciel. Sa grande sœur dessine des spirales mauves. Au-dessus de la forêt, elles rencontrent un oisillon arrêté devant un trou entre deux nuages. « Comment vais-je rejoindre mon nid ? » demande-t-il. La grande veut le porter, mais le petit oiseau préfère essayer de voler. Les sœurs cherchent une autre idée. Elles rapprochent de petits nuages pour former un pont. L’oisillon avance, puis ouvre ses ailes. Les licornes volent à ses côtés sans le tenir. Enfin, il atteint son nid. Les sœurs comprennent que donner du courage peut aider autant que faire les choses à la place de quelqu’un.',
+ 'Pourquoi les sœurs changent-elles leur première idée?', ['Le petit oiseau veut essayer de voler lui-même','Elles ne trouvent plus la forêt','Le nid est déjà vide'],0,
+ 'L’oisillon préfère essayer. Les sœurs adaptent leur aide et l’accompagnent sans le porter. Trouve la phrase qui le montre. Lis oi-sil-lon puis oisillon. Liaisons : « un oisillon » avec n, « ses ailes » avec z. Fais entendre la question de l’oiseau et laisse une pause aux virgules.'),
+ story('unicorn-star-3',3,'Le jardin des étoiles',
+ 'Chaque soir, les deux sœurs licornes visitent un jardin suspendu entre la lune et les nuages. On y cultive de petites étoiles. Un soir, la fontaine ne coule plus et les étoiles perdent leur éclat. La plus jeune propose de tirer sur le robinet. Sa sœur préfère observer le tuyau. Elles suivent son trajet et découvrent une branche coincée dans un coude. Ensemble, elles dégagent doucement le passage. L’eau recommence à couler, mais elles ne remplissent pas tous les arrosoirs à la fois. Elles partagent les tâches : une sœur apporte l’eau pendant que l’autre arrose. Peu à peu, le jardin s’illumine. Avant de partir, elles installent une petite grille pour empêcher les branches d’entrer dans le tuyau. « Demain, les étoiles auront encore de l’eau ! » se réjouissent-elles.',
+ 'À quoi sert la petite grille installée à la fin?', ['À décorer les arrosoirs','À empêcher une nouvelle obstruction','À cacher la lune'],1,
+ 'La grille empêche les branches d’entrer : les sœurs préviennent le retour du problème. Raconte les étapes : observer, trouver, réparer, prévenir. Lis ar-ro-soir puis arrosoir. Liaisons : « les étoiles » avec z, « un arrosoir » avec n. Marque les pauses et termine avec une voix heureuse.')
+];

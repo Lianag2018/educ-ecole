@@ -1,3 +1,4 @@
+import {unicornStories} from './unicorn-stories.js';
 // Original local learning content. No textbook reproduction or speech recognition.
 export const subjects=['Français','Lecture','Maths','Univers social'];
 export const rows=Object.fromEntries(`A 251 438 539 915 460 123 307 763 655 876
@@ -12,6 +13,7 @@ I 272 795 814 493 389 781 978 696 524 999`.split('\n').map(s=>{const [k,...v]=s.
 export const decompose=n=>String(n).split('').map((d,i,a)=>Number(d)*10**(a.length-i-1)).filter(Boolean).join(' + ');
 const card=(id,skill,prompt,text,choices,answer,explanation)=>({id,skill,level:1,prompt,text,choices,answer,explanation});
 export const stories=[
+...unicornStories,
 {grade:1,...card('garden-story-1','comprehension','Où est le chat?','Le chat est ici. Il est sur le tapis. Il voit un ami. Les amis jouent, puis le chat dort.',['Sur le tapis','Dans un arbre'],0,'Le texte dit : « Il est sur le tapis. » Lis une phrase à la fois. Les‿amis : liaison obligatoire en z; un‿ami : n. Fais une petite pause à la virgule et une pause au point.')},
 {grade:1,...card('garden-story-2','comprehension','Pourquoi le petit ours va-t-il sous un arbre?','Un petit ours sort. La pluie arrive. Il va sous un arbre. Il est à l’abri. Puis le soleil revient.',['Pour se mettre à l’abri','Pour nager'],0,'La pluie arrive, puis l’ours se met à l’abri. Relis deux phrases ensemble. Petit‿ours : t; un‿arbre : n. Fais une pause à chaque point.')},
 {grade:3,...card('garden-story-3','comprehension','Pourquoi le groupe change-t-il son plan?','Les amis préparent un sentier dans le jardin. Ils veulent poser des pierres près du ruisseau, mais la terre est trop humide. Une élève propose de déplacer le passage vers un grand arbre. Le groupe compare les deux endroits et choisit le sol le plus ferme. Le lendemain, la pluie tombe : le nouveau passage reste praticable.',['Le premier sol est trop humide','Les pierres sont trop petites'],0,'La terre humide motive le changement; le passage praticable confirme le choix. Quel passage justifie ta réponse? Les‿amis : z; grand‿arbre : t (aucune liaison entre un et grand); deux‿endroits : z. Pauses aux virgules, pause plus longue au point et aux deux-points.')},
