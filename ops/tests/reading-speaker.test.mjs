@@ -24,3 +24,12 @@ test('unavailable voice offers explicit system fallback',()=>{
 test('silent startup fails visibly and clears pending speech',()=>{
  const f=fixture();f.reader.speak('lapin',f.opts);[...f.timers.values()][0]();assert.equal(f.states.at(-1)[0],'error');assert.equal(f.reader.current,null);assert.equal(f.timers.size,0);
 });
+test('browser timers are called with their native global receiver',()=>{
+ const originalSet=globalThis.setTimeout,originalClear=globalThis.clearTimeout;
+ try {
+  globalThis.setTimeout=function(){assert.equal(this,globalThis);return 1;};
+  globalThis.clearTimeout=function(){assert.equal(this,globalThis);};
+  const f=fixture();const reader=new ReadingSpeaker({synth:f.synth,Utterance:class{}});
+  reader.stop();reader.speak('lapin');reader.stop();
+ } finally {globalThis.setTimeout=originalSet;globalThis.clearTimeout=originalClear;}
+});

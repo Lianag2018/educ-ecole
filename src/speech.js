@@ -17,7 +17,7 @@ export const readingRate = mode => mode==='very-slow' ? .45 : .65;
 
 // Keep the utterance alive and isolate callbacks from stopped/replaced readings.
 export class ReadingSpeaker {
- constructor({synth=globalThis.speechSynthesis,Utterance=globalThis.SpeechSynthesisUtterance,setTimer=setTimeout,clearTimer=clearTimeout}={}) {
+ constructor({synth=globalThis.speechSynthesis,Utterance=globalThis.SpeechSynthesisUtterance,setTimer=(fn,ms)=>globalThis.setTimeout(fn,ms),clearTimer=id=>globalThis.clearTimeout(id)}={}) {
   Object.assign(this,{synth,Utterance,setTimer,clearTimer});this.epoch=0;this.current=null;
  }
  stop(){this.epoch++;this.clearTimer(this.timer);this.current=null;this.synth?.cancel();}
