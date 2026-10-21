@@ -1,4 +1,5 @@
-import {numberWords} from './numbers.js';
+import {numberWords,numberParts} from './numbers.js';
+const numberByWords=new Map(Array.from({length:2000},(_,n)=>[numberWords(n),n]));
 // Same-origin prerecorded OpenAI narration. No user text or microphone data is sent.
 export class NarrationSpeaker {
  constructor({fallback,AudioClass=globalThis.Audio,fetcher=globalThis.fetch}={}){
@@ -9,7 +10,7 @@ export class NarrationSpeaker {
  stop(){this.epoch++;this.fallback?.stop();if(this.audio){this.audio.pause();this.audio.onplaying=null;this.audio.onended=null;this.audio.onerror=null;this.audio.removeAttribute?.('src');} }
  speak(text,options={}){
   this.stop();const epoch=this.epoch,raw=String(text).trim(),key=/^\d{1,4}$/.test(raw)&&Number(raw)<=1999?numberWords(Number(raw)):raw,parts=this.clips[key]?[key]:key.split('. ').filter(Boolean);
-  const files=parts.map(p=>this.clips[p]);
+  const files=parts.flatMap(p=>this.clips[p]?[this.clips[p]]:numberByWords.has(p)?numberParts(numberByWords.get(p)).map(s=>this.clips[s]):[undefined]);
   if(options.systemVoice||options.preferredURI||!this.audio||!files.length||files.some(f=>!f||!/^[a-f0-9]{64}\.mp3$/.test(f))){this.fallback.speak(text,options);return;}
   const onState=options.onState||(()=>{}),audio=this.audio;let index=0;
   const active=()=>this.epoch===epoch;
