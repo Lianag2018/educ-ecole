@@ -1,0 +1,17 @@
+// Pedagogical cues, not a phonetic assessment. Prerecorded timing is approximate.
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const links=new Map([['les amis','z'],['des ailes','z'],['ses ailes','z'],['ses amies','z'],['les étoiles','z'],['un arbre','n'],['un oisillon','n'],['un arrosoir','n'],['un petit ours','t']]);
+const marks={',':['comma','Petite pause'],'.':['stop','La phrase est finie. Fais une pause.'],'!':['expression','Mets de l’expression, sans crier !'],'?':['question','Fais entendre la question.'],'…':['stop','Prends ton temps…']};
+export function readingCues(text){
+ const tokens=Array.from(String(text).matchAll(/[\p{L}\p{N}]+(?:[’'−-][\p{L}\p{N}]+)*|[^\s]/gu),m=>({text:m[0],start:m.index,end:m.index+m[0].length,kind:marks[m[0]]?.[0]||'word',hint:marks[m[0]]?.[1]||'Suis les mots avec tes yeux.'}));
+ for(const [phrase,sound] of links){let at=-1;while((at=text.toLocaleLowerCase('fr-CA').indexOf(phrase,at+1))!==-1){
+  if(/[\p{L}]/u.test(text[at-1]||'')||/[\p{L}]/u.test(text[at+phrase.length]||''))continue;
+  const group=tokens.filter(t=>t.start>=at&&t.end<=at+phrase.length);
+  group.forEach((t,i)=>{t.link=sound;t.bridge=i<group.length-1;t.hint=`Relie les mots avec le son « ${sound} ».`;});
+ }}
+ let total=0;for(const t of tokens){t.from=total;total+=t.kind==='comma'?2:t.kind==='stop'?4:t.kind==='word'?Math.max(1,t.text.length*.55):3;t.to=total;}
+ return {tokens,total};
+}
+export function cueAt(plan,progress){if(!plan.tokens.length)return -1;const n=Math.max(0,Math.min(1,progress))*plan.total;return Math.max(0,plan.tokens.findIndex(t=>n<t.to)===-1?plan.tokens.length-1:plan.tokens.findIndex(t=>n<t.to));}
+export function guidedMarkup(text,older=false){const {tokens}=readingCues(text);let end=0;const html=tokens.map((t,i)=>{const space=escape(text.slice(end,t.start));end=t.end;return space+`<span data-cue="${i}" class="read-token cue-${t.kind}${t.bridge?' liaison-bridge':''}"${t.link?` title="Liaison : son ${t.link}"`:''}>${escape(t.text)}</span>`;}).join('');return `<div class="guided-reading" data-guided-text="${escape(text)}"><div class="reading guided-text">${html}</div><p class="reading-coach">🦉 Écoute, puis essaie à ton tour.</p><div class="reading-legend"><span>, petite pause</span><span>. pause</span><span>! expression</span>${older?'<span>? question</span>':''}<span>⌣ mots liés</span></div><p class="small">Repères visuels approximatifs pendant la narration. Les ponts montrent certaines liaisons à pratiquer.</p></div>`;}
+export function updateReadingCue(root,text,event){const box=root.querySelector('.guided-reading');if(!box||box.dataset.guidedText!==text)return;const plan=readingCues(text);const index=event.charIndex!==undefined?plan.tokens.findIndex(t=>t.end>event.charIndex):cueAt(plan,event.progress);box.querySelectorAll('[data-cue]').forEach((el,i)=>{el.classList.toggle('cue-active',i===index);el.classList.toggle('cue-read',i<index);});const coach=box.querySelector('.reading-coach');if(coach)coach.textContent='🦉 '+(plan.tokens[index]?.hint||'Écoute, puis essaie à ton tour.');}

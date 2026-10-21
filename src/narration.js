@@ -7,7 +7,7 @@ export class NarrationSpeaker {
   if(this.audio){this.audio.preload='auto';this.audio.setAttribute?.('playsinline','');}
   this.ready=fetcher('/audio/manifest.json').then(r=>r.ok?r.json():null).then(m=>{if(m?.version===1)this.clips=m.clips||{};}).catch(()=>{});
  }
- stop(){this.epoch++;this.fallback?.stop();if(this.audio){this.audio.pause();this.audio.onplaying=null;this.audio.onended=null;this.audio.onerror=null;this.audio.removeAttribute?.('src');} }
+ stop(){this.epoch++;this.fallback?.stop();if(this.audio){this.audio.pause();this.audio.onplaying=null;this.audio.onended=null;this.audio.onerror=null;this.audio.ontimeupdate=null;this.audio.removeAttribute?.('src');} }
  speak(text,options={}){
   this.stop();const epoch=this.epoch,raw=String(text).trim(),key=/^\d{1,4}$/.test(raw)&&Number(raw)<=1999?numberWords(Number(raw)):raw,parts=this.clips[key]?[key]:key.split('. ').filter(Boolean);
   const files=parts.flatMap(p=>this.clips[p]?[this.clips[p]]:numberByWords.has(p)?numberParts(numberByWords.get(p)).map(s=>this.clips[s]):[undefined]);
@@ -17,6 +17,8 @@ export class NarrationSpeaker {
   const fail=()=>{if(active()){this.stop();onState('error','Touche Écouter pour relancer la narratrice. Vérifie aussi le volume.');}};
   const play=()=>{if(!active())return;audio.src='/audio/'+files[index];audio.playbackRate=options.speed==='very-slow'?.8:1;audio.volume=1;audio.muted=false;try{const promise=audio.play();promise?.catch(fail);}catch{fail();}};
   audio.onplaying=()=>{if(active())onState('speaking','Narratrice IA · français québécois · lecture douce.');};
+  // Do not run a wall-clock animation: stalled/paused audio must not advance the guide.
+  audio.ontimeupdate=()=>{if(active()&&files.length===1&&Number.isFinite(audio.duration)&&audio.duration>0)options.onProgress?.({progress:audio.currentTime/audio.duration,approximate:true});};
   audio.onerror=fail;
   audio.onended=()=>{if(!active())return;if(++index<files.length)play();else onState('ended','À ton tour! Tu peux réécouter aussi souvent que tu veux.');};
   play();if(active())onState('starting','La narratrice commence…');

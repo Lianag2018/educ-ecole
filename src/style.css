@@ -44,3 +44,14 @@ body{background:radial-gradient(ellipse at top,#fff5d8,transparent 65%),#f9f5ed;
 @media(prefers-reduced-motion:reduce){.garden-spark,.family-face,.reward-stars{animation:none!important}.game-player:hover .family-face,.game-worlds button:hover span{transform:none}}
 
 .weekly-plan{max-width:600px;margin:24px auto;padding:20px;background:#fff8e5;border:2px solid #e9d7ab;border-radius:24px;text-align:center}.weekly-plan h2{margin:0 0 12px}.weekly-tables{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0}.weekly-tables button{padding:8px;min-height:48px;background:#ebe1fb;border:2px solid white;border-radius:15px;font-size:24px;font-weight:800}.weekly-plan details{text-align:left}.weekly-plan li{margin-bottom:12px}.weekly-plan select{max-width:100%}
+
+/* Reading cues keep the line stable: no jumping words or flashing text. */
+.guided-text{line-height:2.1;text-align:left;overflow-wrap:anywhere;font-size:clamp(1.4rem,4vw,2rem)}
+.read-token{border-radius:.3em;box-decoration-break:clone;-webkit-box-decoration-break:clone;transition:background-color .18s,color .18s}
+.cue-comma,.cue-stop{color:#075b68;font-weight:900;background:#def5f4}
+.cue-expression,.cue-question{color:#853e06;font-weight:900;background:#fff0c2}
+.liaison-bridge{border-bottom:3px solid #7750a2;border-radius:0 0 50% 50%;padding-bottom:.12em}
+.guided-text .cue-active{background:#ffdb69;color:#241136;outline:2px solid #714291;outline-offset:2px}
+.cue-read{color:#5b476b}.reading-coach{min-height:3em;background:#f4eaff;border-radius:1em;padding:.8em;font-weight:700}
+.reading-legend{display:flex;flex-wrap:wrap;gap:.5em;font-size:.9rem}.reading-legend span{padding:.35em .65em;background:#fff4d9;border-radius:1em}
+@media(prefers-reduced-motion:reduce){.read-token{transition:none}}
