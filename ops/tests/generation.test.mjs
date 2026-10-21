@@ -23,3 +23,17 @@ test('an interrupted generation publishes usable clips and sanitized diagnostics
   assert.ok(!(await readFile('dist/audio/status.json','utf8')).includes('private'));
  }finally{process.chdir(cwd);await rm(dir,{recursive:true,force:true});}
 });
+test('a transient timeout is retried before failing the canary',async()=>{
+ const cwd=process.cwd(),dir=await mkdtemp(join(tmpdir(),'educ-audio-retry-'));process.chdir(dir);
+ try{
+  let calls=0,waits=0;const bytes=Buffer.alloc(2000);bytes.write('ID3');
+  const fetcher=async url=>{
+   if(!url.includes('api.openai.com'))return {ok:false};calls++;
+   if(calls===1){const e=Error('timeout');e.name='TimeoutError';throw e;}
+   if(calls===2)return {ok:true,status:200,arrayBuffer:async()=>bytes};
+   return {ok:false,status:401,json:async()=>({error:{code:'invalid_api_key'}})};
+  };
+  const result=await generateNarration({env,fetcher,waiter:async()=>{waits++;}});
+  assert.equal(waits,1);assert.equal(result.ready,1);assert.equal(result.error,'OpenAI narration HTTP 401 invalid_api_key');
+ }finally{process.chdir(cwd);await rm(dir,{recursive:true,force:true});}
+});
