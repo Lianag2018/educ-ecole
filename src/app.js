@@ -16,6 +16,8 @@ let lastReadingText='Bonjour! On prend notre temps pour lire ensemble.';
 let tutorHint=false, owlState='idle', numberRow='A', numberIndex=0, wholeRow=false, speaking=false, editTaskIndex=null;
 let storage;try{storage=window.localStorage;}catch{}
 let state=load(storage),view='home',session=null,draft=[],feedback=null,helped=false,voiceMessage='',mediaMessage='',recording=false;
+// Switch existing installations to the requested narrator once, preserving later choices.
+if(state.readingNarrationRevision!==1){state.readingVoiceURI='';state.readingNarrationRevision=1;}
 let recorder,stream,recordURL,recordTimer,mediaEpoch=0,micPending=false;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const profile=()=>state.profiles.find(p=>p.id===state.active);
