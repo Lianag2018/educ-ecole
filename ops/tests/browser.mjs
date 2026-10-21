@@ -24,7 +24,11 @@ try{
  const click=s=>run(`document.querySelector(${JSON.stringify(s)}).click()`);
  assert.match(await run('document.title'),/Atelier/);
  assert.equal(await run('document.documentElement.scrollWidth<=innerWidth'),true);
- await click('[data-scene=start]');await click('[data-choice="1"]');
+ await click('[data-scene=start]');
+ await run(`window.__spoken=[];Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{getVoices:()=>[{name:'Amélie',lang:'fr-CA',voiceURI:'amelie'}],cancel(){},speak(u){window.__spoken.push({text:u.text,voice:u.voice.name})}}});`);
+ await click('[data-action=listen]');
+ assert.deepEqual(await run('window.__spoken.at(-1)'),{text:'lapin',voice:'Amélie'});
+ await click('[data-choice="1"]');
  assert.match(await run("document.querySelector('.feedback').textContent"),/apprend/);
  await click('[data-action=next]');await click('[data-action=help]');
  assert.match(await run("document.querySelector('.tutor').textContent"),/tour d’essayer/);
