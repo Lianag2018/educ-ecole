@@ -1,3 +1,4 @@
+import {prioritySkills,isReadingEvent} from './progress.js';
 import {readingBank} from './learning.js';
 import { bank, skills } from './content.js';
 
@@ -34,7 +35,7 @@ export function pool(p) { return [...readingBank(p), ...p.assignments]; }
 
 // These are content tiers, not school grades or a reading diagnosis.
 export function level(p, skill) {
-  const recent = p.history.filter(x => x.skill === skill).slice(-4);
+  const recent = p.history.filter(x => x.skill === skill && isReadingEvent(x)).slice(-4);
   if (recent.length === 4 && recent.every(x => x.result === 'correct')) return 3;
   return recent.length >= 2 &&
     recent.filter(x => x.result === 'correct').length >= Math.ceil(recent.length * .75)
@@ -53,7 +54,7 @@ export function select(p, day) {
   const picked = due.slice(0, 3);
   const assigned = p.assignments.find(q => !p.records[q.id] && !picked.includes(q));
   if (assigned) picked.push(assigned);
-  for (const skill of Object.keys(skills)) {
+  for (const skill of prioritySkills(p, day)) {
     const candidates = all.filter(q => q.skill === skill &&
       !picked.includes(q) && (!p.records[q.id] || p.records[q.id].due <= day) &&
       q.level <= level(p, skill)).sort((a, b) =>
@@ -71,13 +72,13 @@ export function nextDate(day, days) {
   return d.toISOString().slice(0, 10);
 }
 
-export function answer(p, q, result, day) {
+export function answer(p, q, result, day, subject = 'Français') {
   if (!['correct', 'incorrect', 'help'].includes(result)) throw Error('Résultat invalide');
   const old = p.records[q.id] || { streak: 0, attempts: 0 };
   const streak = result === 'correct' ? old.streak + 1 : 0;
   const days = result === 'correct' ? [1, 3, 7, 14][Math.min(streak - 1, 3)] : 0;
   p.records[q.id] = { streak, attempts: old.attempts + 1, result, due: nextDate(day, days) };
-  p.history.push({ id: q.id, skill: q.skill, result, day });
+  p.history.push({ id: q.id, skill: q.skill, result, day, subject, activityLevel: q.level || 1 });
 }
 
 // Literal token extraction only: no invented phonetics, syllable breaks or answers.
