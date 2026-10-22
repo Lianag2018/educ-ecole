@@ -1,3 +1,4 @@
+import {squishyStages} from '../src/squishy.js';
 import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
 import {soundCards} from '../src/sound-cards.js';
 import {createHash} from 'node:crypto';
@@ -28,6 +29,7 @@ export function narrationCatalog(){
  for(const card of Object.values(soundCards))texts.add(card.instruction);
  const baseTexts=new Set(texts);
  texts.add(gardenWelcome);texts.add(gardenEncouragement);for(const card of gardenSounds)texts.add(card.instruction);
+ for(const stage of squishyStages)for(const q of stage.items){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(q.hint);for(const c of q.choices)texts.add(choiceSpeech(c));for(const r of ['correct','incorrect','help'])texts.add(oralFeedback(q,r));}
  const young={id:'p1'},oralCards=[...bank,...mathsFor(young),socialFor(young),...stories.filter(q=>q.grade===1)];
  for(const q of oralCards){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(localHint(q,young));for(const c of q.choices)texts.add(choiceSpeech(c));for(const result of ['correct','incorrect','help'])texts.add(oralFeedback(q,result));}
  for(const word of Object.keys(syllables))texts.add(wordLesson(word));
