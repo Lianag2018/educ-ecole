@@ -1,3 +1,11 @@
+## 21 octobre 2026, America/Toronto — accompagnement oral 1re année
+
+Préparé depuis main 124979d (PR17). Voix native explicitement française, préférence fr-CA; refus explicite si aucune voix française disponible, aucune voix anglaise par défaut. Modèles des sons en mots français contextualisés (chou, loup, du pain), terminologie sons/lettres. Questions et choix écoutables, indices et explications parlés, passage après fin de l’explication; arrêt/interruption annule le passage. Découpage visible la · pin conservé sans prononcer plus. Petit dictionnaire manuel de syllabes et boutons de décodage, univers social simplifié pour la 1re année. Les textes importés ne sont jamais découpés automatiquement.
+
+Catalogue borné étendu à 601 clips intégrés, réutilisation des clips existants. Les nouveaux messages d’accompagnement ne sont pas soumis à l’alignement payant; les textes de lecture conservent le mécanisme existant. Tests Node/build réussis; publication et vérification acoustique à confirmer. Aucun score de prononciation ni test iPad physique revendiqué.
+
+Référence pédagogique : ministère de l’Éducation, Progression des apprentissages, français primaire, orthographe d’usage, correspondances graphème-phonème (pages 14–15). https://cdn-contenu.quebec.ca/cdn-contenu/education/pfeq/primaire/progressions-apprentissages/PFEQ-progression-apprentissages-francais-langue-enseignement-primaire.pdf . Le graphème est écrit, le phonème entendu; les noms des lettres ne remplacent pas les sons. Les choix pédagogiques de l’interface ne constituent pas une validation officielle du ministère.
+
 ## 21 octobre 2026, America/Toronto — mondes par année scolaire
 
 Refonte depuis `31759d582d601d9f45e0d06d207d09f83106cbac`. L’accueil de choix montre les deux personnages; après sélection, seul le monde du profil actif est rendu. `src/worlds.js` définit six choix distincts par niveau. Les anciens hotspots interprofils ont été retirés. Les tables hebdomadaires sont réservées au niveau avancé, sur leur propre écran. Le contenu et les progrès existants sont conservés.
