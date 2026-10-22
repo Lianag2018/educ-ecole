@@ -27,3 +27,14 @@ test('a small spelling mismatch in a sentence keeps measured anchors without inv
  const words=['Les','deux','soeur','regardent','les','belles','étoiles','dans','le','ciel'].map((word,i)=>({word,start:i,end:i+1}));
  const cues=alignWords(text,words);assert.equal(cues.length,9);assert.ok(!cues.some(c=>c.charIndex===9));assert.equal(cues.at(-1).start,9);
 });
+
+test('ball uses measured word fraction and waits on punctuation even after a space',async()=>{
+ class Audio{pause(){}setAttribute(){}removeAttribute(){}play(){return Promise.resolve();}}
+ const file='b'.repeat(64)+'.mp3',text='Lapin !';
+ const p=new NarrationSpeaker({fallback:{stop(){}},AudioClass:Audio,fetcher:async url=>({ok:true,json:async()=>url.includes('alignment')?{version:1,clips:{[file]:{text,cues:[{start:0,end:2,charIndex:0,charEnd:5}]}}}:{version:1,clips:{[text]:file}}})});
+ await Promise.all([p.ready,p.alignmentReady]);const events=[];
+ p.speak(text,{onProgress:e=>events.push(e)});p.audio.duration=3;
+ p.audio.currentTime=1.5;p.audio.ontimeupdate();assert.equal(events.at(-1).wordProgress,.75);
+ p.setSpeed(1.5);p.audio.ontimeupdate();assert.equal(events.at(-1).wordProgress,.75);
+ p.audio.currentTime=2.5;p.audio.ontimeupdate();assert.equal(events.at(-1).charIndex,6);
+});
