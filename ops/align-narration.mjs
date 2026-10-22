@@ -33,7 +33,7 @@ export async function alignNarration({env=process.env,fetcher=fetch}={}){
  if(env.VERCEL_ENV!=='production'||env.VERCEL!=='1'||env.VERCEL_GIT_COMMIT_REF!=='main')return;
  const manifest=JSON.parse(await readFile('dist/audio/manifest.json','utf8'));
  const numbers=new Set(Array.from({length:2000},(_,n)=>numberWords(n)));
- const items=narrationCatalog().filter(x=>manifest.clips[x.text]===x.file&&!numbers.has(x.text)&&!/[0-9+−=]/.test(x.text)&&x.text.trim().split(/\s+/).length>1);
+ const items=narrationCatalog().filter(x=>x.align!==false&&manifest.clips[x.text]===x.file&&!numbers.has(x.text)&&!/[0-9+−=]/.test(x.text)&&x.text.trim().split(/\s+/).length>1);
  if(items.length>80)throw Error('Alignment catalog exceeds reviewed limit');
  let previous={};try{const r=await fetcher('https://educ-ecole.vercel.app/audio/alignment.json',{redirect:'error',signal:AbortSignal.timeout(15000)});if(r.ok){const data=await r.json();if(data.version===1)previous=data.clips||{};}}catch{}
  const clips={},cache='.vercel/cache/educ-alignment';await mkdir(cache,{recursive:true});
