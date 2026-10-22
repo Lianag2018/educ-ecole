@@ -1,5 +1,13 @@
 > **Reprise du projet :** lire [AGENTS.md](AGENTS.md), [l’architecture](ARCHITECTURE.md), [l’état courant](ops/PROJECT-STATE.md) et [le parcours d’accès](ops/ACCESS-RUNBOOK.md). Les sections historiques ci-dessous ne prouvent pas l’état de production actuel.
 
+## Nombres enregistrés — 22 octobre 2026
+
+Le lecteur associe les nombres de 0 à 1 999 aux 40 extraits identifiés de PédagoFA (CSSDM), lus depuis leurs URL officielles. Les nombres composés utilisent les groupes sonores appropriés; les formes sensibles absentes de la banque, dont 21–29 et certaines centaines, gardent leur enregistrement entier dans la narration existante. Les calculs simples utilisent les mêmes nombres, avec des opérateurs français enregistrés. Les profils conservent leurs plages : 0–99 au début, 0–1 999 au niveau avancé.
+
+Dans le sentier ou le château des nombres, saisir un nombre puis toucher **Écouter le nombre**. La vitesse est réglable. Arrêter, changer de nombre, de ligne ou de profil interrompt la séquence. Les états de lecture et les erreurs sont visibles. Les extraits officiels se lisent automatiquement; aucun ZIP à importer pour cette fonction. Une connexion Internet reste nécessaire. Une panne de source peut déclencher une reprise du nombre entier avec la narration de secours.
+
+Aucun MP3 PédagoFA n’est réhébergé par cette modification. Les sources et empreintes sont dans `src/number-audio-data.js`; les règles de composition sont dans `src/number-audio.js`. Les 1 132 empreintes de narration précédentes restent identiques; seuls sept petits enregistrements d’opérateurs sont ajoutés au catalogue. L’état réellement publié, les vérifications et les limites figurent dans [PROJECT-STATE](ops/PROJECT-STATE.md) et la PR associée. Présence d’un fichier et correspondance à une légende ne valent pas validation acoustique exhaustive.
+
 ## État du 21 octobre 2026 — projet personnel en production
 
 L’application est publiée sur https://educ-ecole.vercel.app, depuis `Lianag2018/educ-ecole`. Les sections de livraison du 20 octobre ci-dessous décrivent l’état historique et ne doivent pas être utilisées pour conclure que la lecture audio attend encore une activation.
