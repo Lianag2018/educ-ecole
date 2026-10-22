@@ -21,3 +21,19 @@ test('recorded cues follow actual media time and ignore callbacks after stop',as
  p.audio.currentTime=2;p.audio.ontimeupdate();assert.equal(cues[1].progress,.2);
  const callback=p.audio.ontimeupdate;p.stop();callback();assert.equal(cues.length,2);assert.equal(p.audio.ontimeupdate,null);
 });
+
+import {syllableParts} from '../../src/reading-syllables.js';
+import {syllableIndex} from '../../src/guided-reading.js';
+test('ball travels across syllables, then pauses on punctuation for either grade',()=>{
+ const plan=readingCues('Lapin, animation!');
+ assert.deepEqual(plan.tokens[0].parts,['La','pin']);
+ assert.deepEqual(plan.tokens[2].parts,['a','ni','ma','tion']);
+ assert.equal(syllableIndex(plan,0,{wordProgress:.1}),0);
+ assert.equal(syllableIndex(plan,0,{wordProgress:.7}),1);
+ assert.equal(syllableIndex(plan,1,{wordProgress:1}),0);
+ assert.equal(plan.tokens[1].kind,'comma');assert.equal(plan.tokens[3].kind,'expression');
+ assert.equal(syllableIndex(plan,2,{wordProgress:.8}),3);
+ for(const older of [false,true])assert.match(guidedMarkup('Lapin!',older),/data-part="1">pin/);
+ assert.deepEqual(syllableParts('inconnuinventé'),['inconnuinventé']);
+ assert.equal(syllableParts('bibliothèque').join(''),'bibliothèque');
+});

@@ -19,9 +19,11 @@ const sounds=[
 export const firstSounds=sounds.map(([id,letters,model,yes,no,tip],index)=>({
  id:'first-sound-'+id,skill:'sons',level:index<10?1:2,order:index,
  title:index<6?'Je découvre les voyelles':'Je découvre les sons',text:letters,
- spokenText:`Écoute le mot français : ${model}. ${model}.`,
+ soundTarget:letters,model,
+ spokenText:tip,
  lesson:`${tip} Tu peux répéter après moi.`,
- prompt:`Quel mot contient le son que tu viens d’écouter?`,
+ oralPrompt:`Écoute chaque choix. Cherche le son que nous venons de travailler dans le mot ${model}.`,
+ prompt:`Cherche le son « ${letters} » dans un autre mot.`,
  choices:index%2?[no,yes]:[yes,no],answer:index%2?1:0,
  explanation:`Écoute : ${model}, ${yes}. On entend le son travaillé dans ces deux mots.`
 }));

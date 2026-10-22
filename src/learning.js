@@ -8,7 +8,7 @@ const card=(id,skill,prompt,text,choices,answer,explanation,level=1)=>({id,skill
 export const olderReading=[
  card('g3-sy1','syllabes','Assemble ce mot de quatre syllabes.','a + ni + ma + tion',['animation','animal','amitié'],0,'a, ni, ma, tion : animation. Lis ensuite le mot entier.'),
  card('g3-sy2','syllabes','Quel mot peux-tu former?','in + vi + ta + tion',['invention','invitation','imitation'],1,'in, vi, ta, tion : invitation. Prends le temps de réunir les syllabes.',2),
- card('g3-so1','sons','Quel mot contient le même son que « feuille »?','feuille',['seuil','fille','file'],0,'Feuille et seuil ont le même son final. Écoute-les, puis redis les mots.'),
+ card('g3-so1','sons','Quel mot rime avec « feuille »?','feuille',['seuil','fille','file'],0,'Feuille et seuil riment : leur fin se prononce de la même façon. Écoute-les, puis redis les mots.'),
  card('g3-so2','sons','Dans quel mot le g fait-il le son « j »?','Observe la lettre après le g.',['gare','girafe','gomme'],1,'Dans girafe, g devant i fait le son j.',2),
  card('g3-mo1','mots','Choisis le mot qui précise le sens.','Les deux sœurs observent le ciel avec…',['attention','attendre','attentif'],0,'Avec attention signifie qu’elles regardent soigneusement.'),
  card('g3-mo2','mots','Quel mot veut dire presque la même chose que « immense »?','Un immense nuage',['minuscule','gigantesque','léger'],1,'Gigantesque veut dire très grand, comme immense.',2),

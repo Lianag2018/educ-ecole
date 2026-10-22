@@ -1,3 +1,8 @@
+## 22 octobre 2026 — balle de lecture et cartes de sons (America/Toronto)
+Préparation depuis main 3e6f6fc (PR19). Remplacement du contour actif par une petite balle sous les unités syllabiques du dictionnaire manuel, pour les deux niveaux. Les mots inconnus restent entiers. Repères temporels des mots mesurés lorsqu’ils existent; positions internes des syllabes interpolées, non alignement phonétique exact. Ponctuation traitée séparément pour marquer la pause, question/exclamation conservées. Aucun changement du texte parlé des histoires.
+Cartes de sons : cible visible, modèle et consigne orale explicites; suppression du texte métalinguistique affiché à la place du son. Association a/ami/avion et i/ici/image correcte à l’écrit, mais ne constitue pas une validation acoustique du fichier. Ancien exercice feuille/seuil clarifié comme rime.
+Tests des syllabes, ponctuation, associations et isolation; build à vérifier avant livraison. Aucun test iPad physique, aucune validation de tous les fichiers à l’oreille. Prochaine action : PR, publication et contrôle distant.
+
 ## 22 octobre 2026 — import des phonèmes pour usage familial (UTC)
 Demande explicite du parent : importer les sons et compléter le jardin. Préparation locale sur feat/animated-sound-cards, main distant vérifié 3e6f6fc18fa2e6049ae13d6c15be9d0e7cdcefe2; aucun push ni déploiement.
 36 MP3 récupérés depuis les fiches officielles du Laboratoire de phonétique de l’Université Laval, conservés sans transformation dans icons/phonemes. sources.json conserve page, URL, SHA-256, taille et état de validation. Usage familial déclaré par le parent; aucune licence ouverte ou autorisation institutionnelle de redistribution affirmée.
