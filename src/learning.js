@@ -20,7 +20,7 @@ export const olderReading=[
  card('g3-co2','comprehension','Quel indice montre que la pluie approche?','Le ciel s’assombrit. Les feuilles se retournent sous le vent. Liana referme son livre et les deux sœurs courent vers la maison.',['Le ciel s’assombrit','Le livre est ouvert'],0,'Le ciel qui s’assombrit et le vent donnent des indices. Explique ton raisonnement avec ces détails.',2)
 ];
 export const readingBank=p=>advanced(p)?olderReading:bank;
-export const skillCards=(p,skill)=>readingBank(p).filter(q=>q.skill===skill);
+export const skillCards=(p,skill)=>readingBank(p).filter(q=>q.skill===skill).sort((a,b)=>!advanced(p)?(a.order??100)-(b.order??100):0);
 export const storyCards=p=>stories.filter(q=>q.grade===(advanced(p)?3:1));
 const youngerMath=[
  card('g1-add','mots','Compte les étoiles.','3 + 2',['4','5','6'],1,'Pars de 3 et ajoute 2 : 4, 5. Il y a 5 étoiles.'),

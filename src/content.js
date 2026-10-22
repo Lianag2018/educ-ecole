@@ -1,3 +1,4 @@
+import {firstSounds,firstBlends,firstWords} from './first-reading.js';
 const q=(id,skill,level,prompt,text,choices,answer,explanation)=>({id,skill,level,prompt,text,choices,answer,explanation});
 export const skills={syllabes:'Les syllabes',sons:'Les sons et leurs lettres',mots:'Les mots',liaisons:'Les liaisons',intonation:'La voix',comprehension:'Les histoires'};
 export const bank=[
@@ -31,3 +32,5 @@ const oralModels={
  so4:{spokenText:'Un bateau.',prompt:'Quelles lettres terminent le mot « bateau »?',explanation:'Dans bateau, les lettres e, a et u représentent ensemble le son que tu entends à la fin du mot vélo.'}
 };
 for(const item of bank)Object.assign(item,oralModels[item.id]||{});
+
+bank.push(...firstSounds,...firstBlends,...firstWords);
