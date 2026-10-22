@@ -27,7 +27,8 @@ export class NarrationSpeaker {
    if(Array.isArray(cues)&&cues.length){
     const time=audio.currentTime;let cue=null;
     for(const c of cues){if(c.start>time)break;cue=c;}
-    options.onProgress?.({charIndex:cue?(time>=cue.end&&/^[,!.?…]/.test(key.slice(cue.charEnd))?cue.charEnd:cue.charIndex):-1,charEnd:cue?.charEnd,approximate:false});
+    const pause=cue&&Number.isInteger(cue.charEnd)?key.slice(cue.charEnd).match(/^\s*([,!.?…;:])/):null;
+    options.onProgress?.({charIndex:cue?(time>=cue.end&&pause?cue.charEnd+pause[0].length-1:cue.charIndex):-1,charEnd:cue?.charEnd,wordProgress:cue?Math.max(0,Math.min(1,(time-cue.start)/Math.max(.001,cue.end-cue.start))):0,approximate:false});
    }else options.onProgress?.({progress:audio.currentTime/audio.duration,approximate:true});
   };
   audio.ontimeupdate=progress;
