@@ -19,7 +19,7 @@ test('stale callbacks cannot overwrite new reading or restart after stop',()=>{
 });
 test('unavailable voice offers explicit system fallback',()=>{
  const f=fixture();f.reader.speak('lapin',f.opts);f.reader.current.onerror({error:'voice-unavailable'});assert.equal(f.states.at(-1)[0],'error');
- f.reader.speak('lapin',{...f.opts,systemVoice:true});assert.equal(f.reader.current.voice,undefined);assert.equal(f.reader.current.lang,'fr-CA');
+ f.reader.speak('lapin',{...f.opts,systemVoice:true});assert.equal(f.reader.current.voice.lang,'fr-CA');assert.equal(f.reader.current.lang,'fr-CA');
 });
 test('silent startup fails visibly and clears pending speech',()=>{
  const f=fixture();f.reader.speak('lapin',f.opts);[...f.timers.values()][0]();assert.equal(f.states.at(-1)[0],'error');assert.equal(f.reader.current,null);assert.equal(f.timers.size,0);
@@ -33,3 +33,5 @@ test('browser timers are called with their native global receiver',()=>{
   reader.stop();reader.speak('lapin');reader.stop();
  } finally {globalThis.setTimeout=originalSet;globalThis.clearTimeout=originalClear;}
 });
+
+test('English device voice is never used, even for system fallback',()=>{const f=fixture();f.synth.getVoices=()=>[{lang:'en-US',name:'English',voiceURI:'en'}];f.reader.speak('pain',{...f.opts,systemVoice:true});assert.equal(f.states.at(-1)[0],'error');assert.equal(f.reader.current,null);});
