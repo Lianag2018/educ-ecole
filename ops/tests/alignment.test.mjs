@@ -1,7 +1,30 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {alignWords} from '../align-narration.mjs';
+import {alignWords,alignmentItems} from '../align-narration.mjs';
+import {narrationCatalog} from '../narration-catalog.mjs';
 import {NarrationSpeaker} from '../../src/narration.js';
+test('a complete production narration catalog stays within the reviewed alignment budget',()=>{
+ const catalog=narrationCatalog(),clips=Object.fromEntries(catalog.map(x=>[x.text,x.file]));
+ const items=alignmentItems(catalog,clips),texts=new Set(items.map(x=>x.text));
+ assert.ok(items.length>0&&items.length<=80,`${items.length} candidates exceed the reviewed budget of 80`);
+ for(const text of ['zéro','vingt','cinquante-six','mille neuf cent quatre-vingt-dix-neuf','vingt-quatre plus treize','cinquante-six moins vingt']){
+  assert.equal(catalog.find(x=>x.text===text)?.numeric,true,`${text} must be explicitly numeric`);
+  assert.ok(!texts.has(text));
+ }
+ assert.ok(texts.has('Les deux sœurs observent le ciel avec…'));
+ assert.ok(texts.has('Le chat est ici. Il est sur le tapis. Il voit un ami. Les amis jouent, puis le chat dort.'));
+});
+test('alignment selection preserves stories containing numbers and operator words',()=>{
+ const catalog=[
+  {text:'Les deux amis veulent plus de place.',file:'story.mp3',numeric:false,align:true},
+  {text:'Les 2 amis attendent 3 minutes.',file:'digits.mp3',numeric:false,align:true},
+  {text:'deux plus trois',file:'math.mp3',numeric:true,align:true},
+  {text:'Une autre histoire attend.',file:'missing.mp3',numeric:false,align:true},
+  {text:'Une consigne hors alignement.',file:'excluded.mp3',numeric:false,align:false},
+ ];
+ const clips=Object.fromEntries(catalog.filter(x=>x.file!=='missing.mp3').map(x=>[x.text,x.file]));
+ assert.deepEqual(alignmentItems(catalog,clips).map(x=>x.file),['story.mp3','digits.mp3']);
+});
 test('alignment preserves original accents, apostrophes and repeated word offsets',()=>{
  const cues=alignWords('Les sœurs, les étoiles.',[{word:'Les',start:0,end:.3},{word:'soeurs',start:.3,end:1},{word:'les',start:1.5,end:1.8},{word:'étoiles.',start:1.8,end:2.5}]);
  assert.deepEqual(cues.map(c=>c.charIndex),[0,4,11,15]);

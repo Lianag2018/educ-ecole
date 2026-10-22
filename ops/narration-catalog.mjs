@@ -14,8 +14,14 @@ import {spokenActivity} from '../src/speech.js';
 export const MODEL='gpt-4o-mini-tts-2025-12-15',VOICE='coral';
 export const INSTRUCTIONS='Parle en français québécois naturel, avec une voix féminine douce, chaleureuse et rassurante. Lis lentement et articule clairement, sans exagérer l’accent. Respecte les pauses et l’intonation du texte. Lis seulement le texte fourni, sans introduction. Reste exclusivement en français du Québec du début à la fin, y compris pour les mots isolés et les nombres. Ne prononce aucun mot comme un mot anglais. Ne rajoute ni syllabe ni mot. Garde les voyelles françaises distinctes et les voyelles nasales naturelles.';
 export function narrationCatalog(){
+ // Alignment uses the activity's source collection, not number/operator words
+ // found in a story. This metadata does not participate in the MP3 cache key.
+ const numericActivityTexts=new Set([...mathsFor({id:'p1'}),...mathsFor({id:'p2'}),...mathCards].flatMap(q=>[spokenActivity(q),q.explanation]));
  const cards=[...mathsFor({id:'p2'}),...bank,...olderReading,...stories,...mathCards,social];
- for(let n=1;n<=6;n++)for(const op of ['+','−'])cards.push(...tablePractice(n,op));
+ for(let n=1;n<=6;n++)for(const op of ['+','−']){
+  const practice=tablePractice(n,op);cards.push(...practice);
+  for(const q of practice){numericActivityTexts.add(spokenActivity(q));numericActivityTexts.add(q.explanation);}
+ }
  const texts=new Set(['Bonjour! On prend notre temps pour lire ensemble.','Bravo! Tu as bien travaillé.','On prend notre temps. Tu peux réessayer.']);
  for(const n of [307,1000,1999,1001,1010,1024,1100,1208,1370,1500,1809])texts.add(numberWords(n));
  for(const q of cards){
@@ -43,5 +49,5 @@ export function narrationCatalog(){
  return [...texts].map(text=>{let instructions=segmented.has(text)?INSTRUCTIONS+' Exercice de décodage en français uniquement. Les éléments séparés par des points sont des syllabes orales, pas des noms de lettres. Prononce chaque syllabe puis le mot entier. Dans pin, le son final est nasal, comme dans sapin; jamais le mot anglais pin.':INSTRUCTIONS;
  if(phonics.has(text)||segmented.has(text))instructions+=' Tous les mots sont français, même les mots courts. Ne bascule jamais en anglais. Pain rime avec main et sapin, avec une voyelle nasale, jamais le mot anglais pain. Le u de lune est distinct du ou de loup. On est nasal comme dans rond. Ch se prononce comme au début de chat, pas comme en anglais. Ne lis pas les signes plus et ne rajoute pas de son e après une consonne.';
  if(numericTexts.has(text))instructions+=numericInstructions;
- return {text,instructions,align:baseTexts.has(text),file:createHash('sha256').update(MODEL+'|'+VOICE+'|'+instructions+'|'+text).digest('hex')+'.mp3'};});
+ return {text,instructions,numeric:numberNames.has(text)||numericActivityTexts.has(text),align:baseTexts.has(text),file:createHash('sha256').update(MODEL+'|'+VOICE+'|'+instructions+'|'+text).digest('hex')+'.mp3'};});
 }

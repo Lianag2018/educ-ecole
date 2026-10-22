@@ -23,7 +23,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(result.status,{'Content-Type':'application/json','Cache-Control':'no-store',...result.headers});res.end(JSON.stringify(result.body));return;
     }
     // Never serve server code, config, tests or credentials from the app directory.
-    if(pathname!=='/' && pathname!=='/index.html' && pathname!=='/manifest.webmanifest' && !/^\/icons\/[a-z0-9-]+\.png$/.test(pathname) && !/^\/icons\/phonemes\/[a-z][a-z-]*\.mp3$/.test(pathname) && !/^\/src\/[a-z-]+\.(js|css)$/.test(pathname)) throw Error('Invalid path');
+    if(pathname!=='/' && pathname!=='/index.html' && pathname!=='/manifest.webmanifest' && !/^\/icons\/[a-z0-9-]+\.png$/.test(pathname) && !/^\/icons\/phonemes\/[a-z][a-z-]*\.mp3$/.test(pathname) && !/^\/src\/[a-z][a-z0-9-]*\.(js|css)$/.test(pathname) && pathname!=='/src/vendor/fflate.js') throw Error('Invalid path');
     const path = resolve(root, '.' + pathname);
     if (!path.startsWith(root + '/') && path !== root) throw Error('Invalid path');
     const file = path === root ? root + '/index.html' : path;
