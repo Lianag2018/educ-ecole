@@ -41,7 +41,7 @@ Les profils p1 (1re année) et p2 (3e année) ont des activités et progrès dis
 
 `ops/build.mjs` construit `dist`, puis `ops/generate-narration.mjs` utilise le catalogue borné de `ops/narration-catalog.mjs`. La génération payante n’est autorisée par ce code qu’en build Vercel de production sur main. Elle réutilise les fichiers existants; ne pas lancer plusieurs builds payants simultanément.
 
-Le catalogue connu comprend 395 clips, modèle/voix et instructions fixés dans le code. `/audio/manifest.json` associe textes pédagogiques et fichiers. `/audio/status.json` indique ready/partial/unavailable et les compteurs. Un clic sur Écouter lit un fichier existant; il ne génère pas une nouvelle facture OpenAI. Les textes privés importés ne deviennent pas automatiquement des MP3 publics.
+Le catalogue actuel vise 1 132 clips, avec modèle, voix et instructions fixés dans le code. Le statut publié fait foi pour la disponibilité réelle. `/audio/manifest.json` associe textes pédagogiques et fichiers. `/audio/status.json` indique ready/partial/unavailable et les compteurs. Un clic sur Écouter lit un fichier existant; il ne génère pas une nouvelle facture OpenAI. Les textes privés importés ne deviennent pas automatiquement des MP3 publics.
 
 ## Conversation et données
 
@@ -90,3 +90,16 @@ Le bilan est recalculé après les réponses lors de son affichage et ne nécess
 `ops/server/plans.mjs` et `/api/plans/import`, `/api/plans/list` : parent authentifié, profil détenu, consentement par photo, configuration de rétention vérifiée, budget durable partagé, requête OpenAI à endpoint fixe (aucun outil), sortie structurée validée puis sauvegarde privée. Une réserve prudente de 1 CAD par import (pas le coût réel) reste comptabilisée; les requêtes répétées dont le résultat est sauvegardé utilisent le cache. Pas de nouvelle tentative payante automatique. Au plus 12 plans par profil. Photo non conservée par l’app; la rétention fournisseur dépend de la configuration vérifiée.
 
 **Activation non démontrée** : schéma `ops/supabase/school-plans-schema.sql` proposé, non appliqué. Exige les profils et le budget existants, les variables personnelles et `plansEnabled:true` dans la configuration uniquement après vérification effective des conditions. Aucune valeur de consentement/rétention ne doit être falsifiée. Connexion parent indépendante de la disponibilité vocale. Les plans peuvent être récupérés sur un autre appareil une fois le service configuré; les historiques de réponses restent locaux, sans synchronisation automatique.
+
+
+## Fiches familiales et parcours — 22 octobre 2026
+
+`src/family-library-data.js` décrit 78 PDF officiels Alloprof et leurs pages utiles, après analyse de 426 pages. Il ne contient aucun PDF. `family-library-p1-data.js` et `family-library-p2-data.js` définissent six parcours, 49 petites étapes et les supports enfant/parent. Les ressources familiales ont des consignes et pages différentes selon le profil. Neuf documents plus avancés restent dans « Pour plus tard »; les erreurs de source repérées sont signalées au parent sans modifier les originaux.
+
+`family-library-paths.js` conserve `profile.familyLibraryProgress` avec point de départ, dernier repère de chaque étape et reprise explicite. Le parent seul confirme le passage; une ouverture, un temps passé ou un lancement de jeu ne vaut pas réussite. Les activités liées réutilisent la banque du profil et les matières existantes. L’historique de lecture n’est ni remplacé ni artificiellement crédité par les fiches.
+
+`family-library.js` et son CSS affichent d’abord l’étape courante, puis le catalogue replié. Les liens officiels et locaux portent la première page prévue dans l’ordre pédagogique; les guides et corrigés restent repliés. L’import est disponible dans l’espace parent. Les données et copies sont locales au navigateur et à l’origine du site.
+
+`family-library-store.js` valide le ZIP par son répertoire, les empreintes NFC des chemins, les tailles et SHA-256 des PDF. Il ignore l’HTML et le manifeste inclus, refuse les archives incomplètes/étrangères et borne la décompression. `src/vendor/fflate.js` est la version navigateur 0.8.2, licence MIT jointe, sans CDN. Une transaction IndexedDB remplace les 78 documents après validation complète; échec ou annulation conserve l’ancienne bibliothèque. Les liens Blob sont préparés avant l’ouverture et libérés ensuite. Les profils peuvent être réinitialisés séparément des copies PDF.
+
+Le correctif de `ops/narration-catalog.mjs` marque explicitement les contenus numériques. `ops/align-narration.mjs` les exclut de l’alignement des textes de lecture, même après mise en mots : 52 candidats, sous la limite existante de 80, sans changer les empreintes audio.

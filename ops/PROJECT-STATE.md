@@ -1,3 +1,17 @@
+# 22 octobre 2026 — fiches familiales et progression par profil (UTC)
+
+Base main distante revérifiée : `7d75d3666b2a7b1602402b4b2a25e324ddf8df6a` (PR24). Préparation sur `feat/fiches-famille`. Analyse des 78 PDF / 426 pages de la trousse familiale : p1, 28 documents / 146 pages; p2, 42 / 236; famille, 8 / 44. Six parcours originaux et 49 étapes (p1 : 8 sons-mots, 8 compréhension, 7 nombres; p2 : 9 lecture, 9 nombres-découvertes, 8 problèmes). Pages et consignes adaptées, guides/corrigés repliés, neuf documents différés. Les grands nombres et les erreurs repérées dans certaines sources ne servent pas d’exercices initiaux.
+
+Liens officiels immédiatement utilisables. Import local facultatif de la trousse vérifiée dans IndexedDB; aucun PDF copié dans le dépôt ou le déploiement. Chemins privés remplacés par leur empreinte, tailles et SHA-256 du contenu contrôlés, archive complète exigée, remplacement atomique, annulation et suppression explicites. L’archive importée et son HTML ne sont jamais exécutés. Les copies restent sur l’appareil; pas de synchronisation ni mode hors ligne complet annoncé.
+
+Le parent choisit le départ et marque « à reprendre », « avec de l’aide » ou « prêt pour la suite ». Ouvrir un PDF ne valide rien. Reprendre une étape terminée conserve les autres résultats. Progrès locaux séparés de l’historique de lecture, état de session expliqué si la sauvegarde échoue. Les exercices liés gardent le profil actif et la matière correcte.
+
+Vérification : 162 tests Node réussis sur les fichiers finaux; build local réussi, modules complets et aucune copie PDF/ZIP dans dist. Chrome réel : import des 78 fichiers sans requête réseau, persistance, réimport sans doublon, annulation, refus de stockage avec restauration des anciennes copies; PDF Blob valide et suppression. Parcours : avance seulement après confirmation, rechargement, reprise d’une étape terminée, séparation des profils, bonne page de départ, refus de localStorage expliqué et entrée contextuelle Nombres. Rendu vérifié aux largeurs 820 et 390 px, sans débordement ni exception JS. Aucun test Safari/iPad physique ni évaluation pédagogique avec les enfants.
+
+Correction du build de narration : après la conversion des nombres en mots de PR24, le filtre fondé seulement sur les chiffres dépassait la limite d’alignement. Métadonnée numérique explicite : 52 textes admissibles, limite de 80 inchangée; textes, instructions et empreintes des 1 132 MP3 inchangés par ce correctif. Le dernier statut Vercel de PR24 était failure, production observée à 988 clips; le défaut local ne constitue pas une lecture des journaux distants.
+
+Publication en attente au moment de ce commit. Ouvrir/revoir la PR, fusionner selon l’autorisation existante, puis vérifier le statut Vercel et les empreintes des fichiers réellement servis. Reporter les preuves de livraison dans la PR associée. Le connecteur Vercel personnel retourne 403; le déploiement suit l’intégration Git existante. Aucun service professionnel modifié.
+
 # Mise à niveau du 22 octobre 2026 · UTC
 Base distante vérifiée a672a6607a6220563acc292c3fd7cd50cbe593b3 (PR23). Changements préparés : sprint de calcul de 10 cartes, préparation des nombres/calculs en français et renouvellement des instructions de 1 132 narrations, import photo de plans et missions bornées par profil. 119 tests réussis après revue finale, y compris reprise de partie sans promotion prématurée et date photo invalide bloquée avant tout appel payant. Build et diff local réussis. Publication à confirmer après fusion.
 
