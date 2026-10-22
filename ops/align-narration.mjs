@@ -2,17 +2,32 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {narrationCatalog} from './narration-catalog.mjs';
 import {numberWords} from '../src/numbers.js';
 const normalized=s=>s.toLocaleLowerCase('fr-CA').replaceAll('œ','oe').normalize('NFD').replace(/[^a-z0-9]/g,'');
-// Accept only a complete match. Never invent timings for missing or changed words.
+// Match ordered lexical units; small transcription spelling differences must not
+// discard an entire story. Unmatched words never receive invented timestamps.
 export function alignWords(text,words){
  if(!Array.isArray(words)||!words.length)return null;
- const chars=[];let source='';
- for(let i=0;i<text.length;i++){const n=normalized(text[i]);for(const c of n){source+=c;chars.push(i);}}
- let offset=0,last=0;const cues=[];
- for(const w of words){const n=normalized(w.word||'');if(!n)continue;
-  if(!Number.isFinite(w.start)||!Number.isFinite(w.end)||w.start<last||w.end<=w.start||w.end>180||source.slice(offset,offset+n.length)!==n)return null;
-  cues.push({start:w.start,end:w.end,charIndex:chars[offset],charEnd:chars[offset+n.length-1]+1});offset+=n.length;last=w.end;
+ const split=s=>Array.from(s.matchAll(/[\p{L}\p{N}]+/gu),m=>({value:normalized(m[0]),index:m.index,length:m[0].length}));
+ const source=split(text),heard=[];let last=0;
+ for(const w of words){
+  if(!Number.isFinite(w.start)||!Number.isFinite(w.end)||w.start<last||w.end<w.start||w.end>180)return null;
+  for(const part of split(w.word||''))heard.push({...part,start:w.start,end:w.end});last=w.start;
  }
- return offset===source.length&&cues.length?cues:null;
+ if(!source.length||!heard.length||source.length>1000||heard.length>1000)return null;
+ const rows=Array.from({length:source.length+1},()=>new Uint16Array(heard.length+1));
+ for(let i=source.length-1;i>=0;i--)for(let j=heard.length-1;j>=0;j--)rows[i][j]=source[i].value===heard[j].value?1+rows[i+1][j+1]:Math.max(rows[i+1][j],rows[i][j+1]);
+ if(rows[0][0]/source.length<.90||rows[0][0]/heard.length<.90)return null;
+ const cues=[];let i=0,j=0,missed=0;
+ while(i<source.length&&j<heard.length){
+  if(source[i].value===heard[j].value){
+   if(missed>2)return null;missed=0;
+   const start=heard[j].start,end=heard[j].end,charIndex=source[i].index,charEnd=charIndex+source[i].length;
+   const previous=cues.at(-1);
+   // Apostrophe/hyphen fragments from one timestamp are one highlighted group.
+   if(previous&&previous.start===start&&previous.end===end)previous.charEnd=charEnd;
+   else cues.push({start,end,charIndex,charEnd});i++;j++;
+  }else if(rows[i+1][j]>=rows[i][j+1]){i++;missed++;}else j++;
+ }
+ return missed+source.length-i<=2&&cues.length?cues:null;
 }
 export async function alignNarration({env=process.env,fetcher=fetch}={}){
  if(env.VERCEL_ENV!=='production'||env.VERCEL!=='1'||env.VERCEL_GIT_COMMIT_REF!=='main')return;
