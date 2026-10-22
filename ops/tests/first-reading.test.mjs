@@ -16,3 +16,8 @@ test('phonics recordings carry French pronunciation instructions and distinct ca
  const c=narrationCatalog();
  for(const text of ['Du pain. Le pain.','Une main.','la.','la. pin. lapin.']){const clip=c.find(x=>x.text===text);assert.ok(clip,text);assert.match(clip.instructions,/Ne bascule jamais en anglais/);assert.match(clip.instructions,/u de lune/);}
 });
+
+test('sound associations explicitly identify the target and use one matching choice',()=>{
+ const expected={a:'avion',i:'image',o:'vélo',u:'lune',eacute:'bébé',egrave:'sel',m:'moto',l:'lit',s:'soleil',f:'fil',ou:'roue',on:'ballon',ch:'chat',in:'lapin'};
+ for(const q of firstSounds){assert.equal(q.choices[q.answer],expected[q.id.replace('first-sound-','')]);assert.ok(q.soundTarget);assert.ok(q.oralPrompt.includes(q.model));assert.ok(!q.spokenText.includes('Écoute le mot français'));assert.ok(!q.choices.filter((_,i)=>i!==q.answer).includes(q.choices[q.answer]));}
+});
