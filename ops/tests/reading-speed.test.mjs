@@ -13,7 +13,7 @@ test('speed changes keep media position, pitch and measured word anchor',async()
 });
 test('native voice resumes at last known word and preserves original character offsets',()=>{
  const utterances=[];class Utterance{constructor(text){this.text=text;}}
- const p=new ReadingSpeaker({synth:{cancel(){},getVoices(){return[];},speak(u){utterances.push(u);}},Utterance,setTimer(){},clearTimer(){}});
+ const p=new ReadingSpeaker({synth:{cancel(){},getVoices(){return[{lang:"fr-CA",name:"Amélie",voiceURI:"fr"}];},speak(u){utterances.push(u);}},Utterance,setTimer(){},clearTimer(){}});
  const cues=[];p.speak('Les amis lisent',{onProgress:e=>cues.push(e.charIndex)});
  utterances.at(-1).onboundary({charIndex:4});p.setSpeed(1.5);assert.equal(utterances.at(-1).text,'amis lisent');
  utterances.at(-1).onboundary({charIndex:5});assert.equal(cues.at(-1),9);
