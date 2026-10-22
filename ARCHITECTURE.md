@@ -1,6 +1,6 @@
 # Architecture de l’Atelier des mots
 
-Référence technique au 21 octobre 2026. État opérationnel daté : [PROJECT-STATE](ops/PROJECT-STATE.md). Accès et exploitation : [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md).
+Référence technique au 22 octobre 2026. État opérationnel daté : [PROJECT-STATE](ops/PROJECT-STATE.md). Accès et exploitation : [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md).
 
 ## Périmètre et hébergement
 
@@ -41,7 +41,7 @@ Les profils p1 (1re année) et p2 (3e année) ont des activités et progrès dis
 
 `ops/build.mjs` construit `dist`, puis `ops/generate-narration.mjs` utilise le catalogue borné de `ops/narration-catalog.mjs`. La génération payante n’est autorisée par ce code qu’en build Vercel de production sur main. Elle réutilise les fichiers existants; ne pas lancer plusieurs builds payants simultanément.
 
-Le catalogue actuel vise 1 132 clips, avec modèle, voix et instructions fixés dans le code. Le statut publié fait foi pour la disponibilité réelle. `/audio/manifest.json` associe textes pédagogiques et fichiers. `/audio/status.json` indique ready/partial/unavailable et les compteurs. Un clic sur Écouter lit un fichier existant; il ne génère pas une nouvelle facture OpenAI. Les textes privés importés ne deviennent pas automatiquement des MP3 publics.
+Le catalogue est borné par `ops/narration-catalog.mjs`, avec modèle, voix et instructions fixés dans le code. Le statut publié fait foi pour la disponibilité réelle. `/audio/manifest.json` associe textes pédagogiques et fichiers. `/audio/status.json` indique ready/partial/unavailable et les compteurs. Un clic sur Écouter lit un fichier existant; il ne génère pas une nouvelle facture OpenAI. Les textes privés importés ne deviennent pas automatiquement des MP3 publics.
 
 ## Conversation et données
 
@@ -60,6 +60,28 @@ Les modules `session.mjs`, `budget.mjs`, `turn.mjs`, `provider.mjs`, `pedagogy.m
 | Audio/transcription conversation | Traitement serveur conditionnel; protections et rétention à vérifier avant usage réel |
 
 Installation sur écran d’accueil via manifest et icônes; aucun service worker ni fonctionnement hors ligne garanti.
+
+## Retour oral borné et accompagnement — 22 octobre 2026
+
+`src/oral-check.js` porte un contrôleur persistant séparé de la conversation. L’interface peut être remontée après une lecture sans perdre l’essai courant. Chaque changement de cible annule l’essai; profil, navigation, arrière-plan et déconnexion retirent aussi l’attestation adulte. Le panneau mot est replié au nouvel essai; sa fermeture arrête le micro. Les autres lecteurs, le studio et la conversation sont arrêtés avant une capture. Un état ou une réponse périmée ne s’applique pas à une nouvelle activité.
+
+La capture utilise AudioWorklet, avec secours ScriptProcessor si nécessaire, et produit un WAV PCM mono 24 kHz limité à huit secondes côté client. Les pistes sont fermées avant l’envoi. Aucun Web Speech Recognition tiers implicite n’est utilisé. La présence adulte est une attestation renouvelée au plus tard après quinze minutes, ajoutée à la connexion parent réelle; elle n’est pas une détection physique de présence.
+
+`src/oral-check-targets.js` partage la liste des dix mots intégrés, les nombres autorisés et les trois retours fixes. `/api/voice/check` passe par `runtime.mjs` puis `oral-check.mjs` : authentification Supabase, origine exacte, propriété du profil, attestation récente, configuration vérifiée, validation WAV et réservation durable avant un seul appel `gpt-transcribe`. La cible attendue n’est pas envoyée à OpenAI. Le serveur accepte au plus dix secondes et ne renvoie ni transcription brute ni score phonétique. Pas de retry payant automatique, de chat ou de TTS à chaque essai : les retours fixes utilisent la narration préenregistrée.
+
+Le résultat se limite à une réponse reconnue, une autre réponse connue ou un résultat incertain. La liste explicite des nombres tolère les pluriels écrits silencieux de cent/vingt; elle n’accepte pas un calcul, un nombre signé ou une phrase arbitraire comme réponse numérique positive. Un signal proche du silence numérique est écarté avant appel; cela ne constitue pas une détection de voix ou d’identité. Aucun résultat STT ne crédite le moteur, un PDF ou une ligne.
+
+`/api/voice/status` conserve `available` pour la conversation et ajoute `authConfigured`, `oralCheckAvailable` et `oralCheckReason`. Ces statuts de configuration ne prouvent pas un test réel du fournisseur ou des migrations. `VOICE-SETUP.md` précise le blocage d’accès personnel et les conditions d’activation.
+
+`src/learning-coach.js` fournit uniquement des aides facultatives : représentation du nombre, colonnes de position adaptées, zéro conservé, décomposition, comparaison, explication d’un mot et phrase personnelle. Les questions ne valident rien automatiquement. Le panneau parent distingue pratique accompagnée, observation et évaluation professionnelle.
+
+## Observations quotidiennes et reprise des données — 22 octobre 2026
+
+`dailyEvidence` regroupe au plus une observation par carte/domaine/jour et conserve l’aide ou l’erreur précédant une réussite. `answer` retourne ce résultat effectif; la mission l’emploie pour son retour et son crédit. Tous les essais restent présents, avec `submittedResult` lorsque nécessaire. Les anciens sujets nommés par compétence sont interprétés comme Français; Maths reste séparé.
+
+Les paliers utilisent au plus quatre observations : palier 2 à partir de deux jours et 75 % sans aide signalée; palier 3 avec quatre réussites sur trois jours et deux cartes. Révisions 1/3/7/14 jours selon les journées réussies distinctes. Ces seuils sont des règles du produit. Le tri respecte `order` des fondations; les révisions dues gardent leur priorité.
+
+Au chargement, seuls les champs dérivés `streak`, `result`, `due` des cartes documentées sont repris. Les entrées historiques non exploitables sont conservées mais ignorées pour le calcul. Aucun reset des profils, des PDF, des autres champs ou de l’historique n’est nécessaire. Le rapport parent utilise « sans aide signalée » et ne constitue pas un diagnostic. Voir [l’audit daté](ops/AUDIT-PEDAGOGIQUE-2026-10-22.md).
 
 ## Validation et livraison
 

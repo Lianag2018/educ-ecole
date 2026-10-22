@@ -396,7 +396,8 @@ export function mountFamilyLibrary(root, profile, services = {}) {
     }
     const practice = event.target.closest?.('[data-fl-practice]');
     if (practice && host.contains(practice) && pathProgress(profile, activePath).step?.practice === practice.dataset.flPractice) {
-      services.onPractice?.(practice.dataset.flPractice);
+      const step=pathProgress(profile, activePath).step;
+      services.onPractice?.(step.practice,{number:step.practiceNumber});
       return;
     }
     const button = event.target.closest?.('[data-fl-prepare]');

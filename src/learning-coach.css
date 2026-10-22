@@ -1,0 +1,24 @@
+.learning-coach{margin-block:1rem;border:1px solid #d5c6e5;border-radius:1rem;background:#fcfaff;color:#34283f;text-align:left}
+.learning-coach>summary{min-height:46px;box-sizing:border-box;padding:.8rem 1rem;font-weight:700;cursor:pointer;line-height:1.45;overflow-wrap:anywhere}
+.learning-coach>summary:focus-visible{outline:3px solid #76509b;outline-offset:3px;border-radius:.9rem}
+.learning-coach[open]>summary{border-bottom:1px solid #e5daee}
+.learning-coach .lc-content{padding:.3rem 1rem 1rem;line-height:1.6}
+.learning-coach .lc-content p{margin:.7rem 0}
+.learning-coach h4{margin:1rem 0 .3rem;font-size:1rem}
+.learning-coach .lc-place-table{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;margin-top:.8rem;border:1px solid #d8cae6;border-radius:.7rem;overflow:hidden;background:#fff}
+.learning-coach .lc-place-table caption{caption-side:top;text-align:left;font-size:.9rem;padding-bottom:.35rem;font-weight:600}
+.learning-coach .lc-place-table th,.learning-coach .lc-place-table td{text-align:center;padding:.4rem .25rem;border:0}
+.learning-coach .lc-place-table th{font-size:.8rem;font-weight:700;background:#eee5f6;overflow-wrap:anywhere}
+.learning-coach .lc-place-table td{font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.learning-coach .lc-decomposition{font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.learning-coach .lc-zero-note{font-size:.9rem}
+.learning-coach .lc-regroupings{padding:.6rem .8rem;border-left:3px solid #a581c6;background:#f2ebf8;font-size:.95rem}
+.learning-coach .lc-prompts{padding-left:1.2rem;margin:.65rem 0}
+.learning-coach .lc-prompts li{padding-left:.15rem;margin:.55rem 0;overflow-wrap:anywhere}
+.learning-coach .lc-soft-note{font-size:.9rem;color:#65546f}
+.learning-coach-parent>h2{margin-top:0}
+.learning-coach-parent>p{line-height:1.6;overflow-wrap:anywhere}
+.learning-coach-parent .lc-references{font-size:.9rem}
+.learning-coach-parent .lc-references a{color:#533376;text-decoration:underline;text-underline-offset:.15em}
+.learning-coach-parent .lc-references a:focus-visible{outline:3px solid #76509b;outline-offset:3px}
+@media(max-width:420px){.learning-coach>summary{padding:.75rem .8rem}.learning-coach .lc-content{padding:.25rem .75rem .8rem}.learning-coach .lc-place-table th{font-size:.73rem}.learning-coach .lc-place-table td{font-size:1.25rem}}

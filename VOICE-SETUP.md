@@ -1,5 +1,39 @@
 > **Reprise et accès :** consulter [PROJECT-STATE](ops/PROJECT-STATE.md) et [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md). Les rubriques datées ci-dessous distinguent l’état récent et les livraisons historiques; ne pas confondre narration et conversation micro.
 
+## Retour oral court — 22 octobre 2026
+
+La narration préenregistrée et les extraits de nombres sont déjà livrés par PR26. Le nouvel exercice `/api/voice/check` est distinct de la conversation libre et de la simple réécoute locale. Il compare la transcription d’un nombre ou d’un mot intégré avec une cible autorisée, puis rend une des trois phrases fixes. Il ne mesure pas la qualité phonétique et n’augmente aucun niveau.
+
+### État réel avant publication
+
+Le parent a demandé l’usage accompagné; cette autorisation n’est pas à redemander pour préparer et publier le code. Elle ne prouve pas la configuration d’un compte fournisseur ou d’une base distante. Le projet Vercel personnel est identifié mais le connecteur retourne 403. Aucun accès au Supabase personnel, provisionnement des profils, schéma budgétaire actif ou approbation ZDR du projet OpenAI n’a été confirmé. Les anciens essais d’exploitation ne démontrent pas une activation. Aucun service professionnel ne sert de solution de remplacement.
+
+Le code garde donc le service fermé tant que les conditions réelles ne sont pas satisfaites. Aucun enregistrement d’enfant n’a été transmis. Les tests fournisseur sont simulés; le navigateur a réellement capturé un signal synthétique avec AudioWorklet. La livraison Git/Vercel de l’interface ne doit pas être annoncée comme une activation du microphone IA.
+
+### Contrat et périmètre
+
+`POST /api/voice/check` accepte exclusivement `profileId`, `target`, `audio`, `adultPresent`, `adultConfirmedAt`. La cible est `{kind:'number',value}` ou `{kind:'word',activityId}`. La liste des mots et les bornes numériques sont définies dans `src/oral-check-targets.js` : p1 0–99; p2 0–1 999 selon son niveau serveur. Les phonèmes isolés, phrases, PDF et mots privés importés ne sont pas acceptés.
+
+Connexion parent Supabase vérifiée, origine exacte, profil appartenant au parent et attestation adulte de moins de quinze minutes sont requis à chaque requête. Le navigateur renouvelle cette attestation après un changement de profil, de page ou une mise en arrière-plan. Une case cochée est une déclaration; l’application ne détecte pas la présence physique d’un adulte.
+
+Capture huit secondes au plus côté client, WAV PCM mono 24 kHz. Le serveur vérifie indépendamment l’en-tête, les données et une durée au plus dix secondes; il accepte seulement 16/24/48 kHz et 16 bits mono. Une absence de signal exploitable donne un retour incertain avant réservation. Ce contrôle n’est ni une analyse de prononciation ni une reconnaissance de personne.
+
+Le serveur appelle une seule fois `https://api.openai.com/v1/audio/transcriptions`, avec `model=gpt-transcribe`, `response_format=json` et `languages[]=fr`. Aucun mot attendu, prompt, prénom, contexte scolaire ou historique n’est transmis avec le WAV. Une réponse sans langue française unique, trop longue, inconnue ou ambiguë reste incertaine. Le texte brut n’est ni renvoyé au navigateur ni enregistré. La réponse est bornée à 8 Ko et l’appel à vingt secondes. Pas de retry fournisseur automatique.
+
+Les retours enfant sont fermés : « Bravo! J’ai reconnu ta réponse. », « Écoutons le modèle, puis essaie encore. On prend notre temps. » ou « Je n’ai pas bien entendu. Tu peux réessayer avec l’adulte. ». Les textes intégrés sont préenregistrés au build; aucune requête chat ou synthèse payante n’est faite après chaque essai. Reconnaître une transcription ne démontre pas une prononciation parfaite. Une voix québécoise enfantine n’a pas fait l’objet d’un benchmark dans cette livraison.
+
+### Configuration supplémentaire, après vérification effective
+
+Les variables personnelles et six conditions existantes décrites plus bas restent obligatoires. `EDUC_VOICE_CONFIG` doit ajouter `oralCheckEnabled:true` et `oralCheckModel:'gpt-transcribe'` uniquement après les contrôles réels. `rates.sttMinuteMicros` doit être un entier au moins égal à 6 000. C’est une réserve interne prudente pour une minute entière, pas une facturation minimale officielle. Le tarif OpenAI consulté est 0,0045 USD/minute; vérifier le tarif et le modèle au moment de l’activation.
+
+La conversion CA, les frais, la marge, les dates de validité, les coûts fixes et le registre durable du foyer sont requis. La réserve demeure débitée en cas d’interruption ou d’erreur ambiguë; six réservations par minute et plafond mensuel partagé existant. Aucun compteur en mémoire ne remplace PostgreSQL.
+
+Pour des enfants de moins de treize ans, la documentation OpenAI demande l’activation de Zero Data Retention avant traitement de leurs données personnelles. Vérifier l’approbation et l’applicabilité au projet et à l’endpoint exacts; ne pas confondre absence de stockage dans l’app, `store:false`, consentement familial et rétention fournisseur. Aucun booléen de configuration ne doit être mis à vrai pour contourner cette vérification.
+
+`/api/voice/status` ajoute `authConfigured`, `oralCheckAvailable` et `oralCheckReason` (`setup_required`, `parent_required`, `ready`); l’ancien `available` reste réservé à la conversation libre. Le statut de configuration ne teste pas à lui seul toutes les migrations ni une facture réelle. Après raccordement, exécuter un essai adulte consenti, contrôler la réservation durable et le nettoyage, puis examiner avec le parent la reconnaissance de la voix familiale. Aucun résultat simulé ne doit servir de preuve d’activation.
+
+Références : [API de transcription](https://developers.openai.com/api/docs/guides/speech-to-text), [modèle et prix gpt-transcribe](https://developers.openai.com/api/docs/models/gpt-transcribe), [conditions d’usage avec des mineurs](https://developers.openai.com/api/docs/guides/safety-checks/under-18-api-guidance), [rétention des données](https://developers.openai.com/api/docs/guides/your-data). Consultées le 22 octobre 2026. [Audit pédagogique et limites](ops/AUDIT-PEDAGOGIQUE-2026-10-22.md).
+
 ## État du 21 octobre 2026 — projet personnel en production
 
 L’application est publiée sur https://educ-ecole.vercel.app, depuis `Lianag2018/educ-ecole`. Les sections de livraison du 20 octobre ci-dessous décrivent l’état historique et ne doivent pas être utilisées pour conclure que la lecture audio attend encore une activation.
