@@ -1,6 +1,6 @@
 // Only join visual syllable separators in syllable activities: maths keeps its operators.
 export function spokenActivity(activity) {
- const text=String(activity.text??'');
+ const text=String(activity.spokenText??activity.text??'');
  return activity.skill==='syllabes' ? text.replace(/\s*\+\s*/gu,'') : text;
 }
 export function chooseReadingVoice(voices, preferredURI='') {
@@ -30,7 +30,8 @@ export class ReadingSpeaker {
  speak(text,{preferredURI='',speed,systemVoice=false,onState=()=>{},onProgress=()=>{}}={}) {
   this.stop();this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,systemVoice,onState,onProgress};const epoch=this.epoch;
   if(!this.synth||!this.Utterance){onState('error','Lecture audio indisponible ici. Ouvre l’application dans Safari.');return;}
-  const voice=systemVoice||!preferredURI?undefined:chooseReadingVoice(this.synth.getVoices(),preferredURI);
+  const voice=chooseReadingVoice(this.synth.getVoices(),systemVoice?'':preferredURI);
+  if(!voice){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
   const u=new this.Utterance(String(text));this.current=u;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
   u.rate=readingRate(speed);u.pitch=1;u.volume=1;
