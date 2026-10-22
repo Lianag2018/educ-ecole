@@ -24,7 +24,7 @@ export function speedCard(level,used=[],random=Math.random,tableCap=6){
  return {...base,id:'speed-'+base.id,choices:choices.map(String),answer:choices.indexOf(correct),sourceId:base.id};
 }
 export class SpeedRound{
- constructor(p,{now=()=>performance.now(),random=Math.random,tableCap=6}={}){this.state={...speedState(p),block:0};this.now=now;this.random=random;this.tableCap=tableCap;this.results=[];this.used=[];this.phase='ready';}
+ constructor(p,{now=()=>performance.now(),random=Math.random,tableCap=6}={}){this.state=speedState(p);this.state.block=Math.max(-1,...this.state.recent.map(e=>Number.isInteger(e.block)?e.block:-1))+1;this.now=now;this.random=random;this.tableCap=tableCap;this.results=[];this.used=[];this.phase='ready';}
  next(){if(this.results.length>=10){this.phase='done';return;}this.card=speedCard(this.state.level,this.used,this.random,this.tableCap);this.used.push(this.card.sourceId);this.cardLevel=this.state.level;this.elapsed=0;this.started=this.now();this.phase='playing';this.help=false;}
  time(){return this.elapsed+(this.phase==='playing'?Math.max(0,this.now()-this.started):0);}
  pause(){if(this.phase==='playing'){this.elapsed=this.time();this.phase='paused';}}
