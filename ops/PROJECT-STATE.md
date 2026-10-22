@@ -1,3 +1,7 @@
+## 22 octobre 2026 — accès Météormath et MaZone CEC (UTC)
+Base 02775170acb16cd851d14815fd103bb24df52fad, PR22 déployée et vérifiée (988/988 clips, fichiers publics conformes, 109 tests). Ajout de deux accès directs sur le monde avancé et le plan de maths hebdomadaire : Alloprof Météormath 2 et connexion officielle MaZone CEC. Nouvel onglet, arrêt de la narration en quittant, consignes contextualisées au plan du 19–23 octobre. Profils débutants exclus de ce panneau.
+Ce sont des liens externes, pas une intégration des scores ou des livres. Aucun identifiant collecté; accès aux cahiers CEC non encore fourni ni vérifié. URL Alloprof vérifiée; page CEC non lisible par l’outil de recherche, lien exact fourni par le parent conservé. Validation syntaxe, rendu des liens par niveau et build local réussis. Publication à vérifier après PR.
+
 ## 22 octobre 2026 — parcours Squishy et ressources scolaires (UTC)
 Base vérifiée : e19e58521b8c19eabaf4314b1190233d33773cc6. Parcours avancé uniquement : trois chemins, douze étapes, vingt-quatre défis originaux. Collection issue de l’historique local par profil; récompense d’effort distincte des réussites sans aide. Rejouer sans doublons, prochaine étape après exploration des deux questions. Jardin débutant et phonèmes conservés.
 Références annuelles dans CURRICULUM-3E.md, six PDF officiels téléchargés pour remise privée au parent, sept vidéos RÉCIT liées (pas de copie vidéo). Premier ensemble de défis, pas programme annuel complet. Aucun achat, aucun service professionnel modifié.
