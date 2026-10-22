@@ -19,6 +19,10 @@ test('speed rises only after repeated correct quick answers; mistakes and slowne
 test('pause excludes time and duplicate taps are ignored; clock can exceed target',()=>{
  let now=0;const g=new SpeedRound(fresh().profiles[1],{now:()=>now});g.next();now=1000;g.pause();now=61000;assert.equal(g.time(),1000);assert.equal(g.submit(0),null);g.resume();now=91000;const e=g.submit(g.card.answer);assert.equal(e.ms,31000);assert.ok(e.correct);assert.equal(g.submit(0),null);assert.equal(g.results.length,1);
 });
+test('a new round never counts results from the prior round toward promotion',()=>{
+ const p=fresh().profiles[1];p.speedMath={level:0,recent:Array.from({length:4},()=>({level:0,block:0,correct:true,help:false,ms:500}))};
+ const g=new SpeedRound(p);g.next();g.submit(g.card.answer);assert.equal(g.state.level,0);assert.equal(g.state.block,1);
+});
 const task={subject:'Maths',topic:'Tables',instruction:'Addition de 1 à 2',tables:[1,2],operations:['+'],words:[],missing:false};
 const plan={profileId:'p2',grade:3,week:'2026-10-19',tasks:[task,{...task,topic:'Soustraction',operations:['−']}]};
 test('plans isolate profiles, preserve prior weeks, and unlock only after correct attempts',()=>{
@@ -36,5 +40,6 @@ test('photo pipeline reserves before provider, stores no photo, uses fixed model
 test('missing auth, config, budget and bad images prevent any provider charge',async()=>{
  for(const override of [{auth:{authenticateParent:async()=>null}},{config:{}},{ledger:{durable:true,reserve:async()=>{throw Error();}}}]){const f=fixture(override);assert.notEqual((await planEndpoint(f.args)(req)).status,200);assert.ok(!f.calls.some(x=>x[0]==='provider'));}
  const f=fixture();assert.equal((await planEndpoint(f.args)({...req,body:{...req.body,image:'https://internal/private'}})).status,422);assert.equal(f.calls.length,0);
+ const d=fixture();assert.equal((await planEndpoint(d.args)({...req,body:{...req.body,week:'2026-02-30'}})).status,422);assert.equal(d.calls.length,0);
 });
 test('same image cache is isolated by owner/slot and avoids another charge',async()=>{let keys;const f=fixture({store:{find:async(...a)=>{keys=a;return plan;}}});const r=await planEndpoint(f.args)(req);assert.equal(r.body.reused,true);assert.deepEqual(keys.slice(0,2),['parent','p2']);assert.equal(f.calls.length,0);});
