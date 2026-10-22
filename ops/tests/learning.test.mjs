@@ -23,7 +23,7 @@ test('personal work and difficulty survive reload without crossing profiles',()=
  assert.equal(young.history.length,0);assert.equal(young.assignments.length,0);
  const storage={getItem:()=>storage.data,setItem:(_,v)=>storage.data=v};save(storage,s);
  const restored=load(storage);assert.deepEqual(restored,s);
- older.schoolContext.stage='1re année';assert.equal(skillCards(older,'syllabes')[0].id,'sy1');
+ older.schoolContext.stage='1re année';assert.deepEqual(skillCards(older,'syllabes'),skillCards(young,'syllabes'));
 });
 
 import {numberWords} from '../../src/numbers.js';
