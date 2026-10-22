@@ -78,3 +78,15 @@ Le bilan est recalculé après les réponses lors de son affichage et ne nécess
 ## Jardin des sons — préparation locale du 22 octobre 2026
 
 `src/sound-garden.js` fournit les 36 cartes. `src/phoneme-player.js` joue exclusivement les MP3 importés de Laval, à vitesse originale, et invalide les événements des lectures précédentes. `icons/phonemes/sources.json` conserve la provenance et les empreintes des fichiers; le build les copie avec les icônes. Aucun service payant, microphone ou synthèse de phonème n’est appelé. Les récompenses d’effort restent distinctes de la maîtrise en lecture. État de validation et de publication dans PROJECT-STATE.
+
+## Sprint et plans photographiés — 22 octobre 2026
+
+`src/speed-math.js` : dix cartes, trois choix uniques, temps actif monotone, pause sur changement d’onglet. Trois paliers (20/15/10 secondes indicatives). Cinq réussites dont quatre dans le repère permettent une montée; deux erreurs/aides ou trois lenteurs dans un bloc de cinq permettent une baisse. Jamais d’échec automatique au délai. Résultats séparés dans chaque profil; pas de diagnostic de maîtrise.
+
+`src/math-speech.js` normalise nombres et calculs simples en mots français. `56 − 20` devient « cinquante-six moins vingt ». Les instructions de narration ont été révisées pour toute la banque, avec un complément numérique. Les fichiers ont une nouvelle empreinte; la publication doit confirmer 1 132 clips. L’existence d’un MP3 ne prouve pas à elle seule la qualité acoustique.
+
+`src/school-plan.js` : formulaire photo, réduction JPEG locale (1 600 px), extraction limitée aux notions, plans datés isolés par profil, génération déterministe de calculs et cartes de mots et sélection de contenus d’univers social déjà préparés. Les thèmes non pris en charge et pages manquantes sont affichés explicitement. Il n’y a ni import automatique des livres CEC, ni renouvellement autonome du code.
+
+`ops/server/plans.mjs` et `/api/plans/import`, `/api/plans/list` : parent authentifié, profil détenu, consentement par photo, configuration de rétention vérifiée, budget durable partagé, requête OpenAI à endpoint fixe (aucun outil), sortie structurée validée puis sauvegarde privée. Une réserve prudente de 1 CAD par import (pas le coût réel) reste comptabilisée; les requêtes répétées dont le résultat est sauvegardé utilisent le cache. Pas de nouvelle tentative payante automatique. Au plus 12 plans par profil. Photo non conservée par l’app; la rétention fournisseur dépend de la configuration vérifiée.
+
+**Activation non démontrée** : schéma `ops/supabase/school-plans-schema.sql` proposé, non appliqué. Exige les profils et le budget existants, les variables personnelles et `plansEnabled:true` dans la configuration uniquement après vérification effective des conditions. Aucune valeur de consentement/rétention ne doit être falsifiée. Connexion parent indépendante de la disponibilité vocale. Les plans peuvent être récupérés sur un autre appareil une fois le service configuré; les historiques de réponses restent locaux, sans synchronisation automatique.
