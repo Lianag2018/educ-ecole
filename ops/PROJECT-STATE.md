@@ -1,3 +1,11 @@
+## 2026-10-22 — Fondations de lecture (préparation, UTC)
+Base : main 8542b45186b22b4fdb6984ac3f0f72b4eafe41fb (PR18).
+28 activités originales ajoutées : 14 sons/voyelles, 8 assemblages, 6 mots.
+Première année : ordre explicite, séparation visuelle +, explications orales et mots assemblés après réponse. Liens Alloprof différenciés 1re/3e année dans l’espace parent; complément RÉCIT univers social.
+Consignes TTS renforcées pour pain/main, u/ou, on/ch et syllabes : nouveaux hashes pour les enregistrements concernés. Aucune validation acoustique exhaustive ni test Safari/iPad réalisé; ne pas confondre présence MP3 et prononciation correcte.
+Références : Alloprof apprendre-lecture-ecriture-k1352 et répertoires f1588/f1590; activités originales, aucun contenu/audio tiers copié.
+Livraison non confirmée à ce stade. Prochaine action : vérifier tests, build, PR puis déploiement et écouter les sons problématiques.
+
 ## 21 octobre 2026, America/Toronto — accompagnement oral 1re année
 
 Préparé depuis main 124979d (PR17). Voix native explicitement française, préférence fr-CA; refus explicite si aucune voix française disponible, aucune voix anglaise par défaut. Modèles des sons en mots français contextualisés (chou, loup, du pain), terminologie sons/lettres. Questions et choix écoutables, indices et explications parlés, passage après fin de l’explication; arrêt/interruption annule le passage. Découpage visible la · pin conservé sans prononcer plus. Petit dictionnaire manuel de syllabes et boutons de décodage, univers social simplifié pour la 1re année. Les textes importés ne sont jamais découpés automatiquement.
