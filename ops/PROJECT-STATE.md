@@ -3,6 +3,26 @@ Préparation depuis main 3e6f6fc (PR19). Remplacement du contour actif par une p
 Cartes de sons : cible visible, modèle et consigne orale explicites; suppression du texte métalinguistique affiché à la place du son. Association a/ami/avion et i/ici/image correcte à l’écrit, mais ne constitue pas une validation acoustique du fichier. Ancien exercice feuille/seuil clarifié comme rime.
 Tests des syllabes, ponctuation, associations et isolation; build à vérifier avant livraison. Aucun test iPad physique, aucune validation de tous les fichiers à l’oreille. Prochaine action : PR, publication et contrôle distant.
 
+## 22 octobre 2026 — import des phonèmes pour usage familial (UTC)
+Demande explicite du parent : importer les sons et compléter le jardin. Préparation locale sur feat/animated-sound-cards, main distant vérifié 3e6f6fc18fa2e6049ae13d6c15be9d0e7cdcefe2; aucun push ni déploiement.
+36 MP3 récupérés depuis les fiches officielles du Laboratoire de phonétique de l’Université Laval, conservés sans transformation dans icons/phonemes. sources.json conserve page, URL, SHA-256, taille et état de validation. Usage familial déclaré par le parent; aucune licence ouverte ou autorisation institutionnelle de redistribution affirmée.
+Bouton Écouter le son dans chaque carte; lecteur dédié sans synthèse de secours, vitesse originale, arrêt au changement de carte/profil/navigation, à la narration et au bouton Arrêter. Animation décorative pendant la lecture et retour d’état accessible. Aucun diagnostic de prononciation, aucune simulation labiale.
+Validation : 36/36 fichiers décodés par FFmpeg sans erreur, durées 0,3705–0,787833 s; 104 tests réussis, build réussi avec les 36 MP3. Tests couvrant interruption/rejeu, callbacks périmés, échec audio et correspondance source/empreinte. Les 36 fichiers sont servis en HTTP 200 avec le bon type audio/mpeg et les empreintes attendues; autorisation limitée du serveur local ajoutée pour icons/phonemes/*.mp3. Écoute humaine exhaustive et Safari/iPad physique non réalisés; le rendu navigateur reste à vérifier. Les extraits sont courts, ils ne constituent pas des consonnes prolongées de plusieurs secondes.
+Prochaine étape : revue visuelle et écoute familiale; publication séparée à confirmer. L’intégration locale audio est réalisée, pas la livraison en ligne.
+
+## 22 octobre 2026 — jardin illustré des sons (America/Toronto)
+Préparation locale demandée dans la conversation secondaire, sur la branche existante feat/animated-sound-cards (base distante vérifiée : 3e6f6fc18fa2e6049ae13d6c15be9d0e7cdcefe2). Aucun push, fusion ou déploiement de cette étape.
+Ajout de src/sound-garden.js : Plume le hibou illustré sur fond transparent et décor de forêt original (PNG générés depuis la maquette approuvée), 12 premiers sons puis 36 fiches, narration des consignes, liens vers les fiches sources de Laval, récompense des essais et retour aux exercices existants. Entrée par le jardin des sons du profil débutant; le niveau scolaire du deuxième profil ne change pas. Les fleurs sont enregistrées par profil et ne changent ni scores ni niveau de lecture. Aucun microphone ni copie de média tiers.
+Boutons HTML séparés du décor, animation douce de Plume et célébration des essais, réduction des mouvements respectée. Illustrations de mots encore représentées par pictogrammes emoji.
+Validation : 101 tests Node réussis, syntaxe JS et build réussis. Le test navigateur a été tenté mais Chromium absent; téléchargement Playwright échoué (archive vide/invalide). Rendu visuel, navigation réelle et iPad physique non validés. Aucun modèle sonore déclaré acoustiquement validé : les références s’ouvrent dans un nouvel onglet accompagné par un adulte. Les animations sont décoratives, sans simulation d’articulation humaine ni synchronisation labiale.
+Prochaine étape : vérifier visuellement le jardin dans un navigateur disponible, écouter les 36 fichiers, confirmer les droits avant lecture directe, puis revue/publication selon autorisation. L’intégration audio directe reste incomplète.
+
+## 22 octobre 2026 — cartes animées f/v (America/Toronto)
+Préparation depuis main 3e6f6fc18fa2e6049ae13d6c15be9d0e7cdcefe2, branche feat/animated-sound-cards.
+Dans la leçon f : cartes originales f/v, position labiodentale simplifiée, souffle animé et vibration distincte, consignes écoutables, références vidéo externes Lumni/Canopé. Réduction des mouvements respectée. Aucun film tiers copié ni intégré en iframe.
+Les suites Node et le build local passent. Aucune écoute acoustique ni validation iPad réalisée. Les sons isolés ne sont PAS livrés : aucun fichier approuvé disponible; aucun fffff/vvvvv envoyé à la synthèse. Les liens de référence ont été trouvés mais leur lecture depuis le Canada n’est pas validée. Ni fusion ni déploiement confirmés.
+Prochaine étape : obtenir des modèles f/v autorisés, les écouter et les faire valider pédagogiquement avant de proposer leur lecture; compléter ensuite les autres sons. Les consignes parlées restent synthétiques et ne valent pas validation du phonème.
+
 ## 2026-10-22 — Fondations de lecture (préparation, UTC)
 Base : main 8542b45186b22b4fdb6984ac3f0f72b4eafe41fb (PR18).
 28 activités originales ajoutées : 14 sons/voyelles, 8 assemblages, 6 mots.

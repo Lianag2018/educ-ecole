@@ -1,3 +1,5 @@
+import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
+import {soundCards} from '../src/sound-cards.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading,mathsFor,socialFor} from '../src/learning.js';
@@ -23,7 +25,9 @@ export function narrationCatalog(){
  for(const n of Object.values(rows).flat())texts.add(numberWords(n));
  for(let n=0;n<100;n++)texts.add(numberWords(n));
  for(let n=100;n<=1000;n+=100)texts.add(numberWords(n));
+ for(const card of Object.values(soundCards))texts.add(card.instruction);
  const baseTexts=new Set(texts);
+ texts.add(gardenWelcome);texts.add(gardenEncouragement);for(const card of gardenSounds)texts.add(card.instruction);
  const young={id:'p1'},oralCards=[...bank,...mathsFor(young),socialFor(young),...stories.filter(q=>q.grade===1)];
  for(const q of oralCards){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(localHint(q,young));for(const c of q.choices)texts.add(choiceSpeech(c));for(const result of ['correct','incorrect','help'])texts.add(oralFeedback(q,result));}
  for(const word of Object.keys(syllables))texts.add(wordLesson(word));

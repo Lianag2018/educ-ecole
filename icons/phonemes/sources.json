@@ -1,0 +1,366 @@
+{
+  "attribution": "Laboratoire de phonétique de l’Université Laval",
+  "purpose": "Usage familial personnel demandé par le parent; aucune licence ouverte affirmée.",
+  "recordings": [
+    {
+      "id": "a",
+      "ipa": "a",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-la/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/a_ant.mp3",
+      "file": "/icons/phonemes/a.mp3",
+      "bytes": 18789,
+      "sha256": "f68bde654caa322ee8da40d57dd16295cb754f196b746dbbf4add9e8542b5735",
+      "auditoryReview": false
+    },
+    {
+      "id": "i",
+      "ipa": "i",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-pie/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/i.mp3",
+      "file": "/icons/phonemes/i.mp3",
+      "bytes": 15032,
+      "sha256": "0e90aef61219e507c8414277380d5375587ae2b8c1783ec6a5b0a65ffa4f558f",
+      "auditoryReview": false
+    },
+    {
+      "id": "u",
+      "ipa": "y",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-rue/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/y_son.mp3",
+      "file": "/icons/phonemes/u.mp3",
+      "bytes": 18163,
+      "sha256": "3c79caefe07e76291b6c44dab33f0721ebc2f9af12376bcf8e8e8ce4e27136ae",
+      "auditoryReview": false
+    },
+    {
+      "id": "ou",
+      "ipa": "u",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-boue/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/ou_son.mp3",
+      "file": "/icons/phonemes/ou.mp3",
+      "bytes": 19415,
+      "sha256": "f16f8f0bdf87aa949aae4778ebae77c222eb7ac81f89730def3abb716b311c08",
+      "auditoryReview": false
+    },
+    {
+      "id": "f",
+      "ipa": "f",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-afin/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/f_son.mp3",
+      "file": "/icons/phonemes/f.mp3",
+      "bytes": 21919,
+      "sha256": "19a2e17d6951f282ec457408c256c3a279b794f4a0758a54eca38b57f85ff19e",
+      "auditoryReview": false
+    },
+    {
+      "id": "v",
+      "ipa": "v",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-avant/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/v_son.mp3",
+      "file": "/icons/phonemes/v.mp3",
+      "bytes": 21293,
+      "sha256": "64e1b21945b5e4dd4d0c395131038a5313ce38a30b4d563ea8fa7209ee66b577",
+      "auditoryReview": false
+    },
+    {
+      "id": "m",
+      "ipa": "m",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-ami/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/m_son.mp3",
+      "file": "/icons/phonemes/m.mp3",
+      "bytes": 21919,
+      "sha256": "b90c803885123e334bdc25e357a1c85c5ccf36e45a68517f9a0bd9a4f17f26bd",
+      "auditoryReview": false
+    },
+    {
+      "id": "l",
+      "ipa": "l",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-ilot/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/l_son.mp3",
+      "file": "/icons/phonemes/l.mp3",
+      "bytes": 21919,
+      "sha256": "b35eb6022676ae909d114d619588790d90748243f6e34380cf2a36c90b083149",
+      "auditoryReview": false
+    },
+    {
+      "id": "s",
+      "ipa": "s",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-hi/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/s_son.mp3",
+      "file": "/icons/phonemes/s.mp3",
+      "bytes": 23171,
+      "sha256": "e5c9f2d020ffdbd6be8a2dfe2c85a0958a60f8e2c01b5db9bbdcb12b7cee4a6e",
+      "auditoryReview": false
+    },
+    {
+      "id": "ch",
+      "ipa": "ʃ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-echu/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/ch_son.mp3",
+      "file": "/icons/phonemes/ch.mp3",
+      "bytes": 25049,
+      "sha256": "d1acf254d2788c91d752b776adbd639191e5a6344ce73b281b79c692187b3300",
+      "auditoryReview": false
+    },
+    {
+      "id": "on",
+      "ipa": "ɔ̃",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-long/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/on_son.mp3",
+      "file": "/icons/phonemes/on.mp3",
+      "bytes": 19415,
+      "sha256": "97aa24b3036dba2b29ceeb1e1a4e9e63bf5adcd6ed2cb99bcc6928fff4262b48",
+      "auditoryReview": false
+    },
+    {
+      "id": "in",
+      "ipa": "ɛ̃",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-pain/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/in_son.mp3",
+      "file": "/icons/phonemes/in.mp3",
+      "bytes": 16285,
+      "sha256": "0a3b90c8a9fdde2f35764e46f85fb803ff1dfbe68512dd075163795178e5575c",
+      "auditoryReview": false
+    },
+    {
+      "id": "eacute",
+      "ipa": "e",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-the/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/e_ferme.mp3",
+      "file": "/icons/phonemes/eacute.mp3",
+      "bytes": 16285,
+      "sha256": "4222926bf5e293ddd91179ccc4cba5a19c33db34ae9f16db2d1d33431e95308e",
+      "auditoryReview": false
+    },
+    {
+      "id": "egrave",
+      "ipa": "ɛ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-fait/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/e_ouvert.mp3",
+      "file": "/icons/phonemes/egrave.mp3",
+      "bytes": 17537,
+      "sha256": "e77fb9e36a980d7406b2e5b7f63a6af4072e2a271b4c95aecd904dc1e3dff664",
+      "auditoryReview": false
+    },
+    {
+      "id": "o",
+      "ipa": "o",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-sceau/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/o_son.mp3",
+      "file": "/icons/phonemes/o.mp3",
+      "bytes": 20041,
+      "sha256": "145e916339ce4b859d2efceba0c5f21fe5739fc66bad0c8c001f2d8506246c97",
+      "auditoryReview": false
+    },
+    {
+      "id": "oopen",
+      "ipa": "ɔ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-bosse/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/o_ouvert_son.mp3",
+      "file": "/icons/phonemes/oopen.mp3",
+      "bytes": 19415,
+      "sha256": "eb146fd7894be8b891f90e82833fbdc297cbc13fb953648558ed78e70fc4a0e6",
+      "auditoryReview": false
+    },
+    {
+      "id": "eu",
+      "ipa": "ø",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-peu/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/eu_son.mp3",
+      "file": "/icons/phonemes/eu.mp3",
+      "bytes": 20667,
+      "sha256": "157c5ba4ed7fd668ea2468818a218c0379aaf6f3bcd1137690e8db041e6094e0",
+      "auditoryReview": false
+    },
+    {
+      "id": "oe",
+      "ipa": "œ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-boeuf/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/oe_son.mp3",
+      "file": "/icons/phonemes/oe.mp3",
+      "bytes": 20041,
+      "sha256": "eb8a25c00d52eed7beebc47678f584ddc733da4b2e9cc523284731e05c9b866c",
+      "auditoryReview": false
+    },
+    {
+      "id": "e",
+      "ipa": "ə",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-de/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/schwa_son.mp3",
+      "file": "/icons/phonemes/e.mp3",
+      "bytes": 17537,
+      "sha256": "722849d75b434f1ddc6f24f256380d412564351a05ec9ce456f788ddcee194a3",
+      "auditoryReview": false
+    },
+    {
+      "id": "a-back",
+      "ipa": "ɑ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-pate/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/a_post_son.mp3",
+      "file": "/icons/phonemes/a-back.mp3",
+      "bytes": 20664,
+      "sha256": "f207bfd92b4570e0cf19b50915289104a2318863a93c1305ddb494b5f9fe1182",
+      "auditoryReview": false
+    },
+    {
+      "id": "an",
+      "ipa": "ɑ̃",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-quand/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/an_son.mp3",
+      "file": "/icons/phonemes/an.mp3",
+      "bytes": 16908,
+      "sha256": "020655e8c283db0b9b1288da80b1bb7e4b5f1ccc1dc46c57111b89cd933aa2da",
+      "auditoryReview": false
+    },
+    {
+      "id": "un",
+      "ipa": "œ̃",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/voyelles/comme-dans-un/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/un_son.mp3",
+      "file": "/icons/phonemes/un.mp3",
+      "bytes": 16911,
+      "sha256": "90fd7dcba49d45323d3b980e4edcbdad9d5c6dd8a33cedb1a0703bbecb4dcdbd",
+      "auditoryReview": false
+    },
+    {
+      "id": "p",
+      "ipa": "p",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-epis/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/p_son.mp3",
+      "file": "/icons/phonemes/p.mp3",
+      "bytes": 17537,
+      "sha256": "10e9a9e2bade718e54486bfdee975484faf00abb7e88c13acc8e457189d0012d",
+      "auditoryReview": false
+    },
+    {
+      "id": "b",
+      "ipa": "b",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-a/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/b_son.mp3",
+      "file": "/icons/phonemes/b.mp3",
+      "bytes": 18163,
+      "sha256": "10cfe4e49449befbde3e20fd7536ac13b824c919abae3972bb1290f142add68d",
+      "auditoryReview": false
+    },
+    {
+      "id": "t",
+      "ipa": "t",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-attends/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/t_son.mp3",
+      "file": "/icons/phonemes/t.mp3",
+      "bytes": 19415,
+      "sha256": "9de265107d7402fd4abb7843c6680b49c8df64313172d8b7993ad08b4c13e440",
+      "auditoryReview": false
+    },
+    {
+      "id": "d",
+      "ipa": "d",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-aider/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/d_son.mp3",
+      "file": "/icons/phonemes/d.mp3",
+      "bytes": 18789,
+      "sha256": "8453e80d25a0a0ca774d7cdd4edf88bf1468d456a2e63f6164d36a4cc4049531",
+      "auditoryReview": false
+    },
+    {
+      "id": "k",
+      "ipa": "k",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-echo/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/k_son.mp3",
+      "file": "/icons/phonemes/k.mp3",
+      "bytes": 19415,
+      "sha256": "6b63ed9bbccc7de43b2f511f118f7fdea3da97bf43290eccced7ecd65fe8f691",
+      "auditoryReview": false
+    },
+    {
+      "id": "g",
+      "ipa": "ɡ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-egout/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/g_son.mp3",
+      "file": "/icons/phonemes/g.mp3",
+      "bytes": 18789,
+      "sha256": "93647c5de98eaf77108dc804fa593507601de9b223c873abbb8094ea92da2b5c",
+      "auditoryReview": false
+    },
+    {
+      "id": "n",
+      "ipa": "n",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-uni/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/n_son.mp3",
+      "file": "/icons/phonemes/n.mp3",
+      "bytes": 21919,
+      "sha256": "dae0b8aad0d6b8b9dcfb5211c754eae202b05bf17d365de679ef17afcda42b22",
+      "auditoryReview": false
+    },
+    {
+      "id": "gn",
+      "ipa": "ɲ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-oi/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/gn_son.mp3",
+      "file": "/icons/phonemes/gn.mp3",
+      "bytes": 22545,
+      "sha256": "d572fb4a88bc799f3c29b716a040cd89a52fa6bebc1897bd73f8795e3c3fb0b8",
+      "auditoryReview": false
+    },
+    {
+      "id": "z",
+      "ipa": "z",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-use/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/z_son.mp3",
+      "file": "/icons/phonemes/z.mp3",
+      "bytes": 24423,
+      "sha256": "b812bb068775c925ae1528906e46d779b329f2884346ae04a56d4f5d9d2edac7",
+      "auditoryReview": false
+    },
+    {
+      "id": "j",
+      "ipa": "ʒ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-ajout/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/ge_son.mp3",
+      "file": "/icons/phonemes/j.mp3",
+      "bytes": 22545,
+      "sha256": "49ea7105bcfca3cefc2b538bd734ca3bf28354d45f3808877780511b7d60bc27",
+      "auditoryReview": false
+    },
+    {
+      "id": "r",
+      "ipa": "ʁ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-haras/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/r_son.mp3",
+      "file": "/icons/phonemes/r.mp3",
+      "bytes": 21919,
+      "sha256": "aab6c0449e83175e9f00bacd80bd9a20e0b9c7f0e0f77dce5d2f87df43778bf7",
+      "auditoryReview": false
+    },
+    {
+      "id": "y",
+      "ipa": "j",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-oeillet/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/j_son.mp3",
+      "file": "/icons/phonemes/y.mp3",
+      "bytes": 21919,
+      "sha256": "e233cae4f22161bcb1a039537d982c93aefd222fea66d05448438f7a9dab3c13",
+      "auditoryReview": false
+    },
+    {
+      "id": "w",
+      "ipa": "w",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-oui/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/w_glide_son.mp3",
+      "file": "/icons/phonemes/w.mp3",
+      "bytes": 23171,
+      "sha256": "cd1e5c36ad7f4b03d7e997ab69e3bc6e225129732d41f07a5b14cd486a5c47b5",
+      "auditoryReview": false
+    },
+    {
+      "id": "ui",
+      "ipa": "ɥ",
+      "page": "https://www.phonetique.ulaval.ca/identification-des-sons-du-francais/les-consonnes/comme-la-consonne-dans-puits/",
+      "source": "https://www.phonetique.ulaval.ca//wp-content/uploads/sons/y_glide_son.mp3",
+      "file": "/icons/phonemes/ui.mp3",
+      "bytes": 25049,
+      "sha256": "06a4b939e7f400593ee813a7a300b82a70c14179ff3c7eef4c1f5a671d5aabf7",
+      "auditoryReview": false
+    }
+  ]
+}
