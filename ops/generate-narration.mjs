@@ -34,7 +34,7 @@ export async function generateNarration({env=process.env,fetcher=fetch,waiter=ms
   }
   let response;
   for(let attempt=0;attempt<3;attempt++){
-   try{response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:INSTRUCTIONS,response_format:'mp3',speed:0.85})});}
+   try{response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:item.instructions||INSTRUCTIONS,response_format:'mp3',speed:0.85})});}
    catch(e){if(attempt===2||!['TimeoutError','TypeError'].includes(e.name))throw e;await waiter((attempt+1)*1500);continue;}
    if(response.ok||response.status<500||response.status>599||attempt===2)break;
    await response.body?.cancel();await waiter((attempt+1)*1500);
