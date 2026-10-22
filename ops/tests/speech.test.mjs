@@ -4,7 +4,7 @@ import {spokenActivity,chooseReadingVoice,readingRate} from '../../src/speech.js
 test('syllable audio joins the word without saying visual plus signs',()=>{
  assert.equal(spokenActivity({skill:'syllabes',text:'la + pin'}),'lapin');
  assert.equal(spokenActivity({skill:'syllabes',text:'pa + ra + sol'}),'parasol');
- assert.equal(spokenActivity({skill:'maths',text:'3 + 7'}),'3 + 7');
+ assert.equal(spokenActivity({skill:'maths',text:'3 + 7'}),'trois plus sept');
  assert.equal(spokenActivity({skill:'liaisons',text:'les amis'}),'les amis');
 });
 test('prefer Canadian French reading voice and honor parent selection',()=>{

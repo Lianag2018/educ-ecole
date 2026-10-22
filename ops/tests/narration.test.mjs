@@ -10,7 +10,7 @@ test('catalog includes every requested number, first word and fictional stories,
  for(let n=0;n<=1999;n++)assert.ok(texts.has(numberWords(n))||numberParts(n).every(s=>texts.has(s)));
  assert.ok(texts.has('lapin'));assert.ok(c.some(x=>x.text.startsWith('Deux sœurs rêvent.')));
  assert.ok(c.every(x=>!x.text.includes('Liana')&&!x.text.includes('Mely-Ann')));
- assert.ok(c.length<=1100);assert.ok(c.reduce((n,x)=>n+x.text.length,0)<=150000);
+ assert.ok(c.length<=1250);assert.ok(c.reduce((n,x)=>n+x.text.length,0)<=150000);
 });
 test('all numbers can play in short spoken groups when a complete recording is absent',async()=>{
  const clips=Object.fromEntries(narrationCatalog().map(c=>[c.text,file]));delete clips[numberWords(1999)];

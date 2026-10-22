@@ -1,3 +1,4 @@
+import {mathSpeech} from './math-speech.js';
 import {playbackSpeed} from './speech.js';
 import {numberWords,numberParts} from './numbers.js';
 const numberByWords=new Map(Array.from({length:2000},(_,n)=>[numberWords(n),n]));
@@ -12,9 +13,9 @@ export class NarrationSpeaker {
  stop(){this.epoch++;this.fallback?.stop();if(this.audio){this.audio.pause();this.audio.onplaying=null;this.audio.onended=null;this.audio.onerror=null;this.audio.ontimeupdate=null;this.audio.removeAttribute?.('src');} }
  setSpeed(value){this.speed=playbackSpeed(value);if(this.audio){this.audio.playbackRate=this.speed;this.audio.preservesPitch=true;}if(this.usingFallback)this.fallback?.setSpeed?.(value);}
  speak(text,options={}){
-  this.stop();this.usingFallback=false;this.setSpeed(options.speed);const epoch=this.epoch,raw=String(text).trim(),key=/^\d{1,4}$/.test(raw)&&Number(raw)<=1999?numberWords(Number(raw)):raw,parts=this.clips[key]?[key]:key.split('. ').filter(Boolean);
+  this.stop();this.usingFallback=false;this.setSpeed(options.speed);const epoch=this.epoch,raw=String(text).trim(),key=mathSpeech(raw),parts=this.clips[key]?[key]:key.split('. ').filter(Boolean);
   const files=parts.flatMap(p=>this.clips[p]?[this.clips[p]]:numberByWords.has(p)?numberParts(numberByWords.get(p)).map(s=>this.clips[s]):[undefined]);
-  if(options.systemVoice||options.preferredURI||!this.audio||!files.length||files.some(f=>!f||!/^[a-f0-9]{64}\.mp3$/.test(f))){this.usingFallback=true;this.fallback.speak(text,options);return;}
+  if(options.systemVoice||options.preferredURI||!this.audio||!files.length||files.some(f=>!f||!/^[a-f0-9]{64}\.mp3$/.test(f))){this.usingFallback=true;this.fallback.speak(key,options);return;}
   const onState=options.onState||(()=>{}),audio=this.audio;let index=0;
   const active=()=>this.epoch===epoch;
   const fail=()=>{if(active()){this.stop();onState('error','Touche Écouter pour relancer la narratrice. Vérifie aussi le volume.');}};

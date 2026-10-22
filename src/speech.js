@@ -1,7 +1,8 @@
+import {mathSpeech} from './math-speech.js';
 // Only join visual syllable separators in syllable activities: maths keeps its operators.
 export function spokenActivity(activity) {
  const text=String(activity.spokenText??activity.text??'');
- return activity.skill==='syllabes' ? text.replace(/\s*\+\s*/gu,'') : text;
+ return activity.skill==='syllabes' ? text.replace(/\s*\+\s*/gu,'') : mathSpeech(text);
 }
 export function chooseReadingVoice(voices, preferredURI='') {
  const french=voices.filter(v=>/^fr(?:-|_)/i.test(v.lang));
@@ -28,7 +29,7 @@ export class ReadingSpeaker {
   this.speak(text.slice(offset),{...options,speed,onProgress:e=>options.onProgress?.({...e,charIndex:e.charIndex+offset})});
  }
  speak(text,{preferredURI='',speed,systemVoice=false,onState=()=>{},onProgress=()=>{}}={}) {
-  this.stop();this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,systemVoice,onState,onProgress};const epoch=this.epoch;
+  this.stop();text=mathSpeech(text);this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,systemVoice,onState,onProgress};const epoch=this.epoch;
   if(!this.synth||!this.Utterance){onState('error','Lecture audio indisponible ici. Ouvre l’application dans Safari.');return;}
   const voice=chooseReadingVoice(this.synth.getVoices(),systemVoice?'':preferredURI);
   if(!voice){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
