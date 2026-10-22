@@ -6,7 +6,7 @@ test('alignment preserves original accents, apostrophes and repeated word offset
  const cues=alignWords('Les sœurs, les étoiles.',[{word:'Les',start:0,end:.3},{word:'soeurs',start:.3,end:1},{word:'les',start:1.5,end:1.8},{word:'étoiles.',start:1.8,end:2.5}]);
  assert.deepEqual(cues.map(c=>c.charIndex),[0,4,11,15]);
  assert.equal(alignWords('Le chat.',[{word:'Le chien',start:0,end:1}]),null);
- assert.equal(alignWords('Le chat.',[{word:'Le',start:1,end:2},{word:'chat',start:1,end:3}]),null);
+ assert.equal(alignWords('Le chat.',[{word:'Le',start:1,end:2},{word:'chat',start:.5,end:3}]),null);
  assert.equal(alignWords('Le chat.',[{word:'Le',start:0,end:1}]),null);
 });
 test('recorded word positions follow time through slow playback, seeking, replay and cancellation',async()=>{
@@ -20,4 +20,10 @@ test('recorded word positions follow time through slow playback, seeking, replay
  p.audio.currentTime=.3;p.audio.ontimeupdate();assert.equal(events.at(-1).charIndex,0);
  const stale=p.audio.ontimeupdate;p.stop();const count=events.length;stale();assert.equal(events.length,count);
  p.speak(text,{onProgress:e=>events.push(e)});p.audio.currentTime=0;p.audio.ontimeupdate();assert.equal(events.at(-1).charIndex,-1);
+});
+
+test('a small spelling mismatch in a sentence keeps measured anchors without invented words',()=>{
+ const text='Les deux sœurs regardent les belles étoiles dans le ciel.';
+ const words=['Les','deux','soeur','regardent','les','belles','étoiles','dans','le','ciel'].map((word,i)=>({word,start:i,end:i+1}));
+ const cues=alignWords(text,words);assert.equal(cues.length,9);assert.ok(!cues.some(c=>c.charIndex===9));assert.equal(cues.at(-1).start,9);
 });
