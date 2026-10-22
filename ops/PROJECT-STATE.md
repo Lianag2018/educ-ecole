@@ -1,3 +1,9 @@
+## 21 octobre 2026, America/Toronto — mondes par année scolaire
+
+Refonte depuis `31759d582d601d9f45e0d06d207d09f83106cbac`. L’accueil de choix montre les deux personnages; après sélection, seul le monde du profil actif est rendu. `src/worlds.js` définit six choix distincts par niveau. Les anciens hotspots interprofils ont été retirés. Les tables hebdomadaires sont réservées au niveau avancé, sur leur propre écran. Le contenu et les progrès existants sont conservés.
+
+Décors CSS animés avec réduction des mouvements, portraits issus de l’illustration approuvée, cartes de jeux et écrans d’exercice compacts. Les longs récits défilent à l’intérieur d’un panneau; ne pas promettre zéro défilement sur toutes tailles/zooms. Contrôles audio et vitesse conservés, outils adultes repliés. Tests de navigation rendue et d’isolation des banques, suite Node et build réussis. Validation visuelle et publication à vérifier. Pas de test iPad physique.
+
 ## 21 octobre 2026, America/Toronto — vitesse réglable
 
 Curseur visible 0,6×–1,5× pour activités et nombres, enregistré dans le navigateur. Les MP3 changent de vitesse sans redémarrer ni modifier currentTime; preservesPitch activé. Les repères restent pilotés par le temps du média. La voix système reprend au dernier mot signalé par le navigateur; sans boundary, elle repart au début. Deux tests dédiés (vitesse en cours, position, hauteur, reprise native répétée), suite Node et build réussis. Déploiement à vérifier; pas de test iPad physique. Les limites de couverture 31/33 ci-dessous restent valables.
