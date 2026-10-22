@@ -17,7 +17,7 @@ export function planEndpoint({auth,profiles,ledger,store,config,apiKey,fetcher=f
   const grade=p.stage==='1re année'?1:p.stage==='3e année'?3:null;if(!grade)throw Error('invalid_plan');
   if(req.path==='/api/plans/list')return {status:200,body:{plans:await store.list(parent.id,b.profileId)}};
   phase='config';if(!ready(config)||config.plansEnabled!==true||!apiKey||!ledger?.durable)throw Error('plan_unavailable');
-  if(b.consent!==true||!/^\d{4}-\d{2}-\d{2}$/.test(b.week)||!Number.isFinite(Date.parse(b.week+'T12:00:00Z')))throw Error('invalid_plan');
+  if(b.consent!==true||!/^\d{4}-\d{2}-\d{2}$/.test(b.week)||!Number.isFinite(Date.parse(b.week+'T12:00:00Z'))||new Date(b.week+'T12:00:00Z').toISOString().slice(0,10)!==b.week)throw Error('invalid_plan');
   const image=validatePhoto(b.image),digest=createHash('sha256').update(b.profileId+'|'+grade+'|'+b.week+'|'+image).digest('hex');
   const existing=await store.find(parent.id,b.profileId,digest);if(existing)return {status:200,body:{plan:existing,reused:true}};
   // One fixed conservative CAD reserve, shared with the family budget. No retries.
