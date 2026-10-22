@@ -5,3 +5,5 @@ for (const file of ['index.html','src','icons','manifest.webmanifest']) await cp
 console.log('Static production build: dist/');
 const {generateNarration}=await import('./generate-narration.mjs');
 await generateNarration();
+const {alignNarration}=await import('./align-narration.mjs');
+await alignNarration();
