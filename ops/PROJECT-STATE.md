@@ -1,3 +1,9 @@
+## Vérification du 21 octobre 2026 à 21 h 32 (America/Toronto)
+
+PR13 et PR14 fusionnées, production Vercel SUCCESS sur `bc551eb625c2aa0dc5ac0e4894336742b508966b`. Le fichier public `/src/narration.js` correspond exactement au fichier local testé. `/audio/alignment.json` confirme **31/33** textes alignés, y compris les quatre histoires de licornes; deuxième génération : 16 appels, deux échecs. Les 395 MP3 demeurent disponibles. Les deux textes sans repères conservent le suivi approximatif. Tests Node réussis. Pas de vérification acoustique ni iPad physique.
+
+Le contrôle intégral décrit ci-dessous pour PR13 a été remplacé par PR14 : alignement lexical ordonné, correspondance d’au moins 90 % dans les deux sens, maximum deux mots absents consécutifs; aucun timestamp inventé pour un mot absent. Les timestamps proviennent d’une transcription automatique, pas d’un alignement phonétique garanti. La conversation libre et la mémoire distante ne sont pas modifiées par ces PR. Prochaine étape : essai tablette et inspection des deux clips restants avant toute nouvelle génération.
+
 ## Reprise du 22 octobre 2026 (UTC) — synchronisation narration
 
 Correctif préparé depuis main `9aa1fecc9783866821124f5a0eab148a167e2404`, branche `fix/narration-word-sync`. Ajout de repères de mots extraits des MP3 publics au build, uniquement pour les textes intégrés non numériques (maximum 80 requêtes, aucune répétition payante par build, cache par hash audio). Refus des transcriptions qui ne correspondent pas intégralement au texte. Les clips sans repères conservent le suivi approximatif; aucun alignement phonétique garanti. Le suivi conserve son état après réaffichage, couvre aussi sons/syllabes et fait défiler le mot hors écran.
