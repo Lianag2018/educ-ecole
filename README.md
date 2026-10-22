@@ -1,5 +1,13 @@
 > **Reprise du projet :** lire [AGENTS.md](AGENTS.md), [l’architecture](ARCHITECTURE.md), [l’état courant](ops/PROJECT-STATE.md) et [le parcours d’accès](ops/ACCESS-RUNBOOK.md). Les sections historiques ci-dessous ne prouvent pas l’état de production actuel.
 
+## Progression, accompagnement et retour oral — 22 octobre 2026
+
+La progression tient maintenant compte des journées distinctes : répéter une carte le même jour ne suffit plus à monter le niveau. Une réussite après une aide reste accompagnée; l’historique et les deux profils sont conservés. Les fondations suivent leur ordre pédagogique, les consignes évitent de donner la réponse avant l’essai, et les fiches sur les centaines/milliers ouvrent des exemples adaptés.
+
+Des aides facultatives proposent de représenter les nombres, garder les positions à zéro, comparer et expliquer un mot dans une phrase. Le nouvel exercice oral est présent dans les nombres et certains mots intégrés, avec connexion parent, attestation d’un adulte et capture courte. Il donne un retour sur ce qui a été reconnu, sans score phonétique ni validation automatique. L’activation OpenAI réelle reste bloquée tant que le projet personnel, le budget durable et les conditions de confidentialité ne sont pas vérifiés; le micro ne s’ouvre pas sur un statut indisponible. La narration et le studio local fonctionnent indépendamment.
+
+[Audit pédagogique détaillé et limites](ops/AUDIT-PEDAGOGIQUE-2026-10-22.md) · [Configuration du retour oral](VOICE-SETUP.md) · [État et vérifications de livraison](ops/PROJECT-STATE.md).
+
 ## Nombres enregistrés — 22 octobre 2026
 
 Le lecteur associe les nombres de 0 à 1 999 aux 40 extraits identifiés de PédagoFA (CSSDM), lus depuis leurs URL officielles. Les nombres composés utilisent les groupes sonores appropriés; les formes sensibles absentes de la banque, dont 21–29 et certaines centaines, gardent leur enregistrement entier dans la narration existante. Les calculs simples utilisent les mêmes nombres, avec des opérateurs français enregistrés. Les profils conservent leurs plages : 0–99 au début, 0–1 999 au niveau avancé.

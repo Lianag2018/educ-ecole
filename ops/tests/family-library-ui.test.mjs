@@ -392,6 +392,24 @@ test('opening a PDF or practising does not advance a step; only the explicit par
   mounted.destroy();
 });
 
+test('number practice opens a value aligned with the current step and leaves pattern work in its PDF', async () => {
+  const profile = structuredClone(p2), ui = childHost(), practices = [];
+  const mounted = mountFamilyLibrary(ui.host, profile, {track:'numbers', listLocalDocuments:async () => [], onPractice:(kind, context) => practices.push({kind, ...context})});
+  await flush();
+  await ui.host.emit('click', {target:ui.guide.querySelector('[data-fl-practice]')});
+  assert.deepEqual(practices, [{kind:'numbers', number:462}]);
+  ui.guide.querySelector('[data-fl-start-step]').value = 'p2-numbers-zero';
+  await ui.host.emit('click', {target:ui.guide.querySelector('[data-fl-start-apply]')});
+  await ui.host.emit('click', {target:ui.guide.querySelector('[data-fl-practice]')});
+  assert.deepEqual(practices.at(-1), {kind:'numbers', number:1204});
+  ui.guide.querySelector('[data-fl-start-step]').value = 'p2-numbers-patterns';
+  await ui.host.emit('click', {target:ui.guide.querySelector('[data-fl-start-apply]')});
+  assert.equal(ui.guide.querySelector('[data-fl-practice]'), null);
+  assert.match(ui.guide.innerHTML, /data-library-guided-document/);
+  assert.equal(practices.length, 2);
+  mounted.destroy();
+});
+
 test('the parent can choose a starting step without erasing earlier or other-path progress', async () => {
   const profile = structuredClone(p1), paths = pathsFor(profile), path = paths[0]; assert.ok(path?.steps.length >= 3);
   recordPathStep(profile, path.id, path.steps[0].id, 'ready');

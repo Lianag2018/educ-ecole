@@ -1,4 +1,4 @@
-import {prioritySkills,isReadingEvent} from './progress.js';
+import {prioritySkills,isReadingEvent,isPracticeEvent,dailyEvidence,normalizeReadingSubject} from './progress.js';
 import {readingBank} from './learning.js';
 import { bank, skills } from './content.js';
 
@@ -19,7 +19,7 @@ export function load(storage) {
         s.profiles.every((p, i) => p.id === `p${i + 1}` &&
           typeof p.name === 'string' && p.records &&
           Array.isArray(p.history) && Array.isArray(p.assignments)) &&
-        ['p1', 'p2'].includes(s.active)) { s.profiles.forEach((p,i)=>{p.schoolContext??={stage:i===0?'1re année':'3e année',focus:''};}); return s; }
+        ['p1', 'p2'].includes(s.active)) { s.profiles.forEach((p,i)=>{p.schoolContext??={stage:i===0?'1re année':'3e année',focus:''};reconcileReviews(p);}); return s; }
   } catch { /* Private mode or unavailable storage: keep the app usable. */ }
   return fresh();
 }
@@ -33,20 +33,27 @@ export function save(storage, state) {
 
 export function pool(p) { return [...readingBank(p), ...p.assignments]; }
 
-// These are content tiers, not school grades or a reading diagnosis.
-export function level(p, skill) {
-  const recent = p.history.filter(x => x.skill === skill && isReadingEvent(x)).slice(-4);
-  if (recent.length === 4 && recent.every(x => x.result === 'correct')) return 3;
-  return recent.length >= 2 &&
-    recent.filter(x => x.result === 'correct').length >= Math.ceil(recent.length * .75)
+// Conservative product settings for this small activity bank, not validated
+// clinical cutoffs, school grades or a diagnosis. Tier 2 allows a single card
+// practiced on different days because some grade-3 domains have one tier-1 card.
+export const PROGRESSION_RULES=Object.freeze({window:4,tier2Days:2,tier2Ratio:.75,tier3Days:3,tier3Cards:2,reviewDays:Object.freeze([1,3,7,14])});
+export function level(p, skill, day) {
+  const recent = dailyEvidence(p.history.filter(x => isPracticeEvent(x) && x.skill === skill && isReadingEvent(x) && (!day || x.day <= day))).slice(-PROGRESSION_RULES.window);
+  const days = new Set(recent.map(x => x.day)).size;
+  const cards = new Set(recent.map(x => x.id)).size;
+  if (recent.length === PROGRESSION_RULES.window && days >= PROGRESSION_RULES.tier3Days && cards >= PROGRESSION_RULES.tier3Cards && recent.every(x => x.result === 'correct')) return 3;
+  return days >= PROGRESSION_RULES.tier2Days &&
+    recent.filter(x => x.result === 'correct').length >= Math.ceil(recent.length * PROGRESSION_RULES.tier2Ratio)
     ? 2 : 1;
 }
+
+const authoredOrder=(a,b)=>(Number.isFinite(a.order)?a.order:Number.MAX_SAFE_INTEGER)-(Number.isFinite(b.order)?b.order:Number.MAX_SAFE_INTEGER)||b.level-a.level||a.id.localeCompare(b.id);
 
 export function select(p, day) {
   const all = pool(p);
   if (!p.calibrated) {
     return Object.keys(skills).map(skill =>
-      all.find(q => q.skill === skill && q.level === 1));
+      all.filter(q => q.skill === skill && q.level === 1).sort(authoredOrder)[0]);
   }
   const due = all.filter(q => p.records[q.id]?.due <= day).sort((a, b) =>
     p.records[a.id].due.localeCompare(p.records[b.id].due) || a.id.localeCompare(b.id));
@@ -55,12 +62,13 @@ export function select(p, day) {
   const assigned = p.assignments.find(q => !p.records[q.id] && !picked.includes(q));
   if (assigned) picked.push(assigned);
   for (const skill of prioritySkills(p, day)) {
+    const tier=level(p,skill,day);
     const candidates = all.filter(q => q.skill === skill &&
       !picked.includes(q) && (!p.records[q.id] || p.records[q.id].due <= day) &&
-      q.level <= level(p, skill)).sort((a, b) =>
+      q.level <= tier).sort((a, b) =>
       Number(!!p.records[a.id]) - Number(!!p.records[b.id]) ||
       (p.records[a.id]?.due || '').localeCompare(p.records[b.id]?.due || '') ||
-      b.level - a.level || a.id.localeCompare(b.id));
+      authoredOrder(a,b));
     if (candidates[0] && picked.length < 8) picked.push(candidates[0]);
   }
   return picked;
@@ -72,13 +80,40 @@ export function nextDate(day, days) {
   return d.toISOString().slice(0, 10);
 }
 
+const samePractice=(a,b)=>a.skill===b.skill&&(isReadingEvent(a)?isReadingEvent(b):normalizeReadingSubject(a.subject)===normalizeReadingSubject(b.subject));
+function reviewFrom(evidence){
+  const latest=evidence.at(-1);
+  let streak=0;
+  for(let i=evidence.length-1;i>=0&&evidence[i].result==='correct';i--)streak++;
+  const days=latest.result==='correct'?PROGRESSION_RULES.reviewDays[Math.min(streak-1,PROGRESSION_RULES.reviewDays.length-1)]:0;
+  return {streak,result:latest.result,due:nextDate(latest.day,days)};
+}
+
+// Repair only derived review fields from old repeated-click records. Do not
+// rewrite history, attempt counts, assignments, profile data or unrelated keys.
+function reconcileReviews(p){
+  const cards=new Map();
+  for(const e of p.history){
+    if(!isPracticeEvent(e)||!Object.hasOwn(p.records,e.id))continue;
+    if(!cards.has(e.id))cards.set(e.id,[]);
+    cards.get(e.id).push(e);
+  }
+  for(const [id,events] of cards){
+    const latest=dailyEvidence(events).at(-1);
+    const evidence=dailyEvidence(events.filter(e=>samePractice(latest,e)));
+    p.records[id]={...p.records[id],...reviewFrom(evidence)};
+  }
+}
+
 export function answer(p, q, result, day, subject = 'Français') {
   if (!['correct', 'incorrect', 'help'].includes(result)) throw Error('Résultat invalide');
   const old = p.records[q.id] || { streak: 0, attempts: 0 };
-  const streak = result === 'correct' ? old.streak + 1 : 0;
-  const days = result === 'correct' ? [1, 3, 7, 14][Math.min(streak - 1, 3)] : 0;
-  p.records[q.id] = { streak, attempts: old.attempts + 1, result, due: nextDate(day, days) };
-  p.history.push({ id: q.id, skill: q.skill, result, day, subject, activityLevel: q.level || 1 });
+  const event = { id: q.id, skill: q.skill, result, day, subject:normalizeReadingSubject(subject), activityLevel: q.level || 1 };
+  const evidence=dailyEvidence([...p.history.filter(x=>isPracticeEvent(x)&&x.id===q.id&&x.day<=day&&samePractice(event,x)),event]);
+  const effective=evidence.at(-1).result;
+  p.records[q.id] = {...old,...reviewFrom(evidence),attempts:old.attempts+1};
+  p.history.push({...event,result:effective,...(effective!==result?{submittedResult:result}:{})});
+  return effective;
 }
 
 // Literal token extraction only: no invented phonetics, syllable breaks or answers.

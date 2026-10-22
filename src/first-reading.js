@@ -16,12 +16,22 @@ const sounds=[
  ['ch','ch','chou','chat','sac','Écoute le début de chou. Les lettres c et h représentent ensemble ce son. Souffle doucement.'],
  ['in','in','sapin','lapin','ballon','Écoute : sapin, lapin. À la fin, le son résonne aussi dans le nez. Ne prononce pas la lettre n séparément.']
 ];
+const soundIntroductions={
+ o:'Arrondis les lèvres. Écoute le son du mot eau.',
+ u:'Arrondis les lèvres. Écoute le début du mot une.',
+ eacute:'Écoute le début du mot été.',
+ egrave:'Écoute le début du mot aile.',
+ ou:'Écoute le son à la fin du mot loup. Les lettres o et u travaillent ensemble.',
+ on:'Écoute le son à la fin du mot rond. Il résonne aussi dans le nez. Ne prononce pas la lettre n séparément.',
+ in:'Écoute le son à la fin du mot sapin. Il résonne aussi dans le nez. Ne prononce pas la lettre n séparément.'
+};
 export const firstSounds=sounds.map(([id,letters,model,yes,no,tip],index)=>({
  id:'first-sound-'+id,skill:'sons',level:index<10?1:2,order:index,
  title:index<6?'Je découvre les voyelles':'Je découvre les sons',text:letters,
  soundTarget:letters,model,
  spokenText:tip,
  lesson:`${tip} Tu peux répéter après moi.`,
+ ...(soundIntroductions[id]?{introLesson:soundIntroductions[id]}:{}),
  oralPrompt:`Écoute chaque choix. Cherche le son que nous venons de travailler dans le mot ${model}.`,
  prompt:`Cherche le son « ${letters} » dans un autre mot.`,
  choices:index%2?[no,yes]:[yes,no],answer:index%2?1:0,
@@ -34,7 +44,8 @@ export const firstBlends=blends.map(([id,syllable,model],index)=>({
  id:'first-blend-'+id,skill:'syllabes',level:1,order:index,
  title:'Je colle les sons',text:syllable[0]+' + '+syllable.slice(1),
  lesson:`Écoute le début du mot ${model}. Les lettres affichées se lisent ensemble.`,
- prompt:'Écoute, puis retrouve la syllabe.',spokenText:`${syllable}.`,
+ introLesson:'Regarde les lettres affichées. Essaie de les lire ensemble. Tu peux écouter un modèle avec le bouton Écouter.',
+ prompt:'Lis les lettres ensemble, puis retrouve la syllabe.',spokenText:`${syllable}.`,
  choices:index%2?['fa',syllable]:[syllable,'ri'],answer:index%2?1:0,
  explanation:`Les lettres se lisent ensemble : ${syllable}, comme au début de ${model}.`
 }));

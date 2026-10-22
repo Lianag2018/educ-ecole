@@ -453,7 +453,8 @@ export const P2_PATHS = [
             "note": "Faire un exemple ensemble si les groupements de dix sont encore difficiles."
           }
         ],
-        "practice": "numbers"
+        "practice": "numbers",
+        "practiceNumber": 462
       },
       {
         "id": "p2-numbers-zero",
@@ -481,7 +482,8 @@ export const P2_PATHS = [
             "note": "306 et 36 servent de reprise plus simple. La distinction entre chiffre des dizaines et nombre total de dizaines n’est pas exigée ici."
           }
         ],
-        "practice": "numbers"
+        "practice": "numbers",
+        "practiceNumber": 1204
       },
       {
         "id": "p2-numbers-addition",
@@ -584,7 +586,7 @@ export const P2_PATHS = [
             "note": "Commencer par un motif répété. Une suite comme 0, 2, 4, 6 sera un autre petit essai, quand la règle concrète est claire."
           }
         ],
-        "practice": "numbers"
+        "practice": null
       },
       {
         "id": "p2-numbers-measure",

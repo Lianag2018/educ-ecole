@@ -9,7 +9,8 @@ test('three independent paths, rewards persist and remain isolated',()=>{
  assert.equal(stageOpen(older,squishyStages[4]),true);assert.equal(stageOpen(older,squishyStages[8]),true);
  answer(older,s.items[0],'help','2026-10-22',s.domain);assert.equal(stageOpen(older,next),false);
  answer(older,s.items[1],'incorrect','2026-10-22',s.domain);assert.equal(stageOpen(older,next),true);assert.equal(stageProgress(older,s).independent,0);
- answer(older,s.items[0],'correct','2026-10-22',s.domain);assert.equal(stageProgress(older,s).independent,1);assert.equal(stageProgress(young,s).explored,false);
+ answer(older,s.items[0],'correct','2026-10-22',s.domain);assert.equal(stageProgress(older,s).independent,0);
+ answer(older,s.items[0],'correct','2026-10-23',s.domain);assert.equal(stageProgress(older,s).independent,1);assert.equal(stageProgress(young,s).explored,false);
  let data;const storage={setItem(k,v){data=v},getItem(){return data}};save(storage,state);assert.equal(stageProgress(load(storage).profiles[1],s).explored,true);
  assert.equal(squishyStages.filter(x=>stageProgress(older,x).explored).length,1);
 });
