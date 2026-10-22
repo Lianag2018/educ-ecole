@@ -1,5 +1,5 @@
 const q=(id,skill,level,prompt,text,choices,answer,explanation)=>({id,skill,level,prompt,text,choices,answer,explanation});
-export const skills={syllabes:'Les syllabes',sons:'Les sons',mots:'Les mots',liaisons:'Les liaisons',intonation:'La voix',comprehension:'Les histoires'};
+export const skills={syllabes:'Les syllabes',sons:'Les sons et leurs lettres',mots:'Les mots',liaisons:'Les liaisons',intonation:'La voix',comprehension:'Les histoires'};
 export const bank=[
 q('sy1','syllabes',1,'Assemble les syllabes.','la + pin',['lapin','sapin','patin'],0,'la et pin forment le mot « lapin ». On entend deux syllabes.'),
 q('sy2','syllabes',1,'Quel mot commence par la syllabe « ma »?','ma',['vélo','matin','tapis'],1,'Dans « matin », on entend ma, puis tin.'),
@@ -22,3 +22,12 @@ q('co2','comprehension',1,'Pourquoi Lili prend-elle ses bottes?','Lili regarde d
 q('co3','comprehension',2,'Pourquoi Sami revient-il au jardin?','Sami sème trois graines. Chaque matin, il apporte un peu d’eau. Un jour, une pousse sort de terre. Sami sourit. Demain, il reviendra avec son arrosoir.',['Pour cueillir des pommes','Pour arroser sa pousse','Pour chercher son chat'],1,'Sami prend soin de ses graines, puis de sa pousse. Son arrosoir sert à lui donner de l’eau.'),
 q('co4','comprehension',3,'Que comprend Nora à la fin?','Nora veut bâtir une cabane. Son premier mur tombe. Elle ajoute une base plus large et demande à Émile de tenir les branches. Cette fois, le mur reste debout. Nora lui réserve une place dans la cabane.',['Que travailler ensemble peut aider','Que les branches sont inutiles','Que sa cabane est terminée'],0,'Avec une meilleure base et l’aide d’Émile, Nora réussit à faire tenir le mur. Le texte ne dit pas que toute la cabane est terminée.')
 ];
+
+// Model sounds in French words, not ambiguous bare letter names.
+const oralModels={
+ so1:{spokenText:'Écoute le son dans le mot loup. Loup.',prompt:'Écoute « loup ». Quel mot contient le même son à la fin?',explanation:'Écoute : loup, roue. On entend le même son à la fin. Il s’écrit avec les lettres o et u.'},
+ so2:{spokenText:'Écoute le début du mot chou. Chou.',prompt:'Quel mot commence comme « chou »?',explanation:'Écoute : chou, chat. On entend le même son au début. Les lettres c et h représentent ce son ensemble.'},
+ so3:{spokenText:'Du pain. Le pain.',prompt:'Quel mot rime avec « pain »?',explanation:'Écoute : du pain, une main. Ces mots riment. On entend le même son à la fin.'},
+ so4:{spokenText:'Un bateau.',prompt:'Quelles lettres terminent le mot « bateau »?',explanation:'Dans bateau, les lettres e, a et u représentent ensemble le son que tu entends à la fin du mot vélo.'}
+};
+for(const item of bank)Object.assign(item,oralModels[item.id]||{});
