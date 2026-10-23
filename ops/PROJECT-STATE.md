@@ -71,3 +71,7 @@ Le lecteur et le studio local ne dépendent pas de l’activation de ce service.
 
 PostgREST 10 : les fonctions SQL `VOID` renvoient `204 No Content`.
 https://docs.postgrest.org/en/v10/releases/v10.0.0.html
+
+## Préparation des cahiers de 1re année — 22 octobre 2026
+
+Les photos reçues (lecture, orthographe, mathématiques et aide-mémoire Nougat) servent de repères pédagogiques. `src/mely-grade1.js` contient 18 thèmes, 36 cartes originales et une liste de 100 mots, réservés au profil de 1re année. Aucun scan ni identifiant scolaire dans le dépôt. Les exercices existants, l'historique et le profil de 3e année restent inchangés. La présence du code n'est pas une preuve de publication; vérifier la PR, les tests et le SHA déployé avant d'annoncer la mise en ligne. La progression reste soumise aux réponses observées et à la confirmation du parent. L'accès au manuel intégral de l'éditeur n'est pas importé.
