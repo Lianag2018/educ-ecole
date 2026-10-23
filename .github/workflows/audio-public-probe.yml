@@ -1,0 +1,38 @@
+name: Diagnostic audio public école
+on:
+  push:
+    branches: [fix/audio-integrity-gate]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspecter les MP3 publics sans secret
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,urllib.request,urllib.error
+          base='https://educ-ecole.vercel.app'
+          for path in ['/audio/status.json','/audio/manifest.json','/src/narration.js']:
+            try:
+              req=urllib.request.Request(base+path,headers={'User-Agent':'school-audio-probe'})
+              with urllib.request.urlopen(req,timeout=20) as r:
+                body=r.read()
+                print(path,'HTTP',r.status,'type',r.headers.get('Content-Type'),'bytes',len(body))
+                if path.endswith('status.json'): print('STATUS',body[:1000].decode(errors='replace'))
+                if path.endswith('manifest.json'):
+                  data=json.loads(body)
+                  clips=data.get('clips',{})
+                  print('MANIFEST CLIPS',len(clips),'bonjour',clips.get('Bonjour! On prend notre temps pour lire ensemble.'),'vingt',clips.get('vingt'))
+                  for word in ['Bonjour! On prend notre temps pour lire ensemble.','vingt']:
+                    f=clips.get(word)
+                    if f:
+                      try:
+                        with urllib.request.urlopen(base+'/audio/'+f,timeout=20) as audio:
+                          b=audio.read(16)
+                          print('CLIP',word,'HTTP',audio.status,'type',audio.headers.get('Content-Type'),'header',b.hex())
+                      except Exception as e: print('CLIP',word,type(e).__name__,str(e)[:200])
+            except Exception as e: print('ERROR',path,type(e).__name__,str(e)[:250])
+          PY
