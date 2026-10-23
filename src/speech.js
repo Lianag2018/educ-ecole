@@ -32,7 +32,9 @@ export class ReadingSpeaker {
   this.stop();text=mathSpeech(text);this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,systemVoice,onState,onProgress};const epoch=this.epoch;
   if(!this.synth||!this.Utterance){onState('error','Lecture audio indisponible ici. Ouvre l’application dans Safari.');return;}
   const voice=chooseReadingVoice(this.synth.getVoices(),systemVoice?'':preferredURI);
-  if(!voice){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
+  // iOS Safari can report zero voices until its synthesizer initializes. In that case,
+  // request fr-CA explicitly rather than refusing to speak. Never choose an English-only voice.
+  if(!voice&&this.synth.getVoices().length){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
   const u=new this.Utterance(String(text));this.current=u;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
   u.rate=readingRate(speed);u.pitch=1;u.volume=1;

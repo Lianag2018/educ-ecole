@@ -35,3 +35,11 @@ test('browser timers are called with their native global receiver',()=>{
 });
 
 test('English device voice is never used, even for system fallback',()=>{const f=fixture();f.synth.getVoices=()=>[{lang:'en-US',name:'English',voiceURI:'en'}];f.reader.speak('pain',{...f.opts,systemVoice:true});assert.equal(f.states.at(-1)[0],'error');assert.equal(f.reader.current,null);});
+
+test('iOS empty voice list requests French Canadian synthesis instead of remaining silent',()=>{
+ const f=fixture();f.synth.getVoices=()=>[];
+ f.reader.speak('Bonjour',{...f.opts});
+ assert.equal(f.reader.current.lang,'fr-CA');
+ assert.equal(f.reader.current.voice,undefined);
+ assert.equal(f.calls.filter(x=>typeof x==='object').length,1);
+});
