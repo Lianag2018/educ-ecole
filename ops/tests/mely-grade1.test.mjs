@@ -38,3 +38,20 @@ test('le studio ne sollicite pas le micro avant la question parentale',()=>{
  assert.match(fn,/if\(!parentAdditionGate\(\)\)/);
  assert.ok(fn.indexOf('parentAdditionGate()')<fn.indexOf('getUserMedia'));
 });
+
+import {narrationCatalog} from '../narration-catalog.mjs';
+import {oralQuestion} from '../../src/oral-learning.js';
+test('each photographed first-grade word and question has a recorded narration target',()=>{
+ const catalog=new Set(narrationCatalog().map(c=>c.text));
+ for(const word of motsMely)assert.ok(catalog.has(word),'missing audio '+word);
+ for(const topic of sujetsMely)for(const q of exercicesMely(topic.id))assert.ok(catalog.has(oralQuestion(q)),'missing spoken question '+q.id);
+});
+
+test('Mely page has a sound test and individual listening controls',()=>{
+ const screen=ecranMely();
+ assert.match(screen,/data-action="test-voice"/);
+ assert.equal((screen.match(/data-mely-word=/g)||[]).length,100);
+ const app=readFileSync(new URL('../../src/app.js',import.meta.url),'utf8');
+ assert.match(app,/data-mely-word/);
+ assert.match(app,/view==='mely-grade1'\)\?\x60<aside/);
+});
