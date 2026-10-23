@@ -115,6 +115,12 @@ function playSyllable(category,name){
  reader.stop();speaking=false;phonemePlayer.stop();conversation.stop();oralCheck.stop();
  const local=category==='sons'?localPhonemeForKalulu(name):null;
  if(local){syllablePlayer.stop();phonemePlayer.play(local);return;}
+ // The external Kalulu syllable URL can fail on iOS (observed for "ma").
+ // Reuse the same narration service that already speaks the questions.
+ // It plays a local narrated MP3 when present, or a French system voice.
+ if(category==='syllabes'&&syllableChoiceAudio({skill:'syllabes'},name)){
+  syllablePlayer.stop();speakText(name);return;
+ }
  const status=msg=>{const el=document.querySelector('.audio-status');if(el)el.textContent=msg;};
  syllablePlayer.play(category,name,status);
 }
