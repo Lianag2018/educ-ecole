@@ -1,4 +1,4 @@
-import {syllableAudioFor,syllableChoiceAudio} from './syllable-audio.js';
+import {syllableAudioFor,syllableChoiceAudio,syllablePartsFor} from './syllable-audio.js';
 import {createKaluluPlayer} from './kalulu-bank.js';
 import {mountKalulu} from './kalulu-bank.js';
 import {familyLibraryPanel,familyLibraryScreen,mountFamilyLibraryImport,mountFamilyLibrary} from './family-library.js';
@@ -84,7 +84,8 @@ function lessonText(q,p){
  if(q.soundTarget)return `<div class="sound-target"><span class="sound-letter">${esc(q.soundTarget)}</span><p>Comme dans <strong>${esc(q.model)}</strong></p><p>🔊 Écoute le son à chercher, puis les deux choix.</p></div>`;
  const text=spokenActivity(q),parts=q.skill==='syllabes'&&q.text.includes('+')?q.text.split(/\s*\+\s*/):null;
  const recorded=!advanced(p)?syllableAudioFor(q):null;
- const strip=recorded?`<div class="syllable-strip" aria-label="Morceaux à assembler">${recorded.parts.map((part,i)=>`<button type="button" data-syllable-part="${i}" aria-label="Écouter le son ${esc(part.label)}">🔊 ${esc(part.label)}</button>`).join('<i aria-hidden="true">+</i>')}</div><div class="reading-coach"><button type="button" data-syllable-whole="${esc(recorded.whole)}">▶ Écouter ${esc(recorded.whole)}</button><p>Écoute chaque son, puis la syllabe entière. Le signe + ne se prononce pas.</p></div>`:parts?`<div class="syllable-strip" aria-label="Morceaux à assembler">${parts.map(part=>`<span>${esc(part)}</span>`).join('<i aria-hidden="true">+</i>')}</div>`:'';
+ const pieceClips=!advanced(p)?syllablePartsFor(q):[];
+ const strip=parts?`<div class="syllable-strip" aria-label="Morceaux à assembler">${parts.map((part,i)=>pieceClips[i]?`<button type="button" data-syllable-part="${i}" aria-label="Écouter ${esc(part)}">🔊 ${esc(part)}</button>`:`<span>${esc(part)}</span>`).join('<i aria-hidden="true">+</i>')}</div>${recorded?`<div class="reading-coach"><button type="button" data-syllable-whole="${esc(recorded.whole)}">▶ Écouter ${esc(recorded.whole)}</button><p>Écoute chaque son, puis la syllabe entière. Le signe + ne se prononce pas.</p></div>`:''}`:'';
  const words=!advanced(p)?decodingWords(q):[];
  return (q.skill==='sons'&&['f','v'].includes(q.text)?soundCardMarkup(activeSoundCard):'')+strip+(parts&&!feedback?'<p class="reading-coach">🦉 Écoute les morceaux, puis assemble-les.</p>':guidedMarkup(text,advanced(p)))+(!advanced(p)&&words.length?`<div class="decode-words" aria-label="Écouter les mots en syllabes">${words.map(w=>`<button data-word-audio="${esc(w)}">🔊 ${syllables[w].map(esc).join(' · ')}</button>`).join('')}</div>`:'');
 }
@@ -95,9 +96,9 @@ function finishAnswer(result){if(feedback)return;const q=session.items[session.i
 function navigate(v){kaluluUnmount?.();kaluluUnmount=null;oralWordOpenKey=null;oralCheck.reset();cleanup();view=v;draft=[];session=null;feedback=null;render();document.querySelector('#main').focus();}
 function bind(){
  document.querySelectorAll('[data-syllable-part]').forEach(b=>b.addEventListener('click',()=>{
-  const q=session?.items?.[session.index],recorded=q&&!advanced(profile())?syllableAudioFor(q):null;
-  const part=recorded?.parts[Number(b.dataset.syllablePart)];
-  if(view==='mission'&&part){helped=true;playSyllable('sons',part.id);}
+  const q=session?.items?.[session.index],parts=q&&!advanced(profile())?syllablePartsFor(q):[];
+  const part=parts[Number(b.dataset.syllablePart)];
+  if(view==='mission'&&part){helped=true;playSyllable(part.category,part.id);}
  }));
  document.querySelectorAll('[data-syllable-whole]').forEach(b=>b.addEventListener('click',()=>{
   const q=session?.items?.[session.index],recorded=q&&!advanced(profile())?syllableAudioFor(q):null;

@@ -1,13 +1,21 @@
 import {kaluluUrl,kaluluSyllables} from './kalulu-bank.js';
-const sounds=Object.freeze({m:'m-m',a:'a-a',l:'l-l',i:'i-i',f:'f-f',s:'s-s',p:'p-p',t:'t-t',n:'n-n',b:'b-b',d:'d-d',v:'v-v',j:'j-cap.z',r:'r-cap.r',ch:'ch-cap.s',ou:'ou-u'});
+const sounds=Object.freeze({m:'m-m',a:'a-a',l:'l-l',i:'i-i',u:'u-y',o:'o-o',f:'f-f',s:'s-s',p:'p-p',t:'t-t',n:'n-n',b:'b-b',d:'d-d',v:'v-v',j:'j-cap.z',r:'r-cap.r',ch:'ch-cap.s',ou:'ou-u'});
 const syllableSet=new Set(kaluluSyllables);
+const tokens=q=>q?.skill==='syllabes'&&typeof q.text==='string'?q.text.trim().toLowerCase().split(/\s*\+\s*/):[];
+export function syllablePartsFor(q){
+ const parts=tokens(q);if(parts.length<2||parts.length>5)return [];
+ return parts.map(label=>{
+  const phoneme=sounds[label];
+  if(phoneme&&label.length<=2&&kaluluUrl('sons',phoneme))return {label,category:'sons',id:phoneme};
+  if(syllableSet.has(label)&&kaluluUrl('syllabes',label))return {label,category:'syllabes',id:label};
+  return null;
+ });
+}
 export function syllableAudioFor(q){
- if(q?.skill!=='syllabes'||typeof q.text!=='string')return null;
- const parts=q.text.split(/\s*\+\s*/).map(x=>x.trim().toLowerCase());
- if(parts.length!==2||parts.some(x=>!sounds[x]||!kaluluUrl('sons',sounds[x])))return null;
+ const parts=tokens(q);if(parts.length===0||parts.length>5)return null;
  const whole=parts.join('');
  if(!syllableSet.has(whole)||!kaluluUrl('syllabes',whole))return null;
- return {parts:parts.map((label,i)=>({label,id:sounds[parts[i]]})),whole};
+ return {parts:syllablePartsFor(q).filter(Boolean).map(({label,id})=>({label,id})),whole};
 }
 export function syllableChoiceAudio(q,choice){
  if(q?.skill!=='syllabes'||typeof choice!=='string')return null;
