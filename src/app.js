@@ -1,4 +1,4 @@
-import {syllableAudioFor,syllableChoiceAudio,syllablePartsFor} from './syllable-audio.js';
+import {syllableAudioFor,syllableChoiceAudio,syllablePartsFor,localPhonemeForKalulu} from './syllable-audio.js';
 import {createKaluluPlayer} from './kalulu-bank.js';
 import {mountKalulu} from './kalulu-bank.js';
 import {familyLibraryPanel,familyLibraryScreen,mountFamilyLibraryImport,mountFamilyLibrary} from './family-library.js';
@@ -35,6 +35,8 @@ let gameReady=false, nextWordTimer=null, chosenNumber=null,oralWordOpenKey=null;
 let readingProgress=null;
 let activeSoundCard='f';
 const phonemePlayer=new PhonemePlayer({onState:status=>{
+ const missionStatus=document.querySelector('.adventure-lesson .audio-status');
+ if(missionStatus&&view==='mission'&&status!=='idle')missionStatus.textContent=({loading:'Le son arrive…',playing:'Écoute le son…',ended:'À ton tour! Tu peux réécouter.',error:'Ce son ne démarre pas. Réessaie.'})[status]||'';
  const garden=document.querySelector('.sound-garden');if(!garden)return;
  garden.classList.toggle('phoneme-playing',status==='playing');
  const button=garden.querySelector('[data-garden-listen]');if(button)button.setAttribute('aria-busy',String(status==='loading'));
@@ -111,6 +113,8 @@ function libraryPractice(kind,context={}){const p=profile();if(kind==='sounds'){
 function introduce(){speakText(oralQuestion(session.items[session.index]));}
 function playSyllable(category,name){
  reader.stop();speaking=false;phonemePlayer.stop();conversation.stop();oralCheck.stop();
+ const local=category==='sons'?localPhonemeForKalulu(name):null;
+ if(local){syllablePlayer.stop();phonemePlayer.play(local);return;}
  const status=msg=>{const el=document.querySelector('.audio-status');if(el)el.textContent=msg;};
  syllablePlayer.play(category,name,status);
 }

@@ -22,3 +22,12 @@ export function syllableChoiceAudio(q,choice){
  const word=choice.trim().toLowerCase();
  return syllableSet.has(word)&&kaluluUrl('syllabes',word)?word:null;
 }
+
+const localSoundIds=Object.freeze({
+ 'm-m':'m','a-a':'a','l-l':'l','i-i':'i','u-y':'u','o-o':'o',
+ 'f-f':'f','s-s':'s','p-p':'p','t-t':'t','n-n':'n','b-b':'b',
+ 'd-d':'d','v-v':'v','j-cap.z':'j','r-cap.r':'r','ch-cap.s':'ch','ou-u':'ou'
+});
+export function localPhonemeForKalulu(id){
+ return typeof id==='string'&&Object.hasOwn(localSoundIds,id)?localSoundIds[id]:null;
+}
