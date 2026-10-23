@@ -173,3 +173,15 @@ test('segment changes, stop and replacement readings invalidate pending timeouts
  player.speak('0');firstTimer.fn();secondTimer.fn();
  assert.equal(audio.calls.length,3);assert.equal(audio.calls[2].src,originalZero);assert.equal(native.length,0);
 });
+
+test('iOS activation: media play happens before UI rerender from starting status',async()=>{
+ const sequence=[];
+ class GestureAudio {
+  pause(){} setAttribute(){} removeAttribute(){} load(){}
+  play(){sequence.push('play');return Promise.resolve();}
+ }
+ const player=new NarrationSpeaker({AudioClass:GestureAudio,fallback:{stop(){},speak(){throw Error('unexpected fallback');}},fetcher:async()=>({ok:true,json:async()=>({version:1,clips:{'Bonjour! On prend notre temps pour lire ensemble.':'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.mp3'}})})});
+ await player.ready;
+ player.speak('Bonjour! On prend notre temps pour lire ensemble.',{onState:state=>{if(state==='starting')sequence.push('render');}});
+ assert.deepEqual(sequence,['play','render']);
+});
