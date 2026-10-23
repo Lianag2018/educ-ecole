@@ -5,7 +5,6 @@ import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garde
 import {soundCards} from '../src/sound-cards.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
-import {motsMely,sujetsMely,exercicesMely} from '../src/mely-grade1.js';
 import {olderReading,mathsFor,socialFor} from '../src/learning.js';
 import {oralQuestion,oralFeedback,choiceSpeech,wordLesson,syllables} from '../src/oral-learning.js';
 import {localHint} from '../src/tutor.js';
@@ -45,15 +44,6 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
- // First-grade worksheet (not aligned: short prompts need no word-level timestamps) activities need actual recorded audio, not only a device voice.
- // All words are fixed teaching content; never include school logins or child recordings.
- for(const word of motsMely)texts.add(word);
- for(const topic of sujetsMely)for(const q of exercicesMely(topic.id)){
-  texts.add(oralQuestion(q));
-  for(const choice of q.choices)texts.add(choiceSpeech(choice));
-  texts.add(oralFeedback(q,'correct'));
- }
-
  // Fixed oral feedback and whole-word models contain no child recording.
  for(const text of [...Object.values(ORAL_FEEDBACK),...ORAL_WORD_TEXTS])texts.add(text);
  // Introduce older activities by their instruction, leaving the reading model optional.
