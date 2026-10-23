@@ -5,6 +5,7 @@ import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garde
 import {soundCards} from '../src/sound-cards.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
+import {motsMely,sujetsMely,exercicesMely} from '../src/mely-grade1.js';
 import {olderReading,mathsFor,socialFor} from '../src/learning.js';
 import {oralQuestion,oralFeedback,choiceSpeech,wordLesson,syllables} from '../src/oral-learning.js';
 import {localHint} from '../src/tutor.js';
@@ -28,6 +29,14 @@ export function narrationCatalog(){
  // complete calculations or changing the existing narration cache keys.
  const operatorTexts=new Set(['plus','moins','fois','divisé par','égale','est plus petit que','est plus grand que']);
  for(const text of operatorTexts)texts.add(text);
+ // First-grade worksheet activities need actual recorded audio, not only a device voice.
+ // All words are fixed teaching content; never include school logins or child recordings.
+ for(const word of motsMely)texts.add(word);
+ for(const topic of sujetsMely)for(const q of exercicesMely(topic.id)){
+  texts.add(oralQuestion(q));
+  for(const choice of q.choices)texts.add(choiceSpeech(choice));
+  texts.add(oralFeedback(q,'correct'));
+ }
  for(const n of [307,1000,1999,1001,1010,1024,1100,1208,1370,1500,1809])texts.add(numberWords(n));
  for(const q of cards){
   // Built-in teaching content only. No profiles, uploads, questions or child audio.
