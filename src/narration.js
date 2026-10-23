@@ -139,10 +139,12 @@ export class NarrationSpeaker {
     try{
      audio.src=segment.src;audio.playbackRate=this.speed;audio.preservesPitch=true;audio.volume=1;audio.muted=false;
      armLoading();
-     onState('starting',message(`Le son commence… ${sourceLabel}`));
-     if(!current())return;
-     // Keep play() in the tap handler. No fetch, manifest wait or IndexedDB read here.
-     audio.play()?.catch(reject);
+     // Safari requires play() inside the original user gesture. Do not call the
+     // app's onState handler first: it rerenders the entire page synchronously.
+     // Even a synchronous rerender can consume the iOS playback activation.
+     const playing=audio.play();
+     if(current())onState('starting',message(`Le son commence… ${sourceLabel}`));
+     playing?.catch(reject);
     }catch(error){reject(error);}
    };
    playSegment(0);
