@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {kaluluSounds,kaluluSyllables,kaluluUrl,kaluluMarkup,createKaluluPlayer} from '../src/kalulu-bank.js';
+import test from 'node:test';import assert from 'node:assert/strict';import {kaluluSounds,kaluluSyllables,kaluluUrl,kaluluMarkup,createKaluluPlayer} from '../../src/kalulu-bank.js';
 test('archive inventory exactly 105+223 unique recorded items',()=>{assert.equal(kaluluSounds.length,105);assert.equal(kaluluSyllables.length,223);assert.equal(new Set(kaluluSounds).size,105);assert.equal(new Set(kaluluSyllables).size,223);});
 test('pinned source and exact filenames, no arbitrary URL injection',()=>{assert.match(kaluluUrl('syllabes','ma'),/185b6579.*\/ma.mp3$/);assert.match(kaluluUrl('sons','m-m'),/\/m-m.mp3$/);assert.equal(kaluluUrl('syllabes','../../foo'),null);assert.equal(kaluluUrl('other','ma'),null);});
 test('credit and first grade selections remain clear',()=>{const html=kaluluMarkup();assert.match(html,/français de France/);assert.match(html,/CC BY-SA 4.0/);assert.match(html,/data-kalulu-bank/);assert.match(html,/data-kalulu-name="ma"/);});
