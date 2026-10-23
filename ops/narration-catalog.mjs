@@ -29,14 +29,6 @@ export function narrationCatalog(){
  // complete calculations or changing the existing narration cache keys.
  const operatorTexts=new Set(['plus','moins','fois','divisé par','égale','est plus petit que','est plus grand que']);
  for(const text of operatorTexts)texts.add(text);
- // First-grade worksheet activities need actual recorded audio, not only a device voice.
- // All words are fixed teaching content; never include school logins or child recordings.
- for(const word of motsMely)texts.add(word);
- for(const topic of sujetsMely)for(const q of exercicesMely(topic.id)){
-  texts.add(oralQuestion(q));
-  for(const choice of q.choices)texts.add(choiceSpeech(choice));
-  texts.add(oralFeedback(q,'correct'));
- }
  for(const n of [307,1000,1999,1001,1010,1024,1100,1208,1370,1500,1809])texts.add(numberWords(n));
  for(const q of cards){
   // Built-in teaching content only. No profiles, uploads, questions or child audio.
@@ -53,6 +45,15 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
+ // First-grade worksheet (not aligned: short prompts need no word-level timestamps) activities need actual recorded audio, not only a device voice.
+ // All words are fixed teaching content; never include school logins or child recordings.
+ for(const word of motsMely)texts.add(word);
+ for(const topic of sujetsMely)for(const q of exercicesMely(topic.id)){
+  texts.add(oralQuestion(q));
+  for(const choice of q.choices)texts.add(choiceSpeech(choice));
+  texts.add(oralFeedback(q,'correct'));
+ }
+
  // Fixed oral feedback and whole-word models contain no child recording.
  for(const text of [...Object.values(ORAL_FEEDBACK),...ORAL_WORD_TEXTS])texts.add(text);
  // Introduce older activities by their instruction, leaving the reading model optional.
