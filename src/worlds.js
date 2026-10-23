@@ -3,17 +3,17 @@ import {advanced,gradeFor} from './learning.js';
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const childName=p=>/^Lectrice [12]$/.test(p.name)?(p.id==='p1'?'Mely-Ann':'Liana'):p.name;
 export function worldsFor(p){return advanced(p)?[
- {icon:'📚',title:'Les mots explorateurs',detail:'Mots longs et sons complexes',scene:'syllables'},
- {icon:'🦄',title:'Les récits du ciel',detail:'Lire et comprendre une aventure',scene:'reading'},
- {icon:'🏰',title:'Le château des nombres',detail:'De 0 à 1 999',scene:'numbers'},
- {icon:'🔭',title:'Le labo des calculs',detail:'Comparer et décomposer',subject:2},
+ {icon:'📚',title:'Les mots explorateurs',detail:'Défi : découper et expliquer',scene:'syllables'},
+ {icon:'🦄',title:'Les récits du ciel',detail:'Défi : lire et trouver les indices',scene:'reading'},
+ {icon:'🏰',title:'Le château des nombres',detail:'Défi : composer et comparer',scene:'numbers'},
+ {icon:'🔭',title:'Le labo des calculs',detail:'Défi : calculer et vérifier',subject:2},
  {icon:'🌎',title:'Les explorateurs',detail:'Vivre ensemble et découvrir',subject:3},
  {icon:'🦉',title:'Mon défi de la semaine',detail:'Tables de 1 à 6',action:'weekly'}
 ]:[
- {icon:'🌸',title:'Le jardin des sons',detail:'Écouter et reconnaître les sons',scene:'sounds'},
- {icon:'🦋',title:'Les syllabes magiques',detail:'Assembler mes petits mots',scene:'syllables'},
- {icon:'🦄',title:'Mes petites histoires',detail:'Des phrases pour commencer',scene:'reading'},
- {icon:'🍄',title:'Le sentier des nombres',detail:'Compter de 0 à 99',scene:'numbers'},
+ {icon:'🌸',title:'Le jardin des sons',detail:'Défi : écouter et retrouver',scene:'sounds'},
+ {icon:'🦋',title:'Les syllabes magiques',detail:'Défi : assembler puis choisir',scene:'syllables'},
+ {icon:'🦄',title:'Mes petites histoires',detail:'Défi : imaginer et répondre',scene:'reading'},
+ {icon:'🍄',title:'Le sentier des nombres',detail:'Défi : compter et vérifier',scene:'numbers'},
  {icon:'⭐',title:'Mes petits calculs',detail:'Ajouter et enlever',subject:2},
  {icon:'🏡',title:'Autour de chez moi',detail:'Mon école et mon quartier',subject:3}
 ];}
