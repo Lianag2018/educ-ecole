@@ -118,10 +118,13 @@ function playSyllable(category,name){
  // The external Kalulu syllable URL can fail on iOS (observed for "ma").
  // Reuse the same narration service that already speaks the questions.
  // It plays a local narrated MP3 when present, or a French system voice.
- if(category==='syllabes'&&syllableChoiceAudio({skill:'syllabes'},name)){
-  syllablePlayer.stop();speakText(name);return;
- }
- const status=msg=>{const el=document.querySelector('.audio-status');if(el)el.textContent=msg;};
+ const status=msg=>{
+  const el=document.querySelector('.audio-status');if(el)el.textContent=msg;
+  if(category==='syllabes'&&msg.startsWith('Le son est indisponible')){
+   // Offline-safe fallback only if the bundled MP3 fails to load.
+   speakText(name);
+  }
+ };
  syllablePlayer.play(category,name,status);
 }
 function listen(){
