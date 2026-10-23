@@ -10,7 +10,7 @@ test('different school levels use age-appropriate challenge steps',()=>{
 });
 test('feedback does not imply a clinical score',()=>{
  const html=challengeStepMarkup({skill:'syllabes'},1,'Français',true);
- assert.equal((html.match(/class="challenge-step/g)||[]).length,3);
+ assert.equal((html.match(/<span class="challenge-step/g)||[]).length,3);
  assert.match(html,/challenge-step-done/);
  assert.doesNotMatch(html,/maîtris|diagnostic|note/);
 });
