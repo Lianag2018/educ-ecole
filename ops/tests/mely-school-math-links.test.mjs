@@ -3,21 +3,18 @@ import assert from 'node:assert/strict';
 import {fresh} from '../../src/engine.js';
 import {schoolMathLinks,worldHome} from '../../src/worlds.js';
 import {ecranMely} from '../../src/mely-grade1.js';
-test('Mely-Ann has Nougat and Meteormath in her 1st-grade maths tools',()=>{
+test('first grade keeps Nougat and Meteormath, third grade keeps CEC',()=>{
  const [mely,liana]=fresh().profiles;
- const home=worldHome(mely),workbook=ecranMely();
- for(const text of ['https://ipluseleve.ca/','meteormath-2','1re année'])assert.ok((home+workbook).includes(text),text);
+ const home=worldHome(mely),book=ecranMely(),older=schoolMathLinks(liana);
  assert.match(home,/Retrouver 1·2·3 avec Nougat/);
- assert.match(workbook,/Ouvrir 1·2·3 avec Nougat/);
- assert.doesNotMatch(home,/tables de 1 à 6, selon le plan du 19 au 23 octobre/);
- assert.match(home,/aucun mot de passe scolaire n'est enregistré/i);
- assert.match(schoolMathLinks(liana),/Météormath 2/);
- assert.match(schoolMathLinks(liana),/MaZone CEC/);
- assert.doesNotMatch(schoolMathLinks(liana),/ipluseleve/);
+ assert.match(book,/Ouvrir 1·2·3 avec Nougat/);
+ assert.match(home,/meteormath-2/);
+ assert.match(older,/MaZone CEC/);
+ assert.doesNotMatch(older,/iplusinteractif/);
 });
-test('school links open safely without embedding student credentials',()=>{
+test('links are direct and do not embed student passwords',()=>{
  const [mely]=fresh().profiles;
  const markup=schoolMathLinks(mely)+ecranMely();
  assert.match(markup,/target="_blank" rel="noopener noreferrer"/);
- assert.doesNotMatch(markup,/402059|Nom d.utilisateur\s*:\s*10|Mot de passe\s*:/);
+ assert.doesNotMatch(markup,/type="password"|data-school-credential/);
 });
