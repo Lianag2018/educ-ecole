@@ -5,7 +5,7 @@ export const childName=p=>/^Lectrice [12]$/.test(p.name)?(p.id==='p1'?'Mely-Ann'
 export function worldsFor(p){return advanced(p)?[
  {icon:'📚',title:'Les mots explorateurs',detail:'Défi : découper et expliquer',scene:'syllables'},
  {icon:'🦄',title:'Les récits du ciel',detail:'Défi : lire et trouver les indices',scene:'reading'},
- {icon:'🏰',title:'Le château des nombres',detail:'Défi : composer et comparer',scene:'numbers'},
+ {icon:'🏰',title:'Le château des nombres',detail:'Défi : composer et comparer de 0 à 1 999',scene:'numbers'},
  {icon:'🔭',title:'Le labo des calculs',detail:'Défi : calculer et vérifier',subject:2},
  {icon:'🌎',title:'Les explorateurs',detail:'Vivre ensemble et découvrir',subject:3},
  {icon:'🦉',title:'Mon défi de la semaine',detail:'Tables de 1 à 6',action:'weekly'}
