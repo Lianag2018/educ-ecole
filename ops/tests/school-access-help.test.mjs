@@ -4,22 +4,21 @@ import {readFileSync} from 'node:fs';
 import {fresh} from '../../src/engine.js';
 import {worldHome} from '../../src/worlds.js';
 import {ecranMely} from '../../src/mely-grade1.js';
-import {SCHOOL_HELP,showSchoolHelp} from '../../src/school-access-help.js';
-test('the correct official login guide appears for each profile',()=>{
+test('Mely-Ann and Liana have direct official school links without blockers',()=>{
  const [young,older]=fresh().profiles;
- assert.match(worldHome(young),/data-school-help="nougat"/);
- assert.match(ecranMely(),/data-school-help="nougat"/);
- assert.match(worldHome(older),/data-school-help="cec"/);
- assert.doesNotMatch(worldHome(older),/data-school-help="nougat"/);
- assert.equal(SCHOOL_HELP.nougat.fields.length,3);
- assert.equal(SCHOOL_HELP.cec.fields.length,2);
+ const home=worldHome(young),book=ecranMely(),liana=worldHome(older);
+ for(const markup of [home,book]){
+  assert.match(markup,/https:\/\/www\.iplusinteractif\.com\/primaire\/login\?lang=fr_CA/);
+  assert.match(markup,/target="_blank" rel="noopener noreferrer"/);
+  assert.doesNotMatch(markup,/data-school-help|data-school-login/);
+ }
+ assert.match(liana,/https:\/\/app\.mazonecec\.com\/login/);
+ assert.doesNotMatch(liana,/data-school-help|data-school-login/);
 });
-test('school help is parent gated and never collects student passwords',()=>{
- assert.equal(showSchoolHelp('nougat',{gate:()=>false}),false);
- assert.equal(showSchoolHelp('missing',{gate:()=>true}),false);
- const source=readFileSync(new URL('../../src/school-access-help.js',import.meta.url),'utf8');
- assert.doesNotMatch(source,/createElement\('input'\)|localStorage|sessionStorage|fetch\(/);
- assert.match(source,/dialog\.showModal\(\)/);
- const app=readFileSync(new URL('../../src/app.js',import.meta.url),'utf8');
- assert.match(app,/showSchoolHelp\(a\.dataset\.schoolHelp,\{gate:parentAdditionGate\}\)/);
+test('school links navigate directly while the microphone still requires parent approval',()=>{
+ const src=readFileSync(new URL('../../src/app.js',import.meta.url),'utf8');
+ assert.match(src,/\[data-school-resource\]/);
+ assert.doesNotMatch(src,/showSchoolHelp\(|openSchoolLogin\(/);
+ assert.match(src,/parentAdditionGate\(\)/);
+ assert.match(src,/if\(!parentAdditionGate\(\)\)/);
 });
