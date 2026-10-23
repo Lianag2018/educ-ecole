@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "node ops/server.mjs",
     "preview": "node ops/server.mjs dist",
-    "build": "node ops/build.mjs",
+    "build": "node ops/test.mjs && node ops/build.mjs",
     "test": "node ops/test.mjs",
     "test:browser": "node ops/tests/browser.mjs",
     "test:rls": "node ops/test-rls.mjs",

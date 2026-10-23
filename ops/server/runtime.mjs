@@ -1,3 +1,4 @@
+import {createSupabaseClient} from './supabase-client.mjs';
 import {planEndpoint} from './plans.mjs';
 import {createTurnEndpoint,ready,maximumUsd,TurnProvider} from './turn.mjs';
 import {quote} from './budget.mjs';
@@ -9,7 +10,7 @@ export function runtime(env=process.env,fetcher=fetch){
  const authConfigured=()=>/^https:\/\/[a-z0-9.-]+$/.test(origin||'')&&/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url||'')&&key&&anon&&env.EDUC_PARENT_ID;
  const configured=()=>{try{return ready(c)&&/^https:\/\/[a-z0-9.-]+$/.test(origin)&&/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url)&&key&&anon&&env.EDUC_PARENT_ID&&env.EDUC_OPENAI_API_KEY&&quote(c.pricing,maximumUsd(c))>0;}catch{return false;}};
  const oralConfigured=()=>Boolean(authConfigured()&&env.EDUC_OPENAI_API_KEY&&oralCheckReady(c));
- async function sb(path,body,token=key){const r=await fetcher(url+path,{method:body?'POST':'GET',redirect:'error',signal:AbortSignal.timeout(10000),headers:{apikey:body&&path.includes('/token')?anon:key,Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});if(!r.ok){if(path==='/rest/v1/rpc/famille_reserve_voice'){const e=await r.json().catch(()=>null);if(e?.message==='rate_limit')throw Error('rate_limit');}throw Error('backend_unavailable');}return r.json();}
+ const sb=createSupabaseClient({url,key,anon,fetcher});
  const auth={async authenticateParent(req){
   if(!authConfigured()||req.headers.origin!==origin)return null;
   const token=(req.headers.cookie||'').match(/(?:^|; )educ_parent=([^;]+)/)?.[1];if(!token)return null;
