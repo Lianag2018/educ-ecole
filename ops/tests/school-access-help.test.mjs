@@ -5,21 +5,23 @@ import {fresh} from '../../src/engine.js';
 import {worldHome} from '../../src/worlds.js';
 import {ecranMely} from '../../src/mely-grade1.js';
 import {SCHOOL_HELP,showSchoolHelp} from '../../src/school-access-help.js';
-test('the correct official login guide appears for each profile',()=>{
+test('each child gets her own photo-viewing link',()=>{
  const [young,older]=fresh().profiles;
  assert.match(worldHome(young),/data-school-help="nougat"/);
  assert.match(ecranMely(),/data-school-help="nougat"/);
  assert.match(worldHome(older),/data-school-help="cec"/);
  assert.doesNotMatch(worldHome(older),/data-school-help="nougat"/);
- assert.equal(SCHOOL_HELP.nougat.fields.length,3);
- assert.equal(SCHOOL_HELP.cec.fields.length,2);
+ assert.match(SCHOOL_HELP.nougat.url,/iplusinteractif/);
+ assert.match(SCHOOL_HELP.cec.url,/mazonecec/);
 });
-test('school help is parent gated and never collects student passwords',()=>{
- assert.equal(showSchoolHelp('nougat',{gate:()=>false}),false);
- assert.equal(showSchoolHelp('missing',{gate:()=>true}),false);
- const source=readFileSync(new URL('../../src/school-access-help.js',import.meta.url),'utf8');
- assert.doesNotMatch(source,/createElement\('input'\)|localStorage|sessionStorage|fetch\(/);
- assert.match(source,/dialog\.showModal\(\)/);
+test('photo stays on device and no second parental prompt blocks access',()=>{
+ assert.equal(showSchoolHelp('missing'),false);
+ const src=readFileSync(new URL('../../src/school-access-help.js',import.meta.url),'utf8');
+ assert.match(src,/reader\.readAsDataURL\(selected\)/);
+ assert.match(src,/photoData=null/);
+ assert.match(src,/photoWindow\?\.close\(\)/);
+ assert.doesNotMatch(src,/localStorage|sessionStorage|fetch\(|XMLHttpRequest|createElement\('input'\).*password/);
  const app=readFileSync(new URL('../../src/app.js',import.meta.url),'utf8');
- assert.match(app,/showSchoolHelp\(a\.dataset\.schoolHelp,\{gate:parentAdditionGate\}\)/);
+ assert.match(app,/showSchoolHelp\(a\.dataset\.schoolHelp\)/);
+ assert.doesNotMatch(app,/showSchoolHelp\(a\.dataset\.schoolHelp,\{gate:parentAdditionGate\}\)/);
 });
