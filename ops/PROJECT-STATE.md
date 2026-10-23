@@ -81,3 +81,6 @@ Archive fournie par le parent : 328 MP3 (105 sons, 223 syllabes) et index; contr
 
 ## Correction de l’écoute « m + a » — 23 octobre 2026
 Le parent rapporte que le haut-parleur prononce « mma aaaa ». La cause du prototype séparé est confirmée : il enchaîne un /m/ simulé et un /a/ enregistré. La correction proposée pour le haut-parleur normal de l’exercice m + a en 1re année utilise un unique enregistrement Kalulu ma.mp3 (fr_FR), jamais deux sons successifs. Lecture arrêtée sur changement de profil, activité et autre narration. Aucune modification des autres syllabes, de Liana, du micro ou des progrès. PR34 existante réutilisée; ne pas fusionner sans écoute parent sur iPad comme convenu. Contrôles CI et préversion à constater; le site de production n’est pas encore corrigé par cette PR.
+
+## Parcours de syllabes revu — 23 octobre 2026
+La PR34 existante utilise les syllabes complètes enregistrées pour les boutons Écouter et les réponses courtes des activités de 1re année; les morceaux individuels enregistrés deviennent écoutables dans les exercices de fusion. Les mots entiers, sons sans MP3 et phrases gardent leur narration précédente. Aucun changement de Liana, du jardin de sons Laval, du verrou parental, des profils ou de la progression. CI, préversion et iPad à valider avant publication.
