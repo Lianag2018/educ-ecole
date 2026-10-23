@@ -71,3 +71,8 @@ Le lecteur et le studio local ne dépendent pas de l’activation de ce service.
 
 PostgREST 10 : les fonctions SQL `VOID` renvoient `204 No Content`.
 https://docs.postgrest.org/en/v10/releases/v10.0.0.html
+
+
+## 22 octobre 2026 — préparation des fiches de 1re année
+
+À partir des photographies fournies, 15 repères, 100 mots scolaires, 16 cartes de lecture et 16 cartes de maths originales, limités au profil de 1re année. Le lien Nougat mène au site officiel sans recopier de mot de passe, photo ni page de manuel dans GitHub. L'analyse vocale OpenAI reste distincte et non validée. Vérifier les tests et le déploiement avant de dire que c'est en ligne.

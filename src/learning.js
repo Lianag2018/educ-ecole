@@ -1,4 +1,5 @@
 import {bank} from './content.js';
+import {melyReading,melyMath} from './mely-grade1.js';
 import {rows,stories,mathCards,social} from './garden.js';
 
 // School placement selects content; performance still adjusts difficulty within it.
@@ -19,7 +20,7 @@ export const olderReading=[
  card('g3-co1','comprehension','Pourquoi la sœur qui vole devant ralentit-elle?','Les deux sœurs volent vers un nuage doré. Mely-Ann reste un peu derrière. Liana ralentit et lui montre un passage sans vent. Bientôt, elles volent côte à côte.',['Pour aider sa sœur à la rejoindre','Parce qu’elle veut rentrer seule'],0,'Mely-Ann est derrière, puis elles volent côte à côte : Liana l’aide à la rejoindre.'),
  card('g3-co2','comprehension','Quel indice montre que la pluie approche?','Le ciel s’assombrit. Les feuilles se retournent sous le vent. Liana referme son livre et les deux sœurs courent vers la maison.',['Le ciel s’assombrit','Le livre est ouvert'],0,'Le ciel qui s’assombrit et le vent donnent des indices. Explique ton raisonnement avec ces détails.',2)
 ];
-export const readingBank=p=>advanced(p)?olderReading:bank;
+export const readingBank=p=>advanced(p)?olderReading:[...bank,...melyReading];
 export const skillCards=(p,skill)=>readingBank(p).filter(q=>q.skill===skill).sort((a,b)=>!advanced(p)?(a.order??100)-(b.order??100):0);
 export const storyCards=p=>stories.filter(q=>q.grade===(advanced(p)?3:1));
 const youngerMath=[
@@ -28,7 +29,7 @@ const youngerMath=[
  card('g1-order','mots','Quel nombre est le plus petit?','Compare ces nombres.',['12','9','15'],1,'9 vient avant 12 et 15 dans la suite des nombres.'),
  card('g1-tens','mots','Combien font une dizaine et quatre unités?','10 + 4',['40','14','41'],1,'Une dizaine vaut 10. Ajoute 4 unités : 14.')
 ];
-export const mathsFor=p=>advanced(p)?mathCards:youngerMath;
+export const mathsFor=p=>advanced(p)?mathCards:[...youngerMath,...melyMath];
 const youngerSocial=card('g1-social','comprehension','Où peux-tu emprunter un livre?','Je vais à la bibliothèque. Je choisis un livre. Je le rapporte après ma lecture.',['À la bibliothèque','Au parc'],0,'La bibliothèque permet d’emprunter des livres. Nomme un endroit que tu connais dans ton quartier.');
 export const socialFor=p=>advanced(p)?social:youngerSocial;
 const smallRows=Object.fromEntries(Object.keys(rows).map((k,i)=>[k,Array.from({length:10},(_,j)=>i*10+j+1)]));
