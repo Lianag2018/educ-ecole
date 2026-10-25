@@ -1,4 +1,5 @@
 import {numericInstructions} from '../src/math-speech.js';
+import {miniZones,miniCards} from '../src/mini-garden.js';
 import {ORAL_FEEDBACK,ORAL_WORD_TEXTS} from '../src/oral-check-targets.js';
 import {squishyStages} from '../src/squishy.js';
 import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
@@ -52,6 +53,13 @@ export function narrationCatalog(){
  for(const stage of squishyStages)for(const q of stage.items){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(q.hint);for(const c of q.choices)texts.add(choiceSpeech(c));for(const r of ['correct','incorrect','help'])texts.add(oralFeedback(q,r));}
  const young={id:'p1'},oralCards=[...bank,...mathsFor(young),socialFor(young),...stories.filter(q=>q.grade===1)];
  for(const q of oralCards){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(localHint(q,young));for(const c of q.choices)texts.add(choiceSpeech(c));for(const result of ['correct','incorrect','help'])texts.add(oralFeedback(q,result));}
+ // Public, original mini-games reuse the same narrator/cache and never include
+ // school credentials, child results or publisher assets. No extra alignment.
+ for(const zone of miniZones)for(const tier of [1,2,3])for(const q of miniCards(zone.id,tier)){
+  for(const text of [spokenActivity(q),oralQuestion(q),q.hint,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]){
+   texts.add(text);numericActivityTexts.add(text);
+  }
+ }
  for(const word of Object.keys(syllables))texts.add(wordLesson(word));
  const segmented=new Set([...Object.keys(syllables).map(wordLesson),...bank.filter(q=>q.id.startsWith('first-blend-')).map(spokenActivity)]);
  const phonics=new Set(bank.filter(q=>['sons','syllabes'].includes(q.skill)).flatMap(q=>[spokenActivity(q),oralQuestion(q),...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]));
