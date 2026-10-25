@@ -118,3 +118,32 @@ les nouveaux MP3 exigent le build production. Pas de validation iPad/Safari phys
 Le connecteur Vercel personnel renvoie encore 403 à l'inspection. Cela ne démontre
 pas l'échec de la connexion Git ni une panne. Prochaine action : PR et contrôles de
 préversion, puis publication et preuve du SHA/version/audio réellement servis.
+
+### Livraison vérifiée — PR48, 25 octobre 2026 (America/Toronto)
+
+PR48 : https://github.com/Lianag2018/educ-ecole/pull/48, fusion squash
+`9a11dd07d1c0964a0483c67d96f8ff2c08608fe6`. Préversion du head
+`34b3c9d6b9ca95f2be0c8b0d6947d5a27f454788` réussie, workflow GitHub
+`40238804614` réussi et 334 tests Node locaux réussis. La relecture locale du diff
+a précédé la fusion; la revue automatique externe était encore en cours à ce moment.
+
+Le tableau Vercel personnel confirme Production / main / `9a11dd0`, deployment
+`2HESYG11bGi1rgWwXkmAZqgnnNQu`, Ready en 3 min 22 s, avec l'alias
+`https://educ-ecole.vercel.app`. Statut GitHub Vercel réussi. HTTP public vérifié :
+version `2026.10.25-jardin-mini-defis`, module `src/mini-garden.js` identique au
+module testé, SHA-256 `315e1774ecfea730199708d04381c901e1da00fb9c9e06c83be36e53737dfe8f`.
+`/audio/status.json` : ready, 1 442 / 1 442, 291 générés, 1 151 réutilisés, aucune
+erreur. Les 328 sons Kalulu restent dans le build.
+
+Chrome public : entrée p1, jardin, lancement d'un défi de suite numérique,
+« Narratrice IA · français québécois · lecture douce », puis arrêt effectif constatés.
+Aucune réponse de test ajoutée en production. Chrome local : trois essais conservés
+après rechargement, monde p2 conservé. Préversion : lancement dizaines/calculs et
+sortie sans crédit automatique. Les tests multi-jours restent synthétiques; aucune
+maîtrise réelle ni validation Safari/iPad physique n'est revendiquée.
+
+Les ressources Nougat restent des liens. Aucun téléchargement d'éditeur proposé
+n'a été identifié dans les écrans consultés; aucun contenu interactif copié.
+La publication utilise la connexion Git existante; le 403 du connecteur Vercel
+n'a nécessité aucun changement d'accès ni de service professionnel. Prochaine action :
+usage accompagné et observation des réponses réelles, sans réinitialiser les profils.
