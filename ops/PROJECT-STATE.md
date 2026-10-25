@@ -81,3 +81,40 @@ Archive fournie par le parent : 328 MP3 (105 sons, 223 syllabes) et index; contr
 
 ## Audit des syllabes de Liana (3e année) — 23 octobre 2026
 Les deux exercices de fusion du profil avancé conservent la narration complète des mots « animation » et « invitation ». Les morceaux déjà disponibles sont désormais cliquables (a/ni/ma et vi/ta), les morceaux sans enregistrement (in, tion) restent visibles sans bouton trompeur. La banque de sons et syllabes n'est pas modifiée; l'enregistrement fr_FR est facultatif, et les modèles complets gardent la narration existante. Le parcours de Mely-Ann, la progression, le micro et les données restent inchangés. Préversion et CI à vérifier avant fusion; pas de test iPad physique.
+
+## Jardin des mini-défis p1 — 25 octobre 2026 (America/Toronto)
+
+Base distante vérifiée avant édition : `d82eab8dee251f3fced81899b7f52a9d6be18378`.
+Branche : `feat/p1-jardin-mini-defis`. Publication et SHA déployé à confirmer.
+
+Ajout réservé à p1 en 1re année : jardin animé, quatre coins, 72 cartes originales,
+trois cartes par séance, sans limite de temps. Quantités et représentations observées
+dans la première activité Nougat; suites, dizaines et petits calculs prolongent les
+repères photographiés déjà documentés. Aucune prétention d'analyse des 51 activités.
+Liens conservés vers le portail et l'activité effectivement ouverte; aucun fichier
+éditeur ni identifiant scolaire importé. Aucune commande de téléchargement proposée
+n'a été trouvée dans les écrans consultés; aucune activité interactive copiée.
+
+Réutilise `answer`, l'historique, les échéances de révision et les constantes de
+progression existants. Paliers Maths séparés par coin, fondés sur plusieurs jours;
+aide/erreur restent effectives après nouvel essai le même jour. Aucun crédit au
+lancement ni à l'ouverture externe. Trois défis puis écran de pause et retour au
+jardin. Le jardin des sons demeure accessible. Animation réduite respectée.
+
+La narratrice et son cache existants portent les nouveaux textes publics (catalogue
+borné à 1 442 entrées / 85 208 caractères). Aucun changement de modèle, de voix,
+d'empreinte des anciens fichiers, de protocole micro ou de données serveur. Un build
+local/préversion ne génère pas les nouveaux MP3; seule la production main autorisée
+les produit. Vérifier son statut audio avant de déclarer la nouvelle voix disponible.
+
+Validation : suite Node complète et build réussis, 328 MP3 Kalulu assemblés. Nouveaux
+tests : exactitude des réponses, quantités, trois choix distincts, paliers sur jours
+distincts, aide/reprises, priorité des révisions, conservation de l'historique et des
+assignations au rechargement et isolation p2. Chrome local : entrée p1, jardin,
+quantités, indice puis réponse accompagnée, erreur, bonne réponse, fin de trois
+cartes et retour au jardin constatés. Voix système de secours observée localement;
+les nouveaux MP3 exigent le build production. Pas de validation iPad/Safari physique.
+
+Le connecteur Vercel personnel renvoie encore 403 à l'inspection. Cela ne démontre
+pas l'échec de la connexion Git ni une panne. Prochaine action : PR et contrôles de
+préversion, puis publication et preuve du SHA/version/audio réellement servis.

@@ -1,0 +1,11 @@
+.mini-garden{position:relative;overflow:hidden;background:linear-gradient(#e7f8ff,#fffdf0 42%,#edf8de);border-radius:28px;padding:clamp(18px,4vw,44px)}
+.mini-sky{display:flex;justify-content:space-around;font-size:clamp(28px,5vw,54px);min-height:75px;pointer-events:none}
+.mini-sky span,.mini-friend{display:inline-block;animation:mini-float 4s ease-in-out infinite alternate}.mini-sky span:nth-child(even){animation-delay:-2s}
+.mini-zone-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:24px 0}
+.mini-zone-grid article{background:#fffffff0;border:2px solid #d2e9bb;border-radius:24px;padding:22px;min-width:0}.mini-zone-grid h2{font-size:1.35rem}.mini-zone-grid button{min-height:48px;width:100%}
+.mini-friend{font-size:3rem}.mini-seeds{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:330px;margin:18px auto;padding:14px;background:#fff;border-radius:20px;border:2px solid #729350}
+.mini-seeds span{display:grid;place-items:center;min-height:34px;color:#777;font-size:1.5rem}.mini-seeds .filled{color:#356121}
+.mini-bouquets{display:grid;justify-items:center;gap:14px;padding:18px;background:#fffbea;border-radius:20px;border:2px solid #dccb74}.mini-bouquets span{font-size:2rem}.mini-bouquets small{font-size:1rem}
+@keyframes mini-float{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-9px) rotate(3deg)}}
+@media(max-width:600px){.mini-zone-grid{grid-template-columns:1fr}.mini-zone-grid article{padding:18px}}
+@media(prefers-reduced-motion:reduce){.mini-sky span,.mini-friend{animation:none}}
