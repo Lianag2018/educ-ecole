@@ -147,3 +147,42 @@ n'a été identifié dans les écrans consultés; aucun contenu interactif copi�
 La publication utilise la connexion Git existante; le 403 du connecteur Vercel
 n'a nécessité aucun changement d'accès ni de service professionnel. Prochaine action :
 usage accompagné et observation des réponses réelles, sans réinitialiser les profils.
+
+
+## Chemin Raconte-moi les sons p1 — 25 octobre 2026 (America/Toronto)
+
+Base distante vérifiée : `8452afab2242c1af3443edbc6cc0231179fa82fd` (PR49).
+Branche `feat/p1-raconte-moi-les-sons`; PR et publication à confirmer.
+Le parent a confirmé le titre du cahier. Les pages imprimées 34–112 ont été
+consultées dans la session Chrome scolaire autorisée : 71 découvertes originales
+couvrant les 79 pages dans l’ordre. Repères page par page dans
+[RACONTE-MOI-LES-SONS-2026-10-25](RACONTE-MOI-LES-SONS-2026-10-25.md).
+Aucun PDF ni fichier éditeur téléchargé; le cahier reste un lien scolaire.
+
+Ajout p1/1re année : écouter, choisir l’image du modèle oral, assembler, lire
+avec l’adulte, petit défi animé et pause. Placement simple pour les premières
+voyelles; modèle de mot entier pour h muet et groupes sans son isolé exact.
+Les modèles de mots peuvent nécessiter une lecture accompagnée au début.
+Les indices sont bornés aux exemples (c/g, ai, eu, ch, w, ill); aucune copie
+d’histoire, de dessin ou de geste de l’éditeur. Le parent peut choisir la page
+travaillée en classe sans créditer les pages sautées.
+
+Réutilise `answer`, les échéances et `PROGRESSION_RULES`, agrégées par journée
+pour les paliers de ce chemin. Aide/erreur conservées après nouvel essai.
+Session additive `rmsSession` par profil, sans remplacement des anciens résultats.
+Aucun changement du moteur existant, p2, base serveur, micro ou consentements.
+Les lecteurs de narration, phonèmes et Kalulu existants sont réutilisés;
+catalogue borné à 1 579 entrées / 88 924 caractères, anciens paramètres inchangés.
+Les nouveaux MP3 ne sont produits que par le build production main.
+
+Validation locale : suite Node complète et build réussis, 328 MP3 Kalulu.
+Tests ajoutés : couverture et ordre des pages, cas de contexte, choix uniques,
+paliers multi-jours, aide/reprises, conservation ancienne progression et p2.
+Chrome local : écoute enregistrée a, image erronée puis correcte accompagnée,
+placement a, mot avec réécoute comptée comme aide, défi final, pause, rechargement
+et reprise à la pause; h muet sans bouton de phonème constatés. Narration système
+de secours locale; aucune prétention de validation des nouveaux MP3 production.
+Pas de test Safari/iPad physique ni de maîtrise réelle revendiquée.
+
+Prochaine action : relire le diff, contrôler CI et préversion au SHA exact,
+publier puis vérifier version servie et disponibilité des narrations.

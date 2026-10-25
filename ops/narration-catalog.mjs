@@ -1,3 +1,4 @@
+import {rmsNarrationTexts} from '../src/rms-course.js';
 import {numericInstructions} from '../src/math-speech.js';
 import {miniZones,miniCards} from '../src/mini-garden.js';
 import {ORAL_FEEDBACK,ORAL_WORD_TEXTS} from '../src/oral-check-targets.js';
@@ -45,6 +46,7 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
+ for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
  for(const text of [...Object.values(ORAL_FEEDBACK),...ORAL_WORD_TEXTS])texts.add(text);
  // Introduce older activities by their instruction, leaving the reading model optional.
