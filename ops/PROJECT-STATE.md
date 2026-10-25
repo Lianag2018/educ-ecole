@@ -186,3 +186,35 @@ Pas de test Safari/iPad physique ni de maîtrise réelle revendiquée.
 
 Prochaine action : relire le diff, contrôler CI et préversion au SHA exact,
 publier puis vérifier version servie et disponibilité des narrations.
+
+
+### Livraison vérifiée — PR50, 25 octobre 2026 (America/Toronto)
+
+PR50 : https://github.com/Lianag2018/educ-ecole/pull/50, fusion squash
+`fcc58389f153bd9a01a6c94218e8d98cf5b4832c`. Head testé
+`6a3162df4d35b177a7f9995151cb836e589e67aa` : 338 tests Node réussis,
+workflow GitHub `40246647308` réussi, préversion Vercel
+`Dq1yVoHudBdGDLoJG5HPjEUBsv4z` Ready. Diff relu localement avant fusion;
+revue automatique externe encore en cours au dernier contrôle.
+
+Production / main / `fcc5838`, deployment `G38ySGrbyg69oL1o2v8revP1p3qV`,
+Ready en 1 min 24 s; alias https://educ-ecole.vercel.app confirmé dans Vercel.
+Version HTTP publique : `2026.10.25-chemin-des-sons`. Les trois fichiers publics
+sont identiques octet par octet aux fichiers testés :
+
+- rms-course.js SHA-256 `860f60cb3120940c69cd16666c2014e01bf82cc89cdbd53924ab9c08937bce02`
+- rms-player.js SHA-256 `e594f0c65fd065dd66e78fe18b1d97b058155e79453fb047849813075851e6c4`
+- rms-course.css SHA-256 `0bde48c38629d1061e64f0143dcd773c324c0853a4c1d1bd7831753db1323e4e`
+
+Statut audio public : ready, 1 579 / 1 579, 131 générés, 1 448 réutilisés,
+aucune erreur. Comparaison des catalogues : les 1 442 anciennes empreintes
+sont conservées; 137 nouvelles entrées. Un nouveau MP3 d’indice est réellement
+servi et identifié MPEG layer III / mono / 24 kHz.
+Chrome public : entrée p1, chemin, lancement page 34, statut « Narratrice IA ·
+français québécois · lecture douce », arrêt effectif et retour à la carte
+constatés. Aucune réponse de test ajoutée en production. Préversion : lancement
+et arrêt constatés. Les essais complets et le rechargement ont été faits en local.
+
+Livré. Prochaine action : pratique accompagnée dans l’ordre de la classe;
+choix de page avec l’adulte si nécessaire, sans réinitialiser les deux profils.
+Le cahier a été consulté en ligne, pas téléchargé en PDF.
