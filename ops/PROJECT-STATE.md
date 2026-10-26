@@ -356,3 +356,13 @@ Le bateau reste dans le voyage après sélection. Décor animé par CSS : nuages
 étoiles, soleil doux et trois lucioles; aucun visage régénéré, aucun service vidéo.
 Case de pause des animations et préférence système de réduction respectées.
 Préversion et contrôle visuel de cette révision à confirmer; production inchangée.
+
+## Dossier photo de devoirs — 26 octobre 2026 (America/Toronto)
+PR52, base f8d8189. Espace Parents : dossier local IndexedDB par profil/semaine,
+8 photos JPEG/PNG/WebP maximum; préparation JPEG réduite sans métadonnées, aperçu,
+sélecteur téléphone/appareil photo et suppression individuelle confirmée. Aucun
+envoi automatique ni synchronisation annoncée. Une photo sauvegardée peut alimenter
+le formulaire d’analyse existant avec confirmation réinitialisée; protections du
+serveur intactes. Activation réelle de l’analyse à vérifier séparément.
+Accueil original conservé. Vidéo Runway demandée depuis voyage-soeurs.webp, tâche
+f7b5d6d2-3f21-48d6-983f-de4f217d01eb : génération en cours, pas encore intégrée.
