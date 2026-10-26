@@ -176,3 +176,18 @@ restent disponibles dans un volet secondaire. Illustration WebP dérivée de
 références familiales, sans photographies originales ni métadonnées de voyage
 dans le dépôt. Une étape explorée n’est pas une maîtrise acquise. Les étoiles
 et le plan hebdomadaire conservent leurs règles et leurs données par profil.
+
+## Scènes manipulables — 26 octobre 2026
+
+`illustrated-games.js` adapte les cartes existantes sans modifier leur identifiant,
+réponse ou historique. Collections : 0–20 graines; additions/soustractions :
+collections de 24 objets maximum; groupes ×/÷ : 12 × 12 maximum et division exacte.
+Les expressions hors contrat gardent leur présentation existante. Six nouvelles
+cartes de groupes sont réservées au profil avancé. Les actions sur les groupes
+signalent une aide; aucune manipulation ne crédite une réussite à elle seule.
+`session.scene` garde les objets touchés pendant les mises à jour, puis est vidé au
+changement de carte. Le démontage retire les écouteurs. La narration utilise
+`updateAudioSurface` et ne reconstruit plus les jeux à chaque changement de statut.
+La navigation et les réponses conservent pour le moment le rendu général existant.
+Le CSS partagé respecte la pause de voyage et la réduction des animations.
+Cette première tranche couvre les objets de maths, pas encore tous les lecteurs.

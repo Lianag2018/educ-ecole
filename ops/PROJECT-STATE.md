@@ -437,3 +437,22 @@ L’illustration originale accueil-famille.png sert de référence au clip accue
 
 ### 26 octobre 2026 — Bravo et Pop-it cohérent (America/Toronto)
 PR52, base 8aa5756. Bonne réponse actuelle célébrée même après aide, sans transformer le résultat accompagné en réussite autonome. Bravo visuel animé, narration existante courte et passage suivant après 4 secondes indépendamment de la disponibilité audio, pour les deux profils. Rester ici annule le passage mission; fermeture/changement annulent les callbacks, aucune avance en onglet caché. Pop-it : mêmes félicitations et suite automatique, tableau complet 12×12 préservé pour p2; additions/soustractions bornées à 12, facteurs/diviseurs et quotients des tables jusqu’à 12. 375 tests et build local réussis. Préversion à vérifier; production inchangée.
+
+## Refonte illustrée — 26 octobre 2026 (America/Toronto)
+
+Première tranche sur PR52 / feat/voyage-magique, départ distant 478ae04.
+Accueil original et données conservés. Ajout de scènes de graines manipulables,
+additions/soustractions représentées et six défis de groupes ×/÷ pour p2.
+Accès directs depuis le voyage, textes de présentation raccourcis. La voix met
+à jour les contrôles sans reconstruire la scène ni perdre les objets sélectionnés.
+Les jeux gardent le moteur de réponses, la distinction aide/erreur et les profils.
+Les calculs hors contrat graphique conservent leur rendu existant; le Pop-it
+complet 12×12 reste disponible, sans modification de ses plages.
+
+381 tests Node réussis et build local réussi, dont six tests de quantités,
+manipulations, limites, séparation des profils et mise à jour audio sans remplacement.
+Aucun appel payant de génération. Publication et contrôle navigateur à confirmer.
+L'extension du navigateur utilisateur n'est pas accessible dans ce contexte;
+la vérification utilisera le navigateur distant. Aucun test Safari/iPad physique.
+La transformation des autres parcours et les expressions animées des personnages
+restent à réaliser. Aucune fusion main ni modification des services professionnels.
