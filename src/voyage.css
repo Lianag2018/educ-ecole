@@ -45,10 +45,16 @@
 .welcome-picture-links .picture-link:hover{background:#ffffff28;border-color:#fff9;box-shadow:0 0 0 3px #65458b80}
 .welcome-picture-links .picture-link:focus-visible{outline:4px solid #fff;box-shadow:0 0 0 8px #5a2e87;outline-offset:1px;background:#fff2}
 .picture-parent{left:82%;top:2%;width:17%;height:6%}
-.welcome-picture-links .picture-start{top:61.7%;width:21.2%;height:7.1%;border-radius:50px;color:#fff;font-size:clamp(12px,2.5vw,34px);font-weight:700;line-height:1;box-shadow:0 3px 0 #58304c33}
-.welcome-picture-links .picture-mely{left:21.3%;background:#e84e79}
-.welcome-picture-links .picture-liana{left:58.5%;background:#9265d1}
+.welcome-picture-links .picture-start{top:61.7%;width:21.2%;height:7.1%;border-radius:50px;color:#fff;font-size:clamp(12px,2.5vw,34px);font-weight:700;line-height:1;box-shadow:none}
+.welcome-picture-links .picture-mely{left:21.3%;background:transparent}
+.welcome-picture-links .picture-liana{left:58.5%;background:transparent}
 .picture-sounds{left:21.8%;top:47%;width:10.3%;height:13.4%}.picture-syllables{left:33.1%;top:47%;width:9.6%;height:13.4%}
 .picture-reading{left:60.1%;top:47%;width:9.5%;height:13.4%}.picture-numbers{left:70.2%;top:47%;width:9.5%;height:13.4%}
 .welcome-direct .welcome-motion{margin:8px auto 0}
 @media(max-width:600px){.choose-world.welcome-direct{padding:0}.original-welcome.welcome-direct .choose-art{border-radius:12px}.welcome-picture-links .picture-link{border-width:2px}.welcome-picture-links .picture-start{font-size:12px;min-height:36px}.welcome-picture-links .picture-parent{left:77%;width:22%}}
+
+/* Transparent hit areas keep the original lettering visible exactly once. */
+.welcome-stardust{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden;border-radius:inherit}
+.welcome-stardust i{position:absolute;left:var(--x);top:var(--y);font-style:normal;font-size:clamp(15px,2vw,25px);color:#fff3a6;text-shadow:0 0 7px #ffd66b,0 0 14px #fff;animation:welcome-star-fall .65s ease-out both;animation-delay:var(--delay)}
+@keyframes welcome-star-fall{0%{opacity:0;transform:translate(0,-12px) scale(.3)}20%{opacity:1}100%{opacity:0;transform:translate(var(--drift),80px) rotate(70deg) scale(.5)}}
+@media(prefers-reduced-motion:reduce){.welcome-stardust{display:none}}

@@ -479,3 +479,13 @@ changement d’historique, de voix, de microphone ni d’autorisation serveur.
 382 tests et build locaux réussis. Vérification visuelle de préversion à suivre;
 aucune validation iPad physique. Les autres éléments dessinés du bitmap ne sont
 pas tous des contrôles actifs. Production inchangée.
+
+## Accueil : texte unique et poussière d’étoiles — 26 octobre 2026
+PR52, base feba415. Retrait du texte HTML superposé et des fonds opaques des
+boutons de départ : seul le lettrage de l’illustration reste visible. Zones
+accessibles transparentes conservées. Transition décorative de 18 étoiles,
+720 ms avant activation du bouton existant, sans crédit de progression.
+Double clic bloqué pendant la transition; navigation annulée si la page est
+quittée ou cachée. Animation réduite/pause : ouverture immédiate sans étoiles.
+Suite complète et build réussis. Préversion interactive à vérifier; pas de
+validation Safari/iPad physique. Production inchangée.
