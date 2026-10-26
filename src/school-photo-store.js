@@ -1,5 +1,5 @@
 // Private, additive storage. Separate from profiles, results and the Alloprof ZIP.
-export const PHOTO_GAMES=Object.freeze({sounds:{label:'Jardin des sons',subject:'Français'},syllables:{label:'Syllabes',subject:'Français'},vocabulary:{label:'Mots à pratiquer',subject:'Français'},reading:{label:'Lecture',subject:'Français'},numbers:{label:'Nombres',subject:'Maths'},maths:{label:'Petits calculs',subject:'Maths'},social:{label:'Univers social',subject:'Univers social'}});
+export const PHOTO_GAMES=Object.freeze({plan:{label:'Ma semaine adaptée',subject:'Plan scolaire'},sounds:{label:'Jardin des sons',subject:'Français'},syllables:{label:'Syllabes',subject:'Français'},vocabulary:{label:'Mots à pratiquer',subject:'Français'},reading:{label:'Lecture',subject:'Français'},numbers:{label:'Nombres',subject:'Maths'},maths:{label:'Petits calculs',subject:'Maths'},social:{label:'Univers social',subject:'Univers social'}});
 export const PHOTO_KINDS=Object.freeze({week:'Feuille de la semaine',words:'Mots à pratiquer',book:'Page de livre ou cahier',other:'Autre document scolaire'});
 export const PHOTO_BATCH_LIMIT=8;
 const DB='atelier-school-photos-v1',stores=['metadata','images'];

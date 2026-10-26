@@ -1,3 +1,7 @@
+import {sujetsMely,exercicesMely} from '../src/mely-grade1.js';
+import {beginnerCard,activityPages} from '../src/beginner-access.js';
+import {islandChapters,islandCards} from '../src/dominican-adventure.js';
+import {destinations,travelCards} from '../src/voyage.js';
 import {rmsNarrationTexts} from '../src/rms-course.js';
 import {numericInstructions} from '../src/math-speech.js';
 import {miniZones,miniCards} from '../src/mini-garden.js';
@@ -16,10 +20,13 @@ import {numberWords} from '../src/numbers.js';
 import {spokenActivity} from '../src/speech.js';
 export const MODEL='gpt-4o-mini-tts-2025-12-15',VOICE='coral';
 export const INSTRUCTIONS='Parle en français québécois naturel, avec une voix féminine douce, chaleureuse et rassurante. Lis lentement et articule clairement, sans exagérer l’accent. Respecte les pauses et l’intonation du texte. Lis seulement le texte fourni, sans introduction. Reste exclusivement en français du Québec du début à la fin, y compris pour les mots isolés et les nombres. Ne prononce aucun mot comme un mot anglais. Ne rajoute ni syllabe ni mot. Garde les voyelles françaises distinctes et les voyelles nasales naturelles.';
+export const NATURAL_INSTRUCTIONS=INSTRUCTIONS.replace('Lis lentement et articule clairement', 'Lis à un rythme naturel et fluide, avec une articulation claire, sans étirer les syllabes');
 export function narrationCatalog(){
  // Alignment uses the activity's source collection, not number/operator words
  // found in a story. This metadata does not participate in the MP3 cache key.
  const numericActivityTexts=new Set([...mathsFor({id:'p1'}),...mathsFor({id:'p2'}),...mathCards].flatMap(q=>[spokenActivity(q),q.explanation]));
+ const island=islandChapters.flatMap(c=>['p1','p2'].flatMap(id=>islandCards({id},c.id)));
+ const travel=destinations.flatMap(d=>['p1','p2'].flatMap(id=>travelCards({id},d.id)));
  const cards=[...mathsFor({id:'p2'}),...bank,...olderReading,...stories,...mathCards,social];
  for(let n=1;n<=6;n++)for(const op of ['+','−']){
   const practice=tablePractice(n,op);cards.push(...practice);
@@ -46,6 +53,7 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
+
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
  for(const text of [...Object.values(ORAL_FEEDBACK),...ORAL_WORD_TEXTS])texts.add(text);
@@ -63,6 +71,13 @@ export function narrationCatalog(){
   }
  }
  for(const word of Object.keys(syllables))texts.add(wordLesson(word));
+ // New adventure narration is natural at 1x. Keep shared teaching clips and
+ // existing cache keys intact; no wholesale re-generation of the audio library.
+ const adventureTexts=new Set();
+ for(const q of [...travel,...island])for(const text of [spokenActivity(q),oralQuestion(q),q.explanation,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))])adventureTexts.add(text);
+ const naturalTexts=new Set([...adventureTexts].filter(text=>!texts.has(text)));
+ for(const text of adventureTexts)texts.add(text);
+ for(const original of [...sujetsMely.flatMap(s=>exercicesMely(s.id)),...oralCards,...travel.filter(q=>q.id.includes('-p1-')),...island.filter(q=>q.id.includes('-p1-'))]){const q=beginnerCard(original,{id:'p1'});for(const text of [...activityPages(q,{id:'p1'}),oralQuestion(q),q.explanation,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]){if(!texts.has(text))naturalTexts.add(text);texts.add(text);}}
  const wordModels=new Set([...Object.keys(syllables).map(wordLesson),...rmsNarrationTexts.filter(isFrenchWordModel)]);
  const blends=new Set(bank.filter(q=>q.id.startsWith('first-blend-')).map(spokenActivity));
  const socialModel=socialFor(young);
@@ -70,10 +85,10 @@ export function narrationCatalog(){
  const phonics=new Set(bank.filter(q=>['sons','syllabes'].includes(q.skill)).flatMap(q=>[spokenActivity(q),oralQuestion(q),...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]));
  return [...texts].map(text=>{
  const natural=phonics.has(text)||isFrenchWordModel(text)||wordModels.has(text)||blends.has(text)||socialTexts.has(text);
- let instructions=natural?'Lis exclusivement en français, avec une prononciation française du Québec claire et usuelle, une voix féminine douce et un débit naturel. Garde chaque mot entier et ses sons liés. Ne chante pas, ne scande pas et n’étire aucune voyelle. Ne rajoute pas de e final ni de nom de lettre. Fais seulement une courte pause entre les phrases. Lis uniquement le texte fourni.':INSTRUCTIONS;
+ let instructions=natural?'Lis exclusivement en français, avec une prononciation française du Québec claire et usuelle, une voix féminine douce et un débit naturel. Garde chaque mot entier et ses sons liés. Ne chante pas, ne scande pas et n’étire aucune voyelle. Ne rajoute pas de e final ni de nom de lettre. Fais seulement une courte pause entre les phrases. Lis uniquement le texte fourni.':(naturalTexts.has(text)?NATURAL_INSTRUCTIONS:INSTRUCTIONS);
  if(natural)instructions+=' Ne bascule jamais en anglais, même pour un mot court. Le u de lune et de lecture est différent du ou de loup. Pain, main et pin ont une voyelle nasale française. Dans choisis, le s entre voyelles se prononce comme z. Dans rapporte, les deux p écrits ne donnent qu’un seul son p. Dans bibliothèque, th se prononce t et que se prononce k. Dans après, le s final est muet et è est une voyelle ouverte.';
  if(numericTexts.has(text))instructions+=numericInstructions;
- const speed=natural?1:.85;
+ const speed=natural||naturalTexts.has(text)?1:.85;
  // Preserve all unrelated cache keys. Revised phonics use a new key including
  // their natural generation speed, so old defective clips cannot be reused.
  const key=MODEL+'|'+VOICE+'|'+instructions+'|'+text+(natural?'|speed='+speed:'');

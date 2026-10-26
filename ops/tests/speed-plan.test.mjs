@@ -43,3 +43,8 @@ test('missing auth, config, budget and bad images prevent any provider charge',a
  const d=fixture();assert.equal((await planEndpoint(d.args)({...req,body:{...req.body,week:'2026-02-30'}})).status,422);assert.equal(d.calls.length,0);
 });
 test('same image cache is isolated by owner/slot and avoids another charge',async()=>{let keys;const f=fixture({store:{find:async(...a)=>{keys=a;return plan;}}});const r=await planEndpoint(f.args)(req);assert.equal(r.body.reused,true);assert.deepEqual(keys.slice(0,2),['parent','p2']);assert.equal(f.calls.length,0);});
+test('plan readiness requires owned parent profile and config but never calls provider or budget',async()=>{
+ const f=fixture();const r=await planEndpoint(f.args)({...req,path:'/api/plans/status'});assert.equal(r.body.ready,true);assert.equal(f.calls.length,0);
+ const blocked=fixture({config:{}});assert.equal((await planEndpoint(blocked.args)({...req,path:'/api/plans/status'})).body.ready,false);
+ const anonymous=fixture({auth:{authenticateParent:async()=>null}});assert.equal((await planEndpoint(anonymous.args)({...req,path:'/api/plans/status'})).status,401);
+});

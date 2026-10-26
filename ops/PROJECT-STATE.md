@@ -267,6 +267,154 @@ Livré. Prochaine action : pratique accompagnée dans l’ordre de la classe;
 choix de page avec l’adulte si nécessaire, sans réinitialiser les deux profils.
 Le cahier a été consulté en ligne, pas téléchargé en PDF.
 
+## 26 octobre 2026 · UTC — Voyage magique, préparation
+
+Branche `feat/voyage-magique`, base distante vérifiée
+`fe35483f98bcf277b9c60de357858a22d5e98129`. Accueil illustré des deux sœurs,
+Mexique/Cuba/République dominicaine/royaume imaginaire; histoires p1/p2 et jeux
+avec coquillages SVG, étoiles dédupliquées, bilan parent et ailes hebdomadaires.
+Ancien checkout laissé intact. Aucune donnée locale familiale migrée ou supprimée.
+
+345 tests Node réussis au premier contrôle, dont sept nouveaux tests de récompenses;
+build local réussi sans génération payante. Chromium local indisponible : le
+ téléchargement du binaire retourne une archive tronquée. Vérification visuelle
+interactive et livraison distante encore à confirmer; ne pas annoncer production.
+Image créée avec le générateur intégré depuis l’illustration approuvée : deux
+sœurs aux visages conservés, ailes et cornes de licorne au-dessus d’une mer
+caribéenne imaginaire, sans texte ni interface dans le bitmap; encodage WebP.
+
+### Vérification de la préversion — 26 octobre 2026, 03:34 UTC
+
+PR52 ouverte : https://github.com/Lianag2018/educ-ecole/pull/52.
+Premier commit distant `7a5710e2710514ed1035bb589db521422cb06b7e`, préversion
+Vercel Ready confirmée via statut GitHub et commentaire Vercel (pas via le
+connecteur Vercel, qui retourne 403 sur l’équipe personnelle).
+URL : https://educ-ecole-git-feat-voyage-magique-lianag2018s-projects.vercel.app/.
+Navigateur distant réel : accueil illustré affiché, choix p1, première histoire,
+réponse correcte et +5 étoiles, quatre coquillages, deuxième réponse correcte,
+retour avec 10 étoiles, changement p2 avec zéro étoile confirmé. Données de test
+uniquement dans le navigateur de préversion. Pas de test Safari/iPad réel.
+La voix système est indisponible dans ce navigateur; qualité audio non validée.
+Les textes de voyage rejoignent le catalogue de narration de production sans
+élargir le budget d’alignement. 346 tests et build local final réussis.
+Production inchangée; fusion non effectuée. Révision visuelle et interactive
+réussie sur le parcours indiqué; prochaine étape : accord de fusion PR52.
+
+
+### Révision dominicaine — 26 octobre 2026, UTC
+
+Même branche `feat/voyage-magique`, même PR52; head distant de départ vérifié
+`317e5c369093a1dbfeeaafa9bfc9877ea2466fb1`. Remplacement du choix principal
+de quatre destinations par « Le trésor des deux sœurs » : bateau pirate,
+palmiers, coffre sur la plage. Neuf activités originales par profil avec
+différenciation de lecture, de calcul et d’indices. Illustration générée à
+partir des références fournies; seuls les pixels illustrés optimisés en WebP
+sont livrés, aucune photographie originale ni information de séjour.
+
+353 tests Node et build local réussis. Les tests couvrent dessins/comptages,
+calculs/base dix, variantes de lecture, progression distincte des réussites,
+conservation des profils et catalogue de narration. Ordre du récit conservé
+au rejeu; dates et règles des récompenses hebdomadaires inchangées.
+Les voix nouvelles ne sont pas produites dans une préversion. Safari/iPad
+physique et acoustique non validés. Version `2026.10.26-tresor-dominicain`.
+Prochaine étape : vérifier la préversion interactive sur ce nouveau contenu.
+Production inchangée; aucune fusion effectuée.
+
+
+Contrôle réel sur la préversion de `fea22c72f2868479ab4203d5dfcccd4d6e0b5dc8` :
+Vercel success; nouvel accueil illustré affiché. p1 : compréhension de la carte,
+trois voiles SVG et mot « jardin » répondus correctement, +5 étoiles à chaque
+défi; fin du chapitre puis bouton vers le sentier des palmiers fonctionnels.
+Essais synthétiques dans le navigateur de préversion uniquement. Une dernière
+correction supprime les numéros décoratifs devant les choix de cette aventure
+pour ne pas les confondre avec les réponses de comptage; l’ancien atelier est
+regroupé sous un volet secondaire. 353 tests et build repassés avec succès.
+La voix reste indisponible dans ce navigateur distant, sans conclusion sur
+la qualité acoustique.
+
+### Voix douce et rythme naturel — 26 octobre 2026 (America/Toronto)
+
+Demande parent : conserver une voix douce, à vitesse naturelle ajustable.
+Même PR52, départ distant `068bf1e8fe49aa1b974010f3546ba0d635451681`.
+Les 179 nouveaux textes propres aux aventures demandent désormais un rythme
+naturel et fluide, voix féminine douce en français québécois, génération à 1x.
+Les 1 579 empreintes des enregistrements pédagogiques antérieurs restent
+identiques : aucune régénération globale; aucun texte retiré. Le multiplicateur
+0,65 imposé à la voix native est retiré; le mode explicite historique de sons
+très lents reste conservé. Curseur 0,6–1,5x et valeur sauvegardée inchangés;
+hauteur de la voix MP3 préservée pendant les changements de vitesse.
+
+355 tests et build local réussis, dont reprise au mot courant, débit natif,
+persistance du réglage et instructions des contes. Aucun appel de génération
+payante effectué. L’écoute réelle de ces nouveaux MP3 n’est pas validée : leur
+production attend le build main autorisé. Ne pas confondre configuration/test
+logiciel et qualité acoustique. Production inchangée; fusion non effectuée.
+
+## Révision du début de lecture — 26 octobre 2026 (America/Toronto)
+
+Même branche et PR52, départ distant 6f38839603dd75eed3cb5bc79f8c4036e09d6c24.
+Audit des banques et parcours documenté dans AUDIT-NIVEAUX-2026-10-26.md.
+Variantes courtes pour 15 compréhensions p1, mots-indices isolés, affichage phrase
+par phrase et choix pictographiques. Compréhension orale séparée des paliers de
+lecture autonome; pas de progression automatique après le Bravo p1. Représentations
+exactes de trois calculs; notions ultérieures du cahier sous un volet parent.
+P2 conserve ses textes et raisonnements, données et récompenses conservées.
+
+360 tests Node réussis, dont cinq nouveaux contrôles de contenu, séparation,
+conservation des textes scolaires et dessins/calculs. Build local réussi sans
+appel TTS payant. Chromium local non installé : archive téléchargée tronquée.
+Aucune validation Safari/iPad physique ou acoustique. Nouveaux MP3 non générés
+par la préversion. Production inchangée, pas de fusion. Vérifier le déploiement
+et le parcours dans le navigateur distant avant d’annoncer la livraison.
+
+### Pop-it supplémentaire — 26 octobre 2026 (America/Toronto)
+Intégration au-dessus de l'audit partagé f30f1a73, sans remplacer ses corrections.
+Fenêtre modale native : bulles réversibles, consigne écoutable, cinq défis sans
+chronomètre. Débutant : additions/soustractions de quantités jusqu'à 10. Avancé :
+ajout de petites multiplications/divisions exactes représentées en rangées.
+Résultats séparés dans profile.popit; les erreurs restent accompagnées après
+réouverture le même jour. Aucun crédit automatique de maîtrise ou de plan hebdo.
+Tests arithmétiques et isolation des opérations ajoutés; contrôle navigateur et
+préversion à consigner après livraison. Aucun test physique iPad revendiqué.
+
+Validation Pop-it : 362 tests Node et build local réussis; préversion Vercel
+3acffb92 réussie. Navigateur réel : p2 ouvre la modale, enfonce trois bulles,
+reçoit le retour d'erreur puis la réussite accompagnée; changement multiplication
+et rangées observés. Données synthétiques dans la préversion seulement.
+Correction visuelle finale : diamètre des bulles borné même avec une seule colonne.
+Production non fusionnée. L'écoute humaine et l'iPad physique restent non vérifiés.
+
+## Pop-it complet de troisième année — 26 octobre 2026 (America/Toronto)
+PR52, base 91c272d. La troisième année ouvre d'abord le calcul et un champ de
+réponse libre. Le petit Pop-it ouvre/réduit une aide complète de 144 bulles,
+axes 1–12 et produits comme le matériel fourni; additions/soustractions utilisent
+une numérotation 1–144. Sur téléphone, le tableau défile horizontalement pour
+conserver des cibles de 44 pixels. Aucune réponse saisie n'est perdue en ouvrant
+l'aide. Les bulles restent enfoncées après réduction/réouverture dans le défi.
+Défis : additions/soustractions à deux chiffres avec regroupement, tables 1–6,
+extension facultative jusqu'à 12. Cinq problèmes par opération/palier. L'aide ou
+une erreur restent conservées dans le résultat journalier; aucun effacement des
+anciennes réussites. Défis débutants inchangés. Tests du tableau, de l'arithmétique,
+de l'aide persistante et de la séparation des profils; préversion à vérifier.
+
+## Accueil original préservé — 26 octobre 2026 (America/Toronto)
+PR52, départ distant 7295b7e. À la demande du parent, l’entrée reprend exactement
+l’illustration accueil-famille.png, ses visages et le choix des deux profils.
+Le bateau reste dans le voyage après sélection. Décor animé par CSS : nuages,
+étoiles, soleil doux et trois lucioles; aucun visage régénéré, aucun service vidéo.
+Case de pause des animations et préférence système de réduction respectées.
+Préversion et contrôle visuel de cette révision à confirmer; production inchangée.
+
+## Dossier photo de devoirs — 26 octobre 2026 (America/Toronto)
+PR52, base f8d8189. Espace Parents : dossier local IndexedDB par profil/semaine,
+8 photos JPEG/PNG/WebP maximum; préparation JPEG réduite sans métadonnées, aperçu,
+sélecteur téléphone/appareil photo et suppression individuelle confirmée. Aucun
+envoi automatique ni synchronisation annoncée. Une photo sauvegardée peut alimenter
+le formulaire d’analyse existant avec confirmation réinitialisée; protections du
+serveur intactes. Activation réelle de l’analyse à vérifier séparément.
+Accueil original conservé. Vidéo Runway demandée depuis voyage-soeurs.webp, tâche
+f7b5d6d2-3f21-48d6-983f-de4f217d01eb : génération en cours, pas encore intégrée.
+
 
 ## Correctif des modèles français — 26 octobre 2026 (America/Toronto)
 
@@ -315,3 +463,167 @@ Elle permet le pilotage d’accent/débit par instructions, mais précise aussi 
 les voix sont optimisées pour l’anglais : la consigne seule n’est pas une preuve
 de qualité française. Prochaine action : CI/préversion, publication, contrôle des
 nouveaux MP3 et de l’association au bouton; puis écoute familiale des modèles.
+
+
+## Réconciliation PR52 / PR53 — 26 octobre 2026 (America/Toronto)
+
+Head voyage de9078c réconcilié avec main 644776d (correctifs des modèles
+français). Les cinq conflits sont résolus en conservant les deux historiques,
+les modèles français en mots entiers, leurs empreintes audio corrigées, le
+rythme naturel des voyages et la lecture phrase par phrase des débutantes.
+Accueil original, Pop-it complet p2 et dossier photo local conservés. Le test
+de voix de secours attend désormais le multiplicateur choisi à 1×, conformément
+au réglage naturel du voyage, sans ancien facteur caché de 0,65.
+Suite Node et build local réussis. Les photos locales sont distinguées de
+l’analyse serveur dans le formulaire parent. Vidéo candidate générée mais
+non intégrée : fidélité visuelle encore à revoir. Aucun nouveau rendu payant,
+aucune fusion vers main, aucune réinitialisation des données. Préversion du
+commit de réconciliation à vérifier après publication.
+
+### 2026-10-26 — Première page animée par Runway (PR52)
+L’illustration originale accueil-famille.png sert de référence au clip accueil-anime.mp4 (10 s, muet, 4:3, 1,42 Mo). Revue de frames à 5 et 9 s : composition, visages et textes préservés, clignements/sourires et geste de la chouette. Image originale en secours; vidéo visible après playing, pause via la case existante, arrêt en arrière-plan et réduction des animations système. Nettoyage du lecteur au changement de page. 371 tests et build réussis; lecture et pause/reprise vérifiées sur la préversion Vercel. Aucun changement de production ni fusion.
+
+### 26 octobre 2026 — Bravo et Pop-it cohérent (America/Toronto)
+PR52, base 8aa5756. Bonne réponse actuelle célébrée même après aide, sans transformer le résultat accompagné en réussite autonome. Bravo visuel animé, narration existante courte et passage suivant après 4 secondes indépendamment de la disponibilité audio, pour les deux profils. Rester ici annule le passage mission; fermeture/changement annulent les callbacks, aucune avance en onglet caché. Pop-it : mêmes félicitations et suite automatique, tableau complet 12×12 préservé pour p2; additions/soustractions bornées à 12, facteurs/diviseurs et quotients des tables jusqu’à 12. 375 tests et build local réussis. Préversion à vérifier; production inchangée.
+
+## Refonte illustrée — 26 octobre 2026 (America/Toronto)
+
+Première tranche sur PR52 / feat/voyage-magique, départ distant 478ae04.
+Accueil original et données conservés. Ajout de scènes de graines manipulables,
+additions/soustractions représentées et six défis de groupes ×/÷ pour p2.
+Accès directs depuis le voyage, textes de présentation raccourcis. La voix met
+à jour les contrôles sans reconstruire la scène ni perdre les objets sélectionnés.
+Les jeux gardent le moteur de réponses, la distinction aide/erreur et les profils.
+Les calculs hors contrat graphique conservent leur rendu existant; le Pop-it
+complet 12×12 reste disponible, sans modification de ses plages.
+
+381 tests Node réussis et build local réussi, dont six tests de quantités,
+manipulations, limites, séparation des profils et mise à jour audio sans remplacement.
+Aucun appel payant de génération. Publication et contrôle navigateur à confirmer.
+L'extension du navigateur utilisateur n'est pas accessible dans ce contexte;
+la vérification utilisera le navigateur distant. Aucun test Safari/iPad physique.
+La transformation des autres parcours et les expressions animées des personnages
+restent à réaliser. Aucune fusion main ni modification des services professionnels.
+
+Contrôle préversion 72fe261 : statut Vercel success (HHQMXd2M9nzLPsTwJE5CV3mV3ssX).
+Chrome distant : accueil intact, collections zéro puis un, graine sélectionnée
+conservée pendant l'écoute, remise à zéro, bonne réponse et passage automatique;
+p2 : trois groupes de quatre, manipulation puis réponse accompagnée (sans étoiles
+supplémentaires), passage à quatre groupes de six. Données de test uniquement.
+Le contrôle a révélé un guillemet manquant sur le raccourci Sons/Défis, corrigé
+avec un test de non-régression. Fin audio : retrait du surlignage sans reconstruire
+la scène. 382 tests et build finaux réussis. Le correctif doit être vérifié sur
+la préversion finale; les premières preuves navigateur portent sur 72fe261.
+
+## Accueil : liens dans l’illustration — 26 octobre 2026 (America/Toronto)
+
+Même PR52, base distante dcf97c5. Image et vidéo originales désormais affichées
+entières au ratio 4:3, largeur jusqu’à 1400 px. Suppression des deux cartes de
+profil répétées sous l’image. Boutons HTML sur les deux « C’est parti! »,
+l’espace parent et les quatre cases sons/syllabes/lecture/nombres. Chaque
+raccourci choisit explicitement le bon profil avant l’activité. Focus clavier,
+libellés accessibles, pause et réduction des animations conservés. Aucun
+changement d’historique, de voix, de microphone ni d’autorisation serveur.
+382 tests et build locaux réussis. Vérification visuelle de préversion à suivre;
+aucune validation iPad physique. Les autres éléments dessinés du bitmap ne sont
+pas tous des contrôles actifs. Production inchangée.
+
+## Accueil : texte unique et poussière d’étoiles — 26 octobre 2026
+PR52, base feba415. Retrait du texte HTML superposé et des fonds opaques des
+boutons de départ : seul le lettrage de l’illustration reste visible. Zones
+accessibles transparentes conservées. Transition décorative de 18 étoiles,
+720 ms avant activation du bouton existant, sans crédit de progression.
+Double clic bloqué pendant la transition; navigation annulée si la page est
+quittée ou cachée. Animation réduite/pause : ouverture immédiate sans étoiles.
+Suite complète et build réussis. Préversion interactive à vérifier; pas de
+validation Safari/iPad physique. Production inchangée.
+
+## Ressemblance de Liana — 26 octobre 2026
+PR52, base f7b0352. Image dominicaine retouchée avec le générateur intégré :
+visage et cheveux de la sœur brune guidés par le personnage de droite de
+accueil-famille.png. Tenue rayée, carte et composition conservées. Consigne :
+reprendre les proportions illustrées, yeux, joues et sourire de la référence;
+ne pas changer la petite sœur ni le décor. Revue visuelle effectuée, encodage
+WebP qualité 88. Aucun code de jeu modifié; accueil original inchangé.
+Préversion à contrôler; cette retouche est une image fixe, pas une nouvelle vidéo.
+Audit des apparitions : src/app.js utilise accueil-famille et accueil-anime;
+les avatars .portrait/.family-face recadrent la même référence accueil-famille.
+La couverture dominicaine est partagée par les deux profils. voyage-soeurs.webp
+est visuellement cohérent mais sans référence active dans src. Les icônes app
+représentent la chouette, pas les enfants. Contrôle visuel du visage à 1,3 s dans
+le lecteur de préversion; audit complet des frames vidéo non conclu : les copies
+MP4 téléchargées produisent des erreurs de décodage ffmpeg. Ne pas revendiquer
+une validation intégrale de chaque frame ni modifier la vidéo sur cette base.
+
+## Pop-it cohérent par opération — 26 octobre 2026
+PR52 base e7c6338. Suppression du comptage 1–144 utilisé comme aide +/−.
+Liana : +/− sur 12 unités, quantité de départ déjà enfoncée; ajout aux seules
+bulles libres, retrait aux seules unités de départ. × : table complète 12×12
+avec produits, axes guidés et équation de la case sélectionnée. ÷ : même table,
+colonne du diviseur active; la ligne du total donne le quotient, jamais le nombre
+de cases pressées. Réinitialisation restaure le départ; aide facultative conservée.
+Mely : départ pré-enfoncé, ajout/retrait cohérents, opérations +/− seulement.
+Tests couvrent les manipulations sur chaque exercice et les tables jusqu’à 12,
+conservation des profils/aides. Suite et build locaux réussis; contrôle préversion
+à suivre. Aucune fusion main ni modification des données familiales.
+
+## Pop-it complet manipulable — 26 octobre 2026 (Toronto)
+PR52 base d8bee52. Correction demandée : tableau 12×12 dans les quatre modes
+pour Liana, 144 bulles réversibles sans cases bloquées. +/− : une unité par
+bulle, chiffres de position 1–144; lignes/colonnes enfoncent ou relèvent 12 unités.
+×/÷ : produits de la table réelle, choix libre des axes et repérage du croisement;
+la case touchée explique produit ou quotient. Plusieurs bulles restent pressées.
+La réponse reste saisie par l’enfant et validée séparément. Aide facultative,
+draft, profils, historique et parcours débutant préservés. Tests et build locaux
+réussis. Préversion à vérifier; aucune fusion main ni validation iPad physique.
+Relief demandé ensuite : silicone bombé/concave CSS persistant selon aria-pressed,
+ombrage intérieur, déplacement court au toucher, retour au second clic. Aucun
+plugiciel, dépendance payante ou vidéo requis; reduced-motion supprime la transition.
+
+## Tables Pop-it + et × pour les deux profils — 26 octobre 2026 (Toronto)
+PR52, base b3220ac. Même moteur de tableau complet 12×12 pour tous les accès
+Pop-it des deux profils. Addition : vraies sommes ligne + colonne (2–24);
+multiplication : produits (1–144). Tous les chiffres restent visibles. Choix
+des axes, chemin de bulles réversibles jusqu’au croisement; vert uniquement
+lorsque le bon chemin est entièrement pressé, retiré si une bulle est relevée.
+Opérandes inversés acceptés. Mély : petits calculs et découverte × (facteurs
+1–3, produits au plus 9), aide ouverte; Liana : aide facultative et tables
+avancées conservées. Réponse saisie séparément, succès accompagné enregistré
+sans crédit automatique par manipulation. Accueil, voix et données préservés.
+Tests du chemin incomplet/complet/relevé, axes erronés, deux profils et sommes
+réelles réussis; build local réussi. Contrôle de préversion à suivre. Main non fusionné.
+Préversion b6022ef : Vercel success. Chrome distant : p2 multiplication 6×4,
+8/9 bulles sans vert puis 9/9 avec 24 vert; relever une bulle retire le vert.
+Addition 7+5=12 confirmée. Profil p1 : tableau ouvert, 2+1=3 puis 2×1=2
+confirmés par pression des chemins. Capture du tableau vert conservée.
+387 tests et build réussis. Aucun test Safari/iPad physique; production inchangée.
+
+## Photos → activités automatiques — 26 octobre 2026 (Toronto)
+PR52 réconciliée avec main 9301bf0 / photos publiées PR54. Dossier photo optimisé
+préservé, accès depuis le voyage. Nouveau parcours parent explicite « Ajouter
+les photos et préparer les jeux » : sélection vaut demande d’envoi des seules
+photos sélectionnées à OpenAI; compression et stockage local, précontrôle du
+service authentifié, analyse séquentielle sans retry, installation des notions
+validées pour le profil. Ajout des tâches à la même semaine, dédoublonnage,
+refus au-delà de 12 sans écrasement. Navigation/profil annule le traitement.
+Notions illisibles/hors banque signalées, aucune réussite créditée par import.
+Ancien import manuel et archives locales conservés, aucune migration destructive.
+Tests de pipeline simulés (pas preuve OpenAI réel) : sauvegarde avant envoi,
+refus sans config, cumul de pages, erreur partielle sans retry, annulation et
+isolation de profils. Aucune photo privée envoyée pendant le développement.
+Blocage réel vérifié : /api/voice/status production authConfigured=false;
+Vercel personnel retourne 403; Supabase connecté ne liste que luxura-inventory
+et kenbot-prod, aucun projet scolaire. Aucun contournement ni réemploi de base
+professionnelle. Activation OpenAI réelle NON LIVRÉE, conditions privées de
+VOICE-SETUP toujours requises. L’autorisation parent ne remplace pas la config.
+
+Contrôle de préversion du 26 octobre : 399 tests locaux et build réussis;
+CI 40371014600 et préversion ed33bbb réussies. JPEG synthétique 800×1000
+importé par le véritable sélecteur Chrome : compression, sauvegarde locale
+11 Ko (38 %), arrêt explicite au service privé non activé. Rechargement :
+association p1/semaine conservée. Le décodage bitmap et un repli d’aperçu
+local corrigent les images object-URL qui ne se chargeaient pas dans ce
+navigateur. Aperçu sauvegardé confirmé à 800×1000 sur préversion 075341e.
+Le même décodeur sert à préparer l’image pour l’analyse. Galerie actualisée
+après sauvegarde automatique. Aucune photo d’enfant transmise, aucun appel
+OpenAI réel validé. PR52 prête à examiner; production non modifiée à ce stade.

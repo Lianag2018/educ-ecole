@@ -14,4 +14,4 @@ test('prefer Canadian French reading voice and honor parent selection',()=>{
  assert.equal(chooseReadingVoice([]),undefined);
 });
 
-test('reading defaults to slow, with slower sound practice and safe fallback',()=>{assert.equal(readingRate(),.65);assert.equal(readingRate('very-slow'),.45);assert.equal(readingRate('unexpected'),.65);});
+test('reading defaults to natural, with explicit slower sound practice and safe fallback',()=>{assert.equal(readingRate(),1);assert.equal(readingRate('very-slow'),.45);assert.equal(readingRate('unexpected'),1);});

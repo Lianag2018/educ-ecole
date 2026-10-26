@@ -1,0 +1,30 @@
+// Photos privées sur cet appareil uniquement. Aucun appel réseau.
+const DB='educ-homework-photos-v1', STORE='photos';
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function photoScope(profileId,week){
+ if(!['p1','p2'].includes(profileId)||!/^\d{4}-\d{2}-\d{2}$/.test(week)||!Number.isFinite(Date.parse(week+'T12:00:00Z'))||new Date(week+'T12:00:00Z').toISOString().slice(0,10)!==week)throw Error('invalid_scope');
+ return `${profileId}:${week}`;
+}
+export function photoInboxMarkup(p){return `<section class="homework-inbox" aria-label="Photos des devoirs"><h3>Les photos des devoirs de ${escape(p.name)}</h3><p>Choisis la semaine, puis ajoute les photos prises avec ton téléphone.</p><label>Semaine des photos <input id="homework-week" type="date" required></label><div class="homework-imports"><label class="homework-pick">📷 Prendre une photo<input id="homework-camera" type="file" accept="image/jpeg,image/png,image/webp" capture="environment"></label><label class="homework-pick">＋ Choisir mes photos<input id="homework-files" type="file" accept="image/jpeg,image/png,image/webp" multiple></label></div><p class="small">JPG, PNG ou WebP · 15 Mo maximum par photo · 8 photos par semaine. Si une photo HEIC est refusée, utilise une capture d’écran ou une copie JPEG.</p><p><strong>Conservées seulement dans ce navigateur sur cet appareil.</strong> Elles ne se retrouvent pas automatiquement sur le Mac ni dans cette conversation. Effacer les données du navigateur les supprime. Aucune photo n’est envoyée à une IA en l’ajoutant ici.</p><p id="homework-status" role="status"></p><div id="homework-gallery" class="homework-gallery"></div></section>`;}
+function openDB(){return new Promise((resolve,reject)=>{const request=indexedDB.open(DB,1);request.onupgradeneeded=()=>{request.result.createObjectStore(STORE,{keyPath:'id'}).createIndex('scope','scope');};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
+async function transaction(mode,action){const db=await openDB();try{return await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,mode),r=action(tx.objectStore(STORE));let result;r.onsuccess=()=>{result=r.result;};tx.oncomplete=()=>resolve(result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}}
+export async function photosFor(scope){return transaction('readonly',s=>s.index('scope').getAll(scope));}
+export function mountPhotoInbox(p,{preparePhoto,onUse}={}){
+ const week=document.querySelector('#homework-week'),gallery=document.querySelector('#homework-gallery'),status=document.querySelector('#homework-status');if(!week)return {destroy(){}};
+ let alive=true,busy=false,generation=0;
+ const now=new Date(),local=new Date(now.getTime()-now.getTimezoneOffset()*60000);week.value=local.toISOString().slice(0,10);
+ const pickers=[document.querySelector('#homework-camera'),document.querySelector('#homework-files')];
+ function disable(value){busy=value;week.disabled=value;pickers.forEach(i=>i.disabled=value);gallery.querySelectorAll('button').forEach(b=>b.disabled=value);}
+ async function draw(){const version=++generation;let scope;try{scope=photoScope(p.id,week.value);}catch{gallery.replaceChildren();status.textContent='Choisis une date valide pour la semaine.';return;}
+  try{const rows=await photosFor(scope);if(!alive||version!==generation)return;gallery.replaceChildren();if(!rows.length){gallery.textContent='Aucune photo pour cette semaine.';return;}
+   for(const [index,row] of rows.entries()){const card=document.createElement('article'),img=document.createElement('img'),title=document.createElement('strong'),use=document.createElement('button'),remove=document.createElement('button');img.src=row.image;img.alt=`Photo de devoir ${index+1}`;title.textContent=`Photo ${index+1}`;use.type=remove.type='button';use.textContent='Utiliser pour préparer la semaine';remove.textContent='Retirer cette photo';use.onclick=()=>{if(busy)return;onUse?.(row.image,week.value);status.textContent='Photo choisie pour le formulaire ci-dessous. Vérifie la semaine et la confirmation avant tout envoi.';};remove.onclick=async()=>{if(busy||!confirm('Retirer cette photo de cet appareil?'))return;disable(true);try{await transaction('readwrite',s=>s.delete(row.id));if(alive){status.textContent='Photo retirée.';await draw();}}catch{if(alive)status.textContent='La photo n’a pas pu être retirée.';}finally{if(alive)disable(false);}};card.append(img,title,use,remove);gallery.append(card);}
+  }catch{if(alive)status.textContent='Le navigateur refuse le stockage des photos. Aucun enregistrement confirmé.';}}
+ async function add(input){if(busy)return;let scope;try{scope=photoScope(p.id,week.value);}catch{status.textContent='Choisis la semaine avant d’ajouter des photos.';input.value='';return;}
+  const files=[...input.files];if(!files.length)return;disable(true);let saved=0;
+  try{const existing=await photosFor(scope);if(files.length+existing.length>8)throw Error('too_many');for(const file of files){const image=await preparePhoto(file);if(!alive)return;await transaction('readwrite',s=>s.put({id:crypto.randomUUID(),scope,profileId:p.id,week:week.value,image,createdAt:Date.now()}));saved++;}if(alive)status.textContent=`${saved} photo${saved>1?'s':''} conservée${saved>1?'s':''} sur cet appareil.`;}
+  catch(e){if(alive)status.textContent=(saved?`${saved} photo(s) déjà conservée(s). `:'')+(e.message==='too_many'?'Maximum de 8 photos par semaine.':e.message==='photo_invalid'?'Photo refusée : utilise un JPG, PNG ou WebP lisible de moins de 15 Mo.':'Enregistrement interrompu. Vérifie les photos affichées avant de réessayer.');}
+  finally{input.value='';if(alive){await draw();disable(false);}}
+ }
+ pickers.forEach(input=>input.onchange=()=>add(input));week.onchange=()=>{status.textContent='';draw();};draw();
+ return {destroy(){alive=false;generation++;pickers.forEach(i=>i.onchange=null);week.onchange=null;}};
+}

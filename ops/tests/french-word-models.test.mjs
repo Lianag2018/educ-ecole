@@ -34,5 +34,5 @@ test('natural whole-word fallback keeps French voice and does not multiply the r
  const text=wordLesson('choisis');player.speak(text,{natural:true,speed:1,preferredURI:'en'});
  assert.equal(utterances[0].text,text);assert.equal(utterances[0].lang,'fr-CA');assert.equal(utterances[0].voice.voiceURI,'fr');assert.equal(utterances[0].rate,1);
  player.setSpeed(.8);assert.equal(utterances[1].rate,.8);
- player.speak('Une histoire.',{speed:1});assert.equal(utterances[2].rate,.65);player.stop();
+ player.speak('Une histoire.',{speed:1});assert.equal(utterances[2].rate,1);player.stop();
 });

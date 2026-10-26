@@ -5,15 +5,25 @@ export function photoDimensions(width,height,edge=PHOTO_IMAGE_LIMITS.edge){
  if(!Number.isInteger(width)||!Number.isInteger(height)||width<1||height<1||width*height>PHOTO_IMAGE_LIMITS.pixels||!Number.isFinite(edge)||edge<1)throw Error('photo_invalid');
  const scale=Math.min(1,edge/Math.max(width,height));return {width:Math.max(1,Math.round(width*scale)),height:Math.max(1,Math.round(height*scale))};
 }
-export async function prepareSchoolPhoto(file){
+export async function decodeSchoolPhoto(file){
  if(!file||!['image/jpeg','image/png','image/webp'].includes(file.type)||!file.size||file.size>PHOTO_IMAGE_LIMITS.inputBytes)throw Error('photo_invalid');
- const url=URL.createObjectURL(file);
+ let image,url;
+ // Decode the Blob directly when supported; no object-URL loading is needed.
+ if(typeof createImageBitmap==='function'){try{image=await createImageBitmap(file,{imageOrientation:'from-image'});}catch{}}
+ if(!image){url=URL.createObjectURL(file);image=new Image();image.src=url;try{await image.decode();}catch{URL.revokeObjectURL(url);throw Error('photo_invalid');}}
+ const width=image.naturalWidth||image.width,height=image.naturalHeight||image.height;
+ try{photoDimensions(width,height);}catch(error){if(url)URL.revokeObjectURL(url);image.close?.();throw error;}
+ return {image,width,height,close(){if(url)URL.revokeObjectURL(url);image.close?.();}};
+}
+export function photoDataUrl(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('photo_invalid'));reader.readAsDataURL(blob);});}
+export function photoPreviewFallback(img,blob,isCurrent=()=>true){img.addEventListener('error',async()=>{try{const data=await photoDataUrl(blob);if(isCurrent())img.src=data;}catch{}},{once:true});}
+export async function prepareSchoolPhoto(file){
+ const decoded=await decodeSchoolPhoto(file),{image,width,height}=decoded;
  try{
-  const image=new Image();image.src=url;try{await image.decode();}catch{throw Error('photo_invalid');}
-  photoDimensions(image.naturalWidth,image.naturalHeight);
+  photoDimensions(width,height);
   let best=null;
   for(const edge of [2000,1700,1445]){
-   const size=photoDimensions(image.naturalWidth,image.naturalHeight,edge),canvas=document.createElement('canvas');Object.assign(canvas,size);
+   const size=photoDimensions(width,height,edge),canvas=document.createElement('canvas');Object.assign(canvas,size);
    const context=canvas.getContext('2d');if(!context)throw Error('photo_invalid');
    // A white paper background avoids black pixels when importing a transparent PNG.
    context.fillStyle='#fff';context.fillRect(0,0,size.width,size.height);context.drawImage(image,0,0,size.width,size.height);
@@ -25,5 +35,5 @@ export async function prepareSchoolPhoto(file){
   }
   if(best?.blob.size<=PHOTO_IMAGE_LIMITS.storedBytes)return best;
   throw Error('photo_too_detailed');
- }finally{URL.revokeObjectURL(url);}
+ }finally{decoded.close();}
 }

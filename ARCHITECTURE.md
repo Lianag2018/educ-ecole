@@ -138,3 +138,56 @@ Le planificateur choisit d’abord les extraits entiers disponibles, puis des co
 La politique `media-src` autorise uniquement l’origine HTTPS `pedagofa.cssdm.gouv.qc.ca` en plus des médias du site et des Blob existants. `connect-src` demeure limité au site : les MP3 sont lus par HTMLAudio sans fetch tiers, sans cookies ajoutés par l’application, sans envoi de texte libre ni de microphone. Aucun import, copie distante ou génération payante au clic. La modification du catalogue ajoute sept opérateurs et conserve toutes les empreintes des 1 132 clips antérieurs.
 
 Références linguistiques : [vingt](https://vitrinelinguistique.oqlf.gouv.qc.ca/23141/la-prononciation/prononciation-des-nombres/prononciation-de-vingt), [et dans les nombres](https://vitrinelinguistique.oqlf.gouv.qc.ca/24631/la-prononciation/prononciation-des-nombres/prononciation-de-et-dans-les-nombres-composes), [six et dix](https://vitrinelinguistique.oqlf.gouv.qc.ca/23137/la-prononciation/prononciation-des-nombres/prononciation-de-six-et-dix), [huit](https://vitrinelinguistique.oqlf.gouv.qc.ca/23149/la-prononciation/prononciation-des-nombres/prononciation-de-huit), OQLF, consultées le 22 octobre 2026. Le choix des blocs ne constitue pas une validation de la voix, de chaque enchaînement ou de la prosodie par écoute humaine.
+
+## Passeport magique — 26 octobre 2026
+
+`src/voyage.js` et `voyage.css` ajoutent quatre escales imaginaires, des histoires
+originales adaptées p1/p2 et des coquillages SVG dénombrables. Les activités
+existantes restent accessibles sous la carte. L’illustration WebP dérive des
+visages approuvés; aucune nouvelle dépendance vidéo ni génération à chaque clic.
+Les mouvements sont finis, désactivables et respectent reduced-motion.
+
+Les étoiles sont recalculées depuis les réponses correctes existantes : cinq par
+carte/matière/jour, jamais par simple ouverture. Les erreurs/aides conservées par
+le moteur ne deviennent pas des réussites autonomes. Les étoiles ne sont pas un
+score de maîtrise. `profile.voyage` conserve seulement destination, pause,
+confirmations parent et récompenses. Les profils et anciennes données sont préservés.
+
+Le bilan agrège toutes les tâches du plan importé de la semaine et les tâches
+manuelles avec échéance dans cette semaine, y compris les pages non prises en
+charge. Chaque tâche doit être confirmée dans l’espace parent. Les ailes sont
+attribuables dès dimanche à Toronto ou pour une semaine passée, une seule fois.
+Un plan vide ne qualifie pas. Le texte changé d’une tâche invalide sa confirmation.
+Les récompenses déjà remises restent historiques. L’espace parent n’est pas un
+contrôle d’identité; aucune promesse de validation scolaire automatique.
+
+
+## Aventure du trésor — 26 octobre 2026
+
+`src/dominican-adventure.js` contient trois chapitres de fiction originaux
+(bateau, jardin de palmiers, plage) et neuf activités par profil. La lecture
+précède le calcul puis l’indice, même au rejeu; le reste de la banque conserve
+son ordre adaptatif habituel. p1 : phrases courtes, dessins SVG dénombrables et
+repérage de mots. p2 : compréhension, dizaines/unités, ordre des actions,
+référence pronominale et résumé. Les dessins à compter restent immobiles.
+
+`src/voyage.js` présente ce parcours en priorité; les anciens petits contes
+restent disponibles dans un volet secondaire. Illustration WebP dérivée de
+références familiales, sans photographies originales ni métadonnées de voyage
+dans le dépôt. Une étape explorée n’est pas une maîtrise acquise. Les étoiles
+et le plan hebdomadaire conservent leurs règles et leurs données par profil.
+
+## Scènes manipulables — 26 octobre 2026
+
+`illustrated-games.js` adapte les cartes existantes sans modifier leur identifiant,
+réponse ou historique. Collections : 0–20 graines; additions/soustractions :
+collections de 24 objets maximum; groupes ×/÷ : 12 × 12 maximum et division exacte.
+Les expressions hors contrat gardent leur présentation existante. Six nouvelles
+cartes de groupes sont réservées au profil avancé. Les actions sur les groupes
+signalent une aide; aucune manipulation ne crédite une réussite à elle seule.
+`session.scene` garde les objets touchés pendant les mises à jour, puis est vidé au
+changement de carte. Le démontage retire les écouteurs. La narration utilise
+`updateAudioSurface` et ne reconstruit plus les jeux à chaque changement de statut.
+La navigation et les réponses conservent pour le moment le rendu général existant.
+Le CSS partagé respecte la pause de voyage et la réduction des animations.
+Cette première tranche couvre les objets de maths, pas encore tous les lecteurs.
