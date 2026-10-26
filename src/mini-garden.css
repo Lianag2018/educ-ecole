@@ -9,3 +9,24 @@
 @keyframes mini-float{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-9px) rotate(3deg)}}
 @media(max-width:600px){.mini-zone-grid{grid-template-columns:1fr}.mini-zone-grid article{padding:18px}}
 @media(prefers-reduced-motion:reduce){.mini-sky span,.mini-friend{animation:none}}
+
+/* Empty slots contain no mark that could be mistaken for an object. */
+.mini-seeds{width:min(100%,330px);box-sizing:border-box;gap:6px}
+.mini-seeds .mini-cell{min-height:42px;border:1px solid #dce5d3;border-radius:9px;background:#fafcf7}
+.mini-token{display:inline-block;width:36px;height:36px;flex:none;vertical-align:middle}
+.mini-quantity{display:flex!important;flex-wrap:wrap;justify-content:center;gap:12px}
+.mini-ten{display:grid!important;grid-template-columns:repeat(5,24px);gap:3px;padding:6px;border:2px solid #66813c;border-radius:10px;background:#f3f8e8}
+.mini-ten .mini-token{width:24px;height:28px}
+.mini-units{display:flex!important;flex-wrap:wrap;justify-content:center;gap:4px;max-width:200px}
+.mini-comparison{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.mini-number-group{padding:12px 6px;border:2px solid #d2e9bb;border-radius:16px;background:#fff}
+.mini-number-group strong{display:block;text-align:center;font-size:1.8rem;margin-bottom:10px}
+.mini-sequence{display:flex;align-items:center;justify-content:center;gap:clamp(4px,2vw,18px);margin:24px 0}
+.mini-sequence>span{display:grid;place-items:center;min-width:48px;min-height:56px;background:#eef7de;border:2px solid #66813c;border-radius:12px;font-size:1.8rem;font-weight:bold}
+.mini-sequence .mini-missing{border-style:dashed;background:#fff}
+.mini-calculation{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;padding:18px;border:2px solid #dccb74;border-radius:20px;background:#fffbea}
+.mini-calculation>div{flex:1 1 160px}.mini-calculation small{display:block;text-align:center;font-size:1rem;margin-bottom:8px}
+.mini-nut-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.mini-nut-slot{display:inline-flex;position:relative}.mini-nut-slot.removed svg{opacity:.45}
+.mini-cross{position:absolute;inset:0;display:grid;place-items:center;font-size:48px;line-height:1;font-weight:bold;color:#9a243d}
+@media(max-width:600px){.mini-comparison{grid-template-columns:1fr}.mini-number-group{display:flex;align-items:center;justify-content:center;gap:16px}.mini-number-group strong{margin:0}.mini-seeds .mini-cell{min-height:38px}}

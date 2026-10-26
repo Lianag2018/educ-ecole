@@ -52,3 +52,24 @@ test('Maths cannot upgrade reading; external resources are links with no local c
  assert.equal(miniSession(p,'invalid','2026-10-26').length,0);
  assert.equal((miniVisual(miniCards('collections',1)[0]).match(/class="filled"/g)||[]).length,0);
 });
+test('every card has an accurate illustration, including zero and removed objects',()=>{
+ for(const zone of miniZones)for(const tier of [1,2,3])for(const q of miniCards(zone.id,tier)){
+  const html=miniVisual(q),v=q.visual;
+  assert.ok(html.length>0, q.id);
+  const seeds=(html.match(/data-object="seed"/g)||[]).length;
+  const nuts=(html.match(/data-object="nut"/g)||[]).length;
+  if(v.kind==='seeds'){
+   assert.equal(seeds,v.count);assert.equal((html.match(/mini-cell empty/g)||[]).length,20-v.count);
+   assert.doesNotMatch(html,/[●·]/);
+  }
+  if(v.kind==='tens')assert.equal(seeds,v.tens*10+v.units);
+  if(v.kind==='compare')assert.equal(seeds,v.numbers.reduce((a,b)=>a+b,0));
+  if(v.kind==='sequence')assert.match(html,/mini-missing">\?/);
+  if(v.kind==='calculation'){
+   const removed=(html.match(/data-removed="true"/g)||[]).length;
+   assert.equal(nuts,v.subtract?v.a:v.a+v.b);
+   assert.equal(removed,v.subtract?v.b:0);
+   assert.equal(nuts-removed,Number(q.choices[q.answer]));
+  }
+ }
+});

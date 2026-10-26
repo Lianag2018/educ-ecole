@@ -26,19 +26,19 @@ export function miniCards(zone,tier){
   if(zone==='compare'){
    const n=[i+2,12+i,32+i][tier-1];
    if(i%2===1)return card(zone,tier,i,`${n} · ${n+2} · ${n-1}`,'Quel est le plus grand nombre?',n+2,[n,n-1],
-    'Compare les dizaines, puis les unités si les dizaines sont pareilles.');
+    'Compare les dizaines, puis les unités si les dizaines sont pareilles.',{kind:'compare',numbers:[n,n+2,n-1]});
    return card(zone,tier,i,`${n} · ${n+1} · ?`,'Quel nombre vient juste après?',n+2,[n,n+3],
-    'Avance d’un seul pas dans la suite des nombres.');
+    'Avance d’un seul pas dans la suite des nombres.',{kind:'sequence',numbers:[n,n+1]});
   }
   if(zone==='tens'){
    const tens=tier===1?1:tier===2?2:4,units=tier===1?i%3:i+1,n=tens*10+units;
    return card(zone,tier,i,`${tens} dizaines et ${units} unités`,'Quel nombre est représenté?',n,[n+10,n+1],
-    'Chaque bouquet contient dix graines. Ajoute ensuite les graines seules.',{kind:'tens',tens,units});
+    'Chaque cadre contient dix graines. Ajoute ensuite les graines seules.',{kind:'tens',tens,units});
   }
   const a=[i+2,i+7,i+12][tier-1],b=tier===1?1:3,subtract=i%2===1,n=subtract?a-b:a+b;
   return card(zone,tier,i,`${a} ${subtract?'−':'+'} ${b}`,
    subtract?'Des noisettes sont mangées. Combien en reste-t-il?':'Des noisettes sont ajoutées. Combien y en a-t-il?',n,[n+1,n-1],
-   subtract?'Retire les noisettes mangées, puis compte celles qui restent.':'Pars de la première quantité et ajoute les nouvelles noisettes.');
+   subtract?'Retire les noisettes mangées, puis compte celles qui restent.':'Pars de la première quantité et ajoute les nouvelles noisettes.',{kind:'calculation',a,b,subtract});
  });
 }
 // Same observation window and day/card thresholds as the reading engine, but
@@ -65,11 +65,24 @@ export function miniSession(p,zone,day){
  // Keep the existing review priority, with a bounded three-card session.
  return [...new Map([...due,...fresh,...miniCards(zone,tier)].map(q=>[q.id,q])).values()].slice(0,3);
 }
+// Countable shapes use inline SVG: independent of fonts, emoji or remote assets.
+const seed=()=>`<svg class="mini-token mini-seed" data-object="seed" viewBox="0 0 40 40" aria-hidden="true"><path d="M30 5C9 4 3 17 9 29S35 33 30 5Z" fill="#b77934" stroke="#623d1c" stroke-width="2"/><path d="M12 29Q19 18 27 9" fill="none" stroke="#ffe0a0" stroke-width="3"/></svg>`;
+const nut=()=>`<svg class="mini-token mini-nut" data-object="nut" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 18Q4 33 20 36Q36 33 33 18Z" fill="#b97632" stroke="#633c1d" stroke-width="2"/><path d="M5 18Q6 7 20 7Q34 7 35 18Z" fill="#69472b"/><path d="M20 8L23 3" stroke="#69472b" stroke-width="3"/><path d="M14 22L15 29" stroke="#ffe0a0" stroke-width="3"/></svg>`;
+const row=(count,draw=seed)=>Array.from({length:count},draw).join('');
+const ten=()=>`<span class="mini-ten" data-group="ten">${row(10)}</span>`;
+const quantity=n=>`<span class="mini-quantity">${Array.from({length:Math.floor(n/10)},ten).join('')}<span class="mini-units">${row(n%10)}</span></span>`;
 export function miniVisual(q){
- if(!q.visual)return '';
- const v=q.visual;
- if(v.kind==='seeds')return `<div class="mini-seeds" role="img" aria-label="${v.count} graines">${Array.from({length:20},(_,i)=>`<span class="${i<v.count?'filled':''}" aria-hidden="true">${i<v.count?'●':'·'}</span>`).join('')}</div>`;
- return `<div class="mini-bouquets" role="img" aria-label="${v.tens} dizaines et ${v.units} unités"><span aria-hidden="true">${'🌻 '.repeat(v.tens)}</span><small>Chaque fleur représente dix graines.</small><span aria-hidden="true">${'● '.repeat(v.units)||'Aucune graine seule'}</span></div>`;
+ const v=q.visual;if(!v)return '';
+ if(v.kind==='seeds')return `<div class="mini-seeds" role="img" aria-label="${v.count} graines">${Array.from({length:20},(_,i)=>`<span class="mini-cell ${i<v.count?'filled':'empty'}" aria-hidden="true">${i<v.count?seed():''}</span>`).join('')}</div>`;
+ if(v.kind==='tens')return `<div class="mini-bouquets" role="img" aria-label="${v.tens} dizaines et ${v.units} unités"><small>Un cadre contient dix graines.</small>${quantity(v.tens*10+v.units)}</div>`;
+ if(v.kind==='compare')return `<div class="mini-comparison">${v.numbers.map(n=>`<div class="mini-number-group" role="img" aria-label="${n} graines"><strong>${n}</strong>${quantity(n)}</div>`).join('')}</div>`;
+ if(v.kind==='sequence')return `<div class="mini-sequence" role="img" aria-label="${v.numbers.join(', ')}, puis un nombre à trouver"><span>${v.numbers[0]}</span><b aria-hidden="true">→</b><span>${v.numbers[1]}</span><b aria-hidden="true">→</b><span class="mini-missing">?</span></div>`;
+ if(v.kind==='calculation'){
+  const label=v.subtract?`${v.a} noisettes au départ, ${v.b} barrées à retirer`:`${v.a} noisettes au départ, ${v.b} noisettes ajoutées`;
+  const initial=Array.from({length:v.a},(_,i)=>`<span class="mini-nut-slot${v.subtract&&i>=v.a-v.b?' removed':''}"${v.subtract&&i>=v.a-v.b?' data-removed="true"':''}>${nut()}${v.subtract&&i>=v.a-v.b?'<span class="mini-cross" aria-hidden="true">×</span>':''}</span>`).join('');
+  return `<div class="mini-calculation" role="img" aria-label="${label}"><div><small>Au départ</small><div class="mini-nut-row">${initial}</div></div>${v.subtract?'<small>Les noisettes barrées sont retirées. Compte celles qui restent.</small>':`<b aria-hidden="true">+</b><div><small>On ajoute</small><div class="mini-nut-row">${row(v.b,nut)}</div></div>`}</div>`;
+ }
+ return '';
 }
 export function miniGarden(p,day){
  if(!miniEnabled(p))return '';

@@ -118,3 +118,22 @@ les nouveaux MP3 exigent le build production. Pas de validation iPad/Safari phys
 Le connecteur Vercel personnel renvoie encore 403 à l'inspection. Cela ne démontre
 pas l'échec de la connexion Git ni une panne. Prochaine action : PR et contrôles de
 préversion, puis publication et preuve du SHA/version/audio réellement servis.
+
+## Lisibilité des représentations — 25 octobre 2026 (America/Toronto)
+
+Correctif sur la branche existante `feat/p1-jardin-mini-defis`, base distante
+`34b3c9d6b9ca95f2be0c8b0d6947d5a27f454788`. Les vingt points des cases vides
+étaient confondus avec des graines. Les cases sont désormais réellement vides;
+les graines et noisettes sont des SVG intégrés, sans dépendance à une police.
+Les dizaines montrent dix graines par cadre. Les comparaisons montrent les
+collections, les suites des cases fléchées, les additions deux groupes et les
+soustractions les noisettes retirées barrées. Aucun objet à compter n'est animé.
+Les 72 cartes ont une représentation; aucune modification des réponses,
+identifiants, paliers, données locales ou du profil p2.
+
+Validation : 335 tests Node réussis, dont vérification des objets réellement
+produits pour les 72 cartes (zéro, dizaines, comparaisons, additions et retraits).
+Diff sans erreur d'espacement. Vérification visuelle navigateur non réalisée :
+Chromium absent et archive d'installation distante invalide. Build complet réussi, avec assemblage des 328 MP3 Kalulu. Aucun résultat
+Safari/iPad ni déploiement production revendiqué. Prochaine étape : revue de la
+préversion sur téléphone/iPad puis validation de publication.
