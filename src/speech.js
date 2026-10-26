@@ -15,7 +15,8 @@ export function chooseReadingVoice(voices, preferredURI='') {
 }
 
 export const playbackSpeed = value => value==='very-slow' ? .8 : Number.isFinite(Number(value)) && Number(value)>0 ? Math.max(.6,Math.min(1.5,Number(value))) : 1;
-export const readingRate = mode => mode==='very-slow' ? .45 : .65*playbackSpeed(mode);
+// Keep explicit legacy phonics pacing; ordinary narration starts at the native rate.
+export const readingRate = mode => mode==='very-slow' ? .45 : playbackSpeed(mode);
 
 // Keep the utterance alive and isolate callbacks from stopped/replaced readings.
 export class ReadingSpeaker {

@@ -18,6 +18,7 @@ import {numberWords} from '../src/numbers.js';
 import {spokenActivity} from '../src/speech.js';
 export const MODEL='gpt-4o-mini-tts-2025-12-15',VOICE='coral';
 export const INSTRUCTIONS='Parle en français québécois naturel, avec une voix féminine douce, chaleureuse et rassurante. Lis lentement et articule clairement, sans exagérer l’accent. Respecte les pauses et l’intonation du texte. Lis seulement le texte fourni, sans introduction. Reste exclusivement en français du Québec du début à la fin, y compris pour les mots isolés et les nombres. Ne prononce aucun mot comme un mot anglais. Ne rajoute ni syllabe ni mot. Garde les voyelles françaises distinctes et les voyelles nasales naturelles.';
+export const NATURAL_INSTRUCTIONS=INSTRUCTIONS.replace('Lis lentement et articule clairement', 'Lis à un rythme naturel et fluide, avec une articulation claire, sans étirer les syllabes');
 export function narrationCatalog(){
  // Alignment uses the activity's source collection, not number/operator words
  // found in a story. This metadata does not participate in the MP3 cache key.
@@ -50,7 +51,7 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
- for(const q of [...travel,...island]){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(q.explanation);for(const c of q.choices)texts.add(choiceSpeech(c));for(const r of ['correct','incorrect','help'])texts.add(oralFeedback(q,r));}
+
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
  for(const text of [...Object.values(ORAL_FEEDBACK),...ORAL_WORD_TEXTS])texts.add(text);
@@ -68,10 +69,16 @@ export function narrationCatalog(){
   }
  }
  for(const word of Object.keys(syllables))texts.add(wordLesson(word));
+ // New adventure narration is natural at 1x. Keep shared teaching clips and
+ // existing cache keys intact; no wholesale re-generation of the audio library.
+ const adventureTexts=new Set();
+ for(const q of [...travel,...island])for(const text of [spokenActivity(q),oralQuestion(q),q.explanation,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))])adventureTexts.add(text);
+ const naturalTexts=new Set([...adventureTexts].filter(text=>!texts.has(text)));
+ for(const text of adventureTexts)texts.add(text);
  const segmented=new Set([...Object.keys(syllables).map(wordLesson),...bank.filter(q=>q.id.startsWith('first-blend-')).map(spokenActivity)]);
  const phonics=new Set(bank.filter(q=>['sons','syllabes'].includes(q.skill)).flatMap(q=>[spokenActivity(q),oralQuestion(q),...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]));
- return [...texts].map(text=>{let instructions=segmented.has(text)?INSTRUCTIONS+' Exercice de décodage en français uniquement. Les éléments séparés par des points sont des syllabes orales, pas des noms de lettres. Prononce chaque syllabe puis le mot entier. Dans pin, le son final est nasal, comme dans sapin; jamais le mot anglais pin.':INSTRUCTIONS;
+ return [...texts].map(text=>{const natural=naturalTexts.has(text),baseInstructions=natural?NATURAL_INSTRUCTIONS:INSTRUCTIONS;let instructions=segmented.has(text)?baseInstructions+' Exercice de décodage en français uniquement. Les éléments séparés par des points sont des syllabes orales, pas des noms de lettres. Prononce chaque syllabe puis le mot entier. Dans pin, le son final est nasal, comme dans sapin; jamais le mot anglais pin.':baseInstructions;
  if(phonics.has(text)||segmented.has(text))instructions+=' Tous les mots sont français, même les mots courts. Ne bascule jamais en anglais. Pain rime avec main et sapin, avec une voyelle nasale, jamais le mot anglais pain. Le u de lune est distinct du ou de loup. On est nasal comme dans rond. Ch se prononce comme au début de chat, pas comme en anglais. Ne lis pas les signes plus et ne rajoute pas de son e après une consonne.';
  if(numericTexts.has(text))instructions+=numericInstructions;
- return {text,instructions,numeric:operatorTexts.has(text)||numberNames.has(text)||numericActivityTexts.has(text),align:baseTexts.has(text),file:createHash('sha256').update(MODEL+'|'+VOICE+'|'+instructions+'|'+text).digest('hex')+'.mp3'};});
+ return {text,instructions,speed:natural?1:.85,numeric:operatorTexts.has(text)||numberNames.has(text)||numericActivityTexts.has(text),align:baseTexts.has(text),file:createHash('sha256').update(MODEL+'|'+VOICE+'|'+instructions+'|'+text).digest('hex')+'.mp3'};});
 }

@@ -19,3 +19,19 @@ test('native voice resumes at last known word and preserves original character o
  utterances.at(-1).onboundary({charIndex:5});assert.equal(cues.at(-1),9);
  p.setSpeed(.8);assert.equal(utterances.at(-1).text,'lisent');utterances.at(-1).onboundary({charIndex:0});assert.equal(cues.at(-1),9);
 });
+
+test('native speed uses the chosen multiplier, and a saved setting survives reload',async()=>{
+ const {fresh,save,load}=await import('../../src/engine.js');
+ const {readingRate}=await import('../../src/speech.js');
+ for(const speed of [.6,1,1.5])assert.equal(readingRate(speed),speed);
+ const state=fresh(),data={};state.readingSpeed=.9;
+ save({setItem:(k,v)=>data[k]=v},state);
+ assert.equal(load({getItem:k=>data[k]}).readingSpeed,.9);
+});
+test('new story narration keeps the soft Quebec voice at natural generation speed',async()=>{
+ const {narrationCatalog,INSTRUCTIONS,VOICE}=await import('../narration-catalog.mjs');
+ const {islandCards}=await import('../../src/dominican-adventure.js');
+ const clips=narrationCatalog();assert.equal(VOICE,'coral');
+ for(const id of ['p1','p2']){const story=islandCards({id},'bateau')[0];const item=clips.find(x=>x.text===story.text);assert.equal(item.speed,1);assert.match(item.instructions,/voix féminine douce/);assert.match(item.instructions,/rythme naturel et fluide/);assert.match(item.instructions,/français québécois/);assert.ok(!item.instructions.includes('Lis lentement'));}
+ const old=clips.find(x=>x.text==='Bonjour! On prend notre temps pour lire ensemble.');assert.equal(old.instructions,INSTRUCTIONS);assert.equal(old.speed,.85);
+});

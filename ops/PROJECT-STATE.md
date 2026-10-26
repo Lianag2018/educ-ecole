@@ -283,3 +283,21 @@ pour ne pas les confondre avec les réponses de comptage; l’ancien atelier est
 regroupé sous un volet secondaire. 353 tests et build repassés avec succès.
 La voix reste indisponible dans ce navigateur distant, sans conclusion sur
 la qualité acoustique.
+
+### Voix douce et rythme naturel — 26 octobre 2026 (America/Toronto)
+
+Demande parent : conserver une voix douce, à vitesse naturelle ajustable.
+Même PR52, départ distant `068bf1e8fe49aa1b974010f3546ba0d635451681`.
+Les 179 nouveaux textes propres aux aventures demandent désormais un rythme
+naturel et fluide, voix féminine douce en français québécois, génération à 1x.
+Les 1 579 empreintes des enregistrements pédagogiques antérieurs restent
+identiques : aucune régénération globale; aucun texte retiré. Le multiplicateur
+0,65 imposé à la voix native est retiré; le mode explicite historique de sons
+très lents reste conservé. Curseur 0,6–1,5x et valeur sauvegardée inchangés;
+hauteur de la voix MP3 préservée pendant les changements de vitesse.
+
+355 tests et build local réussis, dont reprise au mot courant, débit natif,
+persistance du réglage et instructions des contes. Aucun appel de génération
+payante effectué. L’écoute réelle de ces nouveaux MP3 n’est pas validée : leur
+production attend le build main autorisé. Ne pas confondre configuration/test
+logiciel et qualité acoustique. Production inchangée; fusion non effectuée.
