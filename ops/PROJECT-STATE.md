@@ -251,3 +251,23 @@ Les textes de voyage rejoignent le catalogue de narration de production sans
 élargir le budget d’alignement. 346 tests et build local final réussis.
 Production inchangée; fusion non effectuée. Révision visuelle et interactive
 réussie sur le parcours indiqué; prochaine étape : accord de fusion PR52.
+
+
+### Révision dominicaine — 26 octobre 2026, UTC
+
+Même branche `feat/voyage-magique`, même PR52; head distant de départ vérifié
+`317e5c369093a1dbfeeaafa9bfc9877ea2466fb1`. Remplacement du choix principal
+de quatre destinations par « Le trésor des deux sœurs » : bateau pirate,
+palmiers, coffre sur la plage. Neuf activités originales par profil avec
+différenciation de lecture, de calcul et d’indices. Illustration générée à
+partir des références fournies; seuls les pixels illustrés optimisés en WebP
+sont livrés, aucune photographie originale ni information de séjour.
+
+353 tests Node et build local réussis. Les tests couvrent dessins/comptages,
+calculs/base dix, variantes de lecture, progression distincte des réussites,
+conservation des profils et catalogue de narration. Ordre du récit conservé
+au rejeu; dates et règles des récompenses hebdomadaires inchangées.
+Les voix nouvelles ne sont pas produites dans une préversion. Safari/iPad
+physique et acoustique non validés. Version `2026.10.26-tresor-dominicain`.
+Prochaine étape : vérifier la préversion interactive sur ce nouveau contenu.
+Production inchangée; aucune fusion effectuée.

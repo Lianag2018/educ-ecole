@@ -160,3 +160,19 @@ attribuables dès dimanche à Toronto ou pour une semaine passée, une seule foi
 Un plan vide ne qualifie pas. Le texte changé d’une tâche invalide sa confirmation.
 Les récompenses déjà remises restent historiques. L’espace parent n’est pas un
 contrôle d’identité; aucune promesse de validation scolaire automatique.
+
+
+## Aventure du trésor — 26 octobre 2026
+
+`src/dominican-adventure.js` contient trois chapitres de fiction originaux
+(bateau, jardin de palmiers, plage) et neuf activités par profil. La lecture
+précède le calcul puis l’indice, même au rejeu; le reste de la banque conserve
+son ordre adaptatif habituel. p1 : phrases courtes, dessins SVG dénombrables et
+repérage de mots. p2 : compréhension, dizaines/unités, ordre des actions,
+référence pronominale et résumé. Les dessins à compter restent immobiles.
+
+`src/voyage.js` présente ce parcours en priorité; les anciens petits contes
+restent disponibles dans un volet secondaire. Illustration WebP dérivée de
+références familiales, sans photographies originales ni métadonnées de voyage
+dans le dépôt. Une étape explorée n’est pas une maîtrise acquise. Les étoiles
+et le plan hebdomadaire conservent leurs règles et leurs données par profil.

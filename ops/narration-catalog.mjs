@@ -1,3 +1,4 @@
+import {islandChapters,islandCards} from '../src/dominican-adventure.js';
 import {destinations,travelCards} from '../src/voyage.js';
 import {rmsNarrationTexts} from '../src/rms-course.js';
 import {numericInstructions} from '../src/math-speech.js';
@@ -21,6 +22,7 @@ export function narrationCatalog(){
  // Alignment uses the activity's source collection, not number/operator words
  // found in a story. This metadata does not participate in the MP3 cache key.
  const numericActivityTexts=new Set([...mathsFor({id:'p1'}),...mathsFor({id:'p2'}),...mathCards].flatMap(q=>[spokenActivity(q),q.explanation]));
+ const island=islandChapters.flatMap(c=>['p1','p2'].flatMap(id=>islandCards({id},c.id)));
  const travel=destinations.flatMap(d=>['p1','p2'].flatMap(id=>travelCards({id},d.id)));
  const cards=[...mathsFor({id:'p2'}),...bank,...olderReading,...stories,...mathCards,social];
  for(let n=1;n<=6;n++)for(const op of ['+','−']){
@@ -48,7 +50,7 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
- for(const q of travel){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(q.explanation);for(const c of q.choices)texts.add(choiceSpeech(c));for(const r of ['correct','incorrect','help'])texts.add(oralFeedback(q,r));}
+ for(const q of [...travel,...island]){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(q.explanation);for(const c of q.choices)texts.add(choiceSpeech(c));for(const r of ['correct','incorrect','help'])texts.add(oralFeedback(q,r));}
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
  for(const text of [...Object.values(ORAL_FEEDBACK),...ORAL_WORD_TEXTS])texts.add(text);
