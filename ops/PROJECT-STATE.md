@@ -218,3 +218,19 @@ et arrêt constatés. Les essais complets et le rechargement ont été faits en 
 Livré. Prochaine action : pratique accompagnée dans l’ordre de la classe;
 choix de page avec l’adulte si nécessaire, sans réinitialiser les deux profils.
 Le cahier a été consulté en ligne, pas téléchargé en PDF.
+
+## 26 octobre 2026 · UTC — Voyage magique, préparation
+
+Branche `feat/voyage-magique`, base distante vérifiée
+`fe35483f98bcf277b9c60de357858a22d5e98129`. Accueil illustré des deux sœurs,
+Mexique/Cuba/République dominicaine/royaume imaginaire; histoires p1/p2 et jeux
+avec coquillages SVG, étoiles dédupliquées, bilan parent et ailes hebdomadaires.
+Ancien checkout laissé intact. Aucune donnée locale familiale migrée ou supprimée.
+
+345 tests Node réussis au premier contrôle, dont sept nouveaux tests de récompenses;
+build local réussi sans génération payante. Chromium local indisponible : le
+ téléchargement du binaire retourne une archive tronquée. Vérification visuelle
+interactive et livraison distante encore à confirmer; ne pas annoncer production.
+Image créée avec le générateur intégré depuis l’illustration approuvée : deux
+sœurs aux visages conservés, ailes et cornes de licorne au-dessus d’une mer
+caribéenne imaginaire, sans texte ni interface dans le bitmap; encodage WebP.
