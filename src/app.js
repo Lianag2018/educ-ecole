@@ -1,3 +1,4 @@
+import {openPopit} from './popit.js';
 import {beginnerCard,beginnerProfile,activityPages,choicePicture,beginnerMathVisual} from './beginner-access.js';
 import {islandCards,islandVisual,islandChapters,islandScene} from './dominican-adventure.js';
 import {travelHome,travelParent,travelPoints,travelState,travelCards,travelVisual,travelTasks,reviewTask,claimTravel} from './voyage.js';
@@ -113,6 +114,7 @@ function finishAnswer(result){if(feedback)return;const q=session.items[session.i
 
 function navigate(v){kaluluUnmount?.();kaluluUnmount=null;oralWordOpenKey=null;oralCheck.reset();cleanup();view=v;draft=[];session=null;feedback=null;render();document.querySelector('#main').focus();}
 function bind(){
+ document.querySelector('[data-popit]')?.addEventListener('click',()=>{cleanup();openPopit(profile(),{save:persist,speak:speakText,stop:()=>reader.stop()});});
  document.querySelectorAll('[data-island-chapter]').forEach(b=>b.onclick=()=>begin(islandCards(profile(),b.dataset.islandChapter),'Voyage'));
 
  document.body.classList.toggle('travel-paused',!!travelState(profile()).quiet);

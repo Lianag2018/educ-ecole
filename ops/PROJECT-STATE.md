@@ -318,3 +318,13 @@ appel TTS payant. Chromium local non installé : archive téléchargée tronqué
 Aucune validation Safari/iPad physique ou acoustique. Nouveaux MP3 non générés
 par la préversion. Production inchangée, pas de fusion. Vérifier le déploiement
 et le parcours dans le navigateur distant avant d’annoncer la livraison.
+
+### Pop-it supplémentaire — 26 octobre 2026 (America/Toronto)
+Intégration au-dessus de l'audit partagé f30f1a73, sans remplacer ses corrections.
+Fenêtre modale native : bulles réversibles, consigne écoutable, cinq défis sans
+chronomètre. Débutant : additions/soustractions de quantités jusqu'à 10. Avancé :
+ajout de petites multiplications/divisions exactes représentées en rangées.
+Résultats séparés dans profile.popit; les erreurs restent accompagnées après
+réouverture le même jour. Aucun crédit automatique de maîtrise ou de plan hebdo.
+Tests arithmétiques et isolation des opérations ajoutés; contrôle navigateur et
+préversion à consigner après livraison. Aucun test physique iPad revendiqué.
