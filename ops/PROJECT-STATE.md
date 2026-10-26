@@ -489,3 +489,20 @@ Double clic bloqué pendant la transition; navigation annulée si la page est
 quittée ou cachée. Animation réduite/pause : ouverture immédiate sans étoiles.
 Suite complète et build réussis. Préversion interactive à vérifier; pas de
 validation Safari/iPad physique. Production inchangée.
+
+## Ressemblance de Liana — 26 octobre 2026
+PR52, base f7b0352. Image dominicaine retouchée avec le générateur intégré :
+visage et cheveux de la sœur brune guidés par le personnage de droite de
+accueil-famille.png. Tenue rayée, carte et composition conservées. Consigne :
+reprendre les proportions illustrées, yeux, joues et sourire de la référence;
+ne pas changer la petite sœur ni le décor. Revue visuelle effectuée, encodage
+WebP qualité 88. Aucun code de jeu modifié; accueil original inchangé.
+Préversion à contrôler; cette retouche est une image fixe, pas une nouvelle vidéo.
+Audit des apparitions : src/app.js utilise accueil-famille et accueil-anime;
+les avatars .portrait/.family-face recadrent la même référence accueil-famille.
+La couverture dominicaine est partagée par les deux profils. voyage-soeurs.webp
+est visuellement cohérent mais sans référence active dans src. Les icônes app
+représentent la chouette, pas les enfants. Contrôle visuel du visage à 1,3 s dans
+le lecteur de préversion; audit complet des frames vidéo non conclu : les copies
+MP4 téléchargées produisent des erreurs de décodage ffmpeg. Ne pas revendiquer
+une validation intégrale de chaque frame ni modifier la vidéo sur cette base.
