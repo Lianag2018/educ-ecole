@@ -531,3 +531,16 @@ réussis. Préversion à vérifier; aucune fusion main ni validation iPad physiq
 Relief demandé ensuite : silicone bombé/concave CSS persistant selon aria-pressed,
 ombrage intérieur, déplacement court au toucher, retour au second clic. Aucun
 plugiciel, dépendance payante ou vidéo requis; reduced-motion supprime la transition.
+
+## Tables Pop-it + et × pour les deux profils — 26 octobre 2026 (Toronto)
+PR52, base b3220ac. Même moteur de tableau complet 12×12 pour tous les accès
+Pop-it des deux profils. Addition : vraies sommes ligne + colonne (2–24);
+multiplication : produits (1–144). Tous les chiffres restent visibles. Choix
+des axes, chemin de bulles réversibles jusqu’au croisement; vert uniquement
+lorsque le bon chemin est entièrement pressé, retiré si une bulle est relevée.
+Opérandes inversés acceptés. Mély : petits calculs et découverte × (facteurs
+1–3, produits au plus 9), aide ouverte; Liana : aide facultative et tables
+avancées conservées. Réponse saisie séparément, succès accompagné enregistré
+sans crédit automatique par manipulation. Accueil, voix et données préservés.
+Tests du chemin incomplet/complet/relevé, axes erronés, deux profils et sommes
+réelles réussis; build local réussi. Contrôle de préversion à suivre. Main non fusionné.

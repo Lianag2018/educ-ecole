@@ -83,3 +83,7 @@
 .popit-advanced .full-pop-bubble[aria-pressed=true]:after{content:'';position:absolute;inset:12%;border-bottom:2px solid #fff8;border-radius:50%;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.popit-advanced .full-pop-bubble{transition:none}}
 html[data-voyage-paused] .popit-advanced .full-pop-bubble{transition:none}
+
+/* Keep the printed number, confirm only a completed correct table path. */
+.popit-advanced .full-pop-bubble.popit-correct[aria-pressed=true]{background-color:#37cd69!important;color:#103d21!important;outline:4px solid #176832;filter:none}
+.popit-confirmed{color:#176832;font-weight:800}
