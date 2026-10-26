@@ -1,6 +1,7 @@
 import {mkdir,writeFile,readFile,copyFile} from 'node:fs/promises';
 import {narrationCatalog,MODEL,VOICE,INSTRUCTIONS} from './narration-catalog.mjs';
 const PUBLIC='https://educ-ecole.vercel.app';
+export function speechRequest(item){return {model:MODEL,voice:VOICE,input:item.text,instructions:item.instructions||INSTRUCTIONS,response_format:'mp3',speed:item.speed??.85};}
 export async function generateNarration({env=process.env,fetcher=fetch,waiter=ms=>new Promise(resolve=>setTimeout(resolve,ms))}={}){
  const catalog=narrationCatalog();
  if(catalog.length>2300||catalog.reduce((n,c)=>n+c.text.length,0)>150000)throw Error('Narration catalog exceeds reviewed generation limit');
@@ -34,7 +35,7 @@ export async function generateNarration({env=process.env,fetcher=fetch,waiter=ms
   }
   let response;
   for(let attempt=0;attempt<3;attempt++){
-   try{response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,voice:VOICE,input:item.text,instructions:item.instructions||INSTRUCTIONS,response_format:'mp3',speed:0.85})});}
+   try{response=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify(speechRequest(item))});}
    catch(e){if(attempt===2||!['TimeoutError','TypeError'].includes(e.name))throw e;await waiter((attempt+1)*1500);continue;}
    if(response.ok||response.status<500||response.status>599||attempt===2)break;
    await response.body?.cancel();await waiter((attempt+1)*1500);
