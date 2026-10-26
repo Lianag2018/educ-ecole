@@ -250,7 +250,10 @@ des modèles à vitesse naturelle, voix française obligatoire et réglage paren
 respecté; autres lectures gardent leur comportement.
 
 341 tests et build réussis (328 Kalulu) avant dernière modification de routage
-vers le modèle du mot entier, à revérifier avant envoi. Tests ajoutés : association
+vers le modèle du mot entier. Le premier head PR53 échoue en CI sur une assertion
+de source du parcours Liana : son appel de lecture attendu avait été déplacé dans
+un ternaire. Le nouvel appel reste limité à p1 et l’appel d’origine de p2 est
+conservé explicitement. Suite complète et préversion à revérifier au head corrigé. Tests ajoutés : association
 des cinq mots, absence des anciennes séquences fragmentées, couverture de tous
 les modèles, corps de requête/vitesse, voix française et débit du secours natif.
 Chrome local : cinq boutons repérés et actionnés, état Amélie/fr-CA et arrêt

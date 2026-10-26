@@ -140,7 +140,8 @@ function listen(){
  const recorded=q&&!advanced(profile())?syllableAudioFor(q):null;
  if(recorded){playSyllable('syllabes',recorded.whole);return;}
  const wholeWord=spokenActivity(session.items[session.index]).replace(/\.$/,'');
- syllablePlayer.stop();speakText(!advanced(profile())&&syllables[wholeWord]?wordLesson(wholeWord):spokenActivity(session.items[session.index]));
+ if(!advanced(profile())&&syllables[wholeWord]){syllablePlayer.stop();speakText(wordLesson(wholeWord));return;}
+ syllablePlayer.stop();speakText(spokenActivity(session.items[session.index]));
 }
 function speakText(text,systemVoice=false,onEnded,fromOralCheck=false){syllablePlayer.stop();if(!fromOralCheck)oralCheck.stop();phonemePlayer.stop();clearTimeout(nextWordTimer);nextWordTimer=null;lastReadingText=text;readingProgress=null;conversation.stop();reader.speak(text,{preferredURI:state.readingVoiceURI||'',speed:state.readingSpeed,natural:isFrenchWordModel(text),systemVoice,onProgress:event=>{readingProgress=event;updateReadingCue(app,text,event);},onState:(status,message)=>{speaking=status==='starting'||status==='speaking';voiceMessage=message;if(status==='ended'||status==='error')readingProgress=null;render();if(status==='ended')onEnded?.();}});}
 function parentAdditionGate(){const a=20+Math.floor(Math.random()*30),b=20+Math.floor(Math.random()*30);const response=window.prompt('Réservé à un adulte : combien font '+a+' + '+b+' ?\nCette question ne remplace pas une connexion parent sécurisée.');return response!==null&&response.trim()===String(a+b);}
