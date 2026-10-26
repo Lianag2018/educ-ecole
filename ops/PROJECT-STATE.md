@@ -1,5 +1,27 @@
 # État courant — 26 octobre 2026 (America/Toronto)
 
+## Vocabulaire Alloprof pour le profil de 3e année — 26 octobre 2026 (Toronto)
+
+Base distante `edd541f0ae84878b330d8fc5a05b1911085f54b1`, fusion PR52.
+La production de cette base a été vérifiée avec la version
+`2026.10.26-voyage-photos-auto` et le déploiement Vercel
+`7CUL2QD2ABSw2175SShs6xvGvdDZ` réussi. Cela livre le voyage, les Pop-it et le
+parcours photo; l’analyse OpenAI réelle reste non activée, comme détaillé plus bas.
+
+Branche `feat/liana-vocabulaire-alloprof`, version
+`2026.10.26-vocabulaire-liana` : carte « Mes mots · Alloprof » dans le voyage,
+l’atelier et les défis de p2. Lien direct officiel Voca et lien App Store;
+consignes repliées pour Commencer → Continuer sans se connecter → code de liste,
+ou listes Primaire 3. Aucun changement du profil p1, des portraits ou de l’accueil.
+Aucun code de liste, mot scolaire ou identifiant privé embarqué dans le dépôt.
+Aucun point attribué ni résultat importé pour une ouverture de lien.
+
+Preuves : navigation Chrome réelle le 26 octobre sur Alloprof, parcours invité
+et ouverture de l’exercice vérifiés sans envoyer de réponse. Lien direct
+statique affichant Commencer confirmé. 401 tests locaux réussis, build réussi
+avec les 328 MP3 Kalulu. Aucun test matériel Safari/iPhone; publication et
+rendu de cette nouvelle carte encore à vérifier à ce stade.
+
 ## Photos de devoirs — vérification du 26 octobre 2026
 
 Base distante vérifiée : `644776d00e049ae20bcd68ed8f7cc90de2b9c1db`,

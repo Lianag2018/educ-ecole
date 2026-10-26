@@ -25,6 +25,7 @@ import {gardenSounds,gardenSelection,gardenPractice,soundGardenMarkup,gardenWelc
 import {soundCards,soundCardMarkup} from './sound-cards.js';
 import {syllables,choiceSpeech,oralQuestion,oralFeedback,wordLesson,isFrenchWordModel,decodingWords} from './oral-learning.js';
 import {worldHome,landscape,companion,childName,schoolMathLinks} from './worlds.js';
+import {schoolVocabularyLinks} from './school-vocabulary.js';
 import {progressPanel,adaptiveCards} from './progress.js';
 import {guidedMarkup,updateReadingCue} from './guided-reading.js';
 import {NarrationSpeaker} from './narration.js';
@@ -212,7 +213,7 @@ function bindMontage(){mountWelcomeMagic(document.querySelector('.welcome-direct
  if(action==='talk')document.querySelector('.tutor')?.scrollIntoView({behavior:'smooth',block:'start'});
  });}
 
-function weeklyPlan(){return `<section class="weekly-plan" aria-label="Plan de travail de Liana"><h2>🦉 ${schoolWeek.title}</h2><p>Mon défi : les tables de 1 à 6</p><label>Je pratique <select id="week-operation"><option value="+">les additions</option><option value="−">les soustractions</option></select></label><div class="weekly-tables">${[1,2,3,4,5,6].map(n=>`<button data-week-table="${n}" aria-label="Pratiquer la table de ${n}">${n}</button>`).join('')}</div><p>Pratique libre sans chronomètre · Le sprint est disponible ci-dessous</p><details><summary>Voir mon plan avec un parent</summary><ul>${schoolWeek.tasks.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p>Les exercices proposés sont des entraînements originaux. Les devoirs du cahier restent à faire.</p></details>${schoolMathLinks(profile())}</section>`;}
+function weeklyPlan(){return `<section class="weekly-plan" aria-label="Plan de travail de Liana"><h2>🦉 ${schoolWeek.title}</h2><p>Mon défi : les tables de 1 à 6</p><label>Je pratique <select id="week-operation"><option value="+">les additions</option><option value="−">les soustractions</option></select></label><div class="weekly-tables">${[1,2,3,4,5,6].map(n=>`<button data-week-table="${n}" aria-label="Pratiquer la table de ${n}">${n}</button>`).join('')}</div><p>Pratique libre sans chronomètre · Le sprint est disponible ci-dessous</p><details><summary>Voir mon plan avec un parent</summary><ul>${schoolWeek.tasks.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p>Les exercices proposés sont des entraînements originaux. Les devoirs du cahier restent à faire.</p></details>${schoolVocabularyLinks(profile())}${schoolMathLinks(profile())}</section>`;}
 
 function bindSoundGarden(){
  document.querySelector('[data-garden-listen]')?.addEventListener('click',()=>{cleanup();phonemePlayer.play(gardenSoundId);});
