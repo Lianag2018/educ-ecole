@@ -1,4 +1,52 @@
-# État courant — 22 octobre 2026 (America/Montreal)
+# État courant — 26 octobre 2026 (America/Toronto)
+
+## Photos de devoirs — vérification du 26 octobre 2026
+
+Base distante vérifiée : `644776d00e049ae20bcd68ed8f7cc90de2b9c1db`,
+fusion PR53 (head corrigé `d73783f4d34ebd519c3343afe5e61062f142853b`, CI et
+préversion réussies). Les modèles français sont fusionnés, mais le statut audio
+public reste partiel : 1 125 / 1 580, `audio_request_timeout`. Ne pas annoncer
+une génération complète ni une validation humaine de la prononciation.
+
+Branche `feat/parent-photo-import` : photos JPEG/PNG/WebP directement dans
+l’espace parent, appareil photo proposé sur mobile; jusqu’à huit images par lot.
+Chaque image exige profil, semaine, matière et jeu compatible. Consultation
+dans le monde de chaque enfant et lancement du jeu existant à son niveau.
+Le ZIP Alloprof demeure disponible dans une option repliée distincte.
+
+Conversion locale en JPEG sur fond blanc, maximum 2 000 pixels de côté,
+qualité initiale 0,82, réduction bornée si nécessaire. Cible 900 Ko, plafond
+1,2 Mo; refus avec demande de recadrage plutôt qu’une réduction illimitée.
+Une seule copie JPEG est enregistrée, sans original ni métadonnées EXIF;
+taille, dimensions et économie réelle sont affichées. Base IndexedDB séparée
+`atelier-school-photos-v1`, transaction atomique pour le lot, lectures par profil,
+archivage et restauration. Aucun changement des résultats, profils ou PDF.
+Ce stockage reste local à l’appareil : ni synchronisation privée ni envoi
+OpenAI dans ce formulaire. L’analyse du plan existante dépend toujours du
+service privé non activé; l’association à un jeu n’extrait pas les mots du cahier.
+
+Preuves locales : 347 tests réussis, build réussi avec 328 MP3 Kalulu.
+Chrome : deux illustrations publiques importées via le sélecteur natif,
+JPEG de 174 et 10 Ko, économies de 89 et 86 %; aperçu affiché, rechargement,
+associations et tailles conservés, parcours enfant vers Nombres 0–99,
+absence des photos p1 dans p2, archivage et restauration vérifiés.
+Aucune photo privée transmise, aucun appareil iPad/iPhone physique testé,
+aucune garantie de lisibilité de toutes les photos après compression.
+Livré par PR54, head `fb9a6783a4b67270d6911522df731caecf6c5b61`, fusion
+`a36e992e7cd3253ec83568b2c4674e77b1a642e9`. CI 40365318459 réussie,
+préversion Vercel DCibTaS5depNhtAKTUCL9Ccc1eKu réussie et production
+7UcPyxSKWzL3WXVtQeit8KBTin96 réussie. Version publique
+`2026.10.26-photos-devoirs` : index et trois modules photo comparés octet par
+octet au code testé. Chrome public confirme le formulaire galerie/appareil
+photo, le stockage local annoncé et le ZIP replié; aucune photo de test ajoutée
+en production. Capture de preuve locale conservée hors dépôt.
+
+La reprise audio de cette publication atteint 1 578 / 1 580,
+`audio_request_timeout` : deux narrations restent à générer. Pas de génération
+parallèle déclenchée. Prochaine action : contrôler les deux manquantes après
+la prochaine compilation, puis écouter les modèles en famille. Pour les photos,
+vérifier la lisibilité des premières vraies feuilles et tester le sélecteur sur
+un iPad/iPhone réel; la synchronisation privée reste une étape distincte.
 
 ## Reprise et preuves
 
@@ -549,3 +597,22 @@ Préversion b6022ef : Vercel success. Chrome distant : p2 multiplication 6×4,
 Addition 7+5=12 confirmée. Profil p1 : tableau ouvert, 2+1=3 puis 2×1=2
 confirmés par pression des chemins. Capture du tableau vert conservée.
 387 tests et build réussis. Aucun test Safari/iPad physique; production inchangée.
+
+## Photos → activités automatiques — 26 octobre 2026 (Toronto)
+PR52 réconciliée avec main 9301bf0 / photos publiées PR54. Dossier photo optimisé
+préservé, accès depuis le voyage. Nouveau parcours parent explicite « Ajouter
+les photos et préparer les jeux » : sélection vaut demande d’envoi des seules
+photos sélectionnées à OpenAI; compression et stockage local, précontrôle du
+service authentifié, analyse séquentielle sans retry, installation des notions
+validées pour le profil. Ajout des tâches à la même semaine, dédoublonnage,
+refus au-delà de 12 sans écrasement. Navigation/profil annule le traitement.
+Notions illisibles/hors banque signalées, aucune réussite créditée par import.
+Ancien import manuel et archives locales conservés, aucune migration destructive.
+Tests de pipeline simulés (pas preuve OpenAI réel) : sauvegarde avant envoi,
+refus sans config, cumul de pages, erreur partielle sans retry, annulation et
+isolation de profils. Aucune photo privée envoyée pendant le développement.
+Blocage réel vérifié : /api/voice/status production authConfigured=false;
+Vercel personnel retourne 403; Supabase connecté ne liste que luxura-inventory
+et kenbot-prod, aucun projet scolaire. Aucun contournement ni réemploi de base
+professionnelle. Activation OpenAI réelle NON LIVRÉE, conditions privées de
+VOICE-SETUP toujours requises. L’autorisation parent ne remplace pas la config.
