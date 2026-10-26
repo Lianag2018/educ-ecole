@@ -456,3 +456,13 @@ L'extension du navigateur utilisateur n'est pas accessible dans ce contexte;
 la vérification utilisera le navigateur distant. Aucun test Safari/iPad physique.
 La transformation des autres parcours et les expressions animées des personnages
 restent à réaliser. Aucune fusion main ni modification des services professionnels.
+
+Contrôle préversion 72fe261 : statut Vercel success (HHQMXd2M9nzLPsTwJE5CV3mV3ssX).
+Chrome distant : accueil intact, collections zéro puis un, graine sélectionnée
+conservée pendant l'écoute, remise à zéro, bonne réponse et passage automatique;
+p2 : trois groupes de quatre, manipulation puis réponse accompagnée (sans étoiles
+supplémentaires), passage à quatre groupes de six. Données de test uniquement.
+Le contrôle a révélé un guillemet manquant sur le raccourci Sons/Défis, corrigé
+avec un test de non-régression. Fin audio : retrait du surlignage sans reconstruire
+la scène. 382 tests et build finaux réussis. Le correctif doit être vérifié sur
+la préversion finale; les premières preuves navigateur portent sur 72fe261.
