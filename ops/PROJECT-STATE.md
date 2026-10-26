@@ -234,3 +234,20 @@ interactive et livraison distante encore à confirmer; ne pas annoncer productio
 Image créée avec le générateur intégré depuis l’illustration approuvée : deux
 sœurs aux visages conservés, ailes et cornes de licorne au-dessus d’une mer
 caribéenne imaginaire, sans texte ni interface dans le bitmap; encodage WebP.
+
+### Vérification de la préversion — 26 octobre 2026, 03:34 UTC
+
+PR52 ouverte : https://github.com/Lianag2018/educ-ecole/pull/52.
+Premier commit distant `7a5710e2710514ed1035bb589db521422cb06b7e`, préversion
+Vercel Ready confirmée via statut GitHub et commentaire Vercel (pas via le
+connecteur Vercel, qui retourne 403 sur l’équipe personnelle).
+URL : https://educ-ecole-git-feat-voyage-magique-lianag2018s-projects.vercel.app/.
+Navigateur distant réel : accueil illustré affiché, choix p1, première histoire,
+réponse correcte et +5 étoiles, quatre coquillages, deuxième réponse correcte,
+retour avec 10 étoiles, changement p2 avec zéro étoile confirmé. Données de test
+uniquement dans le navigateur de préversion. Pas de test Safari/iPad réel.
+La voix système est indisponible dans ce navigateur; qualité audio non validée.
+Les textes de voyage rejoignent le catalogue de narration de production sans
+élargir le budget d’alignement. 346 tests et build local final réussis.
+Production inchangée; fusion non effectuée. Révision visuelle et interactive
+réussie sur le parcours indiqué; prochaine étape : accord de fusion PR52.
