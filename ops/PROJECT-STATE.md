@@ -348,3 +348,11 @@ extension facultative jusqu'à 12. Cinq problèmes par opération/palier. L'aide
 une erreur restent conservées dans le résultat journalier; aucun effacement des
 anciennes réussites. Défis débutants inchangés. Tests du tableau, de l'arithmétique,
 de l'aide persistante et de la séparation des profils; préversion à vérifier.
+
+## Accueil original préservé — 26 octobre 2026 (America/Toronto)
+PR52, départ distant 7295b7e. À la demande du parent, l’entrée reprend exactement
+l’illustration accueil-famille.png, ses visages et le choix des deux profils.
+Le bateau reste dans le voyage après sélection. Décor animé par CSS : nuages,
+étoiles, soleil doux et trois lucioles; aucun visage régénéré, aucun service vidéo.
+Case de pause des animations et préférence système de réduction respectées.
+Préversion et contrôle visuel de cette révision à confirmer; production inchangée.

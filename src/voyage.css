@@ -16,3 +16,15 @@
 
 .popit-cols-1{--columns:1}.popit-cols-2{--columns:2}.popit-cols-3{--columns:3}.popit-cols-4{--columns:4}.popit-cols-5{--columns:5}
 .popit-advanced{width:min(560px,94vw)}.popit-advanced.popit-expanded{width:min(850px,96vw)}.popit-equation{font-size:2.4rem;margin:24px 0}.popit-advanced form{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:20px 0}.popit-advanced input{width:110px;font-size:1.5rem;padding:10px}.popit-helper{display:flex;align-items:center;gap:16px;margin:20px 0}.mini-popit{display:grid;grid-template-columns:repeat(3,10px);gap:3px;background:#72cdc2;padding:7px;border-radius:8px}.mini-popit i{width:10px;height:10px;background:#f5cb4d;border-radius:50%;box-shadow:inset 1px 1px 2px #fff}.full-popit-scroll{overflow-x:auto;max-width:100%;padding:8px;border-radius:18px;background:#e45b7b}.full-popit{display:grid;grid-template-columns:32px repeat(12,minmax(44px,1fr));gap:4px;min-width:660px}.pop-axis{display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;background:#763e73;border-radius:9px}.popit-advanced .full-pop-bubble{min-width:44px;min-height:44px;aspect-ratio:1;padding:0;border-radius:50%;border:2px solid #fff9;color:#202b40;font-size:1rem;font-weight:bold;box-shadow:inset 2px 3px 4px #fff9,0 3px 0 #65335a80}.pop-color-0{background:#ff9396}.pop-color-1{background:#ffe16d}.pop-color-2{background:#8ddfe9}.pop-color-3{background:#81cfbd}.pop-color-4{background:#91b7f4}.pop-color-5{background:#dd9cdb}.popit-advanced .full-pop-bubble[aria-pressed=true]{box-shadow:inset 2px 4px 8px #29284899;filter:brightness(.8)}.full-pop-bubble:focus-visible{outline:3px solid #172e5d;outline-offset:1px}
+
+/* L’accueil familial original reste la porte d’entrée; les voyages viennent ensuite. */
+.original-welcome .choose-art{position:relative;aspect-ratio:1.7;background:#fff8e8}
+.original-welcome .choose-art img{object-fit:cover;object-position:center 35%}
+.welcome-motion{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:13px;color:#63516e;margin:6px auto 0;cursor:pointer}
+.welcome-motion input{width:20px;height:20px;accent-color:#8358a8}
+.welcome-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 8% 82%,#fff9bd 0 2px,transparent 5px),radial-gradient(circle at 91% 88%,#fff9bd 0 2px,transparent 5px),radial-gradient(circle at 52% 12%,#fff9bd 0 2px,transparent 5px);animation:welcome-fireflies 6s ease-in-out infinite}
+.original-welcome .sky-orb{animation:welcome-sun 7s ease-in-out infinite}
+.original-welcome:not(:has(.welcome-motion input:checked)) *,.original-welcome:not(:has(.welcome-motion input:checked)) *:before,.original-welcome:not(:has(.welcome-motion input:checked)) *:after{animation-play-state:paused!important}
+@keyframes welcome-fireflies{0%,100%{opacity:.25;transform:translateY(4px)}50%{opacity:.9;transform:translateY(-5px)}}
+@keyframes welcome-sun{50%{transform:scale(1.035);opacity:.85}}
+@media(prefers-reduced-motion:reduce){.original-welcome *,.original-welcome *:before,.original-welcome *:after{animation:none!important}.welcome-motion{display:none}}
