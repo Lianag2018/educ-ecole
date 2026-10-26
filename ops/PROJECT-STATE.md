@@ -616,3 +616,14 @@ Vercel personnel retourne 403; Supabase connecté ne liste que luxura-inventory
 et kenbot-prod, aucun projet scolaire. Aucun contournement ni réemploi de base
 professionnelle. Activation OpenAI réelle NON LIVRÉE, conditions privées de
 VOICE-SETUP toujours requises. L’autorisation parent ne remplace pas la config.
+
+Contrôle de préversion du 26 octobre : 399 tests locaux et build réussis;
+CI 40371014600 et préversion ed33bbb réussies. JPEG synthétique 800×1000
+importé par le véritable sélecteur Chrome : compression, sauvegarde locale
+11 Ko (38 %), arrêt explicite au service privé non activé. Rechargement :
+association p1/semaine conservée. Le décodage bitmap et un repli d’aperçu
+local corrigent les images object-URL qui ne se chargeaient pas dans ce
+navigateur. Aperçu sauvegardé confirmé à 800×1000 sur préversion 075341e.
+Le même décodeur sert à préparer l’image pour l’analyse. Galerie actualisée
+après sauvegarde automatique. Aucune photo d’enfant transmise, aucun appel
+OpenAI réel validé. PR52 prête à examiner; production non modifiée à ce stade.

@@ -124,7 +124,7 @@ function finishAnswer(result){if(feedback)return;const q=session.items[session.i
 function navigate(v){kaluluUnmount?.();kaluluUnmount=null;oralWordOpenKey=null;oralCheck.reset();cleanup();view=v;draft=[];session=null;feedback=null;render();document.querySelector('#main').focus();}
 function bind(){
  if(view==='parent'||view==='school-photos'){const id=profile().id;photoMount=mountSchoolPhotos(document.querySelector('#school-photos'),profile(),{parent:view==='parent',onPractice:game=>{if(profile().id!==id)return;if(game==='plan')return navigate('school-plan');if(game==='social')begin([socialFor(profile())],'Univers social');else libraryPractice(game);}});}
- if(view==='parent')autoPhotoMount=mountAutomaticPhotos(document.querySelector('#automatic-homework'),profile(),{save:persist,onOpen:()=>navigate('school-plan')});
+ if(view==='parent')autoPhotoMount=mountAutomaticPhotos(document.querySelector('#automatic-homework'),profile(),{save:persist,onStored:()=>photoMount?.refresh(),onOpen:()=>navigate('school-plan')});
 
  document.querySelector('[data-illustrated-calculation]')?.addEventListener('click',()=>{if(advanced(profile()))begin(illustratedCards(profile()),'Maths');});
  if(view==='mission'&&session?.items[session.index])unmountScene=mountScene(document.querySelector('[data-play-scene]'),session.items[session.index],session.scene??={},{onHelp:()=>{helped=true;},disabled:!!feedback});

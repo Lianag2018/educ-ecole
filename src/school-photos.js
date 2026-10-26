@@ -76,5 +76,5 @@ export function mountSchoolPhotos(root,p,{parent=true,services={},onPractice=()=
   finally{busy=false;if(alive){form.querySelectorAll('input,select,button').forEach(el=>el.disabled=false);root.querySelector('[data-photo-save]').disabled=!files.length;}}
  }
  if(parent){picker().addEventListener('change',choose);camera().addEventListener('change',choose);form.addEventListener('submit',submit);}
- load();return {destroy(){alive=false;epoch++;revoke(previews);revoke(savedUrls);if(parent){picker()?.removeEventListener('change',choose);camera()?.removeEventListener('change',choose);form?.removeEventListener('submit',submit);}}};
+ load();return {refresh:load,destroy(){alive=false;epoch++;revoke(previews);revoke(savedUrls);if(parent){picker()?.removeEventListener('change',choose);camera()?.removeEventListener('change',choose);form?.removeEventListener('submit',submit);}}};
 }
