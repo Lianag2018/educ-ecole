@@ -466,3 +466,16 @@ Le contrôle a révélé un guillemet manquant sur le raccourci Sons/Défis, cor
 avec un test de non-régression. Fin audio : retrait du surlignage sans reconstruire
 la scène. 382 tests et build finaux réussis. Le correctif doit être vérifié sur
 la préversion finale; les premières preuves navigateur portent sur 72fe261.
+
+## Accueil : liens dans l’illustration — 26 octobre 2026 (America/Toronto)
+
+Même PR52, base distante dcf97c5. Image et vidéo originales désormais affichées
+entières au ratio 4:3, largeur jusqu’à 1400 px. Suppression des deux cartes de
+profil répétées sous l’image. Boutons HTML sur les deux « C’est parti! »,
+l’espace parent et les quatre cases sons/syllabes/lecture/nombres. Chaque
+raccourci choisit explicitement le bon profil avant l’activité. Focus clavier,
+libellés accessibles, pause et réduction des animations conservés. Aucun
+changement d’historique, de voix, de microphone ni d’autorisation serveur.
+382 tests et build locaux réussis. Vérification visuelle de préversion à suivre;
+aucune validation iPad physique. Les autres éléments dessinés du bitmap ne sont
+pas tous des contrôles actifs. Production inchangée.
