@@ -328,3 +328,10 @@ Résultats séparés dans profile.popit; les erreurs restent accompagnées aprè
 réouverture le même jour. Aucun crédit automatique de maîtrise ou de plan hebdo.
 Tests arithmétiques et isolation des opérations ajoutés; contrôle navigateur et
 préversion à consigner après livraison. Aucun test physique iPad revendiqué.
+
+Validation Pop-it : 362 tests Node et build local réussis; préversion Vercel
+3acffb92 réussie. Navigateur réel : p2 ouvre la modale, enfonce trois bulles,
+reçoit le retour d'erreur puis la réussite accompagnée; changement multiplication
+et rangées observés. Données synthétiques dans la préversion seulement.
+Correction visuelle finale : diamètre des bulles borné même avec une seule colonne.
+Production non fusionnée. L'écoute humaine et l'iPad physique restent non vérifiés.

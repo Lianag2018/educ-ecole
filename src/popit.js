@@ -3,10 +3,10 @@ export const popOperations=p=>advanced(p)?['+','−','×','÷']:['+','−'];
 export function popProblem(p,op,round=0){
  if(!popOperations(p).includes(op))throw Error('Opération non proposée à ce niveau');
  const a=2+(round%5),b=1+((round*2)%4);
- if(op==='+')return {a,b,op,total:a+b,target:a+b,initial:a,columns:5,instruction:`Enfonce ${a} bulles, puis ajoute ${b} bulles.`};
- if(op==='−')return {a:a+b,b,op,total:a+b,target:a,initial:a+b,columns:5,instruction:`Enfonce ${a+b} bulles. Relève ${b} bulles. Compte celles qui restent enfoncées.`};
- if(op==='×')return {a,b,op,total:a*b,target:a*b,initial:0,columns:b,instruction:`Enfonce ${a} rangées de ${b} bulles. Compte toutes les bulles.`};
- return {a:a*b,b,op,total:a*b,target:a,initial:0,columns:b,instruction:`Fais des groupes de ${b} bulles. Combien de groupes as-tu?`};
+ if(op==='+')return {a,b,op,total:a+b,target:a+b,initial:a,columns:5,instruction:`Enfonce ${a} bulles, puis ajoute ${b} bulle${b>1?'s':''}.`};
+ if(op==='−')return {a:a+b,b,op,total:a+b,target:a,initial:a+b,columns:5,instruction:`Enfonce ${a+b} bulles. Relève ${b} bulle${b>1?'s':''}. Compte celles qui restent enfoncées.`};
+ if(op==='×')return {a,b,op,total:a*b,target:a*b,initial:0,columns:b,instruction:`Enfonce ${a} rangées de ${b} bulle${b>1?'s':''}. Compte toutes les bulles.`};
+ return {a:a*b,b,op,total:a*b,target:a,initial:0,columns:b,instruction:`Fais des groupes de ${b} bulle${b>1?'s':''}. Combien de groupes as-tu?`};
 }
 export function popChoices(n){return [...new Set([Math.max(0,n-1),n,n+1])];}
 export function openPopit(p,{save=()=>{},speak=()=>{},stop=()=>{}}={}){
