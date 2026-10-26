@@ -366,3 +366,68 @@ le formulaire d’analyse existant avec confirmation réinitialisée; protection
 serveur intactes. Activation réelle de l’analyse à vérifier séparément.
 Accueil original conservé. Vidéo Runway demandée depuis voyage-soeurs.webp, tâche
 f7b5d6d2-3f21-48d6-983f-de4f217d01eb : génération en cours, pas encore intégrée.
+
+
+## Correctif des modèles français — 26 octobre 2026 (America/Toronto)
+
+Base distante revérifiée : `fe35483f98bcf277b9c60de357858a22d5e98129`.
+Branche `fix/french-word-models`; publication à confirmer. Signalement parent :
+prononciations mélangées/anglicisées et voyelles étirées dans les aides de lecture.
+Cause confirmée dans le code : synthèse de fragments isolés, par exemple
+« bi. bli. o. thèque. bibliothèque. », plus ralentissement génération à .85
+et secours natif à .65. Les tests précédents vérifiaient disponibilité/lecture,
+pas la qualité phonétique à l’oreille; leur réussite ne prouvait pas celle-ci.
+
+Les 16 aides de décodage et les modèles du chemin des sons lisent désormais
+des mots entiers en contexte français. « Tu choisis. Choisis. »,
+« Rapporte le livre. Rapporte. », « La bibliothèque. Bibliothèque. ». Les choix
+constitués d’un mot isolé reçoivent aussi un contexte français; nombres/ponctuation
+gardent leurs règles. Les boutons annoncent le mot entier; les découpages sont
+des repères oraux visuels. Repère oral rapporte corrigé en ra / porte;
+l’orthographe rapporte du texte scolaire reste intacte, avec ses deux p.
+Échec d’un MP3 de syllabe : message explicite, sans deviner sa prononciation
+avec une synthèse d’un fragment brut. Les vrais phonèmes et syllabes enregistrés
+restent utilisés. Aucun identifiant de carte ni résultat réinitialisé.
+
+292 entrées de phonétique/modèles/lecture sociale demandent une diction française
+liée et naturelle, sans chant, scansion ou étirement, vitesse de génération 1.
+Nouvelles empreintes incluent cette vitesse : les anciens fichiers concernés ne
+peuvent pas être réutilisés. Autres paramètres, voix coral et modèle existants
+conservés; catalogue borné 1 580 textes / 90 720 caractères. Secours système
+des modèles à vitesse naturelle, voix française obligatoire et réglage parent
+respecté; autres lectures gardent leur comportement.
+
+341 tests et build réussis (328 Kalulu) avant dernière modification de routage
+vers le modèle du mot entier. Le premier head PR53 échoue en CI sur une assertion
+de source du parcours Liana : son appel de lecture attendu avait été déplacé dans
+un ternaire. Le nouvel appel reste limité à p1 et l’appel d’origine de p2 est
+conservé explicitement. Suite complète et préversion à revérifier au head corrigé. Tests ajoutés : association
+des cinq mots, absence des anciennes séquences fragmentées, couverture de tous
+les modèles, corps de requête/vitesse, voix française et débit du secours natif.
+Chrome local : cinq boutons repérés et actionnés, état Amélie/fr-CA et arrêt
+constatés; la connexion d’onglet a interrompu la première vérification, reprise
+le 26 octobre. Aucune écoute humaine de chaque fichier ni garantie d’accent
+parfait n’est revendiquée. Aucun microphone ou enregistrement d’enfant transmis.
+
+Réglages vérifiés avec la documentation officielle OpenAI :
+https://developers.openai.com/api/docs/guides/text-to-speech
+Elle permet le pilotage d’accent/débit par instructions, mais précise aussi que
+les voix sont optimisées pour l’anglais : la consigne seule n’est pas une preuve
+de qualité française. Prochaine action : CI/préversion, publication, contrôle des
+nouveaux MP3 et de l’association au bouton; puis écoute familiale des modèles.
+
+
+## Réconciliation PR52 / PR53 — 26 octobre 2026 (America/Toronto)
+
+Head voyage de9078c réconcilié avec main 644776d (correctifs des modèles
+français). Les cinq conflits sont résolus en conservant les deux historiques,
+les modèles français en mots entiers, leurs empreintes audio corrigées, le
+rythme naturel des voyages et la lecture phrase par phrase des débutantes.
+Accueil original, Pop-it complet p2 et dossier photo local conservés. Le test
+de voix de secours attend désormais le multiplicateur choisi à 1×, conformément
+au réglage naturel du voyage, sans ancien facteur caché de 0,65.
+Suite Node et build local réussis. Les photos locales sont distinguées de
+l’analyse serveur dans le formulaire parent. Vidéo candidate générée mais
+non intégrée : fidélité visuelle encore à revoir. Aucun nouveau rendu payant,
+aucune fusion vers main, aucune réinitialisation des données. Préversion du
+commit de réconciliation à vérifier après publication.

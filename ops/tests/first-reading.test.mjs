@@ -10,7 +10,7 @@ test('beginner foundations teach distinct u, ou and on with spoken instructions'
  for(const q of cards){assert.ok(q.choices[q.answer]);assert.ok(oralQuestion(q).includes(q.introLesson??q.lesson));assert.ok(!spokenActivity(q).includes('+'));}
  const by=id=>firstSounds.find(q=>q.id==='first-sound-'+id);
  assert.equal(by('u').choices[by('u').answer],'lune');assert.equal(by('ou').choices[by('ou').answer],'roue');assert.equal(by('on').choices[by('on').answer],'ballon');
- assert.equal(wordLesson('lapin'),'la. pin. lapin.');assert.equal(wordLesson('midi'),'mi. di. midi.');
+ assert.equal(wordLesson('lapin'),'Un lapin. Lapin.');assert.equal(wordLesson('midi'),'Il est midi. Midi.');
 });
 test('all eight blend introductions stay neutral while the requested audio still supplies the model',()=>{
  const expected='Regarde les lettres affichées. Essaie de les lire ensemble. Tu peux écouter un modèle avec le bouton Écouter. Lis les lettres ensemble, puis retrouve la syllabe. Touche le haut-parleur pour écouter chaque choix, puis touche ta réponse.';
@@ -26,7 +26,7 @@ test('all eight blend introductions stay neutral while the requested audio still
 });
 test('phonics recordings carry French pronunciation instructions and distinct cache hashes',()=>{
  const c=narrationCatalog();
- for(const text of ['Du pain. Le pain.','Une main.','la.','la. pin. lapin.']){const clip=c.find(x=>x.text===text);assert.ok(clip,text);assert.match(clip.instructions,/Ne bascule jamais en anglais/);assert.match(clip.instructions,/u de lune/);}
+ for(const text of ['Du pain. Le pain.','Une main.','la.','Un lapin. Lapin.']){const clip=c.find(x=>x.text===text);assert.ok(clip,text);assert.match(clip.instructions,/Ne bascule jamais en anglais/);assert.match(clip.instructions,/u de lune/);}
 });
 
 test('sound associations explicitly identify the target and use one matching choice',()=>{

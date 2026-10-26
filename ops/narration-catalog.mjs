@@ -12,7 +12,7 @@ import {soundCards} from '../src/sound-cards.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading,mathsFor,socialFor} from '../src/learning.js';
-import {oralQuestion,oralFeedback,choiceSpeech,wordLesson,syllables} from '../src/oral-learning.js';
+import {oralQuestion,oralFeedback,choiceSpeech,wordLesson,isFrenchWordModel,syllables} from '../src/oral-learning.js';
 import {localHint} from '../src/tutor.js';
 import {stories,mathCards,social,rows} from '../src/garden.js';
 import {tablePractice} from '../src/week-plan.js';
@@ -78,10 +78,19 @@ export function narrationCatalog(){
  const naturalTexts=new Set([...adventureTexts].filter(text=>!texts.has(text)));
  for(const text of adventureTexts)texts.add(text);
  for(const original of [...sujetsMely.flatMap(s=>exercicesMely(s.id)),...oralCards,...travel.filter(q=>q.id.includes('-p1-')),...island.filter(q=>q.id.includes('-p1-'))]){const q=beginnerCard(original,{id:'p1'});for(const text of [...activityPages(q,{id:'p1'}),oralQuestion(q),q.explanation,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]){if(!texts.has(text))naturalTexts.add(text);texts.add(text);}}
- const segmented=new Set([...Object.keys(syllables).map(wordLesson),...bank.filter(q=>q.id.startsWith('first-blend-')).map(spokenActivity)]);
+ const wordModels=new Set([...Object.keys(syllables).map(wordLesson),...rmsNarrationTexts.filter(isFrenchWordModel)]);
+ const blends=new Set(bank.filter(q=>q.id.startsWith('first-blend-')).map(spokenActivity));
+ const socialModel=socialFor(young);
+ const socialTexts=new Set([spokenActivity(socialModel),oralQuestion(socialModel),socialModel.explanation]);
  const phonics=new Set(bank.filter(q=>['sons','syllabes'].includes(q.skill)).flatMap(q=>[spokenActivity(q),oralQuestion(q),...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]));
- return [...texts].map(text=>{const natural=naturalTexts.has(text),baseInstructions=natural?NATURAL_INSTRUCTIONS:INSTRUCTIONS;let instructions=segmented.has(text)?baseInstructions+' Exercice de décodage en français uniquement. Les éléments séparés par des points sont des syllabes orales, pas des noms de lettres. Prononce chaque syllabe puis le mot entier. Dans pin, le son final est nasal, comme dans sapin; jamais le mot anglais pin.':baseInstructions;
- if(phonics.has(text)||segmented.has(text))instructions+=' Tous les mots sont français, même les mots courts. Ne bascule jamais en anglais. Pain rime avec main et sapin, avec une voyelle nasale, jamais le mot anglais pain. Le u de lune est distinct du ou de loup. On est nasal comme dans rond. Ch se prononce comme au début de chat, pas comme en anglais. Ne lis pas les signes plus et ne rajoute pas de son e après une consonne.';
+ return [...texts].map(text=>{
+ const natural=phonics.has(text)||isFrenchWordModel(text)||wordModels.has(text)||blends.has(text)||socialTexts.has(text);
+ let instructions=natural?'Lis exclusivement en français, avec une prononciation française du Québec claire et usuelle, une voix féminine douce et un débit naturel. Garde chaque mot entier et ses sons liés. Ne chante pas, ne scande pas et n’étire aucune voyelle. Ne rajoute pas de e final ni de nom de lettre. Fais seulement une courte pause entre les phrases. Lis uniquement le texte fourni.':(naturalTexts.has(text)?NATURAL_INSTRUCTIONS:INSTRUCTIONS);
+ if(natural)instructions+=' Ne bascule jamais en anglais, même pour un mot court. Le u de lune et de lecture est différent du ou de loup. Pain, main et pin ont une voyelle nasale française. Dans choisis, le s entre voyelles se prononce comme z. Dans rapporte, les deux p écrits ne donnent qu’un seul son p. Dans bibliothèque, th se prononce t et que se prononce k. Dans après, le s final est muet et è est une voyelle ouverte.';
  if(numericTexts.has(text))instructions+=numericInstructions;
- return {text,instructions,speed:natural?1:.85,numeric:operatorTexts.has(text)||numberNames.has(text)||numericActivityTexts.has(text),align:baseTexts.has(text),file:createHash('sha256').update(MODEL+'|'+VOICE+'|'+instructions+'|'+text).digest('hex')+'.mp3'};});
+ const speed=natural||naturalTexts.has(text)?1:.85;
+ // Preserve all unrelated cache keys. Revised phonics use a new key including
+ // their natural generation speed, so old defective clips cannot be reused.
+ const key=MODEL+'|'+VOICE+'|'+instructions+'|'+text+(natural?'|speed='+speed:'');
+ return {text,instructions,speed,numeric:operatorTexts.has(text)||numberNames.has(text)||numericActivityTexts.has(text),align:baseTexts.has(text),file:createHash('sha256').update(key).digest('hex')+'.mp3'};});
 }

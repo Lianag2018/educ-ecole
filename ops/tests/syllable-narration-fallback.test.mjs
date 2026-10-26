@@ -10,10 +10,11 @@ test('m + a uses a whole syllable pronounced ma, never m plus a letter names',()
  assert.equal(spokenActivity(q),'ma.');
  assert.equal(syllableChoiceAudio(q,'ma'),'ma');
 });
-test('all first-grade complete syllables use bundled MP3 with narrator fallback',()=>{
+test('all first-grade complete syllables use recordings and never synthesize a failed fragment',()=>{
  const src=readFileSync(new URL('../../src/app.js',import.meta.url),'utf8');
  assert.match(src,/if\(category==='syllabes'&&msg.startsWith\('Le son est indisponible'\)\)/);
- assert.match(src,/speakText\(name\)/);
+ assert.doesNotMatch(src,/speakText\(name\)/);
+ assert.match(src,/Ce modèle enregistré est indisponible/);
  assert.match(src,/const local=category==='sons'\?localPhonemeForKalulu\(name\):null;/);
  assert.match(src,/phonemePlayer\.play\(local\)/);
  assert.match(src,/data-syllable-whole/);

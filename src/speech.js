@@ -29,8 +29,8 @@ export class ReadingSpeaker {
   const text=this.resumeText,offset=this.resumeOffset||0,options=this.resumeOptions;
   this.speak(text.slice(offset),{...options,speed,onProgress:e=>options.onProgress?.({...e,charIndex:e.charIndex+offset})});
  }
- speak(text,{preferredURI='',speed,systemVoice=false,onState=()=>{},onProgress=()=>{}}={}) {
-  this.stop();text=mathSpeech(text);this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,systemVoice,onState,onProgress};const epoch=this.epoch;
+ speak(text,{preferredURI='',speed,natural=false,systemVoice=false,onState=()=>{},onProgress=()=>{}}={}) {
+  this.stop();text=mathSpeech(text);this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,natural,systemVoice,onState,onProgress};const epoch=this.epoch;
   if(!this.synth||!this.Utterance){onState('error','Lecture audio indisponible ici. Ouvre l’application dans Safari.');return;}
   const voice=chooseReadingVoice(this.synth.getVoices(),systemVoice?'':preferredURI);
   // iOS Safari can report zero voices until its synthesizer initializes. In that case,
@@ -38,7 +38,7 @@ export class ReadingSpeaker {
   if(!voice&&this.synth.getVoices().length){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
   const u=new this.Utterance(String(text));this.current=u;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
-  u.rate=readingRate(speed);u.pitch=1;u.volume=1;
+  u.rate=natural?playbackSpeed(speed):readingRate(speed);u.pitch=1;u.volume=1;
   const label=voice?`${voice.name} · ${voice.lang}`:'Voix système · français canadien demandé';
   const active=()=>this.epoch===epoch&&this.current===u;
   const fail=message=>{if(!active())return;this.stop();onState('error',message);};
