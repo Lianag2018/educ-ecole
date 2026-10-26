@@ -32,9 +32,21 @@ associations et tailles conservés, parcours enfant vers Nombres 0–99,
 absence des photos p1 dans p2, archivage et restauration vérifiés.
 Aucune photo privée transmise, aucun appareil iPad/iPhone physique testé,
 aucune garantie de lisibilité de toutes les photos après compression.
-Publication de cette version `2026.10.26-photos-devoirs` en attente de PR,
-CI/préversion et vérification publique exacte. Prochaine action : publier et
-consigner le SHA et le statut audio effectivement observés.
+Livré par PR54, head `fb9a6783a4b67270d6911522df731caecf6c5b61`, fusion
+`a36e992e7cd3253ec83568b2c4674e77b1a642e9`. CI 40365318459 réussie,
+préversion Vercel DCibTaS5depNhtAKTUCL9Ccc1eKu réussie et production
+7UcPyxSKWzL3WXVtQeit8KBTin96 réussie. Version publique
+`2026.10.26-photos-devoirs` : index et trois modules photo comparés octet par
+octet au code testé. Chrome public confirme le formulaire galerie/appareil
+photo, le stockage local annoncé et le ZIP replié; aucune photo de test ajoutée
+en production. Capture de preuve locale conservée hors dépôt.
+
+La reprise audio de cette publication atteint 1 578 / 1 580,
+`audio_request_timeout` : deux narrations restent à générer. Pas de génération
+parallèle déclenchée. Prochaine action : contrôler les deux manquantes après
+la prochaine compilation, puis écouter les modèles en famille. Pour les photos,
+vérifier la lisibilité des premières vraies feuilles et tester le sélecteur sur
+un iPad/iPhone réel; la synchronisation privée reste une étape distincte.
 
 ## Reprise et preuves
 
