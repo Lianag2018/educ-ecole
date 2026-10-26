@@ -335,3 +335,16 @@ reçoit le retour d'erreur puis la réussite accompagnée; changement multiplica
 et rangées observés. Données synthétiques dans la préversion seulement.
 Correction visuelle finale : diamètre des bulles borné même avec une seule colonne.
 Production non fusionnée. L'écoute humaine et l'iPad physique restent non vérifiés.
+
+## Pop-it complet de troisième année — 26 octobre 2026 (America/Toronto)
+PR52, base 91c272d. La troisième année ouvre d'abord le calcul et un champ de
+réponse libre. Le petit Pop-it ouvre/réduit une aide complète de 144 bulles,
+axes 1–12 et produits comme le matériel fourni; additions/soustractions utilisent
+une numérotation 1–144. Sur téléphone, le tableau défile horizontalement pour
+conserver des cibles de 44 pixels. Aucune réponse saisie n'est perdue en ouvrant
+l'aide. Les bulles restent enfoncées après réduction/réouverture dans le défi.
+Défis : additions/soustractions à deux chiffres avec regroupement, tables 1–6,
+extension facultative jusqu'à 12. Cinq problèmes par opération/palier. L'aide ou
+une erreur restent conservées dans le résultat journalier; aucun effacement des
+anciennes réussites. Défis débutants inchangés. Tests du tableau, de l'arithmétique,
+de l'aide persistante et de la séparation des profils; préversion à vérifier.

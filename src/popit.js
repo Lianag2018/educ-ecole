@@ -1,7 +1,9 @@
+import {openAdvancedPopit,advancedProblem} from './popit-advanced.js';
 import {advanced} from './learning.js';
 export const popOperations=p=>advanced(p)?['+','−','×','÷']:['+','−'];
 export function popProblem(p,op,round=0){
  if(!popOperations(p).includes(op))throw Error('Opération non proposée à ce niveau');
+ if(advanced(p))return advancedProblem(op,round);
  const a=2+(round%5),b=1+((round*2)%4);
  if(op==='+')return {a,b,op,total:a+b,target:a+b,initial:a,columns:5,instruction:`Enfonce ${a} bulles, puis ajoute ${b} bulle${b>1?'s':''}.`};
  if(op==='−')return {a:a+b,b,op,total:a+b,target:a,initial:a+b,columns:5,instruction:`Enfonce ${a+b} bulles. Relève ${b} bulle${b>1?'s':''}. Compte celles qui restent enfoncées.`};
@@ -10,6 +12,7 @@ export function popProblem(p,op,round=0){
 }
 export function popChoices(n){return [...new Set([Math.max(0,n-1),n,n+1])];}
 export function openPopit(p,{save=()=>{},speak=()=>{},stop=()=>{}}={}){
+ if(advanced(p))return openAdvancedPopit(p,{save,speak,stop});
  const previous=document.activeElement,dialog=document.createElement('dialog');dialog.className='popit-dialog';document.body.append(dialog);
  let op='+',round=0,pressed=new Set(),done=false,assisted=false,notice='';
  const close=()=>{stop();dialog.close();dialog.remove();previous?.focus();};
