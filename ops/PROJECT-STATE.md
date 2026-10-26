@@ -528,3 +528,6 @@ la case touchée explique produit ou quotient. Plusieurs bulles restent pressée
 La réponse reste saisie par l’enfant et validée séparément. Aide facultative,
 draft, profils, historique et parcours débutant préservés. Tests et build locaux
 réussis. Préversion à vérifier; aucune fusion main ni validation iPad physique.
+Relief demandé ensuite : silicone bombé/concave CSS persistant selon aria-pressed,
+ombrage intérieur, déplacement court au toucher, retour au second clic. Aucun
+plugiciel, dépendance payante ou vidéo requis; reduced-motion supprime la transition.

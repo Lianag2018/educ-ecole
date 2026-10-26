@@ -74,3 +74,12 @@
 .full-popit button.pop-axis{min-width:44px;min-height:44px;padding:0;color:#202b40;border:2px solid #fff9;cursor:pointer}
 .full-popit button.pop-axis[aria-pressed=true]{outline:3px solid #36224d;outline-offset:-3px;filter:brightness(.85)}
 .full-popit .popit-intersection{outline:4px solid #36224d;outline-offset:-3px}
+
+/* Silicone relief: persistent convex/concave states, without a paid plugin. */
+.popit-advanced .full-popit-scroll{background:linear-gradient(135deg,#f57b91,#bb315b);padding:14px;border:3px solid #ffadb9;box-shadow:inset 2px 3px 5px #fff7,inset -3px -4px 8px #6c123b80,0 7px 0 #962c50,0 12px 20px #502b4433}
+.popit-advanced .full-pop-bubble{position:relative;background-image:radial-gradient(ellipse at 32% 24%,#ffffffa6 0%,#ffffff19 40%,#00000022 100%);border:3px solid #ffffff66;box-shadow:inset 2px 3px 5px #ffffffa6,inset -3px -4px 7px #36254e66,0 4px 0 #41214366,0 5px 5px #39204244;transform:translateY(-2px);transition:transform 130ms ease,box-shadow 130ms ease,filter 130ms ease}
+.popit-advanced .full-pop-bubble[aria-pressed=true]{background-image:radial-gradient(ellipse at 65% 80%,#ffffff55 0%,#0000000d 45%,#20173666 100%);box-shadow:inset 3px 5px 9px #27193999,inset -2px -3px 4px #ffffff80,0 1px 0 #ffffff99;transform:translateY(2px) scale(.94);filter:brightness(.88);border-color:#ffffff88}
+.popit-advanced .full-pop-bubble:active{transform:translateY(3px) scale(.90)}
+.popit-advanced .full-pop-bubble[aria-pressed=true]:after{content:'';position:absolute;inset:12%;border-bottom:2px solid #fff8;border-radius:50%;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.popit-advanced .full-pop-bubble{transition:none}}
+html[data-voyage-paused] .popit-advanced .full-pop-bubble{transition:none}
