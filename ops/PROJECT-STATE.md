@@ -544,3 +544,8 @@ avancées conservées. Réponse saisie séparément, succès accompagné enregis
 sans crédit automatique par manipulation. Accueil, voix et données préservés.
 Tests du chemin incomplet/complet/relevé, axes erronés, deux profils et sommes
 réelles réussis; build local réussi. Contrôle de préversion à suivre. Main non fusionné.
+Préversion b6022ef : Vercel success. Chrome distant : p2 multiplication 6×4,
+8/9 bulles sans vert puis 9/9 avec 24 vert; relever une bulle retire le vert.
+Addition 7+5=12 confirmée. Profil p1 : tableau ouvert, 2+1=3 puis 2×1=2
+confirmés par pression des chemins. Capture du tableau vert conservée.
+387 tests et build réussis. Aucun test Safari/iPad physique; production inchangée.
