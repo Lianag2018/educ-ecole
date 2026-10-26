@@ -1,5 +1,6 @@
 // Original activities. Page order observed in the authenticated school viewer,
 // Raconte-moi les sons, printed pp. 34–112, 2026-10-25. No publisher artwork/stories.
+import {wordLesson} from './oral-learning.js';
 import {gardenSounds} from './sound-garden.js';
 import {answer,PROGRESSION_RULES} from './engine.js';
 import {dailyEvidence} from './progress.js';
@@ -83,7 +84,7 @@ export const rmsLessons=rows.map(([pages,spelling,sound,word,picture,assembly,cu
 }));
 export const rmsSteps=['Écouter','Choisir l’image','Assembler','Lire un mot','Petit défi'];
 export const rmsSpeech={image:'Écoute le mot, puis choisis son image.',assembly:'Touche les morceaux dans le bon ordre. Tu peux les effacer et recommencer.',word:'Essaie de lire le mot. Avec ton adulte, indique comment cela s’est passé.',challenge:'Retrouve la voyelle, la syllabe ou le groupe que tu as assemblé.',correct:'Bravo pour ton effort! Continue à ton rythme.',retry:'On prend notre temps. Écoute le modèle et essaie encore.',pause:'Une petite pause! Tes essais sont conservés.'};
-export const rmsNarrationTexts=[...Object.values(rmsSpeech),...rmsLessons.flatMap(l=>[l.word,l.cue])];
+export const rmsNarrationTexts=[...Object.values(rmsSpeech),...rmsLessons.flatMap(l=>[wordLesson(l.word),l.cue])];
 export const rmsEnabled=p=>p?.id==='p1'&&p.schoolContext?.stage==='1re année';
 export function rmsCard(lesson,step){return {id:lesson.id+'-'+step,skill:step===2?'syllabes':step===3?'mots':'sons',level:1};}
 export function rmsTier(p,lesson,day){

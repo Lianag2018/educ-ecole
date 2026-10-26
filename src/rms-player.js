@@ -1,3 +1,4 @@
+import {wordLesson,isFrenchWordModel} from './oral-learning.js';
 import {rmsLessons,rmsSteps,rmsSpeech,rmsEnabled,rmsTier,rmsSuggested,rmsRecord,rmsPictures,rmsSpellings,rmsAssemblyChoices} from './rms-course.js';
 import {NarrationSpeaker} from './narration.js';
 import {ReadingSpeaker} from './speech.js';
@@ -16,13 +17,13 @@ export function mountRms(root,p,{save,day,speed,voiceURI,onHome}={}){
  const sound=new PhonemePlayer({onState:s=>status(({loading:'Le son arrive…',playing:'Écoute le son…',ended:'À ton tour! Tu peux réécouter.',error:'Ce son ne démarre pas. Réessaie.'})[s]||'')});
  const syllable=createKaluluPlayer();
  function stop(){narration.stop();sound.stop();syllable.stop();}
- function speak(text){stop();narration.speak(text,{speed,preferredURI:voiceURI||'',onState:(_s,message)=>status(message)});}
+ function speak(text){stop();narration.speak(text,{speed,natural:isFrenchWordModel(text),preferredURI:voiceURI||'',onState:(_s,message)=>status(message)});}
  function remember(){p.rmsSession={lessonId:lesson.id,step,picked:[...picked],help,feedback,tier};save();}
  function resume(){const s=p.rmsSession,l=rmsLessons.find(l=>l.id===s?.lessonId);if(!l||!Number.isInteger(s.step)||s.step<0||s.step>5)return;lesson=l;step=s.step;tier=[1,2,3].includes(s.tier)?s.tier:1;picked=Array.isArray(s.picked)?s.picked.filter(i=>Number.isInteger(i)&&i>=0&&i<l.parts.length).slice(0,l.parts.length):[];help=!!s.help;feedback=['correct','help','incorrect'].includes(s.feedback)?s.feedback:'';screen=step===5?'pause':'play';}
  function begin(l){stop();lesson=l;step=0;picked=[];help=false;feedback='';tier=rmsTier(p,l,day);screen='play';remember();draw();speak(l.cue);}
  function record(result){stop();feedback=rmsRecord(p,lesson,step,help&&result==='correct'?'help':result,day);remember();draw();speak(feedback==='incorrect'?rmsSpeech.retry:rmsSpeech.correct);}
  function next(){stop();step++;picked=[];help=false;feedback='';if(step===5)screen='pause';remember();draw();if(step<5)speak(step===0?lesson.cue:rmsSpeech[['','image','assembly','word','challenge'][step]]);}
- function model(){if(step===2&&clipFor(lesson)){stop();help=true;remember();syllable.play('syllabes',lesson.parts.join(''),status);}else{if(step===3){help=true;remember();}speak(lesson.word);}}
+ function model(){if(step===2&&clipFor(lesson)){stop();help=true;remember();syllable.play('syllabes',lesson.parts.join(''),status);}else{if(step===3){help=true;remember();}speak(wordLesson(lesson.word));}}
  function draw(){
   if(!alive)return;
   const page=lesson.pages.join('–'),target=lesson.parts.join('');
