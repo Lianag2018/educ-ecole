@@ -142,14 +142,14 @@ export function familyLibraryPanel(profiles = []) {
   return `<section id="family-library-import" class="panel family-library-import" aria-labelledby="fl-import-title">
     <div class="fl-import-heading"><span aria-hidden="true">📚</span><div><h2 id="fl-import-title">Bibliothèque familiale</h2><p>${LIBRARY_ITEMS.length} PDF à retrouver dans les bibliothèques des enfants.</p></div></div>
     <div class="fl-family-counts">${children.map(profile => `<span><strong>${escape(profileName(profile))}</strong>${plural(LIBRARY_ITEMS.filter(item => item.profile === profile.id).length, 'document')}</span>`).join('')}<span><strong>En famille</strong>${plural(LIBRARY_ITEMS.filter(item => item.profile === 'family').length, 'document')}</span></div>
-    <p>Les liens Alloprof sont déjà disponibles. Pour ajouter les copies sur cet appareil, choisissez la trousse familiale au format ZIP.</p>
+    <p>Les liens Alloprof sont déjà disponibles. Pour les feuilles et pages photographiées, utilise « Ajouter des photos de devoirs » en haut de cet espace.</p><details class="fl-legacy-import"><summary>Ancienne trousse Alloprof · importer les copies PDF en ZIP</summary><p>Cette option sert uniquement à la trousse familiale de PDF déjà fournie.</p>
     <form data-fl-import-form><label for="fl-zip-file">Trousse familiale ZIP<input id="fl-zip-file" data-fl-file type="file" accept=".zip,application/zip,application/x-zip-compressed" aria-describedby="fl-device-note fl-selected-file"></label><p id="fl-selected-file" class="fl-file-caption" data-fl-selected>Aucune trousse choisie.</p><div class="fl-import-actions"><button class="fl-import-submit" type="submit" data-fl-import-button disabled>Ajouter les PDF sur cet appareil</button><button type="button" data-fl-cancel hidden>Annuler l’import</button></div></form>
     <progress data-fl-progress max="${LIBRARY_ITEMS.length}" value="0" aria-label="Import de la bibliothèque familiale" hidden></progress>
     <p class="fl-import-status" data-fl-import-status role="status" aria-live="polite" aria-atomic="true"></p>
     <p class="fl-stored-count" data-fl-stored role="status" aria-live="polite">Recherche des PDF enregistrés sur cet appareil…</p>
     <p id="fl-device-note" class="fl-device-note">Les copies restent dans ce navigateur, sur cet appareil. Elles ne se synchronisent pas. Effacer les données du navigateur retire aussi ces copies.</p>
     <button type="button" class="fl-delete" data-fl-delete disabled>Retirer les PDF de cet appareil</button>
-    <div class="fl-confirm" data-fl-confirm hidden role="group" aria-labelledby="fl-confirm-title"><h3 id="fl-confirm-title">Retirer toutes les copies de cet appareil?</h3><p>Vous pourrez ajouter la trousse de nouveau.</p><button type="button" data-fl-confirm-delete>Oui, retirer les PDF</button><button type="button" data-fl-keep>Garder les PDF</button></div>
+    <div class="fl-confirm" data-fl-confirm hidden role="group" aria-labelledby="fl-confirm-title"><h3 id="fl-confirm-title">Retirer toutes les copies de cet appareil?</h3><p>Vous pourrez ajouter la trousse de nouveau.</p><button type="button" data-fl-confirm-delete>Oui, retirer les PDF</button><button type="button" data-fl-keep>Garder les PDF</button></div></details>
   </section>`;
 }
 
