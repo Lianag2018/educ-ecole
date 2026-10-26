@@ -49,3 +49,12 @@ test('Alloprof guest links send no profile data and do not change learning recor
  assert.ok(markup.includes('Continuer sans se connecter'));
  assert.deepEqual(older.history,before.history);
 });
+
+test('Home activities keep homework photos in the parent area for both profiles',()=>{
+ for(const p of fresh().profiles)for(const render of [worldHome,travelHome]){
+  const markup=render(p);
+  assert.ok(!markup.includes('data-action="school-photos"'));
+  assert.ok(!markup.includes('Mes photos de devoirs'));
+  assert.ok(markup.includes('data-action="parent"'));
+ }
+});

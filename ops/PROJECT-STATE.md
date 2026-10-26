@@ -1,5 +1,15 @@
 # État courant — 26 octobre 2026 (America/Toronto)
 
+## Photos réservées aux parents — 26 octobre 2026 (Toronto)
+
+Suite à la correction demandée par le parent, retrait des accès « Mes photos de
+devoirs » dans les deux voyages et les deux ateliers. Route enfant photo retirée;
+import, compression, galerie, archives et photos déjà enregistrées conservés
+intégralement dans Parents. Version `2026.10.26-photos-cote-parent`.
+Base `09ffd0f859e0b274291f9e9608b7e99a63575131`, fusion PR56 (liens Voca).
+402 tests locaux et build réussis. Aucun changement de stockage ou des données.
+La vérification visuelle de production suivra la publication de ce correctif.
+
 ## Vocabulaire Alloprof pour le profil de 3e année — 26 octobre 2026 (Toronto)
 
 Base distante `edd541f0ae84878b330d8fc5a05b1911085f54b1`, fusion PR52.
