@@ -1,4 +1,40 @@
-# État courant — 22 octobre 2026 (America/Montreal)
+# État courant — 26 octobre 2026 (America/Toronto)
+
+## Photos de devoirs — vérification du 26 octobre 2026
+
+Base distante vérifiée : `644776d00e049ae20bcd68ed8f7cc90de2b9c1db`,
+fusion PR53 (head corrigé `d73783f4d34ebd519c3343afe5e61062f142853b`, CI et
+préversion réussies). Les modèles français sont fusionnés, mais le statut audio
+public reste partiel : 1 125 / 1 580, `audio_request_timeout`. Ne pas annoncer
+une génération complète ni une validation humaine de la prononciation.
+
+Branche `feat/parent-photo-import` : photos JPEG/PNG/WebP directement dans
+l’espace parent, appareil photo proposé sur mobile; jusqu’à huit images par lot.
+Chaque image exige profil, semaine, matière et jeu compatible. Consultation
+dans le monde de chaque enfant et lancement du jeu existant à son niveau.
+Le ZIP Alloprof demeure disponible dans une option repliée distincte.
+
+Conversion locale en JPEG sur fond blanc, maximum 2 000 pixels de côté,
+qualité initiale 0,82, réduction bornée si nécessaire. Cible 900 Ko, plafond
+1,2 Mo; refus avec demande de recadrage plutôt qu’une réduction illimitée.
+Une seule copie JPEG est enregistrée, sans original ni métadonnées EXIF;
+taille, dimensions et économie réelle sont affichées. Base IndexedDB séparée
+`atelier-school-photos-v1`, transaction atomique pour le lot, lectures par profil,
+archivage et restauration. Aucun changement des résultats, profils ou PDF.
+Ce stockage reste local à l’appareil : ni synchronisation privée ni envoi
+OpenAI dans ce formulaire. L’analyse du plan existante dépend toujours du
+service privé non activé; l’association à un jeu n’extrait pas les mots du cahier.
+
+Preuves locales : 347 tests réussis, build réussi avec 328 MP3 Kalulu.
+Chrome : deux illustrations publiques importées via le sélecteur natif,
+JPEG de 174 et 10 Ko, économies de 89 et 86 %; aperçu affiché, rechargement,
+associations et tailles conservés, parcours enfant vers Nombres 0–99,
+absence des photos p1 dans p2, archivage et restauration vérifiés.
+Aucune photo privée transmise, aucun appareil iPad/iPhone physique testé,
+aucune garantie de lisibilité de toutes les photos après compression.
+Publication de cette version `2026.10.26-photos-devoirs` en attente de PR,
+CI/préversion et vérification publique exacte. Prochaine action : publier et
+consigner le SHA et le statut audio effectivement observés.
 
 ## Reprise et preuves
 
