@@ -1,3 +1,5 @@
+import {sujetsMely,exercicesMely} from '../src/mely-grade1.js';
+import {beginnerCard,activityPages} from '../src/beginner-access.js';
 import {islandChapters,islandCards} from '../src/dominican-adventure.js';
 import {destinations,travelCards} from '../src/voyage.js';
 import {rmsNarrationTexts} from '../src/rms-course.js';
@@ -75,6 +77,7 @@ export function narrationCatalog(){
  for(const q of [...travel,...island])for(const text of [spokenActivity(q),oralQuestion(q),q.explanation,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))])adventureTexts.add(text);
  const naturalTexts=new Set([...adventureTexts].filter(text=>!texts.has(text)));
  for(const text of adventureTexts)texts.add(text);
+ for(const original of [...sujetsMely.flatMap(s=>exercicesMely(s.id)),...oralCards,...travel.filter(q=>q.id.includes('-p1-')),...island.filter(q=>q.id.includes('-p1-'))]){const q=beginnerCard(original,{id:'p1'});for(const text of [...activityPages(q,{id:'p1'}),oralQuestion(q),q.explanation,...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]){if(!texts.has(text))naturalTexts.add(text);texts.add(text);}}
  const segmented=new Set([...Object.keys(syllables).map(wordLesson),...bank.filter(q=>q.id.startsWith('first-blend-')).map(spokenActivity)]);
  const phonics=new Set(bank.filter(q=>['sons','syllabes'].includes(q.skill)).flatMap(q=>[spokenActivity(q),oralQuestion(q),...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]));
  return [...texts].map(text=>{const natural=naturalTexts.has(text),baseInstructions=natural?NATURAL_INSTRUCTIONS:INSTRUCTIONS;let instructions=segmented.has(text)?baseInstructions+' Exercice de décodage en français uniquement. Les éléments séparés par des points sont des syllabes orales, pas des noms de lettres. Prononce chaque syllabe puis le mot entier. Dans pin, le son final est nasal, comme dans sapin; jamais le mot anglais pin.':baseInstructions;

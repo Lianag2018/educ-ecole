@@ -301,3 +301,20 @@ persistance du réglage et instructions des contes. Aucun appel de génération
 payante effectué. L’écoute réelle de ces nouveaux MP3 n’est pas validée : leur
 production attend le build main autorisé. Ne pas confondre configuration/test
 logiciel et qualité acoustique. Production inchangée; fusion non effectuée.
+
+## Révision du début de lecture — 26 octobre 2026 (America/Toronto)
+
+Même branche et PR52, départ distant 6f38839603dd75eed3cb5bc79f8c4036e09d6c24.
+Audit des banques et parcours documenté dans AUDIT-NIVEAUX-2026-10-26.md.
+Variantes courtes pour 15 compréhensions p1, mots-indices isolés, affichage phrase
+par phrase et choix pictographiques. Compréhension orale séparée des paliers de
+lecture autonome; pas de progression automatique après le Bravo p1. Représentations
+exactes de trois calculs; notions ultérieures du cahier sous un volet parent.
+P2 conserve ses textes et raisonnements, données et récompenses conservées.
+
+360 tests Node réussis, dont cinq nouveaux contrôles de contenu, séparation,
+conservation des textes scolaires et dessins/calculs. Build local réussi sans
+appel TTS payant. Chromium local non installé : archive téléchargée tronquée.
+Aucune validation Safari/iPad physique ou acoustique. Nouveaux MP3 non générés
+par la préversion. Production inchangée, pas de fusion. Vérifier le déploiement
+et le parcours dans le navigateur distant avant d’annoncer la livraison.
