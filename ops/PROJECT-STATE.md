@@ -506,3 +506,15 @@ représentent la chouette, pas les enfants. Contrôle visuel du visage à 1,3 s 
 le lecteur de préversion; audit complet des frames vidéo non conclu : les copies
 MP4 téléchargées produisent des erreurs de décodage ffmpeg. Ne pas revendiquer
 une validation intégrale de chaque frame ni modifier la vidéo sur cette base.
+
+## Pop-it cohérent par opération — 26 octobre 2026
+PR52 base e7c6338. Suppression du comptage 1–144 utilisé comme aide +/−.
+Liana : +/− sur 12 unités, quantité de départ déjà enfoncée; ajout aux seules
+bulles libres, retrait aux seules unités de départ. × : table complète 12×12
+avec produits, axes guidés et équation de la case sélectionnée. ÷ : même table,
+colonne du diviseur active; la ligne du total donne le quotient, jamais le nombre
+de cases pressées. Réinitialisation restaure le départ; aide facultative conservée.
+Mely : départ pré-enfoncé, ajout/retrait cohérents, opérations +/− seulement.
+Tests couvrent les manipulations sur chaque exercice et les tables jusqu’à 12,
+conservation des profils/aides. Suite et build locaux réussis; contrôle préversion
+à suivre. Aucune fusion main ni modification des données familiales.
