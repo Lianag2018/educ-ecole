@@ -1,6 +1,6 @@
 import * as storage from './school-photo-store.js';
 import {PHOTO_GAMES,PHOTO_KINDS,PHOTO_BATCH_LIMIT,photoAssociation} from './school-photo-store.js';
-import {prepareSchoolPhoto} from './school-photo-image.js';
+import {prepareSchoolPhoto,photoPreviewFallback} from './school-photo-image.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const subjects=['Français','Maths','Univers social'];
 export function photoWeek(date=new Date()){
@@ -27,8 +27,9 @@ export function mountSchoolPhotos(root,p,{parent=true,services={},onPractice=()=
    if(selected.some(f=>!['image/jpeg','image/png','image/webp'].includes(f.type)||!f.size||f.size>15000000))throw Error('photo_invalid');
    revoke(previews);files=selected;rows.innerHTML=files.map((file,index)=>{
     const url=URL.createObjectURL(file);previews.add(url);
-    return `<fieldset data-photo-row><legend>Photo ${index+1} · association au jeu</legend><img class="photo-preview" src="${url}" alt="Aperçu de la photo ${index+1}"><p>Enfant : <strong>${esc(p.name)}</strong></p><label>Titre de la photo<input data-photo-title maxlength="120" value="Photo de devoir ${index+1}" required></label><label>Document<select data-photo-kind>${Object.entries(PHOTO_KINDS).map(([id,label])=>`<option value="${id}">${esc(label)}</option>`).join('')}</select></label><div class="photo-association"><label>Semaine du<input data-photo-week type="date" value="${photoWeek()}" required></label><label>Matière<select data-photo-subject required><option value="">Choisir la matière</option>${subjects.map(s=>`<option>${s}</option>`).join('')}</select></label><label>Associer au jeu<select data-photo-game required><option value="">Choisis d’abord la matière</option></select></label></div><label>Notion ou pages à travailler<input data-photo-note maxlength="300" placeholder="Ex. : mots de la semaine, Nougat page 34"></label></fieldset>`;
+    return `<fieldset data-photo-row><legend>Photo ${index+1} · association au jeu</legend><img class="photo-preview" data-preview-url="${url}" alt="Aperçu de la photo ${index+1}"><p>Enfant : <strong>${esc(p.name)}</strong></p><label>Titre de la photo<input data-photo-title maxlength="120" value="Photo de devoir ${index+1}" required></label><label>Document<select data-photo-kind>${Object.entries(PHOTO_KINDS).map(([id,label])=>`<option value="${id}">${esc(label)}</option>`).join('')}</select></label><div class="photo-association"><label>Semaine du<input data-photo-week type="date" value="${photoWeek()}" required></label><label>Matière<select data-photo-subject required><option value="">Choisir la matière</option>${subjects.map(s=>`<option>${s}</option>`).join('')}</select></label><label>Associer au jeu<select data-photo-game required><option value="">Choisis d’abord la matière</option></select></label></div><label>Notion ou pages à travailler<input data-photo-note maxlength="300" placeholder="Ex. : mots de la semaine, Nougat page 34"></label></fieldset>`;
    }).join('');
+   rows.querySelectorAll('.photo-preview').forEach((img,index)=>{const file=files[index];photoPreviewFallback(img,file,()=>alive&&files[index]===file&&img.isConnected);img.src=img.dataset.previewUrl;});
    rows.querySelectorAll('[data-photo-subject]').forEach(select=>select.onchange=()=>{select.closest('[data-photo-row]').querySelector('[data-photo-game]').innerHTML=gameOptions(select.value);});
    root.querySelector('[data-photo-save]').disabled=false;message('Vérifie la ligne d’association de chaque photo, puis enregistre.');
   }catch(error){ev.target.value='';files=[];rows.innerHTML='';revoke(previews);root.querySelector('[data-photo-save]').disabled=true;message(errorText(error));}
@@ -50,7 +51,7 @@ export function mountSchoolPhotos(root,p,{parent=true,services={},onPractice=()=
     });
     const blob=await api.getSchoolPhoto(p.id,photo.id);if(!alive||token!==epoch)return;
     const image=article.querySelector('[data-photo-image]');
-    if(blob){const url=URL.createObjectURL(blob);savedUrls.add(url);image.innerHTML=`<details><summary>Ouvrir la photo</summary><img class="school-photo-full" src="${url}" alt="${esc(photo.title)}"><a href="${url}" download="devoir-${esc(photo.week)}.jpg">Télécharger la photo</a></details>`;}
+    if(blob){const url=URL.createObjectURL(blob);savedUrls.add(url);image.innerHTML=`<details><summary>Ouvrir la photo</summary><img class="school-photo-full" alt="${esc(photo.title)}"><a href="${url}" download="devoir-${esc(photo.week)}.jpg">Télécharger la photo</a></details>`;const preview=image.querySelector('.school-photo-full');photoPreviewFallback(preview,blob,()=>alive&&token===epoch&&preview.isConnected);preview.src=url;}
     else image.textContent='La copie de cette photo est indisponible sur cet appareil.';
    }
    if(archive&&!photos.some(r=>r.archived))archive.innerHTML='<p>Aucune photo archivée.</p>';

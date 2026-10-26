@@ -1,3 +1,4 @@
+import {decodeSchoolPhoto,photoDimensions} from './school-photo-image.js';
 import {tablePractice} from './week-plan.js';
 import {squishyStages} from './squishy.js';
 const subjects=['Français','Maths','Univers social'];
@@ -36,7 +37,7 @@ export function planPanel(p){const e=escapePlan,plan=planFor(p);return `<section
 export function planMap(p){const plan=planFor(p);if(!plan)return '<section class="panel"><h1>Ma semaine</h1><p>Ton parent peut ajouter le plan dans son espace.</p></section>';const {missions,unsupported}=planMissions(plan),e=escapePlan;return `<section class="weekly-plan"><button data-action="home">‹ Mon monde</button><h1>🫧 Mes étapes de la semaine</h1><p>Semaine du ${e(plan.week)}</p><div class="world-grid">${missions.map((m,i)=>`<button data-plan-mission="${i}" ${missionOpen(p,missions,i)?'':'disabled'}><strong>${missionOpen(p,missions,i)?'⭐':'🔒'} ${e(m.title)}</strong><small>${e(m.subject)} · ${Math.min(4,m.items.length)} défis</small></button>`).join('')}</div>${unsupported.length?`<details><summary>Avec un parent · Éléments à compléter</summary><ul>${unsupported.map(s=>`<li>${e(s)}</li>`).join('')}</ul></details>`:''}<p>Quatre défis réussis sans aide ouvrent l’étape suivante. Tu peux rejouer à chaque étape.</p></section>`;}
 export async function preparePhoto(file){
  if(!file||file.size>15000000||!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('photo_invalid');
- const url=URL.createObjectURL(file);try{const img=new Image();img.src=url;await img.decode();if(img.width*img.height>50000000)throw Error('photo_invalid');const scale=Math.min(1,1600/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);const data=canvas.toDataURL('image/jpeg',.85);if(data.length>1200000)throw Error('photo_invalid');return data;}finally{URL.revokeObjectURL(url);}
+ const decoded=await decodeSchoolPhoto(file);try{const {width,height}=photoDimensions(decoded.width,decoded.height,1600);const canvas=document.createElement('canvas');Object.assign(canvas,{width,height});const context=canvas.getContext('2d');if(!context)throw Error('photo_invalid');context.fillStyle='#fff';context.fillRect(0,0,width,height);context.drawImage(decoded.image,0,0,width,height);const data=canvas.toDataURL('image/jpeg',.85);if(data.length>1200000)throw Error('photo_invalid');return data;}finally{decoded.close();}
 }
 export function mountPlanImport(p,{save,refresh}={}){
  const form=document.querySelector('#plan-photo-form'),status=document.querySelector('#plan-status');if(!form)return;
