@@ -518,3 +518,13 @@ Mely : départ pré-enfoncé, ajout/retrait cohérents, opérations +/− seulem
 Tests couvrent les manipulations sur chaque exercice et les tables jusqu’à 12,
 conservation des profils/aides. Suite et build locaux réussis; contrôle préversion
 à suivre. Aucune fusion main ni modification des données familiales.
+
+## Pop-it complet manipulable — 26 octobre 2026 (Toronto)
+PR52 base d8bee52. Correction demandée : tableau 12×12 dans les quatre modes
+pour Liana, 144 bulles réversibles sans cases bloquées. +/− : une unité par
+bulle, chiffres de position 1–144; lignes/colonnes enfoncent ou relèvent 12 unités.
+×/÷ : produits de la table réelle, choix libre des axes et repérage du croisement;
+la case touchée explique produit ou quotient. Plusieurs bulles restent pressées.
+La réponse reste saisie par l’enfant et validée séparément. Aide facultative,
+draft, profils, historique et parcours débutant préservés. Tests et build locaux
+réussis. Préversion à vérifier; aucune fusion main ni validation iPad physique.

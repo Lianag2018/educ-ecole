@@ -68,3 +68,9 @@
 .full-popit .pop-axis-guide{background:#fff2b0;color:#423266;outline:2px solid #775699}
 .full-popit .popit-guide{outline:2px solid #47326c;outline-offset:0}
 .full-popit .full-pop-bubble:disabled{opacity:.3;cursor:default}
+
+/* Full physical manipulative, with operable row and column headers. */
+.full-popit{grid-template-columns:44px repeat(12,minmax(44px,1fr));min-width:680px}
+.full-popit button.pop-axis{min-width:44px;min-height:44px;padding:0;color:#202b40;border:2px solid #fff9;cursor:pointer}
+.full-popit button.pop-axis[aria-pressed=true]{outline:3px solid #36224d;outline-offset:-3px;filter:brightness(.85)}
+.full-popit .popit-intersection{outline:4px solid #36224d;outline-offset:-3px}
