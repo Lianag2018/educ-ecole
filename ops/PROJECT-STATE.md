@@ -271,3 +271,15 @@ Les voix nouvelles ne sont pas produites dans une préversion. Safari/iPad
 physique et acoustique non validés. Version `2026.10.26-tresor-dominicain`.
 Prochaine étape : vérifier la préversion interactive sur ce nouveau contenu.
 Production inchangée; aucune fusion effectuée.
+
+
+Contrôle réel sur la préversion de `fea22c72f2868479ab4203d5dfcccd4d6e0b5dc8` :
+Vercel success; nouvel accueil illustré affiché. p1 : compréhension de la carte,
+trois voiles SVG et mot « jardin » répondus correctement, +5 étoiles à chaque
+défi; fin du chapitre puis bouton vers le sentier des palmiers fonctionnels.
+Essais synthétiques dans le navigateur de préversion uniquement. Une dernière
+correction supprime les numéros décoratifs devant les choix de cette aventure
+pour ne pas les confondre avec les réponses de comptage; l’ancien atelier est
+regroupé sous un volet secondaire. 353 tests et build repassés avec succès.
+La voix reste indisponible dans ce navigateur distant, sans conclusion sur
+la qualité acoustique.

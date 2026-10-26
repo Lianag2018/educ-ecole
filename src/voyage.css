@@ -9,3 +9,5 @@
 @media(prefers-reduced-motion:reduce){.island-cover img,.island-sparkles{animation:none!important}}
 
 .island-lesson-place{display:flex;align-items:center;gap:14px;margin-bottom:18px;background:#e8f2e9;padding:12px 18px;border-radius:18px;color:#30554c}.island-lesson-place>span{width:60px;flex-shrink:0}.island-lesson-place svg{display:block;width:100%}.island-lesson-place small{display:block;font-size:.6rem;letter-spacing:.08em}.island-lesson-place strong{display:block;margin-top:5px;font-size:1.1rem}.choose-art img{object-fit:contain;object-position:center}.choose-art{aspect-ratio:1672/941;background:#b4dde2}
+
+.island-workshop{max-width:1200px;margin:24px auto;border:1px solid #d9dfcf;border-radius:20px;background:#fffdf7}.island-workshop>summary{padding:20px;font-size:1.1rem;font-weight:700;color:#355c50;cursor:pointer}.island-workshop>.world-home{margin:12px}
