@@ -1,5 +1,24 @@
 # État courant — 26 octobre 2026 (America/Toronto)
 
+## Accès direct Voca — 26 octobre 2026 (Toronto)
+
+Correction du raccourci générique de PR56 : activation privée locale pour p2,
+via un fragment strictement validé puis retiré de l’adresse. Le code de liste
+reste dans le profil sur l’appareil, jamais dans le dépôt ou les fichiers publiés.
+Le bouton ouvre le parcours invité Alloprof avec la liste déjà sélectionnée;
+aucune saisie de code ni connexion exigée. Alloprof conserve son bouton Commencer.
+Pas de transfert d’identifiants Nougat/CEC, ni de synchronisation interappareils.
+Échec de sauvegarde : ancien profil et ancienne configuration préservés.
+
+Base distante 9f59c1113e1ad948801ed1bbc76d11609c94c471 (PR57). Son déploiement
+et le retrait des photos des deux espaces enfants ont été vérifiés en production.
+Chrome a ouvert la vraie liste autorisée de 24 mots directement depuis le parcours
+invité Alloprof; aucun mot de passe, réponse d’enfant ou résultat envoyé.
+406 tests locaux et build réussis. Version préparée 2026.10.26-voca-acces-direct;
+publication et vérification du bouton personnalisé à confirmer après déploiement.
+Le suivi hebdomadaire sauvegarde les listes privées, mais ne pousse pas encore
+leurs mots ou un éventuel nouveau code dans les appareils.
+
 ## Photos réservées aux parents — 26 octobre 2026 (Toronto)
 
 Suite à la correction demandée par le parent, retrait des accès « Mes photos de

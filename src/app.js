@@ -25,7 +25,7 @@ import {gardenSounds,gardenSelection,gardenPractice,soundGardenMarkup,gardenWelc
 import {soundCards,soundCardMarkup} from './sound-cards.js';
 import {syllables,choiceSpeech,oralQuestion,oralFeedback,wordLesson,isFrenchWordModel,decodingWords} from './oral-learning.js';
 import {worldHome,landscape,companion,childName,schoolMathLinks} from './worlds.js';
-import {schoolVocabularyLinks} from './school-vocabulary.js';
+import {schoolVocabularyLinks,activateVocabulary} from './school-vocabulary.js';
 import {progressPanel,adaptiveCards} from './progress.js';
 import {guidedMarkup,updateReadingCue} from './guided-reading.js';
 import {NarrationSpeaker} from './narration.js';
@@ -93,6 +93,12 @@ function oralWordPractice(q){
 
 let persisted=save(storage,state);
 function persist(){persisted=save(storage,state);return persisted;}
+const vocabularyActivation=activateVocabulary(state,window.location.hash,next=>save(storage,next));
+if(vocabularyActivation!==null){
+ window.history.replaceState(null,'',window.location.pathname+window.location.search);
+ if(vocabularyActivation==='ready'){gameReady=true;persisted=true;}
+ else if(vocabularyActivation==='storage-unavailable')persisted=false;
+}
 const syllablePlayer=createKaluluPlayer();
 let kaluluUnmount=null;
 function cleanup(stopOral=true){photoMount?.destroy();photoMount=null;autoPhotoMount?.destroy();autoPhotoMount=null;unmountScene();unmountScene=()=>{};cancelSuccess();answerCelebrated=false;rmsMount?.destroy();rmsMount=null;syllablePlayer.stop();kaluluUnmount?.();kaluluUnmount=null;if(stopOral)oralCheck.stop();speedMount?.destroy();speedMount=null;planMount?.destroy();planMount=null;phonemePlayer.stop();gardenCelebration=false;readingProgress=null;clearTimeout(nextWordTimer);nextWordTimer=null;conversation.reset();editTaskIndex=null;tutorVoice.stop();tutorHint=false;mediaEpoch++;micPending=false;clearTimeout(recordTimer);if(recorder?.state==='recording')recorder.stop();stream?.getTracks().forEach(t=>t.stop());stream=null;recorder=null;recording=false;if(recordURL)URL.revokeObjectURL(recordURL);recordURL=null;reader.stop();speaking=false;mediaMessage='';}
