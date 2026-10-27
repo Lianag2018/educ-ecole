@@ -1,3 +1,4 @@
+import {childName} from './worlds.js';
 import {vocabularyCode,vocabularyURL} from './school-vocabulary.js';
 
 // Only list/group codes and student names are stored locally. No passwords,
@@ -27,18 +28,21 @@ export function updateSchoolAccess(state,profileId,id,values,persist){
  }
  const next={...state,profiles:state.profiles.map(p=>p.id!==profileId?p:id==='voca'?{...p,schoolVocabulary:{...p.schoolVocabulary,...normalized}}:{...p,schoolAccess:{...p.schoolAccess,[id]:normalized}})};
  try{if(!persist(next))return 'storage-unavailable';}catch{return 'storage-unavailable';}
- Object.assign(state,next);return 'saved';
+ // Keep mounted parent tools attached to the same profile object.
+ const saved=next.profiles.find(p=>p.id===profileId);
+ if(id==='voca')profile.schoolVocabulary=saved.schoolVocabulary;else profile.schoolAccess=saved.schoolAccess;
+ return 'saved';
 }
 function fieldsMarkup(p,id,r){
  const values=accessValues(p,id);
- return r.fields.map(([key,label])=>`<div class="access-value"><span>${label}</span>${values[key]?`<strong>${esc(values[key])}</strong><button type="button" data-access-copy="${id}" data-access-field="${key}" data-access-profile="${esc(p.id)}" aria-label="Copier ${label.toLowerCase()} · ${esc(r.title)} · ${esc(p.name)}">Copier</button>`:'<span class="access-missing">À compléter</span>'}</div>`).join('');
+ return r.fields.map(([key,label])=>`<div class="access-value"><span>${label}</span>${values[key]?`<strong>${esc(values[key])}</strong><button type="button" data-access-copy="${id}" data-access-field="${key}" data-access-profile="${esc(p.id)}" aria-label="Copier ${label.toLowerCase()} · ${esc(r.title)} · ${esc(childName(p))}">Copier</button>`:'<span class="access-missing">À compléter</span>'}</div>`).join('');
 }
 export function schoolAccessBar(p){
  const entries=accessResources(p);if(!entries.length)return '';
- return `<aside class="school-access-bar" aria-label="Mes accès scolaires · ${esc(p.name)}"><h2>🔑 Mes accès · ${esc(p.name)}</h2><div class="school-access-grid">${entries.map(([id,r])=>`<article class="school-access-card"><h3>${r.title}</h3>${fieldsMarkup(p,id,r)}<a data-school-resource href="${typeof r.url==='function'?r.url(p):r.url}" target="_blank" rel="noopener noreferrer">Ouvrir ${id==='voca'?'mes mots':id==='nougat'?'Nougat':'MaZone CEC'} ↗</a><span class="access-copy-status" role="status"></span></article>`).join('')}</div></aside>`;
+ return `<aside class="school-access-bar" aria-label="Mes accès scolaires · ${esc(childName(p))}"><h2>🔑 Mes accès · ${esc(childName(p))}</h2><div class="school-access-grid">${entries.map(([id,r])=>`<article class="school-access-card"><h3>${r.title}</h3>${fieldsMarkup(p,id,r)}<a data-school-resource href="${typeof r.url==='function'?r.url(p):r.url}" target="_blank" rel="noopener noreferrer">Ouvrir ${id==='voca'?'mes mots':id==='nougat'?'Nougat':'MaZone CEC'} ↗</a><span class="access-copy-status" role="status"></span></article>`).join('')}</div></aside>`;
 }
 export function schoolAccessSettings(profiles){
- return `<section class="panel school-access-settings" data-parent-group="settings"><h2>Codes d’accès des enfants</h2><p>Codes de groupe ou de liste et noms d’utilisateur seulement. Les mots de passe se saisissent sur le site scolaire et ne sont pas enregistrés ici.</p><p class="small">Enregistrés sur cet appareil, visibles par ses utilisateurs. Ces accès ne sont pas encore synchronisés entre les tablettes.</p>${profiles.map(p=>`<fieldset><legend>${esc(p.name)}</legend>${accessResources(p).map(([id,r])=>{const values=accessValues(p,id);return `<form data-access-form="${id}" data-access-profile="${esc(p.id)}"><h3>${r.title}</h3>${r.fields.map(([key,label,max])=>`<label>${label}<input name="${key}" value="${esc(values[key])}" maxlength="${max}" autocomplete="off" autocapitalize="none" spellcheck="false" ${id==='voca'?'pattern="[A-Za-z0-9]{5,12}"':''}></label>`).join('')}<button type="submit">Enregistrer · ${esc(p.name)}</button><p role="status"></p></form>`;}).join('')}</fieldset>`).join('')}</section>`;
+ return `<section class="panel school-access-settings" data-parent-group="settings"><h2>Codes d’accès des enfants</h2><p>Codes de groupe ou de liste et noms d’utilisateur seulement. Les mots de passe se saisissent sur le site scolaire et ne sont pas enregistrés ici.</p><p class="small">Enregistrés sur cet appareil, visibles par ses utilisateurs. Ces accès ne sont pas encore synchronisés entre les tablettes.</p>${profiles.map(p=>`<fieldset><legend>${esc(childName(p))}</legend>${accessResources(p).map(([id,r])=>{const values=accessValues(p,id);return `<form data-access-form="${id}" data-access-profile="${esc(p.id)}"><h3>${r.title}</h3>${r.fields.map(([key,label,max])=>`<label>${label}<input name="${key}" value="${esc(values[key])}" maxlength="${max}" autocomplete="off" autocapitalize="none" spellcheck="false" ${id==='voca'?'pattern="[A-Za-z0-9]{5,12}"':''}></label>`).join('')}<button type="submit">Enregistrer · ${esc(childName(p))}</button><p role="status"></p></form>`;}).join('')}</fieldset>`).join('')}</section>`;
 }
 export function mountSchoolAccess(root,state,{persist,onSaved=()=>{},clipboard=globalThis.navigator?.clipboard}={}){
  root.querySelectorAll('[data-access-copy]').forEach(button=>button.addEventListener('click',async()=>{

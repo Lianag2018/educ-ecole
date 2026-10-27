@@ -7,10 +7,11 @@ import {vocabularyURL} from '../../src/school-vocabulary.js';
 test('codes remain isolated per child, without changing progress, and survive reload',()=>{
  const state=fresh();state.profiles[0].history.push({id:'keep'});state.profiles[1].assignments.push({id:'keep-word'});
  let stored;const storage={getItem:()=>stored,setItem:(_,value)=>{stored=value;}};
- const persist=next=>save(storage,next),older=structuredClone(state.profiles[1]);
+ const persist=next=>save(storage,next),older=structuredClone(state.profiles[1]),youngRef=state.profiles[0],olderRef=state.profiles[1];
  assert.equal(updateSchoolAccess(state,'p1','nougat',{group:'GROUPE7',username:'eleve-test'},persist),'saved');
  assert.deepEqual(state.profiles[1],older);
  assert.equal(updateSchoolAccess(state,'p2','voca',{code:'TEST123'},persist),'saved');
+ assert.equal(state.profiles[0],youngRef);assert.equal(state.profiles[1],olderRef);
  const restored=load(storage);
  assert.equal(restored.profiles[0].history[0].id,'keep');
  assert.equal(restored.profiles[1].assignments[0].id,'keep-word');
@@ -29,6 +30,7 @@ test('existing activated Voca list is displayed without migration or duplication
 test('missing values are honest, without fake codes or password inputs',()=>{
  const s=fresh(),markup=s.profiles.map(schoolAccessBar).join('');
  assert.match(markup,/À compléter/);
+ assert.match(markup,/Mes accès · Mely-Ann/);assert.match(markup,/Mes accès · Liana/);
  assert.doesNotMatch(markup,/data-access-copy=/);
  const forms=schoolAccessSettings(s.profiles);
  assert.doesNotMatch(forms,/name="password"|type="password"/);

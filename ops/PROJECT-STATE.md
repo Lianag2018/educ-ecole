@@ -17,7 +17,12 @@ automatique Nougat/CEC ni synchronisation entre appareils ajoutée.
 
 Validation locale : 428 tests réussis, dont isolation des profils, reprise des
 codes, refus des champs étrangers, échappement et sauvegarde en échec.
-Build et préversion à vérifier avant fusion; aucune validation sur iPad physique.
+Build réussi avec 328 MP3 Kalulu. PR61, préversion du commit `82a396b`
+vérifiée dans Chrome : trois formulaires enregistrés avec valeurs fictives,
+isolation des profils, affichage, conservation après rechargement et copie/collage
+réel. Dernière retouche : noms
+des personnages cohérents et références des profils préservées pour les outils
+parent montés. CI du SHA final et publication à confirmer. Aucun test iPad physique.
 Version préparée : `2026.10.27-codes-acces`.
 
 ## Navigation simplifiée — 27 octobre 2026, préversion vérifiée
