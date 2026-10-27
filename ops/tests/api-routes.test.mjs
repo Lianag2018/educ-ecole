@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-for (const route of ['voice/status', 'voice/turn', 'parent/login', 'parent/logout']) {
+for (const route of ['voice/status', 'voice/turn', 'parent/login', 'parent/logout', 'learning/sync', 'learning/evolve', 'learning/run', 'plans/status', 'plans/import', 'plans/list']) {
   test(`explicit /api/${route} preserves request size protection`, async () => {
     const {default: handler} = await import(`../../api/${route}.mjs`);
     let status;

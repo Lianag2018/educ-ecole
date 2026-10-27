@@ -4,6 +4,9 @@ import {planEndpoint} from './plans.mjs';
 import {createTurnEndpoint,ready,maximumUsd,TurnProvider} from './turn.mjs';
 import {quote} from './budget.mjs';
 import {createOralCheckEndpoint,oralCheckReady,OralCheckProvider} from './oral-check.mjs';
+import {learningEndpoint,learningStore} from './learning.mjs';
+import {githubJobVerifier} from './github-job.mjs';
+import {installPlan,planMissions} from '../../src/school-plan.js';
 // Server-only: no env value, provider error or request body is logged.
 export function runtime(env=process.env,fetcher=fetch){
  let c;try{c=JSON.parse(env.EDUC_VOICE_CONFIG||'null');}catch{}
@@ -25,7 +28,13 @@ export function runtime(env=process.env,fetcher=fetch){
  const ledger={durable:true,async reserve({family,profileId,id,amount,otherCostsMicros}){
   try{return await sb('/rest/v1/rpc/famille_reserve_voice',{p_parent:family,p_slot:profileId,p_id:id,p_amount:amount,p_other:otherCostsMicros});}catch(e){throw Error(e.message==='rate_limit'?'rate_limit':'budget_unavailable');}
  }};
- const turn=createTurnEndpoint({auth,profiles,config:c,ledger,provider:new TurnProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher})});
+ const memory=learningStore(sb);
+ const turn=createTurnEndpoint({auth,profiles,config:c,ledger,learningContext:c?.learningEnabled===true?memory.context:undefined,schoolActivity:async(parent,slot,id)=>{
+  if(!id.startsWith('plan-'+slot+'-'))return null;
+  const p={id:slot,schoolPlans:[]};for(const plan of (await planStore.list(parent,slot)).reverse())installPlan(p,plan,{append:true});
+  return p.schoolPlans.flatMap(plan=>planMissions(plan).missions.flatMap(m=>m.items)).find(q=>q.id===id);
+ },provider:new TurnProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher})});
+ const learning=learningEndpoint({auth,profiles,config:c,ledger,store:memory,apiKey:env.EDUC_OPENAI_API_KEY,fetcher,parentId:env.EDUC_PARENT_ID,verifyJob:githubJobVerifier({fetcher})});
  const oralCheck=createOralCheckEndpoint({auth,profiles,config:c,ledger,provider:env.EDUC_OPENAI_API_KEY?new OralCheckProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher}):null});
  const planStore={
   async list(parent,slot){return (await sb(`/rest/v1/famille_school_plans?parent_id=eq.${encodeURIComponent(parent)}&profile_slot=eq.${slot}&select=plan&order=created_at.desc&limit=12`)).map(x=>x.plan);},
@@ -34,6 +43,7 @@ export function runtime(env=process.env,fetcher=fetch){
  };
  const plans=planEndpoint({auth,profiles,ledger,store:planStore,config:c,apiKey:env.EDUC_OPENAI_API_KEY,fetcher});
  return async req=>{
+  if(req.path.startsWith('/api/learning/'))return learning(req);
   if(req.path.startsWith('/api/plans/')){
    if(!authConfigured())return {status:503,body:{code:'plan_unavailable'}};
    if(!['/api/plans/import','/api/plans/list','/api/plans/status'].includes(req.path))return {status:404,body:{code:'not_found'}};

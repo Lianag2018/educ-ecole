@@ -28,7 +28,7 @@ export class TurnProvider{
  async respond(messages,signal){const r=await(await this.call('chat/completions',{model:MODELS.llm,messages,max_tokens:128,temperature:0.4,store:false},signal)).json();return r.choices?.[0]?.message?.content;}
  async speak(text,signal){return Buffer.from(await(await this.call('audio/speech',{model:MODELS.tts,input:text,voice:'nova',speed:0.85,response_format:'mp3'},signal)).arrayBuffer());}
 }
-export function createTurnEndpoint({auth,profiles,config,ledger,provider}={}){
+export function createTurnEndpoint({auth,profiles,config,ledger,provider,learningContext,schoolActivity}={}){
  return async req=>{
   let phase='auth';
   try{
@@ -38,11 +38,12 @@ export function createTurnEndpoint({auth,profiles,config,ledger,provider}={}){
    if(!['p1','p2'].includes(b.profileId)||Object.keys(b).some(k=>!['profileId','activityId','text','audio','history'].includes(k))||typeof b.activityId!=='string'||Boolean(b.text)===Boolean(b.audio))throw Error('invalid_request');
    const p=await profiles.ownedBy(parent.id,b.profileId);if(!p)return {status:403,body:{code:'profile_forbidden'}};
    phase='config';if(!ready(config)||!provider||!ledger?.durable)throw Error('voice_unavailable');
-   const activity=activities.find(q=>q.id===b.activityId)||p.assignments?.find(q=>q.id===b.activityId);if(!activity)throw Error('invalid_request');
+   const activity=activities.find(q=>q.id===b.activityId)||p.assignments?.find(q=>q.id===b.activityId)||await schoolActivity?.(parent.id,b.profileId,b.activityId);if(!activity)throw Error('invalid_request');
    const history=b.history??[];if(!Array.isArray(history)||history.length>4||history.some(h=>!h||!['user','assistant'].includes(h.role)||typeof h.content!=='string'||h.content.length>400||Object.keys(h).some(k=>!['role','content'].includes(k))))throw Error('invalid_request');
    const wav=b.audio?validateWav(b.audio):null;if(b.text&&(typeof b.text!=='string'||b.text.length>400))throw Error('invalid_request');
    const instructions=teachingInstructions(p.stage);
-   const context=JSON.stringify({stage:p.stage,focus:p.focus,activity:{skill:activity.skill,text:activity.text,prompt:activity.prompt,grade:activity.grade,reference:activity.explanation}});
+   const progress=learningContext?await learningContext(parent.id,b.profileId):undefined;
+   const context=JSON.stringify({stage:p.stage,focus:p.focus,progress,activity:{skill:activity.skill,text:activity.text,prompt:activity.prompt,grade:activity.grade,reference:activity.explanation}});
    if(Buffer.byteLength(context)>6000)throw Error('invalid_request');
    const amount=quote(config.pricing,maximumUsd(config));phase='budget';
    await ledger.reserve({family:parent.id,profileId:b.profileId,id:randomUUID(),amount,otherCostsMicros:config.otherCostsMicros});
