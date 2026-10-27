@@ -49,9 +49,9 @@ export function level(p, skill, day) {
 
 const authoredOrder=(a,b)=>(Number.isFinite(a.order)?a.order:Number.MAX_SAFE_INTEGER)-(Number.isFinite(b.order)?b.order:Number.MAX_SAFE_INTEGER)||b.level-a.level||a.id.localeCompare(b.id);
 
-export function select(p, day) {
+export function select(p, day, {shortSession=false}={}) {
   const all = pool(p);
-  if (!p.calibrated) {
+  if (!p.calibrated&&!shortSession) {
     return Object.keys(skills).map(skill =>
       all.filter(q => q.skill === skill && q.level === 1).sort(authoredOrder)[0]);
   }

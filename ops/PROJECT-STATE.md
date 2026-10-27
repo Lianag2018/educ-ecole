@@ -1,6 +1,6 @@
 # État courant — 27 octobre 2026 (America/Toronto)
 
-## Navigation simplifiée — 27 octobre 2026, préparation
+## Navigation simplifiée — 27 octobre 2026, préversion vérifiée
 
 Base distante vérifiée : `6496b11fad8b3bebe5a5ebbb6e94016877411aac` (PR59).
 Branche `feat/navigation-enfants`; accord de réalisation reçu après audit.
@@ -19,9 +19,19 @@ Changer de section conserve les formulaires montés et leur sélection de fichie
 Les enregistrements de progression, photos locales et contrats serveur ne sont
 pas migrés. Aucune activation Supabase/IA supplémentaire incluse.
 
-Validation locale : les six tests supplémentaires couvrent reprise, isolation,
-plan courant, limites du Pop-it et conservation des formulaires. Préversion,
-PR, vérification navigateur et publication à confirmer avant déclaration en ligne.
+PR60; première préversion du commit `e6b9737` vérifiée dans Chrome :
+les deux profils, portes Français/Maths, parcours trois étapes, retour et
+rechargement à l'étape 2, Pop-it 3 × 4 avec résultat vert seulement à la fin,
+retour au même exercice, bilan deux réussites autonomes et une accompagnée,
+et sections Parents avec conservation d'un brouillon. Accueil initial conservé.
+Contrôle GitHub `tests` réussi sur ce commit; dernière retouche : aide audio
+repliée et sélection quotidienne qui inclut les mots d'école sans imposer une
+calibration de six questions ni confondre compréhension orale et lecture.
+Validation locale : huit tests supplémentaires couvrent reprise, isolation,
+plan courant, mots assignés, suite du chapitre, limites du Pop-it et formulaires.
+421 tests locaux réussis; build local réussi avec 328 MP3 Kalulu avant la
+dernière retouche de sélection (à revalider par le build Vercel du SHA final).
+Publication production et dernier SHA à confirmer avant déclaration en ligne.
 Aucun test sur appareil physique Safari/iPad.
 
 ## Compatibilité de l'intégration Supabase/Vercel — 26 octobre 2026, soir

@@ -22,6 +22,16 @@ test('stale, malformed or foreign daily routes are rebuilt at the actual grade',
  a.dailyAdventure.items=[{}];assert.equal(dailyAdventure(a,day).items.length,3);
  a.schoolContext.stage='3e année';assert.equal(dailyAdventure(a,day).grade,3);assert.ok(a.dailyAdventure.items.some(q=>q.travelSubject==='Maths'));
 });
+test('short daily routes include school words without falsely completing the six-domain calibration',()=>{
+ const p=fresh().profiles[0];p.assignments=[{id:'school-local-word',skill:'mots',level:1,text:'chat',prompt:'Lis le mot.',choices:['chat','rat'],answer:0}];
+ const route=dailyAdventure(p,day);assert.equal(route.items[0].id,'school-local-word');assert.equal(p.calibrated,false);
+ const oral=route.items.find(q=>q.learningMode==='listening');assert.ok(oral);assert.equal(oral.travelSubject,'Compréhension orale');
+});
+test('daily story moves through chapter cards instead of repeating its first question forever',()=>{
+ const p=fresh().profiles[1],q=dailyAdventure(p,day).items.find(x=>x.island);
+ p.records[q.id]={result:'correct',due:'2026-10-29'};p.history.push({id:q.id,day,result:'correct',subject:'Français',skill:q.skill});
+ const next=dailyAdventure(p,'2026-10-28').items.find(x=>x.island);assert.ok(next);assert.notEqual(next.id,q.id);assert.equal(next.travelSubject,'Maths');
+});
 test('only the current child and current school week contribute plan questions',()=>{
  const [a,b]=fresh().profiles;
  const plan={profileId:'p2',grade:3,week:'2026-10-26',tasks:[{subject:'Maths',topic:'Tables',instruction:'Addition de 1 à 2',tables:[1,2],operations:['+'],words:[],missing:false}]};

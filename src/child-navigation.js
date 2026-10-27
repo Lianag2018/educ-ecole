@@ -11,7 +11,7 @@ import {schoolVocabularyLinks} from './school-vocabulary.js';
 import {travelPoints,weeklyTravel} from './voyage.js';
 
 const e=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const card=(q,p,subject)=>({...beginnerCard(q,p,subject),travelSubject:subject});
+const card=(q,p,subject)=>{const adapted=beginnerCard(q,p,subject);return {...adapted,travelSubject:adapted.travelSubject||subject};};
 const ready=q=>q&&typeof q.id==='string'&&typeof q.text==='string'&&Array.isArray(q.choices);
 export function dailyAdventure(p,day){
  const old=p.dailyAdventure;
@@ -21,10 +21,11 @@ export function dailyAdventure(p,day){
  const week=weekKey(new Date(day+'T17:00:00Z'));
  const plan=(p.schoolPlans||[]).find(x=>x.profileId===p.id&&x.grade===gradeFor(p)&&x.week===week);
  if(plan){try{for(const [i,m] of planMissions(plan).missions.entries()){if(!missionOpen(p,planMissions(plan).missions,i))continue;const pending=m.items.filter(q=>p.records[q.id]?.result!=='correct');add(adaptiveCards(p,pending,day)[0],m.subject);}}catch{/* Keep the built-in route usable if an imported plan is invalid. */}}
- add(adaptiveCards(p,select(p,day).filter(Boolean),day)[0],'Français');
+ add(adaptiveCards(p,select(p,day,{shortSession:true}).filter(Boolean),day)[0],'Français');
  add(adaptiveCards(p,advanced(p)&&illustratedCards(p).length?illustratedCards(p):mathsFor(p),day)[0],'Maths');
  const chapter=islandCards(p,nextIsland(p).id);
- add(chapter[0],'Français');
+ const nextChapterCard=adaptiveCards(p,chapter,day)[0];
+ add(nextChapterCard,nextChapterCard?.travelSubject||'Français');
  for(const q of chapter)add(q,q.travelSubject||'Français');
  const route={day,profileId:p.id,grade:gradeFor(p),items,index:0};
  p.dailyAdventure=route;
