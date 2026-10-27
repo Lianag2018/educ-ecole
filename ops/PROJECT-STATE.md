@@ -1,5 +1,37 @@
 # État courant — 26 octobre 2026 (America/Toronto)
 
+## Compatibilité de l'intégration Supabase/Vercel — 26 octobre 2026, soir
+
+Base distante revérifiée : `d67b8d037ee477b7f1485d5a71cba2dbd2679673` (PR58).
+Les captures du parent confirment le projet personnel sain et sa connexion au
+projet Vercel `educ-ecole` de l'équipe personnelle. Ce constat remplace les anciens
+doutes sur l'existence de la base. Les valeurs privées n'ont pas été lues.
+Le statut HTTP public vérifié après raccordement donne encore
+`authConfigured=false`, `available=false`, `oralCheckReason=setup_required`.
+Le connecteur Vercel ChatGPT retourne encore 403 pour cette équipe; cela ne
+remet pas en cause l'intégration ni la validité du jeton de supervision existant.
+
+Branche `fix/supabase-integration-env` : le runtime accepte les noms serveur de
+l'intégration Vercel, modernes ou anciens. Les variables EDUC explicites gardent
+la priorité comme ensemble entier; un ensemble incomplet ne mélange jamais ses
+clés avec un autre projet. L'adaptateur HTTP utilise les clés opaques dans apikey,
+sans les présenter comme JWT Bearer. Connexion et validation utilisateur passent
+par la clé publique; les lectures serveur gardent la clé privée. Les contrôles
+d'origine, identité parent, confidentialité et budget restent inchangés.
+
+413 tests locaux réussis, build réussi avec les 328 MP3 Kalulu; appels Supabase
+simulés uniquement. Publication et CI à confirmer. Aucune migration distante,
+création de compte parent, copie de clé, modification d'environnement ou
+synchronisation interappareils effectuée par ce correctif.
+
+L'intégration GitHub montrée séparément pointe sur ce dépôt/main avec working
+directory `.`. Le dépôt n'a pas de `supabase/config.toml` ni de
+`supabase/migrations`; les SQL préparés restent sous `ops/supabase` sans structure
+CLI de déploiement automatique. Ne pas annoncer que cette option applique les
+schémas. Prochaine étape : vérifier les variables réellement injectées et le vrai
+compte parent Auth, puis appliquer les schémas revus et tester l'authentification.
+La synchronisation générale des profils/progrès reste un développement distinct.
+
 ## Accès direct Voca — 26 octobre 2026 (Toronto)
 
 Correction du raccourci générique de PR56 : activation privée locale pour p2,

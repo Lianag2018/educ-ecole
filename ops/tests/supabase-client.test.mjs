@@ -90,7 +90,8 @@ test('JSON auth, profiles and saved-plan responses keep their existing values an
   assert.deepEqual(await sb('/rest/v1/famille_voice_profiles?select=stage'),values[2]);
   assert.deepEqual(await sb('/rest/v1/rpc/famille_save_plan',{p_plan:{}}),values[3]);
   assert.equal(calls[0][1].headers.apikey,'synthetic-anon');
-  assert.equal(calls[1][1].headers.apikey,'synthetic-service');
+  assert.equal(calls[0][1].headers.Authorization,'Bearer synthetic-anon');
+  assert.equal(calls[1][1].headers.apikey,'synthetic-anon');
   assert.equal(calls[1][1].headers.Authorization,'Bearer synthetic-jwt');
   assert.equal(calls[1][1].method,'GET');
   assert.equal('body' in calls[1][1],false);

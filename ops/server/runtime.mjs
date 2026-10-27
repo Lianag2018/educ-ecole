@@ -1,4 +1,5 @@
 import {createSupabaseClient} from './supabase-client.mjs';
+import {supabaseConfig} from './supabase-config.mjs';
 import {planEndpoint} from './plans.mjs';
 import {createTurnEndpoint,ready,maximumUsd,TurnProvider} from './turn.mjs';
 import {quote} from './budget.mjs';
@@ -6,7 +7,7 @@ import {createOralCheckEndpoint,oralCheckReady,OralCheckProvider} from './oral-c
 // Server-only: no env value, provider error or request body is logged.
 export function runtime(env=process.env,fetcher=fetch){
  let c;try{c=JSON.parse(env.EDUC_VOICE_CONFIG||'null');}catch{}
- const origin=env.EDUC_ORIGIN,url=env.EDUC_SUPABASE_URL,key=env.EDUC_SUPABASE_SERVICE_KEY,anon=env.EDUC_SUPABASE_ANON_KEY;
+ const origin=env.EDUC_ORIGIN,{url,key,anon}=supabaseConfig(env);
  const authConfigured=()=>/^https:\/\/[a-z0-9.-]+$/.test(origin||'')&&/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url||'')&&key&&anon&&env.EDUC_PARENT_ID;
  const configured=()=>{try{return ready(c)&&/^https:\/\/[a-z0-9.-]+$/.test(origin)&&/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url)&&key&&anon&&env.EDUC_PARENT_ID&&env.EDUC_OPENAI_API_KEY&&quote(c.pricing,maximumUsd(c))>0;}catch{return false;}};
  const oralConfigured=()=>Boolean(authConfigured()&&env.EDUC_OPENAI_API_KEY&&oralCheckReady(c));
