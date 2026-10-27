@@ -3,6 +3,8 @@ await rm('dist', {recursive:true, force:true});
 await mkdir('dist');
 for (const file of ['index.html','src','icons','manifest.webmanifest']) await cp(file, `dist/${file}`, {recursive:true});
 console.log('Static production build: dist/');
+const {checkProductionConnections}=await import('./check-connections.mjs');
+await checkProductionConnections();
 const {stageKalulu}=await import('./stage-kalulu.mjs');
 await stageKalulu();
 const {generateNarration}=await import('./generate-narration.mjs');

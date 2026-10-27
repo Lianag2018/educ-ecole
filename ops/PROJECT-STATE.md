@@ -1,5 +1,29 @@
 # État courant — 27 octobre 2026 (America/Toronto)
 
+## Raccordement OpenAI et diagnostic serveur — 27 octobre 2026
+
+Base distante vérifiée : `1f8c0d3816f411c608973473fef72747e835f944` (PR61),
+production READY sur le Vercel personnel. Les 2 088 narrations sont disponibles.
+L'intégration Supabase de production cible bien le projet familial déjà fourni.
+La clé serveur OpenAI et les variables Supabase sont présentes; `EDUC_PARENT_ID`
+et `EDUC_VOICE_CONFIG` sont absents. Le connecteur Supabase ne donne accès qu'aux
+projets professionnels et refuse le projet familial. Le superviseur cloud actuel
+ne propose pas d'opération de provisionnement familial. Aucun service professionnel
+n'a été modifié; aucune valeur secrète extraite ou publiée.
+
+`npm run check:connections` utilise les variables serveur existantes pour vérifier
+l'accès au modèle OpenAI, Auth, les quatre tables nécessaires et la présence des
+deux RPC. Vérification automatique dans le build Vercel personnel, production/main
+uniquement. GET/HEAD sans génération, écriture ou photo. Le journal ne contient que
+des états fermés; ni compte, clé, cookie, ligne de table, erreur fournisseur brute
+ni contenu scolaire. Les builds locaux et previews ne font pas ces appels.
+Un modèle accessible ne prouve ni l'extraction, ni la facturation, ni la rétention.
+Le contrôle ne déduit jamais le compte parent et ne change aucune condition privée.
+Validation locale : 434 tests réussis et build réussi, 328 MP3 Kalulu conservés.
+La validation distante de cette nouvelle vérification reste à effectuer après
+publication. Le parcours complet Photo → activités n'est pas déclaré opérationnel.
+
+
 
 ## Codes d’accès visibles — 27 octobre 2026 (America/Toronto)
 
