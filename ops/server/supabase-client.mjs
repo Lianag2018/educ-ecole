@@ -3,17 +3,20 @@
 const VOID_BUDGET_RPC = '/rest/v1/rpc/famille_reserve_voice';
 
 export function createSupabaseClient({url, key, anon, fetcher = fetch}) {
-  return async function sb(path, body, token = key) {
+  return async function sb(path, body, token) {
     const method = body ? 'POST' : 'GET';
+    const publicAuth = path === '/auth/v1/token?grant_type=password' || path === '/auth/v1/user';
+    const apiKey = publicAuth ? anon : key;
+    // New API keys are opaque, not JWTs. Only real user tokens or legacy JWT
+    // keys belong in Authorization; password login uses the public key only.
+    const bearer = token ?? apiKey;
+    const headers = {apikey: apiKey, 'Content-Type': 'application/json'};
+    if (bearer && !/^sb_(secret|publishable)_/.test(bearer)) headers.Authorization = `Bearer ${bearer}`;
     const response = await fetcher(url + path, {
       method,
       redirect: 'error',
       signal: AbortSignal.timeout(10000),
-      headers: {
-        apikey: body && path.includes('/token') ? anon : key,
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers,
       ...(body ? {body: JSON.stringify(body)} : {}),
     });
     if (!response.ok) {
