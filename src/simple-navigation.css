@@ -1,0 +1,55 @@
+/* One child world, three clear doors. Existing portraits and artwork are kept. */
+[hidden]{display:none!important}
+body.child-navigation .topline,body.child-navigation main>.learners,body.child-navigation footer{display:none}
+body.child-navigation>#app>header{display:none}
+body.child-navigation:not(.montage-home) main{max-width:1200px;margin:auto;padding:14px}
+.child-toolbar{display:flex;align-items:center;gap:16px;margin:0 0 18px;color:#54446a}
+.child-toolbar button{min-height:48px;border:2px solid #e5dcec;background:#fffdf6;border-radius:20px;padding:10px 18px;font-size:17px}
+.child-toolbar span{font-weight:700}
+.simple-world,.simple-subject{max-width:1100px;margin:auto;padding:20px 26px 32px;color:#304f4b}
+.simple-top{display:flex;justify-content:space-between;gap:10px}
+.simple-top button{background:#fffaf3;border:1px solid #d9d5c7;border-radius:18px;min-height:48px;padding:10px 16px;font-size:15px;color:#385b55}
+.simple-heading{display:flex;align-items:center;gap:18px;margin:22px 0}
+.simple-heading .portrait{width:76px;height:76px;flex:none;border:3px solid white}
+.simple-heading h1{font-size:clamp(28px,4vw,40px);margin:4px 0;line-height:1.15;color:#385b55}
+.simple-level{font-size:15px;font-weight:650;color:#645475}
+.simple-doors{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.daily-door{grid-column:1/-1;position:relative;overflow:hidden;padding:0;border:5px solid #fff;border-radius:30px;text-align:left;background:#295d56;box-shadow:0 7px 0 #d8ddd0;min-width:0;color:white}
+.daily-door img{display:block;width:100%;height:clamp(230px,32vw,370px);object-fit:cover;object-position:50% 38%}
+.daily-copy{display:flex;align-items:flex-start;flex-direction:column;gap:7px;padding:18px 24px;background:#295d56}
+.daily-copy strong{font-size:clamp(25px,4vw,34px);line-height:1.2;color:#fff}
+.daily-copy small{font-size:15px;color:#e1eee3}
+.daily-copy>span{font-size:20px;font-weight:700;color:#ffecb3}
+.simple-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.simple-tile{display:flex;align-items:center;gap:18px;min-height:155px;text-align:left;padding:22px;border:3px solid white;border-radius:28px;background:#f1e9ff;color:#513a67;box-shadow:0 6px 0 #dfd4e7;min-width:0}
+.simple-tile[data-action=maths],.simple-subject .simple-tile:nth-child(2){background:#e3f2e7;color:#275e54;box-shadow:0 6px 0 #c9dfd0}
+.simple-tile strong{display:block;font-size:clamp(22px,3vw,29px);line-height:1.2}
+.simple-tile small{display:block;font-size:16px;line-height:1.4;margin-top:7px}
+.simple-art{font-size:44px;flex:0 0 70px;display:grid;place-items:center;min-height:75px}
+.simple-art svg{width:80px;height:80px}.simple-arrow{margin-left:auto;font-size:25px}
+.book-art{font:700 36px Georgia,serif;border:3px solid #aa88bd;border-radius:8px 15px 15px 8px;background:#fff7e2;padding:14px 8px;box-shadow:4px 4px 0 #cab4db}
+.number-art{font-size:24px;line-height:1.3;word-spacing:7px;font-weight:800;transform:rotate(-6deg);background:#fff7e2;border-radius:15px;padding:10px;color:#40766b}
+.popit-art{font-size:22px;line-height:1.2;letter-spacing:3px;color:#a45c8d;background:#f3dce9;border:3px solid #cc8fb1;border-radius:15px;padding:8px;box-shadow:inset 0 -3px 0 #d4a4be}
+.simple-treasure,.simple-more{margin-top:24px;padding:15px 20px;background:#fffaf0;border:1px solid #e1d9c3;border-radius:20px}
+.simple-treasure summary,.simple-more summary{cursor:pointer;font-size:18px;font-weight:700;min-height:44px;display:list-item;align-content:center}
+.simple-treasure button,.simple-extra>button{min-height:48px;margin:8px 8px 0 0;border-radius:16px;font-size:16px}
+.simple-grid .simple-tile{flex-direction:column;align-items:flex-start;position:relative}.simple-grid .simple-arrow{position:absolute;right:20px;top:25px}
+.simple-subject .school-vocabulary-links{margin-top:24px}.simple-subject .school-vocabulary-links .school-math-grid{grid-template-columns:1fr}
+.simple-subject .school-vocabulary-links a{min-height:90px;display:flex;align-items:center;gap:20px}.simple-subject .school-vocabulary-links a>span{font-size:34px}
+.parent-sections{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:24px 0}
+.parent-sections button{min-height:58px;border-radius:16px;border:2px solid #d8d5cc;background:#fffdf7;color:#3e5c55;font-size:16px;padding:12px}
+.parent-sections button[aria-current]{background:#356e67;border-color:#356e67;color:white;font-weight:700}
+.parent-section{display:grid;gap:20px}.parent-section>.panel,.parent-section>[data-parent-group]{min-width:0;width:100%}.parent-grid:empty{display:none}
+.parent-section details{padding:14px;border:1px solid #ded8d0;border-radius:16px;margin-top:12px}
+.parent-section summary{min-height:44px;align-content:center;cursor:pointer}
+.parent-section .panel{margin:0}.parent-section h2{font-size:25px}
+.reading-options{background:#f4f0f9;border-radius:18px;padding:0 15px;margin-top:8px}.reading-options>summary{min-height:44px;cursor:pointer;align-content:center;font-size:15px}
+.reading-options .reading-dock{margin:0}.reading-options .reading-settings{margin-bottom:12px}
+body.child-navigation .adventure-top>[data-action=home]{display:none}
+body.child-navigation .lesson-companion p{display:none}
+.simple-world button:focus-visible,.simple-subject button:focus-visible,.parent-sections button:focus-visible,.child-toolbar button:focus-visible{outline:4px solid #8156a5;outline-offset:4px}
+.simple-world button:active,.simple-tile:active{transform:translateY(3px);box-shadow:none}
+@media(max-width:650px){.simple-world,.simple-subject{padding:14px}.simple-heading{gap:12px;margin:18px 0}.simple-heading .portrait{width:60px;height:60px}.simple-doors{gap:14px}.simple-tile{flex-direction:column;align-items:flex-start;min-height:185px;padding:17px;gap:12px}.simple-art{flex-basis:auto;min-height:60px;font-size:38px}.simple-arrow{display:none}.simple-tile small{font-size:14px}.simple-grid{grid-template-columns:1fr;gap:14px}.simple-grid .simple-tile{flex-direction:row;align-items:center;min-height:115px}.simple-grid .simple-art{flex:0 0 65px}.daily-door img{height:220px}.daily-copy{padding:16px}.simple-top button{font-size:13px;padding:10px}.parent-sections{grid-template-columns:1fr 1fr;gap:8px}.parent-sections button{font-size:14px}.parent-section h2{font-size:22px}.simple-subject .school-vocabulary-links a{display:block}.child-toolbar{margin:0 0 12px}.child-toolbar span{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.simple-world *, .simple-subject *{animation:none!important;transition:none!important}}
+
+.simple-voice-help{max-width:1050px;margin:12px auto;padding:12px 20px;border:1px solid #d9d5c7;border-radius:18px;background:#fffaf0}.simple-voice-help summary{min-height:44px;align-content:center;cursor:pointer}.lesson-popit-helper{min-height:48px;border-radius:18px;margin:10px 0}
