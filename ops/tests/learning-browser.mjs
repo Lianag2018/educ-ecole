@@ -58,4 +58,4 @@ try{
  state=JSON.parse(await run('localStorage.getItem("atelier-mots-v1")'));assert.equal(state.profiles[1].history.length,1);assert.equal(state.profiles[1].records['synthetic-card'].result,'correct');
  assert.ok(!JSON.stringify(uploaded).includes('PRIVATE_NAME'));assert.deepEqual(errors,[]);
  console.log('Browser: parent reconnection, real fetch, private merge, separate children and tablet layout passed.');
-}finally{socket?.close();if(chrome.exitCode===null)await new Promise(r=>{chrome.once('exit',r);chrome.kill();});server.close();await rm(temporary,{recursive:true,force:true});}
+}finally{socket?.close();if(chrome.exitCode===null)await new Promise(r=>{chrome.once('exit',r);chrome.kill();});server.close();await rm(temporary,{recursive:true,force:true,maxRetries:10,retryDelay:100});}
