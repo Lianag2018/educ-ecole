@@ -10,6 +10,7 @@
     "preview": "node ops/server.mjs dist",
     "build": "node ops/test.mjs && node ops/build.mjs",
     "test": "node ops/test.mjs",
+    "check:connections": "node ops/check-connections.mjs",
     "test:browser": "node ops/tests/browser.mjs",
     "test:rls": "node ops/test-rls.mjs",
     "test:voice-db": "node ops/test-voice-db.mjs"

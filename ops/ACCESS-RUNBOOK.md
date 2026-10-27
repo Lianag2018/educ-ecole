@@ -2,6 +2,28 @@
 
 Référence du 21 octobre 2026. Aucun secret en clair dans ce document.
 
+## Contrôle actualisé du 27 octobre 2026
+
+Le connecteur Vercel **Personnel** fonctionne maintenant pour l'équipe et le
+projet personnels ci-dessous. Les anciens 403 décrivent les contrôles précédents.
+Le projet de production contient déjà `EDUC_OPENAI_API_KEY` et l'intégration
+Supabase. Ne pas recopier la clé ni utiliser une clé professionnelle.
+`EDUC_PARENT_ID` et `EDUC_VOICE_CONFIG` restent absents au contrôle de ce jour.
+Le connecteur Supabase actuel refuse la base familiale; cela ne prouve pas que
+les identifiants serveur Vercel sont invalides.
+
+`npm run check:connections` vérifie depuis l'environnement serveur autorisé :
+accès au modèle utilisé pour les photos, accès Auth et métadonnées du schéma.
+Le même contrôle s'exécute automatiquement pendant les builds du projet Vercel
+personnel, production/main uniquement. Lire la ligne `EDUC_CONNECTION_CHECK`
+dans le journal privé du build. Aucun secret, photo, génération ou écriture de
+base dans ce contrôle. Ne pas publier les environnements locaux.
+Les états `model_access_verified`, `auth_reachable` ou `present` prouvent seulement
+les lectures correspondantes, pas le parcours Photo → activités. L'identité du
+parent, les profils, le registre budgétaire et les conditions de traitement réelles
+restent requis avant tout import. Documentation officielle du contrôle OpenAI :
+https://developers.openai.com/api/reference/resources/models/methods/retrieve
+
 ## Identités à ne plus confondre
 
 | Accès | Cible / état observé |
