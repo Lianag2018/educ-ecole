@@ -1,5 +1,25 @@
 # État courant — 27 octobre 2026 (America/Toronto)
 
+
+## Codes d’accès visibles — 27 octobre 2026 (America/Toronto)
+
+Base distante vérifiée : `d11093028a7622ee11ba45d4efb76f2f9b1e37f7` (PR60).
+Production de cette base confirmée au contrôle précédent, version navigation-simple.
+Branche `feat/codes-acces-enfants` : bandeau en haut des mondes et des écrans
+avec ressources scolaires, isolé par profil. Codes de groupe/liste et identifiants
+copiables; absence indiquée explicitement. Accueil illustré et séances d’exercices
+conservés sans ajout de panneau. La liste Voca locale existante est réutilisée.
+
+Réglages parent pour les accès de chaque profil, sauvegarde atomique locale et
+conservation de l’ancien accès en cas d’échec. Aucun mot de passe, code réel,
+jeton, session ou identifiant privé dans les fichiers publiés. Aucune connexion
+automatique Nougat/CEC ni synchronisation entre appareils ajoutée.
+
+Validation locale : 428 tests réussis, dont isolation des profils, reprise des
+codes, refus des champs étrangers, échappement et sauvegarde en échec.
+Build et préversion à vérifier avant fusion; aucune validation sur iPad physique.
+Version préparée : `2026.10.27-codes-acces`.
+
 ## Navigation simplifiée — 27 octobre 2026, préversion vérifiée
 
 Base distante vérifiée : `6496b11fad8b3bebe5a5ebbb6e94016877411aac` (PR59).
