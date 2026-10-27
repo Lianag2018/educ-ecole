@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID,generateKeyPairSync,sign} from 'node:crypto';
-import {fresh,answer,select} from '../../src/engine.js';
+import {fresh,answer,select,level} from '../../src/engine.js';
 import {prioritySkills} from '../../src/progress.js';
 import {prepareObservations,mergeObservations,learningSummary,validateAdvice} from '../../src/learning-memory.js';
 import {LearningSync,learningPanel} from '../../src/learning-sync.js';
@@ -35,6 +35,12 @@ test('AI priorities expire and only break ties; no forced level or disruption to
  const result=select(p,day);assert.ok(result.every(q=>q.level===1));
  p.learningAdvice.asOf='2020-01-01';assert.equal(prioritySkills(p,day)[0],'mots');
  assert.throws(()=>validateAdvice({priorities:['arbitrary-code'],strategy:'short_practice'}));
+});
+test('legacy subjects and historical attempt totals survive preparation and cloud merge',()=>{
+ const p=fresh().profiles[0];p.history=[{id:card.id,skill:'mots',day:'2026-10-26',result:'correct'},{id:card.id,skill:'mots',day,result:'correct'}];p.records[card.id]={attempts:8};
+ const before=level(p,'mots',day);const sent=prepareObservations(p);assert.equal(before,2);assert.equal(level(p,'mots',day),before);assert.ok(sent.every(e=>!Object.hasOwn(e,'subject')));
+ mergeObservations(p,[{...make(),id:'another-card'}]);assert.equal(p.records[card.id].attempts,8);assert.equal(level(p,'mots',day),before);
+ const remote=make();mergeObservations(p,[remote]);assert.equal(p.records[card.id].attempts,9);mergeObservations(p,[remote]);assert.equal(p.records[card.id].attempts,9);
 });
 test('evolution claims once, reserves shared budget before provider, and only saves strict advice',async()=>{
  const f=fixture(),handle=learningEndpoint(f);assert.equal((await handle(req)).body.result,'updated');

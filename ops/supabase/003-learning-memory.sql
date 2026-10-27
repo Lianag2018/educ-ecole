@@ -32,7 +32,7 @@ begin
  select revision into n from public.famille_learning_state where parent_id=p_parent and profile_slot=p_slot for update;
  if p_after>n then raise exception 'invalid_cursor'; end if;
  for e in select value from jsonb_array_elements(p_events) loop
-  if jsonb_typeof(e)<>'object' or not(e ?& array['syncId','id','skill','day','subject','result','activityLevel'])
+  if jsonb_typeof(e)<>'object' or not(e ?& array['syncId','id','skill','day','result','activityLevel'])
    or e-array['syncId','id','skill','day','subject','result','activityLevel','submittedResult']<>'{}'::jsonb
    or (e->>'syncId')!~*'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
    or e->>'result' not in ('correct','help','incorrect') then raise exception 'invalid_event'; end if;

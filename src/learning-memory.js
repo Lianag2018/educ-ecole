@@ -5,18 +5,19 @@ export const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a
 const fields=['syncId','id','skill','result','day','subject','activityLevel','submittedResult'];
 export function observation(e) {
   if (!isPracticeEvent(e)||!UUID.test(e.syncId)||e.id.length>200||e.skill.length>100||
-      typeof e.subject!=='string'||e.subject.length>100||!Number.isInteger(e.activityLevel)||e.activityLevel<1||e.activityLevel>10||
+      (e.subject!==undefined&&(typeof e.subject!=='string'||e.subject.length>100))||!Number.isInteger(e.activityLevel)||e.activityLevel<1||e.activityLevel>10||
       (e.submittedResult!==undefined&&!['correct','help','incorrect'].includes(e.submittedResult))) throw Error('invalid_observation');
   return Object.fromEntries(fields.filter(k=>e[k]!==undefined).map(k=>[k,e[k]]));
 }
 // Stable IDs are persisted before sending. No names, codes, audio or free text.
 export function prepareObservations(p, uuid=()=>crypto.randomUUID()) {
   return p.history.filter(isPracticeEvent).map(e=>{
-    e.syncId??=uuid(); e.subject??='Historique non classé'; e.activityLevel??=1;
+    e.syncId??=uuid(); e.activityLevel??=1;
     return observation(e);
   });
 }
 export function mergeObservations(p, remote) {
+  const before=new Map();for(const e of p.history.filter(isPracticeEvent))before.set(e.id,(before.get(e.id)||0)+1);
   const ids=new Set(p.history.map(e=>e.syncId).filter(Boolean));
   for(const raw of remote){const e=observation(raw);if(!ids.has(e.syncId)){p.history.push(e);ids.add(e.syncId);}}
   p.history.sort((a,b)=>String(a.day).localeCompare(String(b.day))||String(a.syncId||'').localeCompare(String(b.syncId||'')));
@@ -29,7 +30,9 @@ export function mergeObservations(p, remote) {
     const days=dailyEvidence(events.filter(e=>e.skill===last.skill&&(isReadingEvent(last)?isReadingEvent(e):normalizeReadingSubject(e.subject)===normalizeReadingSubject(last.subject))));let streak=0;
     for(let i=days.length-1;i>=0&&days[i].result==='correct';i--)streak++;
     const d=new Date(last.day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+(last.result==='correct'?[1,3,7,14][Math.min(streak-1,3)]:0));
-    Object.defineProperty(p.records,id,{value:{...p.records[id],streak,result:last.result,due:d.toISOString().slice(0,10),attempts:events.length},writable:true,enumerable:true,configurable:true});
+    const oldAttempts=Number.isSafeInteger(p.records[id]?.attempts)?p.records[id].attempts:0;
+    const attempts=Math.max(oldAttempts,before.get(id)||0)+events.length-(before.get(id)||0);
+    Object.defineProperty(p.records,id,{value:{...p.records[id],streak,result:last.result,due:d.toISOString().slice(0,10),attempts},writable:true,enumerable:true,configurable:true});
   }
 }
 // Only bounded aggregate counts enter the model. IDs may contain school words.

@@ -22,7 +22,7 @@ et par jour. Les réponses restent locales quand la session parent a expiré et
 reprennent à la connexion suivante. Il ne s'agit pas d'un agent qui republie seul
 du code. Voir [EVOLUTION-SETUP.md](EVOLUTION-SETUP.md) pour activation et limites.
 
-Validation : 453 tests Node et build locaux réussis; contrôles SQL exécutés sur
+Validation : 454 tests Node et build locaux réussis; contrôles SQL exécutés sur
 PostgreSQL embarqué jetable (PGlite). Les contrôles PostgreSQL 16 avec six sessions
 concurrentes sont inclus dans le job PR. Un test Chromium réel valide la
 reconnexion, la fusion privée, l'isolation des enfants et la mise en page tablette

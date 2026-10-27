@@ -52,6 +52,8 @@ begin
   perform public.famille_reserve_voice(p,'p2','ffffffff-ffff-4fff-8fff-ffffffffffff',2000000,2000000);
  exception when raise_exception then collision:=sqlerrm='budget_cap'; end;
  if not collision then raise exception 'shared family cap bypassed'; end if;
+ data:=public.famille_sync_learning(p,'p2',jsonb_build_array((event-'subject')||'{"syncId":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"}'),0);
+ if data->'events'->0 ? 'subject' then raise exception 'legacy subject rewritten'; end if;
 end $$;
 reset role;
 do $$ begin

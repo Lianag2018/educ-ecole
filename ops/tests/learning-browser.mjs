@@ -32,12 +32,13 @@ const server=createServer(async(req,res)=>{try{
 }catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const temporary=await mkdtemp(join(tmpdir(),'educ-learning-browser-'));
-const chrome=spawn(process.env.CHROMIUM_PATH||'/usr/bin/chromium',['--headless','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--remote-debugging-port=9224',`--user-data-dir=${temporary}`,'about:blank'],{stdio:'ignore'});
+const chrome=spawn(process.env.CHROMIUM_PATH||'/usr/bin/chromium',['--headless','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--no-first-run','--no-default-browser-check','--disable-background-networking','--remote-debugging-port=0',`--user-data-dir=${temporary}`,'about:blank'],{stdio:['ignore','ignore','pipe']});
+let launchError='',diagnostic='';chrome.on('error',e=>{launchError=e.code;});chrome.stderr.on('data',chunk=>{diagnostic=(diagnostic+chunk).slice(-1500);});
 let socket;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 try{
- let tabs;for(let i=0;i<60;i++){try{tabs=await(await fetch('http://127.0.0.1:9224/json')).json();break;}catch{await sleep(100);}}
- assert.ok(tabs,'Chromium required');socket=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{socket.onopen=r;socket.onerror=j;});
+ let tabs;for(let i=0;i<300&&!launchError;i++){try{const port=(await readFile(join(temporary,'DevToolsActivePort'),'utf8')).split('\n')[0];tabs=await(await fetch(`http://127.0.0.1:${port}/json`,{signal:AbortSignal.timeout(1000)})).json();if(tabs.some(t=>t.type==='page'))break;}catch{}await sleep(100);}
+ assert.ok(tabs?.some(t=>t.type==='page'),'Chromium startup failed: '+launchError+' '+diagnostic);socket=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{socket.onopen=r;socket.onerror=j;});
  let id=0;const pending=new Map();socket.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error('CDP failed')):p.resolve(m.result);}if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text);};
  const cdp=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});socket.send(JSON.stringify({id:n,method,params}));});
  const run=async expression=>{const r=await cdp('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;};
@@ -58,4 +59,4 @@ try{
  state=JSON.parse(await run('localStorage.getItem("atelier-mots-v1")'));assert.equal(state.profiles[1].history.length,1);assert.equal(state.profiles[1].records['synthetic-card'].result,'correct');
  assert.ok(!JSON.stringify(uploaded).includes('PRIVATE_NAME'));assert.deepEqual(errors,[]);
  console.log('Browser: parent reconnection, real fetch, private merge, separate children and tablet layout passed.');
-}finally{socket?.close();if(chrome.exitCode===null)await new Promise(r=>{chrome.once('exit',r);chrome.kill();});server.close();await rm(temporary,{recursive:true,force:true,maxRetries:10,retryDelay:100});}
+}finally{socket?.close();if(chrome.pid&&chrome.exitCode===null)await new Promise(r=>{chrome.once('exit',r);chrome.kill();});server.close();await rm(temporary,{recursive:true,force:true,maxRetries:10,retryDelay:100});}
