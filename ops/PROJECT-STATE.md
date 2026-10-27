@@ -1,4 +1,28 @@
-# État courant — 26 octobre 2026 (America/Toronto)
+# État courant — 27 octobre 2026 (America/Toronto)
+
+## Navigation simplifiée — 27 octobre 2026, préparation
+
+Base distante vérifiée : `6496b11fad8b3bebe5a5ebbb6e94016877411aac` (PR59).
+Branche `feat/navigation-enfants`; accord de réalisation reçu après audit.
+La première page illustrée reste conservée. Après le choix de l'enfant :
+aventure du jour de trois activités, Français et Maths. Le parcours du jour
+reprend localement pour le même profil/date/niveau, et privilégie son plan de
+la semaine lorsqu'il existe. Aucun crédit de réussite par simple navigation.
+Les activités complémentaires restent accessibles sous leur matière ou dans
+le coffre. Alloprof vocabulaire rejoint Français; les liens d'installation
+restent dans Parents. Le Pop-it contextuel représente le calcul en cours
+uniquement si ses axes ou unités le permettent, sans répondre à la place de
+l'enfant. Les essais avec cet outil restent accompagnés.
+
+Parents comporte quatre sections : semaine, documents, progrès, réglages.
+Changer de section conserve les formulaires montés et leur sélection de fichiers.
+Les enregistrements de progression, photos locales et contrats serveur ne sont
+pas migrés. Aucune activation Supabase/IA supplémentaire incluse.
+
+Validation locale : les six tests supplémentaires couvrent reprise, isolation,
+plan courant, limites du Pop-it et conservation des formulaires. Préversion,
+PR, vérification navigateur et publication à confirmer avant déclaration en ligne.
+Aucun test sur appareil physique Safari/iPad.
 
 ## Compatibilité de l'intégration Supabase/Vercel — 26 octobre 2026, soir
 
