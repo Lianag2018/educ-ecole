@@ -11,6 +11,7 @@ const event=(result)=>({syncId:randomUUID(),id:'synthetic-card',skill:'mots',sub
 const records={p1:[event('help')],p2:[event('correct')]};let authenticated=false;
 const uploaded=[],errors=[];
 const server=createServer(async(req,res)=>{try{
+ res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob: https://pedagofa.cssdm.gouv.qc.ca; connect-src 'self'");
  const path=new URL(req.url,'http://localhost').pathname;
  if(path.startsWith('/api/')){
   let body='';for await(const chunk of req)body+=chunk;
@@ -78,6 +79,8 @@ try{
  await click('[data-island-go=cuba]');assert.deepEqual(await position(),before);
  await cdp('Page.reload');await until('!!document.querySelector("[data-game-child]")');await click('[data-game-child="0"]');await click('[data-action=archipelago]');assert.deepEqual(await position(),before);
  await click('[data-island-go=dominicaine]');
+ assert.equal(await run("getComputedStyle(document.querySelector('.archipelago-stage')).getPropertyValue('--island-position').trim()"),'0% 100%');
+ assert.equal(await run("document.querySelector('[data-island-landmark]').style.left"),'29%');
  await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  assert.equal(await run('document.documentElement.scrollWidth<=document.documentElement.clientWidth'),true);
  if(process.env.SCREENSHOT){await run("document.querySelector('.archipelago').scrollIntoView()");await sleep(200);const pic=await cdp('Page.captureScreenshot',{format:'png'});await writeFile(process.env.SCREENSHOT,Buffer.from(pic.data,'base64'));}

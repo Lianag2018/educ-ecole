@@ -10,10 +10,10 @@ export function archipelagoHome(p,day){
   <nav class="archipelago-islands" aria-label="Choisir une destination">${islands.map(i=>`<button data-island-go="${i.id}" ${i.id===island.id?'aria-current="location"':''}><span aria-hidden="true">${i.icon}</span><span>${i.name}</span></button>`).join('')}</nav>
   <div class="archipelago-world">
    <div class="archipelago-scene-head"><div><span>ESCALE ${islands.indexOf(island)+1} / 4</span><h2>${island.name}</h2><p>${island.detail}</p></div><button data-island-pause aria-pressed="${!!s.quiet}" aria-label="Mettre l’exploration en pause">${s.quiet?'▶ Reprendre':'Ⅱ Pause'}</button></div>
-   <div class="archipelago-stage" tabindex="0" role="group" aria-label="Explorer ${island.name}. Touche le sable pour marcher, ou utilise les flèches du clavier." aria-describedby="archipelago-controls" style="--island-position:${island.position}">
+   <div class="archipelago-stage" tabindex="0" role="group" aria-label="Explorer ${island.name}. Touche le sable pour marcher, ou utilise les flèches du clavier." aria-describedby="archipelago-controls">
     <div class="archipelago-land" aria-hidden="true"></div><div class="archipelago-sea-glow" aria-hidden="true"></div>
-    ${landmarks.map((m,n)=>`<button class="archipelago-marker ${route.explored.includes(n)?'explored':''}" data-island-landmark="${n}" style="left:${m.x}%;top:${m.y}%" aria-label="Aller à ${m.name.toLowerCase()} : défi ${n+1}${route.explored.includes(n)?', déjà exploré':''}"><span aria-hidden="true">${m.icon}</span><b>${n+1}</b></button>`).join('')}
-    ${coconuts.map((c,n)=>`<button class="archipelago-coconut" data-coconut="${n}" style="left:${c.x}%;top:${c.y}%" aria-label="Ramasser la noix de coco ${n+1}" ${s.baskets[island.id]?.includes(n)?'hidden':''}>🥥</button>`).join('')}
+    ${landmarks.map((m,n)=>`<button class="archipelago-marker ${route.explored.includes(n)?'explored':''}" data-island-landmark="${n}" aria-label="Aller à ${m.name.toLowerCase()} : défi ${n+1}${route.explored.includes(n)?', déjà exploré':''}"><span aria-hidden="true">${m.icon}</span><b>${n+1}</b></button>`).join('')}
+    ${coconuts.map((c,n)=>`<button class="archipelago-coconut" data-coconut="${n}" aria-label="Ramasser la noix de coco ${n+1}" ${s.baskets[island.id]?.includes(n)?'hidden':''}>🥥</button>`).join('')}
     <span class="archipelago-basket" aria-label="Souvenirs ramassés">🧺 <b data-coconut-count>${s.baskets[island.id]?.length||0}</b> / 5</span>
     <div class="archipelago-target" aria-hidden="true" hidden></div>
     <div class="archipelago-girl girl-p1" aria-hidden="true"><div class="girl-shadow"></div><div class="girl-sprite"></div></div>
@@ -33,6 +33,9 @@ export function mountArchipelago(root,p,{day,save,onIsland,onMission}={}){
  if(!root)return null;
  const controller=new AbortController(),{signal}=controller,s=archipelagoState(p),id=s.destination,route=islandRoute(p,id,day);
  const stage=root.querySelector('.archipelago-stage'),status=root.querySelector('.archipelago-status'),quest=root.querySelector('.archipelago-quest');
+ stage.style.setProperty('--island-position',islands.find(i=>i.id===id).position);
+ root.querySelectorAll('[data-island-landmark]').forEach(b=>{const m=landmarks[Number(b.dataset.islandLandmark)];b.style.left=m.x+'%';b.style.top=m.y+'%';});
+ root.querySelectorAll('[data-coconut]').forEach(b=>{const c=coconuts[Number(b.dataset.coconut)];b.style.left=c.x+'%';b.style.top=c.y+'%';});
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),girls=[...root.querySelectorAll('.archipelago-girl')],name=root.querySelector('.archipelago-active-name'),targetMarker=root.querySelector('.archipelago-target');
  let position=positionFor(p,id),target=null,queued=null,frame=0,last=0,elapsed=0,paused=!!s.quiet,destroyed=false,dirty=false,facing=1;
  const keys=new Set(),directions={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]},keyDirections={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',z:'up',q:'left'};

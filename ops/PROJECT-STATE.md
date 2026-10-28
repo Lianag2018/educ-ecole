@@ -1,5 +1,24 @@
 # État courant — 28 octobre 2026 (America/Toronto)
 
+## Deuxième site de jeu — 28 octobre 2026 (America/Toronto)
+
+Autorisation explicite de créer le deuxième projet Vercel personnel.
+Projet `educ-iles-aventure` (`prj_cx0q803IDtEFC8takYIz1kTRzfPW`),
+adresse `https://educ-iles-giroux.vercel.app/`, distincte du site scolaire.
+Aucune variable privée copiée : progression locale isolée par origine;
+services parent, synchronisation et IA non raccordés sur ce deuxième projet.
+Build preview sans génération audio payante, puis alias public du projet.
+Le build production direct refuse la génération de narration hors main;
+la promotion a retourné 422, l'alias explicite fonctionne sans modifier SSO.
+Les narrations OpenAI du site principal ne sont pas embarquées dans ce build;
+les MP3 Kalulu et le repli vocal du navigateur restent disponibles.
+SHA 69bc30f : deux workflows réussis, incluant parcours Chromium complet.
+Contrôle visuel distant : accueil, accès au jeu et quatre boutons d'escale.
+La CSP bloquait les positions écrites en attribut style dans le HTML :
+correction par propriétés CSS DOM, test navigateur avec CSP de production.
+Publication de cette correction et contrôle visuel final à confirmer sur PR67.
+Site principal inchangé; aucune fusion de PR, aucun essai physique iPhone.
+
 ## Archipel jouable — 28 octobre 2026 (America/Toronto)
 
 Branche `feat/archipel-jouable`, base distante `4709d03ab60087afa177c4f06e1df1d1f97ee1a4`.
