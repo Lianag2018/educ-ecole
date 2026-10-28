@@ -256,7 +256,7 @@ test('status distinguishes parent configuration and oral availability without ex
 test('status fails closed on unverifiable parent auth; explicit check route retains body limit',async()=>{
  const f=runtimeFixture(),handle=runtime(f.env,async()=>{throw Error('private auth error');});
  const status=await handle({path:'/api/voice/status',method:'POST',headers:f.headers,body:{}});assert.equal(status.status,200);assert.equal(status.body.authenticated,false);
- const {default:handler}=await import('../../api/voice/check.mjs');let code;
+ const {default:handler}=await import('../../api/entry.mjs');let code;
  const res={on(){},status(value){code=value;return this;},end(){},json(){},setHeader(){}};
  await handler({url:'/api/voice/check',method:'POST',headers:{},body:{audio:'a'.repeat(1300001)}},res);assert.equal(code,413);
 });
