@@ -191,3 +191,16 @@ changement de carte. Le démontage retire les écouteurs. La narration utilise
 La navigation et les réponses conservent pour le moment le rendu général existant.
 Le CSS partagé respecte la pause de voyage et la réduction des animations.
 Cette première tranche couvre les objets de maths, pas encore tous les lecteurs.
+
+## Accès parent et appareil familial — 28 octobre 2026
+
+`activation.html` et `src/parent-activation.js` permettent au parent de choisir
+son mot de passe avec une invitation Supabase. `ops/server/parent-activation.mjs`
+vérifie le lien et l'identité côté serveur; aucun jeton administrateur public.
+
+`ops/server/family-device.mjs` fournit une autorisation révocable de 90 jours,
+distincte de la session parent récente. `authenticateLearner` est utilisé
+uniquement par la synchronisation des réponses et la lecture des plans existants.
+Les imports, évolutions déclenchées par navigateur et conversations continuent
+d'exiger le parent. Le travail horaire existant conserve ses propres contrôles.
+Voir [PARENT-SETUP](ops/PARENT-SETUP.md) pour les limites et la mise en service.

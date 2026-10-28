@@ -51,8 +51,9 @@ export function learningEndpoint({auth,profiles,store,config,ledger,apiKey,fetch
     const result=[];for(const slot of ['p1','p2'])result.push(await evolve(parentId,slot,req.signal));
     return {status:200,body:{updated:result.filter(s=>s==='updated').length}};
    }
-   const parent=await auth.authenticateParent(req);
-   if(!parent?.id||parent.role!=='parent'||!parent.emailVerified||!parent.recentLogin||!parent.csrfVerified)return {status:401,body:{code:'parent_login_required'}};
+   const parent=await (req.path==='/api/learning/sync'&&auth.authenticateLearner?auth.authenticateLearner(req):auth.authenticateParent(req));
+   const device=req.path==='/api/learning/sync'&&parent?.role==='family_device';
+   if(!parent?.id||!parent.csrfVerified||(!device&&(parent.role!=='parent'||!parent.emailVerified||!parent.recentLogin)))return {status:401,body:{code:'parent_login_required'}};
    if(!available())return {status:503,body:{code:'learning_setup_required'}};
    const b=req.body;
    if(!b||!['p1','p2'].includes(b.profileId))return {status:400,body:{code:'invalid_request'}};
@@ -61,7 +62,7 @@ export function learningEndpoint({auth,profiles,store,config,ledger,apiKey,fetch
     if(Object.keys(b).some(k=>!['profileId','events','after'].includes(k))||!Array.isArray(b.events)||b.events.length>100||!Number.isSafeInteger(b.after)||b.after<0)throw Error('invalid_request');
     const events=b.events.map(e=>{if(!e||Object.keys(e).some(k=>!['syncId','id','skill','result','day','subject','activityLevel','submittedResult'].includes(k)))throw Error('invalid_request');return observation(e);});
     const data=await store.sync(parent.id,b.profileId,events,b.after);
-    return {status:200,body:{...data,accepted:events.map(e=>e.syncId),autoAvailable:aiAvailable()}};
+    return {status:200,body:{...data,accepted:events.map(e=>e.syncId),autoAvailable:aiAvailable(),canEvolve:!device}};
    }
    if(req.path==='/api/learning/evolve'){
     if(Object.keys(b).some(k=>k!=='profileId'))throw Error('invalid_request');

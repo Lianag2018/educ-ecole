@@ -84,7 +84,7 @@ test('pending login locks both commands and ignores duplicate login or logout ha
  assert.equal(h.requests[1].url,'/api/parent/logout');
  h.requests[1].resolve({ok:true});await logout;locked(box,false);
  assert.deepEqual(events,['changed','logout','changed']);
- assert.equal(box.querySelector('[role=status]').textContent,'Tuteur déconnecté.');
+ assert.match(box.querySelector('[role=status]').textContent,/Session parent fermée/);
 });
 
 test('pending logout stops local audio once and prevents a login cookie race',async t=>{

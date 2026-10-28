@@ -34,6 +34,9 @@ jobs:
       - run: node ops/tests/learning-browser.mjs
         env:
           CHROMIUM_PATH: /usr/bin/google-chrome
+      - run: node ops/tests/parent-browser.mjs
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
       - run: npm run build
   evolve:
     if: github.repository == 'Lianag2018/educ-ecole' && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
