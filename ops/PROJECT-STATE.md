@@ -1,5 +1,15 @@
 # État courant — 28 octobre 2026 (America/Toronto)
 
+## Activation mobile : validation visible — 28 octobre
+
+Après un signalement iPhone de bouton sans réaction, le formulaire utilise une
+validation explicite de longueur et de confirmation. Compteur de caractères,
+message annoncé et placé à l'écran après chaque tentative; aucun appel réseau
+si les champs sont incomplets. Les contraintes serveur sont conservées.
+Le parcours navigateur automatisé vérifie mot de passe court, confirmation vide,
+différente puis activation réussie avec API simulée. Aucun mot de passe réel
+utilisé; aucun test physique iPhone revendiqué.
+
 ## Raccordement des routes parent — 28 octobre
 
 Production cec9408 : POST /api/parent/provision renvoie une 404 Vercel avant
