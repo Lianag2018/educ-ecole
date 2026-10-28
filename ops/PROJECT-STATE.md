@@ -1,5 +1,35 @@
 # État courant — 27 octobre 2026 (America/Toronto)
 
+## PR préparée : sauvegarde privée et évolution pédagogique
+
+Branche `feat/evolution-apprentissage`, isolée à partir de `f7c63c0`.
+La connexion au projet Supabase familial a été constatée dans la conversation
+annexe; le diagnostic de connecteur plus bas est historique. Cette PR ne change
+ni les paramètres ni le schéma de la production et ne présume pas l'état de la
+configuration poursuivie dans la conversation principale.
+
+Ajouts : journal privé idempotent des réponses par enfant, synchronisation
+facultative dans Parents → Progrès, adaptation OpenAI bornée aux domaines connus,
+contexte de progrès dans le tuteur et accès aux activités des plans sauvegardés.
+Le workflow `educ-evolution.yml` vérifie les PR puis, sur main, déclenche les
+nouveautés privées par OIDC. Aucun contenu d'enfant ni secret dans GitHub.
+Les nouveaux documents déclenchent une révision serveur; les photos s'analysent
+déjà automatiquement après sélection dans Photo → activités.
+
+Le plafond partagé de 40 CAD est conservé. Pas de nouvel essai payant automatique
+pour une même révision après un résultat ambigu; au plus une tentative par enfant
+et par jour. Les réponses restent locales quand la session parent a expiré et
+reprennent à la connexion suivante. Il ne s'agit pas d'un agent qui republie seul
+du code. Voir [EVOLUTION-SETUP.md](EVOLUTION-SETUP.md) pour activation et limites.
+
+Validation : 454 tests Node et build locaux réussis; contrôles SQL exécutés sur
+PostgreSQL embarqué jetable (PGlite). Les contrôles PostgreSQL 16 avec six sessions
+concurrentes sont inclus dans le job PR. Un test Chromium réel valide la
+reconnexion, la fusion privée, l'isolation des enfants et la mise en page tablette
+avec des API locales simulées; il est inclus dans le job PR. Les tests fournisseur sont simulés;
+aucune nouvelle photo réelle ni facturation OpenAI utilisée pour cette PR.
+La validation du parcours sur iPad physique et l'activation restent à faire.
+
 ## Raccordement OpenAI et diagnostic serveur — 27 octobre 2026
 
 Base distante vérifiée : `1f8c0d3816f411c608973473fef72747e835f944` (PR61),

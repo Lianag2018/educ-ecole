@@ -1,0 +1,55 @@
+name: Évolution Educ École
+on:
+  pull_request:
+    paths: ['src/**', 'ops/**', 'api/**', '.github/workflows/educ-evolution.yml']
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: synthetic-test-only
+          POSTGRES_DB: educ_test
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - run: node ops/test-learning-db.mjs
+        env:
+          EDUC_TEST_DATABASE_URL: postgresql://postgres:synthetic-test-only@localhost:5432/educ_test
+      - run: node ops/tests/learning-browser.mjs
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+      - run: npm run build
+  evolve:
+    if: github.repository == 'Lianag2018/educ-ecole' && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    concurrency:
+      group: educ-private-learning
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node ops/run-learning-job.mjs
