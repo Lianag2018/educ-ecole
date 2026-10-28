@@ -28,12 +28,17 @@ plans, callbacks périmés et ramassage sans crédit scolaire. Test navigateur
 réel ajouté au workflow PR : marche, clavier, pause, mission/retour, rechargement,
 profils distincts, largeur 390 px et réduction des animations. Son exécution
 reste à confirmer; Chromium local indisponible (archive téléchargée invalide).
-Publication de la branche refusée par la revue automatique : une autorisation
-explicite d'envoi du nouveau code vers GitHub est demandée. Aucun push, aucune PR
-ni préversion issus de cette tentative. Le commit local est conservé. Le navigateur
-connecté est indisponible dans ce contexte mobile; les deux téléchargements de
-Chromium local ont fourni une archive invalide. Le test navigateur reste à exécuter
-sur la PR après autorisation. Aucun test iPhone/iPad physique.
+Publication autorisée explicitement par le parent puis effectuée par le connecteur
+GitHub (le client Git local ne possède pas d'identification pour pousser).
+PR ouverte : https://github.com/Lianag2018/educ-ecole/pull/67.
+Arbre publié vérifié identique au code local. Premier aperçu Vercel READY pour
+`bbe73270babd21e4172b1feb5ee6f6af2b6e70bc`, protégé par connexion Vercel.
+La première CI passe les tests unitaires, SQL et les parcours navigateur existants.
+Le nouveau parcours passe marche, mission, ramassage, pause et clavier; son
+rechargement a révélé une attente manquante avant le branchement du bouton enfant.
+Attente corrigée; validation complète du nouveau parcours à relire sur la PR.
+Aucune fusion ni promotion en production. Aucun test iPhone/iPad physique.
+
 
 
 ## Activation mobile : validation visible — 28 octobre
