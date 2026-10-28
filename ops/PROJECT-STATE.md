@@ -1,4 +1,16 @@
-# État courant — 27 octobre 2026 (America/Toronto)
+# État courant — 28 octobre 2026 (America/Toronto)
+
+## Raccordement des routes parent — 28 octobre
+
+Production cec9408 : POST /api/parent/provision renvoie une 404 Vercel avant
+le runtime. Aucun compte Auth ni consommation de jeton constaté après cet essai.
+Regroupement des routes API dans une seule fonction et réécriture explicite
+Vercel vers le runtime existant. Évite les routes introuvables et la multiplication
+des fonctions. Aucun contrôle parent ou fournisseur modifié. La migration
+educ_family_devices_parent_activation est appliquée sur la base familiale;
+RLS et droits RPC serveur vérifiés.
+Invitation privée autorisée par le parent, livraison restant à confirmer.
+
 
 ## Activation parent et tablette familiale — 28 octobre 2026 (America/Toronto)
 
