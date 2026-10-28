@@ -11,7 +11,7 @@ export function validatePhoto(image){
 export function planEndpoint({auth,profiles,ledger,store,config,apiKey,fetcher=fetch}){
  return async req=>{let phase='auth';try{
   if(req.method!=='POST')return {status:405,body:{code:'method_not_allowed'}};
-  const parent=await auth.authenticateParent(req);if(!parent?.id)return {status:401,body:{code:'parent_login_required'}};
+  const parent=await (req.path==='/api/plans/list'&&auth.authenticateLearner?auth.authenticateLearner(req):auth.authenticateParent(req));if(!parent?.id)return {status:401,body:{code:'parent_login_required'}};
   const b=req.body||{};if(!['p1','p2'].includes(b.profileId))throw Error('invalid_plan');
   const p=await profiles.ownedBy(parent.id,b.profileId);if(!p)return {status:403,body:{code:'profile_forbidden'}};
   const grade=p.stage==='1re année'?1:p.stage==='3e année'?3:null;if(!grade)throw Error('invalid_plan');

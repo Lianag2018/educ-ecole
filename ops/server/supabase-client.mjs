@@ -3,9 +3,9 @@
 const VOID_BUDGET_RPC = '/rest/v1/rpc/famille_reserve_voice';
 
 export function createSupabaseClient({url, key, anon, fetcher = fetch}) {
-  return async function sb(path, body, token) {
-    const method = body ? 'POST' : 'GET';
-    const publicAuth = path === '/auth/v1/token?grant_type=password' || path === '/auth/v1/user';
+  return async function sb(path, body, token, options = {}) {
+    const method = options.method || (body ? 'POST' : 'GET');
+    const publicAuth = path === '/auth/v1/token?grant_type=password' || path === '/auth/v1/user' || path === '/auth/v1/verify';
     const apiKey = publicAuth ? anon : key;
     // New API keys are opaque, not JWTs. Only real user tokens or legacy JWT
     // keys belong in Authorization; password login uses the public key only.

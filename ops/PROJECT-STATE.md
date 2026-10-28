@@ -1,5 +1,56 @@
 # État courant — 27 octobre 2026 (America/Toronto)
 
+## Activation parent et tablette familiale — 28 octobre 2026 (America/Toronto)
+
+Branche isolée `feat/parent-tablette`, base distante revérifiée `25b853bb` (PR63).
+Page d'activation parent par invitation Supabase à usage unique. Mot de passe
+choisi par le parent, aucune auto-confirmation administrative. Provisionnement
+fermé par défaut, limité au projet/base familiaux, à un destinataire configuré,
+à une heure maximum et à une utilisation atomique. Livraison privée du lien
+par le canal de messagerie autorisé, sans secret dans le dépôt ou les journaux.
+
+Autorisation facultative d'appareil pendant 90 jours : cookie HttpOnly/Secure,
+seule empreinte stockée, révocation par le parent, accès uniquement aux essais
+structurés et aux plans déjà analysés. Les enfants gardent leur accès par prénom.
+La session parent d'une heure reste requise pour les documents, le tuteur et les
+modifications d'autorisation. Aucun indicateur de confidentialité ou d'IA activé.
+Les données locales et le choix de synchronisation de chaque enfant sont conservés.
+
+Validation locale : 463 tests et build réussis; SQL des droits, limites, durée,
+révocation et usage unique vérifié sur PostgreSQL embarqué jetable. Le job PR
+ajoute les vérifications PostgreSQL 16 et six réclamations concurrentes ainsi
+qu'un parcours Chrome. Le lancement Chrome local est bloqué par les sockets du sandbox; le job PR doit
+confirmer ce parcours avant fusion. Livraison et vraie confirmation parent restent à vérifier.
+Procédure exacte : [PARENT-SETUP.md](PARENT-SETUP.md).
+
+## Mise en production de la PR63 — 28 octobre 2026 (America/Toronto)
+
+La PR63 est fusionnée : `25b853bb3341954a55fbaaadfc98866e127b6e23`.
+Déploiement personnel `dpl_BmayEW8cJSJbhV5s92hTY4jXANxx` READY, alias
+`educ-ecole.vercel.app` confirmé. Les deux modules publics de mémoire/synchronisation
+correspondent exactement au code revu; 454 tests et les workflows de la PR réussis.
+
+Trois migrations appliquées au Supabase familial : `educ_family_voice_budget`,
+`educ_private_school_plans`, `educ_private_learning_memory`. Six tables privées,
+RLS activée et aucun accès direct anon/authenticated. Le linter émet uniquement
+les six avis INFO attendus pour RLS sans politique : accès réservé au serveur.
+La base ne contenait aucune table applicative avant ces migrations.
+
+Configuration serveur ajoutée : `learningEnabled:true`, `learningAutoEnabled:false`.
+Le build confirme accès modèle OpenAI, Auth Supabase, tables budget/plans et RPC.
+Le compte parent recherché est absent; `EDUC_PARENT_ID` n'est pas configuré.
+Aucun profil enfant ou résultat fictif n'a été inséré. Les conditions de rétention,
+prix et coûts restent non attestées; aucun indicateur privé n'a été forcé.
+La sauvegarde nécessite encore un vrai compte parent et les deux profils serveur.
+L'analyse des photos, l'adaptation payante et la voix ne sont pas déclarées actives.
+
+Prochaine action : terminer la connexion à la console familiale pour créer le
+compte parent par le parcours Auth normal. La connexion sécurisée a abouti à un
+CAPTCHA hCaptcha; reprise manuelle demandée, aucun contournement. Puis confirmer
+le parent, provisionner les slots scolaires, vérifier les conditions OpenAI et
+le budget avant activation et test réel Photo → activités. Aucun mot de passe,
+jeton, courriel privé, photo ou donnée scolaire dans ce journal.
+
 ## PR préparée : sauvegarde privée et évolution pédagogique
 
 Branche `feat/evolution-apprentissage`, isolée à partir de `f7c63c0`.
