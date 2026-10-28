@@ -4,10 +4,11 @@
 
 Production cec9408 : POST /api/parent/provision renvoie une 404 Vercel avant
 le runtime. Aucun compte Auth ni consommation de jeton constaté après cet essai.
-Ajout des cinq entrées API explicites (provision, activate, device/status,
-device/enable, device/revoke), comme les autres routes du projet. Aucun contrôle
-parent ou fournisseur modifié. La migration educ_family_devices_parent_activation
-est appliquée sur la base familiale; RLS et droits RPC serveur vérifiés.
+Regroupement des routes API dans une seule fonction et réécriture explicite
+Vercel vers le runtime existant. Évite les routes introuvables et la multiplication
+des fonctions. Aucun contrôle parent ou fournisseur modifié. La migration
+educ_family_devices_parent_activation est appliquée sur la base familiale;
+RLS et droits RPC serveur vérifiés.
 Invitation privée autorisée par le parent, livraison restant à confirmer.
 
 
