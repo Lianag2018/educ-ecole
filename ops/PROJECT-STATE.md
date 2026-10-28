@@ -1,5 +1,41 @@
 # État courant — 28 octobre 2026 (America/Toronto)
 
+## Archipel jouable — 28 octobre 2026 (America/Toronto)
+
+Branche `feat/archipel-jouable`, base distante `4709d03ab60087afa177c4f06e1df1d1f97ee1a4`.
+Nouvelle entrée « Explorer mes îles » après le choix du profil, accueil animé
+conservé. Quatre décors : Cuba, côte caraïbe du Mexique, République dominicaine,
+îles Turques-et-Caïques. Deux personnages illustrés issus de la référence
+approuvée; marche en quatre poses, déplacement par toucher/clic, flèches clavier
+ou pavé tactile. L'escale dominicaine reprend la palmeraie et les glissades des
+références de voyage fournies. Seules les illustrations dérivées sont ajoutées.
+
+Trois points de mission par escale lancent les activités du moteur existant.
+Le plan de la semaine du même profil/niveau a priorité; sa modification renouvelle
+les missions même le même jour. Banque intégrée en complément; aucune analyse
+payante ni transmission des photos de conversation ajoutée. Les missions restent
+bornées aux notions prises en charge par `school-plan.js`.
+
+Positions, panier de noix de coco et défis explorés conservés par profil/escale
+sur cet appareil. Les objets ramassés ne créditent ni réponses ni maîtrise.
+Les résultats corrects, aidés et incorrects gardent le moteur/historique existant.
+Pause, sortie, perte de focus et arrière-plan stoppent le mouvement. Réduction
+des animations : accès direct au point choisi, sans marche animée.
+
+Validation locale : 475 tests réussis, build réussi et 328 MP3 Kalulu conservés.
+Cinq tests couvrent mouvements/bornes, persistance, profils, renouvellement des
+plans, callbacks périmés et ramassage sans crédit scolaire. Test navigateur
+réel ajouté au workflow PR : marche, clavier, pause, mission/retour, rechargement,
+profils distincts, largeur 390 px et réduction des animations. Son exécution
+reste à confirmer; Chromium local indisponible (archive téléchargée invalide).
+Publication de la branche refusée par la revue automatique : une autorisation
+explicite d'envoi du nouveau code vers GitHub est demandée. Aucun push, aucune PR
+ni préversion issus de cette tentative. Le commit local est conservé. Le navigateur
+connecté est indisponible dans ce contexte mobile; les deux téléchargements de
+Chromium local ont fourni une archive invalide. Le test navigateur reste à exécuter
+sur la PR après autorisation. Aucun test iPhone/iPad physique.
+
+
 ## Activation mobile : validation visible — 28 octobre
 
 Après un signalement iPhone de bouton sans réaction, le formulaire utilise une

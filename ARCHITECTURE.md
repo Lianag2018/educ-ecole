@@ -204,3 +204,22 @@ uniquement par la synchronisation des réponses et la lecture des plans existant
 Les imports, évolutions déclenchées par navigateur et conversations continuent
 d'exiger le parent. Le travail horaire existant conserve ses propres contrôles.
 Voir [PARENT-SETUP](ops/PARENT-SETUP.md) pour les limites et la mise en service.
+
+
+## Exploration des quatre destinations — 28 octobre 2026
+
+`archipelago-model.js` conserve un état `profile.archipelago` versionné et borné
+à quatre destinations : positions, paniers et trois cartes par destination.
+La révision inclut profil, niveau, journée, destination, plan de la semaine et
+mots assignés. Les anciennes cartes/réponses ne sont pas réécrites. Une nouvelle
+révision retire seulement les marqueurs d'exploration de la route précédente.
+`completeIslandMission` exige une réponse enregistrée et une révision identique;
+les aides/erreurs restent distinguées par le moteur. Les noix de coco ne touchent
+jamais l'historique pédagogique. L'état visuel du jeu reste local à l'appareil.
+
+`archipelago.js` rend la scène et pilote la marche via requestAnimationFrame,
+avec temps limité par frame, bornes de terrain, contrôles pointer/clavier,
+arrêt en arrière-plan et démontage des écouteurs. Les décors et sprites sont des
+WebP locaux, sans service de rendu ou génération à chaque partie. `app.js`
+ouvre une carte du moteur, puis propose le retour à l'île à la même position.
+Le parcours d'import photo et ses protections serveur restent ceux existants.

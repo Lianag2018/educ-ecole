@@ -43,6 +43,7 @@ export function childHome(p,day){
  return `<section class="simple-world" aria-label="Mon monde">
  <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
+ <button class="island-game-door" data-action="archipelago"><img src="/icons/archipel-voyage.webp" alt="Les deux sœurs en voilier vers leurs îles paradisiaques" width="1672" height="941"><span><span><strong>Explorer mes îles</strong><small>Je marche, je découvre, j’apprends.</small></span><b aria-hidden="true">→</b></span></button>
  <div class="simple-doors" aria-label="Mes trois choix">
  <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><small>${progress===3?'Ta mission est terminée':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Voir mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
  ${tile('Français',advanced(p)?'Mes mots et mes histoires':'Les sons et les mots','<span class="book-art">Aa</span>','data-action="french"')}
