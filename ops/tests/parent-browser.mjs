@@ -49,6 +49,11 @@ try{
  await until('!!document.querySelector("#activate-parent")');
  await until('location.hash===""');assert.equal(received.length,0);
  assert.equal(await run('document.documentElement.scrollWidth<=innerWidth'),true);
+ await run(`document.querySelector('[name=password]').value='court';document.querySelector('[name=confirmation]').value='court';document.querySelector('#activate-parent').requestSubmit();`);
+ await until('document.querySelector("#activation-status").textContent.includes("Il en manque 7")');assert.equal(received.length,0);
+ assert.equal(await run('document.activeElement.id'),'activation-status');
+ await run(`document.querySelector('[name=password]').value='synthetic long password';document.querySelector('[name=confirmation]').value='';document.querySelector('#activate-parent').requestSubmit();`);
+ await until('document.querySelector("#activation-status").textContent.includes("deuxième champ")');assert.equal(received.length,0);
  await run(`document.querySelector('[name=password]').value='synthetic long password';document.querySelector('[name=confirmation]').value='other long password';document.querySelector('#activate-parent').requestSubmit();`);
  await until('document.querySelector("#activation-status").textContent.includes("identiques")');assert.equal(received.length,0);
  await run(`document.querySelector('[name=confirmation]').value='synthetic long password';document.querySelector('[name=rememberDevice]').checked=true;document.querySelector('#activate-parent').requestSubmit();`);
