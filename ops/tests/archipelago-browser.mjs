@@ -43,7 +43,7 @@ try{
  const cdp=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});socket.send(JSON.stringify({id:n,method,params}));});
  const run=async expression=>{const r=await cdp('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;};
  const until=async expression=>{for(let i=0;i<80;i++){if(await run(expression))return;await sleep(100);}throw Error('Browser condition timed out: '+expression);};
- const click=s=>run(`document.querySelector(${JSON.stringify(s)}).click()`);
+ const click=async s=>{await until(`!!document.querySelector(${JSON.stringify(s)})`);if(s.includes('data-game-child'))await until(`typeof document.querySelector(${JSON.stringify(s)}).onclick==='function'`);return run(`document.querySelector(${JSON.stringify(s)}).click()`);};
  await cdp('Runtime.enable');await cdp('Page.enable');await cdp('Emulation.setDeviceMetricsOverride',{width:820,height:1180,deviceScaleFactor:1,mobile:true});
  await cdp('Page.navigate',{url:`http://127.0.0.1:${server.address().port}`});await until('!!document.querySelector("[data-game-child]")');
 
