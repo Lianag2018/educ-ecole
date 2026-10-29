@@ -150,3 +150,7 @@ body.world-older{--world:#6651b6;--world-dark:#382c72;--world-light:#eee8ff;--sk
 .choice-picture:not(:empty){display:block;font-size:2.5rem;margin-bottom:.3rem}.sentence-navigation{display:flex;gap:1rem;align-items:center;justify-content:center}.sentence-navigation button{min-width:56px;min-height:56px}.world-young .lesson-text .reading-text{font-size:clamp(1.6rem,4vw,2.3rem)}
 
 .beginner-math{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}.beginner-math-group{display:flex;flex-wrap:wrap;max-width:220px}
+
+/* Keep complete answer labels readable on narrow phones. */
+.oral-choice>[data-choice]{white-space:normal;overflow-wrap:anywhere;text-align:left}
+@media(max-width:600px){.game-lesson .lesson-work .choices{grid-template-columns:minmax(0,1fr)}.oral-choice>[data-choice-audio]{flex-basis:48px}.game-lesson .lesson-work .choices [data-choice]{font-size:18px;min-height:60px}}

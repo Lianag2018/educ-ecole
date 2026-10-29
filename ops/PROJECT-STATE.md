@@ -1,3 +1,24 @@
+# Parcours continus — 28 octobre 2026 (America/Toronto)
+
+Base main vérifiée : 4709d03ab60087afa177c4f06e1df1d1f97ee1a4.
+Correction du site scolaire demandée par le parent : nouvelles séries après les
+trois défis quotidiens, exclusions persistantes des cartes déjà visitées dans la
+journée, reprise d'une série incomplète et séparation des deux profils.
+Les séances par matière présentent six cartes puis proposent la suite du lot.
+Banques originales : 24 assemblages de mots par niveau, 60 calculs addition/
+soustraction débutants, 98 calculs avancés (quatre opérations), huit courts
+textes de compréhension par niveau. Les textes sont des exercices originaux,
+pas des livres Alloprof téléchargés ni un programme scolaire complet.
+Les réponses mobiles passent sur une colonne pour afficher les mots entiers.
+Catalogue de narration payante inchangé (2088 textes); nouveaux contenus avec
+les enregistrements existants lorsqu'ils correspondent et repli voix système.
+Aucun secret, consentement ou plafond modifié; aucun contenu privé exporté.
+Tests locaux des banques, de douze séries sans répétition, de reprise et des
+profils ajoutés. Parcours Chromium ajouté à la CI (nouvelle série, rechargement,
+suite des syllabes et réponses sans coupure à 390 px). Résultat CI et publication
+à confirmer sur la PR; aucun essai physique iPhone/iPad revendiqué.
+Cette branche ne fusionne pas le jeu archipel dans le site scolaire.
+
 # État courant — 28 octobre 2026 (America/Toronto)
 
 ## Activation mobile : validation visible — 28 octobre
