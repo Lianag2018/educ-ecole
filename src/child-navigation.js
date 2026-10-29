@@ -1,4 +1,4 @@
-import {advanced,gradeFor,mathsFor} from './learning.js';
+import {advanced,gradeFor,mathsFor,readingBank,storyCards} from './learning.js';
 import {select} from './engine.js';
 import {adaptiveCards} from './progress.js';
 import {beginnerCard} from './beginner-access.js';
@@ -13,24 +13,35 @@ import {travelPoints,weeklyTravel} from './voyage.js';
 const e=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const card=(q,p,subject)=>{const adapted=beginnerCard(q,p,subject);return {...adapted,travelSubject:adapted.travelSubject||subject};};
 const ready=q=>q&&typeof q.id==='string'&&typeof q.text==='string'&&Array.isArray(q.choices);
-export function dailyAdventure(p,day){
+export function dailyAdventure(p,day,{exclude=[]}={}){
  const old=p.dailyAdventure;
  if(old?.day===day&&old.profileId===p.id&&old.grade===gradeFor(p)&&Array.isArray(old.items)&&old.items.length===3&&old.items.every(ready)&&Number.isInteger(old.index)&&old.index>=0&&old.index<=3)return old;
- const items=[],add=(q,subject)=>{if(ready(q)&&items.length<3&&!items.some(x=>x.id===q.id))items.push(card(q,p,subject));};
+ const unseen=items=>items.filter(q=>!exclude.includes(q.id));
+ const items=[],add=(q,subject)=>{if(ready(q)&&!exclude.includes(q.id)&&items.length<3&&!items.some(x=>x.id===q.id))items.push(card(q,p,subject));};
  // Only this child's current school week can feed the daily route.
  const week=weekKey(new Date(day+'T17:00:00Z'));
  const plan=(p.schoolPlans||[]).find(x=>x.profileId===p.id&&x.grade===gradeFor(p)&&x.week===week);
- if(plan){try{for(const [i,m] of planMissions(plan).missions.entries()){if(!missionOpen(p,planMissions(plan).missions,i))continue;const pending=m.items.filter(q=>p.records[q.id]?.result!=='correct');add(adaptiveCards(p,pending,day)[0],m.subject);}}catch{/* Keep the built-in route usable if an imported plan is invalid. */}}
- add(adaptiveCards(p,select(p,day,{shortSession:true}).filter(Boolean),day)[0],'Français');
- add(adaptiveCards(p,advanced(p)&&illustratedCards(p).length?illustratedCards(p):mathsFor(p),day)[0],'Maths');
+ if(plan){try{for(const [i,m] of planMissions(plan).missions.entries()){if(!missionOpen(p,planMissions(plan).missions,i))continue;const pending=m.items.filter(q=>p.records[q.id]?.result!=='correct');add(adaptiveCards(p,unseen(pending),day)[0],m.subject);}}catch{/* Keep the built-in route usable if an imported plan is invalid. */}}
+ add(adaptiveCards(p,unseen(select(p,day,{shortSession:true}).filter(Boolean)),day)[0]||adaptiveCards(p,unseen(readingBank(p)),day)[0],'Français');
+ add(adaptiveCards(p,unseen([...(advanced(p)?illustratedCards(p):[]),...mathsFor(p)]),day)[0],'Maths');
  const chapter=islandCards(p,nextIsland(p).id);
- const nextChapterCard=adaptiveCards(p,chapter,day)[0];
+ const nextChapterCard=adaptiveCards(p,unseen(chapter),day)[0];
  add(nextChapterCard,nextChapterCard?.travelSubject||'Français');
- for(const q of chapter)add(q,q.travelSubject||'Français');
- const route={day,profileId:p.id,grade:gradeFor(p),items,index:0};
+ for(const q of [...chapter,...storyCards(p),...readingBank(p),...mathsFor(p)])add(q,q.travelSubject||'Français');
+ const route={day,profileId:p.id,grade:gradeFor(p),items,index:0,seen:exclude};
  p.dailyAdventure=route;
  return route;
 }
+export function nextDailyAdventure(p,day){
+ const old=dailyAdventure(p,day);
+ if(old.index<old.items.length)return old;
+ const exclude=[...new Set([...(old.seen||[]),...old.items.map(q=>q.id)])];
+ delete p.dailyAdventure;
+ let next=dailyAdventure(p,day,{exclude});
+ if(next.items.length<3){delete p.dailyAdventure;next=dailyAdventure(p,day,{exclude:old.items.map(q=>q.id)});next.review=true;}
+ return next;
+}
+
 export function advanceDaily(p,day,index){
  const route=p.dailyAdventure;
  if(route?.day===day&&route.profileId===p.id&&index===route.index&&index<route.items.length)route.index++;
@@ -44,7 +55,7 @@ export function childHome(p,day){
  <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
  <div class="simple-doors" aria-label="Mes trois choix">
- <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><small>${progress===3?'Ta mission est terminée':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Voir mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
+ <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Continuer mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
  ${tile('Français',advanced(p)?'Mes mots et mes histoires':'Les sons et les mots','<span class="book-art">Aa</span>','data-action="french"')}
  ${tile('Maths','Les nombres et les calculs','<span class="number-art">1 2<br>3 4</span>','data-action="maths"')}
  </div><details class="simple-treasure"><summary>✦ ${travelPoints(p)} étoiles · Mon coffre</summary><p>${s.reward?'Tes ailes de la semaine sont dans ton coffre!':'Chaque petit effort fait avancer ton voyage.'}</p>${s.tasks.length?`<p>${s.done} / ${s.tasks.length} étapes du plan confirmées avec ton parent.</p>`:''}<button data-action="adventure">La carte de notre voyage</button><button data-action="school-plan">Mes étapes de la semaine</button></details>

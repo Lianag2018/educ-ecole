@@ -27,7 +27,7 @@ export function narrationCatalog(){
  const numericActivityTexts=new Set([...mathsFor({id:'p1'}),...mathsFor({id:'p2'}),...mathCards].flatMap(q=>[spokenActivity(q),q.explanation]));
  const island=islandChapters.flatMap(c=>['p1','p2'].flatMap(id=>islandCards({id},c.id)));
  const travel=destinations.flatMap(d=>['p1','p2'].flatMap(id=>travelCards({id},d.id)));
- const cards=[...mathsFor({id:'p2'}),...bank,...olderReading,...stories,...mathCards,social];
+ const cards=[...mathsFor({id:'p2'}).filter(q=>!q.practiceExtension),...bank,...olderReading,...stories,...mathCards,social];
  for(let n=1;n<=6;n++)for(const op of ['+','−']){
   const practice=tablePractice(n,op);cards.push(...practice);
   for(const q of practice){numericActivityTexts.add(spokenActivity(q));numericActivityTexts.add(q.explanation);}
@@ -61,7 +61,7 @@ export function narrationCatalog(){
  for(const q of olderReading)texts.add(oralQuestion(q));
  texts.add(gardenWelcome);texts.add(gardenEncouragement);for(const card of gardenSounds)texts.add(card.instruction);
  for(const stage of squishyStages)for(const q of stage.items){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(q.hint);for(const c of q.choices)texts.add(choiceSpeech(c));for(const r of ['correct','incorrect','help'])texts.add(oralFeedback(q,r));}
- const young={id:'p1'},oralCards=[...bank,...mathsFor(young),socialFor(young),...stories.filter(q=>q.grade===1)];
+ const young={id:'p1'},oralCards=[...bank,...mathsFor(young).filter(q=>!q.practiceExtension),socialFor(young),...stories.filter(q=>q.grade===1)];
  for(const q of oralCards){texts.add(spokenActivity(q));texts.add(oralQuestion(q));texts.add(localHint(q,young));for(const c of q.choices)texts.add(choiceSpeech(c));for(const result of ['correct','incorrect','help'])texts.add(oralFeedback(q,result));}
  // Public, original mini-games reuse the same narrator/cache and never include
  // school credentials, child results or publisher assets. No extra alignment.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fresh,load,save,select,answer,generate,level,nextDate,KEY} from '../../src/engine.js';
+import {fresh,load,save,select,answer,generate,level,nextDate,KEY,pool} from '../../src/engine.js';
 import {bank,skills} from '../../src/content.js';
 import {skillCards} from '../../src/learning.js';
 import {learningReport} from '../../src/progress.js';
@@ -37,7 +37,7 @@ test('same-day repetitions cannot raise the content tier or turn a retry into in
 });
 test('tier 2 requires two days and does not strand a grade-3 domain with one introductory card',()=>{
  const p=fresh().profiles[1];p.calibrated=true;const cards=skillCards(p,'syllabes'),q=cards.find(x=>x.level===1);
- assert.equal(cards.filter(x=>x.level===1).length,1);
+ assert.equal(cards.filter(x=>x.level===1&&!x.practiceExtension).length,1);
  for(let i=0;i<4;i++)answer(p,q,'correct',day);
  assert.equal(level(p,'syllabes'),1);
  answer(p,q,'correct',nextDate(day,1));assert.equal(level(p,'syllabes'),2);
@@ -120,4 +120,4 @@ test('tier 3 needs several days and different cards, and assisted practice lower
  for(const card of bank.filter(x=>x.skill==='comprehension'))answer(sameDay,card,'correct',day);
  assert.equal(level(sameDay,'comprehension'),1);
 });
-test('future reviews are never presented early',()=>{const p=fresh().profiles[0];p.calibrated=true;for(const q of bank)answer(p,q,'correct',day);assert.deepEqual(select(p,day),[]);assert.ok(select(p,nextDate(day,1)).length>0);});
+test('future reviews are never presented early',()=>{const p=fresh().profiles[0];p.calibrated=true;for(const q of pool(p))answer(p,q,'correct',day);assert.deepEqual(select(p,day),[]);assert.ok(select(p,nextDate(day,1)).length>0);});
