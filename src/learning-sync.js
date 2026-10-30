@@ -18,7 +18,22 @@ export class LearningSync {
   if(this.running){this.again=true;return;}
   this.running=true;this.again=false;const epoch=this.epoch;this.controller=new AbortController();
   const signal=AbortSignal.any([this.controller.signal,AbortSignal.timeout(55000)]);
-  try{for(const p of this.getState().profiles){
+  try{
+   // An existing device grant covers progress backup. Never override a parent's
+   // explicit per-profile pause, and never infer a grant from local state.
+   const pending=this.getState().profiles.filter(p=>p.learningCloud?.enabled===undefined);
+   if(pending.length&&this.save()){
+    try{
+     const grant=await this.post('/api/parent/device/status',{},signal);
+     if(epoch===this.epoch&&!signal.aborted&&grant.enabled===true){
+      for(const p of pending)if(this.getState().profiles.includes(p)&&p.learningCloud?.enabled===undefined){
+       p.learningCloud={...p.learningCloud,enabled:true};
+      }
+      if(!this.save())throw Error('local_save_failed');
+     }
+    }catch{} // Offline or untrusted devices keep all observations locally.
+   }
+   for(const p of this.getState().profiles){
    if(!p.learningCloud?.enabled)continue;
    const current=()=>epoch===this.epoch&&this.getState().profiles.includes(p)&&p.learningCloud.enabled&&!signal.aborted;
    if(!current())break;
