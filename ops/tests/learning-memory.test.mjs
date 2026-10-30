@@ -7,7 +7,7 @@ import {prepareObservations,mergeObservations,learningSummary,validateAdvice} fr
 import {LearningSync,learningPanel} from '../../src/learning-sync.js';
 import {learningEndpoint} from '../server/learning.mjs';
 import {githubJobVerifier,JOB_AUDIENCE} from '../server/github-job.mjs';
-import {runLearningJob} from '../run-learning-job.mjs';
+import {runLearningJob,jobErrorCode} from '../run-learning-job.mjs';
 import {createTurnEndpoint} from '../server/turn.mjs';
 import {runtime} from '../server/runtime.mjs';
 import {planMissions} from '../../src/school-plan.js';
@@ -123,4 +123,27 @@ test('runtime restores a saved school activity for tutor questions and denies an
  const request={path:'/api/voice/turn',method:'POST',headers:{origin,cookie:'educ_parent='+token},body:{profileId:'p1',activityId,text:'Aide-moi.'}};
  assert.equal((await handle(request)).status,200);assert.equal(paid,1);
  assert.equal((await handle({...request,body:{...request.body,profileId:'p2'}})).status,400);assert.equal(paid,1);
+});
+
+
+test('explicitly disabled scheduled evolution skips only after authentication, without data access',async()=>{
+ const f=fixture();f.config={learningEnabled:true,learningAutoEnabled:false};f.verifyJob=async()=>false;
+ const job={method:'POST',path:'/api/learning/run',body:{}};
+ assert.equal((await learningEndpoint(f)(job)).status,401);
+ f.verifyJob=async()=>true;
+ assert.deepEqual(await learningEndpoint(f)(job),{status:200,body:{skipped:'learning_disabled'}});
+ assert.equal(f.calls.length,0);
+ for(const config of [{},{learningAutoEnabled:true},undefined]){
+  f.config=config;assert.equal((await learningEndpoint(f)(job)).status,503);
+ }
+ assert.equal(f.calls.length,0);
+});
+test('runner distinguishes disabled work and preserves real failures without leaking details',async()=>{
+ const env={GITHUB_REPOSITORY:'Lianag2018/educ-ecole',GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'schedule',ACTIONS_ID_TOKEN_REQUEST_URL:'https://example.actions.githubusercontent.com/token',ACTIONS_ID_TOKEN_REQUEST_TOKEN:'synthetic'};
+ const run=response=>{let n=0;return runLearningJob(env,async()=>++n===1?Response.json({value:'synthetic'}):response);};
+ assert.match(await run(Response.json({skipped:'learning_disabled'})),/aucun traitement effectué/);
+ for(const status of [401,403,429,500,503])await assert.rejects(()=>run(Response.json({code:'learning_setup_required'},{status})),new RegExp('job_http_'+status));
+ await assert.rejects(()=>run(Response.json({unexpected:true})),/invalid_job_response/);
+ assert.equal(jobErrorCode(Error('job_http_503')),'job_http_503');
+ assert.equal(jobErrorCode(Error('private token and document')),'job_unavailable');
 });

@@ -47,6 +47,7 @@ export function learningEndpoint({auth,profiles,store,config,ledger,apiKey,fetch
    if(req.method!=='POST')return {status:405,body:{code:'method_not_allowed'}};
    if(req.path==='/api/learning/run'){
     if(!await verifyJob?.(req))return {status:401,body:{code:'job_auth_required'}};
+    if(config?.learningAutoEnabled===false)return {status:200,body:{skipped:'learning_disabled'}};
     if(!aiAvailable())return {status:503,body:{code:'learning_setup_required'}};
     const result=[];for(const slot of ['p1','p2'])result.push(await evolve(parentId,slot,req.signal));
     return {status:200,body:{updated:result.filter(s=>s==='updated').length}};
