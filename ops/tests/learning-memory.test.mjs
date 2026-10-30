@@ -64,7 +64,7 @@ test('truncated, refused or schema-invalid AI advice is never installed',async()
  for(const choice of [{finish_reason:'length',message:{content:'{}'}},{finish_reason:'stop',message:{refusal:'no'}},{finish_reason:'stop',message:{content:JSON.stringify({priorities:['mots'],strategy:'short_practice',level:4})}}]){const f=fixture();f.fetcher=async()=>Response.json({choices:[choice]});assert.equal((await learningEndpoint(f)(req)).status,503);assert.ok(!f.calls.some(c=>c[0]==='saved'));}
 });
 test('sync persists IDs before network, paginates and retries identical events after lost response',async()=>{
- const state=fresh(),p=state.profiles[0];p.learningCloud={enabled:true};answer(p,card,'help',day);let saved=false,fail=true;const sent=[];
+ const state=fresh(),p=state.profiles[0];state.profiles[1].learningCloud={enabled:false};p.learningCloud={enabled:true};answer(p,card,'help',day);let saved=false,fail=true;const sent=[];
  const sync=new LearningSync({getState:()=>state,save:()=>{saved=true;return true;},request:async(path,init)=>{
   assert.equal(saved,true);const body=JSON.parse(init.body);
   if(path.endsWith('/list'))return Response.json({plans:[]});
@@ -74,7 +74,7 @@ test('sync persists IDs before network, paginates and retries identical events a
  await sync.sync();await sync.sync();assert.equal(sent[0].events[0].syncId,sent[1].events[0].syncId);assert.equal(p.history.length,1);assert.equal(p.learningCloud.cursor,1);sync.stop();
 });
 test('logout, profile reset and failed local storage cannot upload or apply late cloud events',async()=>{
- const state=fresh(),p=state.profiles[0];p.learningCloud={enabled:true};let called=0;
+ const state=fresh(),p=state.profiles[0];state.profiles[1].learningCloud={enabled:false};p.learningCloud={enabled:true};let called=0;
  const failed=new LearningSync({getState:()=>state,save:()=>false,request:async()=>{called++;}});await failed.sync();assert.equal(called,0);
  let resolve;const sync=new LearningSync({getState:()=>state,save:()=>true,request:async()=>new Promise(r=>resolve=r)});
  const pending=sync.sync();sync.stop();state.profiles[0]=fresh().profiles[0];resolve(Response.json({events:[make()],accepted:[],cursor:1,more:false}));await pending;
@@ -146,4 +146,41 @@ test('runner distinguishes disabled work and preserves real failures without lea
  await assert.rejects(()=>run(Response.json({unexpected:true})),/invalid_job_response/);
  assert.equal(jobErrorCode(Error('job_http_503')),'job_http_503');
  assert.equal(jobErrorCode(Error('private token and document')),'job_unavailable');
+});
+
+
+test('trusted device restores both histories automatically without enabling paid evolution',async()=>{
+ const state=fresh(),sent=[];
+ for(const p of state.profiles)answer(p,card,'correct',day);
+ const sync=new LearningSync({getState:()=>state,save:()=>true,request:async(path,init)=>{
+  const b=JSON.parse(init.body);sent.push({path,b});
+  if(path.endsWith('/status'))return Response.json({enabled:true});
+  if(path.endsWith('/list'))return Response.json({plans:[]});
+  assert.equal(path,'/api/learning/sync');
+  return Response.json({events:b.events,accepted:b.events.map(e=>e.syncId),cursor:1,more:false,autoAvailable:false});
+ }});
+ await sync.sync();sync.stop();
+ assert.deepEqual(sent.filter(x=>x.path.endsWith('/sync')).map(x=>x.b.profileId),['p1','p2']);
+ assert.ok(state.profiles.every(p=>p.learningCloud.enabled&&p.history.length===1));
+ assert.ok(!sent.some(x=>x.path.endsWith('/evolve')));
+});
+test('untrusted devices and explicit pauses never upload history automatically',async()=>{
+ for(const enabled of [false,true]){
+  const state=fresh();state.profiles[0].learningCloud={enabled:false};
+  const calls=[];const sync=new LearningSync({getState:()=>state,save:()=>true,request:async(path,init)=>{
+   calls.push({path,b:JSON.parse(init.body)});
+   if(path.endsWith('/status'))return Response.json({enabled});
+   if(path.endsWith('/list'))return Response.json({plans:[]});
+   return Response.json({events:[],accepted:[],cursor:0,more:false,autoAvailable:false});
+  }});
+  await sync.sync();sync.stop();assert.equal(state.profiles[0].learningCloud.enabled,false);
+  assert.ok(!calls.some(c=>c.b.profileId==='p1'));
+  if(!enabled)assert.equal(calls.length,1);
+ }
+});
+test('a stale device check cannot activate profiles after logout',async()=>{
+ const state=fresh();let resolve;
+ const sync=new LearningSync({getState:()=>state,save:()=>true,request:()=>new Promise(r=>resolve=r)});
+ const waiting=sync.sync();sync.stop();resolve(Response.json({enabled:true}));await waiting;
+ assert.ok(state.profiles.every(p=>!p.learningCloud?.enabled));
 });

@@ -1,3 +1,15 @@
+# Sauvegarde des appareils autorisés — 30 octobre 2026 (America/Toronto)
+
+Base 3696c116. La synchronisation vérifie désormais l’autorisation serveur de
+l’appareil pour activer les profils sans choix préalable. Une suspension explicite
+par profil reste prioritaire. Les historiques locaux sont envoyés par le parcours
+existant, avec identifiants persistants, fusion idempotente et séparation p1/p2.
+Le calcul local des paliers reste fondé sur les observations; aucune réussite ni
+hausse de niveau n’est inventée. Aucun appel payant ni indicateur de rétention
+modifié. Les réglages OpenAI consultés ne confirment pas ZDR. Analyse IA désactivée.
+Tests ciblés : appareil autorisé, appareil inconnu, suspension, déconnexion et
+absence d’évolution payante. Publication et récupération réelle restent à vérifier.
+
 # Diagnostic des alertes évolution — 29 octobre 2026 (America/Toronto)
 
 Base c9c69ab, run 40983835702 : échec dans run-learning-job, pas dans les tests.
