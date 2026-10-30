@@ -121,6 +121,7 @@ function home(p){const count=p.history.length;const ready=select(p,today()).leng
 function lessonText(q,p){
  if(sceneFor(q)){session.scene??={};return `<div data-play-scene>${sceneMarkup(q,session.scene)}</div>`;}
  if(q.beginnerMath)return beginnerMathVisual(q);
+ if(q.earlyReader)return `<div class="reader-story"><span aria-hidden="true" style="font-size:3rem">${esc(q.art)}</span><h2>${esc(q.title)}</h2><p class="reading-coach">Lis à ton rythme. Tu peux demander un coup de pouce.</p>${guidedMarkup(q.text,false)}<details data-reader-help><summary>Un coup de pouce pour les mots</summary>${q.wordHelp.map(([word,parts])=>`<button data-word-audio="${esc(word)}">🔊 ${esc(word)} <small>${esc(parts)}</small></button>`).join('')}</details></div>`;
  if(beginnerProfile(p)&&!q.soundTarget&&!q.miniZone&&!q.islandObjects&&!q.islandMath&&!q.travelCount&&q.skill!=='syllabes'){const pages=activityPages(q,p),i=session.page||0;return `${q.learningMode==='listening'?'<p class="reading-coach">Écoute l’histoire. Tu peux répondre sans tout lire.</p>':''}${guidedMarkup(pages[i]||pages[0],false)}${pages.length>1?`<div class="sentence-navigation"><button data-action="sentence-back" ${i===0?'disabled':''}>←</button><span>${i+1} / ${pages.length}</span><button data-action="sentence-next" ${i===pages.length-1?'disabled':''}>→</button></div>`:''}`;}
  if(q.islandObjects||q.islandMath)return islandVisual(q);
 
@@ -140,7 +141,7 @@ function parent(p){return `<section class="parent"><span class="eyebrow">ACCOMPA
 function finishAnswer(result){if(feedback)return;const q=session.items[session.index];const revisit=!!profile().records[q.id],beforePoints=travelPoints(profile());feedback=answer(profile(),q,attemptResult(result,helped),today(),q.travelSubject||(q.travelCount?'Maths':session.subject==='Voyage'?'Français':session.subject||'Français'));credit(profile(),'practice',new Date(),{subject:q.travelSubject||session.subject||'Français',result:feedback,revisit});travelGained=travelPoints(profile())-beforePoints;if(session.calibration&&session.index===session.items.length-1)profile().calibrated=true;answerCelebrated=result==='correct';persist();render();const activeSession=session,index=session.index;if(answerCelebrated){speakText('Bravo! Tu as bien travaillé.');cancelSuccess=scheduleSuccess(()=>{if(view==='mission'&&session===activeSession&&session.index===index&&answerCelebrated)act('next');});}else speakText(oralFeedback(q,feedback));}
 
 function navigate(v){kaluluUnmount?.();kaluluUnmount=null;oralWordOpenKey=null;oralCheck.reset();cleanup();view=v;draft=[];session=null;feedback=null;render();document.querySelector('#main').focus();window.scrollTo(0,0);}
-function bind(){
+function bind(){document.querySelector('[data-reader-help]')?.addEventListener('toggle',event=>{if(event.currentTarget.open)helped=true;});
  if(view==='parent')learningSync.mount(app,profile());
  mountSchoolAccess(app,state,{persist:next=>save(storage,next),onSaved:()=>{persisted=true;}});
  if(view==='parent'){const id=profile().id;photoMount=mountSchoolPhotos(document.querySelector('#school-photos'),profile(),{parent:true,onPractice:game=>{if(profile().id!==id)return;if(game==='plan')return navigate('school-plan');if(game==='social')begin([socialFor(profile())],'Univers social');else libraryPractice(game);}});}
