@@ -68,7 +68,7 @@ export function subjectHome(p,subject){
   tile(older?'Mes mots':'Les syllabes',older?'Vocabulaire et orthographe':'Des mots de deux ou trois syllabes','🦋',older?'data-action="words"':'data-scene="syllables"'),
   ...(older?[tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"')]:[tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"')]),
   ...(older?[tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"')]:[])
- ]:[tile('Les nombres',older?'Compter jusqu’à 1 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),tile('Mon Pop-it','Appuyer et chercher','<span class="popit-art">● ● ●<br>● ● ●<br>● ● ●</span>','data-popit')];
+ ]:[tile('Défi vitesse','Un tableau · une minute','🚀','data-action="speed-math"'),tile('Les nombres',older?'Compter jusqu’à 1 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),tile('Mon Pop-it','Appuyer et chercher','<span class="popit-art">● ● ●<br>● ● ●<br>● ● ●</span>','data-popit')];
  return `<section class="simple-subject">${heading(p,french?'Français':'Maths')}<div class="simple-grid">${tiles.join('')}</div>
  ${french?schoolVocabularyLinks(p,{installation:false}):''}
  <details class="simple-more"><summary>${french?'Encore des découvertes':'D’autres jeux de maths'}</summary><div class="simple-extra">
