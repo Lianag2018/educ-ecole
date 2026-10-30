@@ -10,8 +10,8 @@ test('pauses, expression and curated liaisons are distinguished without invented
  assert.equal(cueAt(p,0),0);assert.equal(cueAt(p,1),p.tokens.length-1);
  assert.equal(cueAt(readingCues(''),0),-1);
 });
-test('rendering escapes text and attributes, and explains approximate timing',()=>{
- const html=guidedMarkup('<img src=x> "bonjour"');assert.ok(!html.includes('<img'));assert.ok(html.includes('&lt;'));assert.ok(html.includes('approximatifs'));
+test('rendering escapes text and attributes, and explains stable reading help',()=>{
+ const html=guidedMarkup('<img src=x> "bonjour"');assert.ok(!html.includes('<img'));assert.ok(html.includes('&lt;'));assert.ok(html.includes('Syllabes en couleur'));
 });
 test('recorded cues follow actual media time and ignore callbacks after stop',async()=>{
  class Audio{pause(){}setAttribute(){}removeAttribute(){}play(){return Promise.resolve();}}

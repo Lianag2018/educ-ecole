@@ -1,3 +1,17 @@
+# Tableaux minute et lecture — 30 octobre 2026 (America/Toronto)
+
+Base 79b5e548. Six variantes de tableaux additions/soustractions par réglage,
+60 secondes pour le tableau complet. 18/21 calculs en troisième année,
+6/10 en première année. Saisie numérique, arrêt à échéance, bilan séparant
+justes/erreurs/non terminés. Pause explicite ou onglet caché signalée comme aide.
+Historique local par profil; seuls les calculs répondus alimentent le suivi existant.
+Accès direct Maths → Défi vitesse. Aucune performance importée depuis les photos.
+Lecture : couleurs fixes des syllabes connues, terminaisons muettes explicites,
+pont vert des liaisons répertoriées, suppression du point mobile. Mots inconnus
+conservés entiers; pas de prétention à une annotation phonétique exhaustive.
+Aucun appel payant ni modification des accès scolaires. Tests et build locaux réussis. Publication
+à confirmer. Aucun essai physique Safari/iPad revendiqué.
+
 # Petites lectures — 30 octobre 2026 (America/Toronto)
 
 Base f5ff43d7. Six histoires originales de 3–4 phrases pour le parcours de

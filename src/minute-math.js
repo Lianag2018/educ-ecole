@@ -1,0 +1,48 @@
+import {advanced} from './learning.js';
+export function minuteCards({older=true,table=4,count=18,variant=0}={}){
+ const cap=older?Math.min(6,Math.max(1,table)):Math.min(3,Math.max(1,table)),pool=[];
+ for(let n=1;n<=cap;n++)for(let b=1;b<=(older?12:7);b++)for(const op of ['+','−']){
+  const a=op==='+'?n:n+b,answer=op==='+'?n+b:b;
+  pool.push({id:`minute-${a}-${op}-${op==='+'?b:n}`,skill:'maths',level:1,text:`${a} ${op} ${op==='+'?b:n}`,choices:[String(answer)],answer:0,value:answer});
+ }
+ // Deterministic shuffled worksheets: repeatable for a fair personal comparison.
+ let seed=12345+variant*7919+cap*31;
+ for(let i=pool.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[pool[i],pool[j]]=[pool[j],pool[i]];}
+ return pool.slice(0,Math.min(count,pool.length));
+}
+export class MinuteRound{
+ constructor(cards,now=()=>performance.now()){this.cards=cards;this.now=now;this.phase='ready';this.values=cards.map(()=> '');this.elapsed=0;this.paused=false;}
+ start(){if(this.phase!=='ready')return;this.started=this.now();this.phase='playing';}
+ time(){return Math.min(60000,this.elapsed+(this.phase==='playing'?Math.max(0,this.now()-this.started):0));}
+ tick(){if(this.phase==='playing'&&this.time()>=60000)this.finish();return this.phase;}
+ input(i,value){this.tick();if(this.phase!=='playing'||!Number.isInteger(i)||i<0||i>=this.cards.length||!/^\d{0,3}$/.test(value))return false;this.values[i]=value;return true;}
+ pause(){this.tick();if(this.phase==='playing'){this.elapsed=this.time();this.phase='paused';this.paused=true;}}
+ resume(){if(this.phase==='paused'){this.started=this.now();this.phase='playing';}}
+ finish(){if(!['playing','paused'].includes(this.phase))return;this.elapsed=this.time();this.phase='done';}
+ results(){return this.cards.map((q,i)=>({card:q,value:this.values[i],status:this.values[i]===''?'unanswered':Number(this.values[i])===q.value?'correct':'incorrect'}));}
+}
+export function mountMinuteMath(root,p,{save,onAnswer}={}){
+ const older=advanced(p),controller=new AbortController();let game,interval,variant=0,table=older?4:2,count=older?18:10,recorded=false;
+ const setup=()=>{game=new MinuteRound(minuteCards({older,table,count,variant}));recorded=false;};
+ const record=()=>{if(recorded||game.phase!=='done')return;recorded=true;const results=game.results();
+  for(const r of results)if(r.status!=='unanswered')onAnswer?.(r.card,{correct:r.status==='correct',help:game.paused});
+  const entry={at:new Date().toISOString(),table,count,variant,ms:game.elapsed,paused:game.paused,correct:results.filter(r=>r.status==='correct').length,incorrect:results.filter(r=>r.status==='incorrect').length,unanswered:results.filter(r=>r.status==='unanswered').length};
+  p.minuteMath=[...(Array.isArray(p.minuteMath)?p.minuteMath:[]),entry].slice(-100);save?.();
+ };
+ const tick=()=>{game.tick();if(game.phase==='done'){record();draw();return;}const el=root.querySelector('[data-minute-clock]');if(el){const s=Math.ceil((60000-game.time())/1000);el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}};
+ const draw=()=>{clearInterval(interval);const done=game.phase==='done',playing=game.phase==='playing',results=game.results();
+ root.innerHTML=`<section class="minute-game"><h1>🚀 Défi vitesse</h1>${game.phase==='ready'?`<p>Une minute pour tout le tableau. Écris les réponses que tu trouves.</p><label>Tables <select data-minute-table>${(older?[4,5,6]:[1,2,3]).map(n=>`<option value="${n}" ${table===n?'selected':''}>+ et − 1 à ${n}</option>`).join('')}</select></label> <label>Calculs <select data-minute-count>${(older?[18,21]:[6,10]).map(n=>`<option ${count===n?'selected':''}>${n}</option>`).join('')}</select></label><p>Tableau ${variant+1} sur 6</p><button data-minute-start class="primary">Commencer · 1 minute</button>`:`<div class="minute-toolbar"><strong data-minute-clock aria-label="Temps restant">${done?'Terminé':'1:00'}</strong><span>Tableau ${variant+1} · ${count} calculs</span></div>${game.phase==='paused'?'<p>En pause. Cette série sera notée comme entraînement avec pause.</p><button data-minute-resume>Reprendre</button>':`<div class="minute-board">${game.cards.map((q,i)=>`<label class="minute-cell ${done?results[i].status:''}"><span>${q.text} =</span><input data-minute-input="${i}" aria-label="${q.text.replace('−','moins').replace('+','plus')}" inputmode="numeric" pattern="[0-9]*" autocomplete="off" value="${game.values[i]}" ${done?'disabled':''}>${done?`<small>${results[i].status==='correct'?'✓':results[i].status==='incorrect'?`À revoir : ${q.value}`:'Non terminé'}</small>`:''}</label>`).join('')}</div>`}${playing?'<button data-minute-finish>J’ai terminé</button><button data-minute-pause>Pause</button>':''}${done?`<div role="status"><h2>⭐ Bravo pour ton effort!</h2><p>${results.filter(r=>r.status==='correct').length} justes · ${results.filter(r=>r.status==='incorrect').length} à revoir · ${results.filter(r=>r.status==='unanswered').length} non terminés</p><p>Temps : ${(game.elapsed/1000).toFixed(1)} s${game.paused?' · avec pause':''}</p><button data-minute-again>Refaire ce tableau</button><button data-minute-next class="primary">Tableau suivant →</button></div>`:''}`}</section>`;
+ root.querySelector('[data-minute-table]')?.addEventListener('change',e=>{table=Number(e.target.value);setup();});
+ root.querySelector('[data-minute-count]')?.addEventListener('change',e=>{count=Number(e.target.value);setup();});
+ root.querySelector('[data-minute-start]')?.addEventListener('click',()=>{game.start();draw();root.querySelector('input')?.focus();});
+ root.querySelector('[data-minute-pause]')?.addEventListener('click',()=>{game.pause();draw();});
+ root.querySelector('[data-minute-resume]')?.addEventListener('click',()=>{game.resume();draw();});
+ root.querySelector('[data-minute-finish]')?.addEventListener('click',()=>{game.finish();record();draw();});
+ root.querySelector('[data-minute-next]')?.addEventListener('click',()=>{variant=(variant+1)%6;setup();draw();});
+ root.querySelector('[data-minute-again]')?.addEventListener('click',()=>{setup();draw();});
+ root.querySelectorAll('[data-minute-input]').forEach((input,i)=>{input.addEventListener('input',()=>{if(!game.input(i,input.value))input.value=game.values[i];if(game.phase==='done'){record();draw();}});input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();root.querySelector(`[data-minute-input="${i+1}"]`)?.focus();}});});
+ if(playing){tick();interval=setInterval(tick,100);}
+ };
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){game.pause();if(game.phase==='done')record();draw();}},{signal:controller.signal});setup();draw();
+ return {destroy(){clearInterval(interval);controller.abort();}};
+}
