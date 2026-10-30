@@ -11,8 +11,16 @@ export async function runLearningJob(env=process.env,fetcher=fetch){
  const response=await fetcher(JOB_AUDIENCE,{method:'POST',redirect:'error',headers:{Authorization:`Bearer ${value}`,'Content-Type':'application/json'},body:'{}',signal:AbortSignal.timeout(55000)});
  // Deliberately never print a token, response body, task, profile or document.
  if(!response.ok)throw Error(`job_http_${response.status}`);
+ const result=await response.json();
+ if(result?.skipped==='learning_disabled')return 'Évolution automatique désactivée : aucun traitement effectué.';
+ if(!Number.isInteger(result?.updated)||result.updated<0||result.updated>2)throw Error('invalid_job_response');
  return 'Traitement privé terminé.';
 }
+// Only fixed codes/statuses may reach logs; never arbitrary exception messages.
+export function jobErrorCode(error){
+ const code=error?.message;
+ return /^(invalid_job|invalid_token_endpoint|job_auth_failed|invalid_job_response|job_http_[1-5][0-9]{2})$/.test(code)?code:'job_unavailable';
+}
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
- try{console.log(await runLearningJob());}catch{console.error('Traitement privé indisponible. Vérifier la configuration et le budget dans le projet personnel.');process.exitCode=1;}
+ try{console.log(await runLearningJob());}catch(error){console.error('Traitement privé indisponible ('+jobErrorCode(error)+'). Vérifier la configuration et le budget dans le projet personnel.');process.exitCode=1;}
 }

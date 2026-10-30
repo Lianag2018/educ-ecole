@@ -1,3 +1,17 @@
+# Diagnostic des alertes évolution — 29 octobre 2026 (America/Toronto)
+
+Base c9c69ab, run 40983835702 : échec dans run-learning-job, pas dans les tests.
+Configuration Vercel personnelle relue : learningEnabled=true,
+learningAutoEnabled=false. Le serveur confondait désactivation explicite et
+configuration invalide (503). Après vérification OIDC, une désactivation explicite
+retourne désormais skipped=learning_disabled, sans accès aux profils/base/fournisseur.
+Le runner annonce « aucun traitement effectué ». Configuration manquante ou activée
+mais incomplète, refus d'authentification et erreurs HTTP restent des échecs.
+Les diagnostics journalisés sont limités à une liste fermée de codes sans secrets.
+Les anciens logs ne permettent pas de prouver le code HTTP du run signalé;
+aucune activation OpenAI ni traitement de devoir réel n'est revendiqué.
+Tests de ces distinctions ajoutés; publication et exécution réelle à vérifier.
+
 # Parcours continus — 28 octobre 2026 (America/Toronto)
 
 Base main vérifiée : 4709d03ab60087afa177c4f06e1df1d1f97ee1a4.
