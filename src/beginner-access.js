@@ -24,7 +24,7 @@ const travel={
 };
 export const beginnerProfile=p=>!(/^[34]/.test(p.schoolContext?.stage||'')||(!/^[12]/.test(p.schoolContext?.stage||'')&&p.id==='p2'));
 export function beginnerCard(q,p,subject='Français'){
- if(!beginnerProfile(p))return q;
+ if(!beginnerProfile(p)||q.earlyReader===true)return q;
  const v=variants[q.id]||(q.island&&q.id.endsWith('-histoire')?island[q.island]:null)||(q.id.startsWith('voyage-')&&q.id.endsWith('-story')?travel[q.id.split('-')[1]]:null);
  let out={...q};
  if(['Maths','Mathématiques'].includes(subject))out.skill='maths';
@@ -37,7 +37,7 @@ export function beginnerCard(q,p,subject='Français'){
  return out;
 }
 export function beginnerPages(text){return String(text||'').match(/[^.!?]+[.!?]*/gu)?.map(s=>s.trim()).filter(Boolean)||[''];}
-export function activityPages(q,p){return beginnerProfile(p)?beginnerPages(q.spokenText||q.text):[q.spokenText||q.text];}
+export function activityPages(q,p){return beginnerProfile(p)&&!q.earlyReader?beginnerPages(q.spokenText||q.text):[q.spokenText||q.text];}
 // Shared pictorial choices for concrete objects; text and audio remain available.
 const pictures={'Une carte':'🗺️','Une fleur':'🌸','Un livre':'📖','Un ballon':'⚽','Une plume':'🪶','Une pomme':'🍎','Ses bottes':'👢','Son chapeau':'👒','Sur le tapis':'🐈','Sur le lit':'🛏️','Il pleut':'🌧️','Il neige':'🌨️','Sur un nuage':'☁️','Sur la mer':'🌊','L’étoile':'⭐','La licorne':'🦄','Un vélo':'🚲','Sur la pierre':'🪨','Sur le livre':'📖','Sur la plage':'🏖️','Le nuage':'☁️','Le hibou':'🦉','Le poisson':'🐟','Vers la mer':'🌊','Vers le lit':'🛏️'};
 export const choicePicture=text=>pictures[text]||'';

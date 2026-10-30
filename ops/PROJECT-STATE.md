@@ -1,3 +1,13 @@
+# Petites lectures — 30 octobre 2026 (America/Toronto)
+
+Base f5ff43d7. Six histoires originales de 3–4 phrases pour le parcours de
+première année, sans réduction automatique en compréhension orale. Aide aux mots
+facultative; ouverture de cette aide signalée comme accompagnement. Six nouveaux
+assemblages de deux/trois syllabes sont proposés avant les anciens exercices.
+Entrée Français : petites lectures au premier plan. Parcours de troisième année,
+historiques et paliers conservés; aucune réussite artificielle. Aucun appel payant.
+Publication et vérification de production à confirmer.
+
 # Sauvegarde des appareils autorisés — 30 octobre 2026 (America/Toronto)
 
 Base 3696c116. La synchronisation vérifie désormais l’autorisation serveur de
