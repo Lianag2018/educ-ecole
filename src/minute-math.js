@@ -10,6 +10,23 @@ export function minuteCards({older=true,table=4,count=18,variant=0}={}){
  for(let i=pool.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[pool[i],pool[j]]=[pool[j],pool[i]];}
  return pool.slice(0,Math.min(count,pool.length));
 }
+export function flashCards({older=true,operation='mixed',count=18,variant=0}={}){
+ const max=older?12:5,pool=[];
+ for(let a=0;a<=max;a++)for(let b=0;b<=max;b++)for(const op of ['+','−']){
+  if(operation!=='mixed'&&operation!==op)continue;
+  if(op==='−'&&a<b)continue;
+  const value=op==='+'?a+b:a-b;
+  pool.push({id:`flash-${a}-${op}-${b}`,skill:'maths',level:1,text:`${a} ${op} ${b}`,choices:[String(value)],answer:0,value});
+ }
+ let seed=23517+variant*7919;
+ for(let i=pool.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[pool[i],pool[j]]=[pool[j],pool[i]];}
+ return pool.slice(0,count);
+}
+export function verticalCalculation(q){
+ const match=/^(\d+) ([+−]) (\d+)$/.exec(q.text);
+ if(!match)return '';
+ return `<div class="flash-operation" aria-hidden="true"><span class="flash-top">${match[1]}</span><span class="flash-sign">${match[2]}</span><span class="flash-bottom">${match[3]}</span></div>`;
+}
 export class MinuteRound{
  constructor(cards,now=()=>performance.now()){this.cards=cards;this.now=now;this.phase='ready';this.values=cards.map(()=> '');this.elapsed=0;this.paused=false;}
  start(){if(this.phase!=='ready')return;this.started=this.now();this.phase='playing';}
@@ -22,16 +39,21 @@ export class MinuteRound{
  results(){return this.cards.map((q,i)=>({card:q,value:this.values[i],status:this.values[i]===''?'unanswered':Number(this.values[i])===q.value?'correct':'incorrect'}));}
 }
 export function mountMinuteMath(root,p,{save,onAnswer}={}){
- const older=advanced(p),controller=new AbortController();let game,interval,variant=0,table=older?4:2,count=older?18:10,recorded=false;
- const setup=()=>{game=new MinuteRound(minuteCards({older,table,count,variant}));recorded=false;};
+ const older=advanced(p),controller=new AbortController();let game,interval,variant=0,table=older?4:2,count=older?18:10,recorded=false,format='cards',operation='mixed',cardIndex=0;
+ const setup=()=>{game=new MinuteRound(format==='cards'?flashCards({older,operation,count,variant}):minuteCards({older,table,count,variant}));recorded=false;cardIndex=0;};
  const record=()=>{if(recorded||game.phase!=='done')return;recorded=true;const results=game.results();
   for(const r of results)if(r.status!=='unanswered')onAnswer?.(r.card,{correct:r.status==='correct',help:game.paused});
-  const entry={at:new Date().toISOString(),table,count,variant,ms:game.elapsed,paused:game.paused,correct:results.filter(r=>r.status==='correct').length,incorrect:results.filter(r=>r.status==='incorrect').length,unanswered:results.filter(r=>r.status==='unanswered').length};
+  const entry={at:new Date().toISOString(),table,count,variant,format,operation,ms:game.elapsed,paused:game.paused,correct:results.filter(r=>r.status==='correct').length,incorrect:results.filter(r=>r.status==='incorrect').length,unanswered:results.filter(r=>r.status==='unanswered').length};
   p.minuteMath=[...(Array.isArray(p.minuteMath)?p.minuteMath:[]),entry].slice(-100);save?.();
  };
  const tick=()=>{game.tick();if(game.phase==='done'){record();draw();return;}const el=root.querySelector('[data-minute-clock]');if(el){const s=Math.ceil((60000-game.time())/1000);el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}};
  const draw=()=>{clearInterval(interval);const done=game.phase==='done',playing=game.phase==='playing',results=game.results();
- root.innerHTML=`<section class="minute-game"><h1>🚀 Défi vitesse</h1>${game.phase==='ready'?`<p>Une minute pour tout le tableau. Écris les réponses que tu trouves.</p><label>Tables <select data-minute-table>${(older?[4,5,6]:[1,2,3]).map(n=>`<option value="${n}" ${table===n?'selected':''}>+ et − 1 à ${n}</option>`).join('')}</select></label> <label>Calculs <select data-minute-count>${(older?[18,21]:[6,10]).map(n=>`<option ${count===n?'selected':''}>${n}</option>`).join('')}</select></label><p>Tableau ${variant+1} sur 6</p><button data-minute-start class="primary">Commencer · 1 minute</button>`:`<div class="minute-toolbar"><strong data-minute-clock aria-label="Temps restant">${done?'Terminé':'1:00'}</strong><span>Tableau ${variant+1} · ${count} calculs</span></div>${game.phase==='paused'?'<p>En pause. Cette série sera notée comme entraînement avec pause.</p><button data-minute-resume>Reprendre</button>':`<div class="minute-board">${game.cards.map((q,i)=>`<label class="minute-cell ${done?results[i].status:''}"><span>${q.text} =</span><input data-minute-input="${i}" aria-label="${q.text.replace('−','moins').replace('+','plus')}" inputmode="numeric" pattern="[0-9]*" autocomplete="off" value="${game.values[i]}" ${done?'disabled':''}>${done?`<small>${results[i].status==='correct'?'✓':results[i].status==='incorrect'?`À revoir : ${q.value}`:'Non terminé'}</small>`:''}</label>`).join('')}</div>`}${playing?'<button data-minute-finish>J’ai terminé</button><button data-minute-pause>Pause</button>':''}${done?`<div role="status"><h2>⭐ Bravo pour ton effort!</h2><p>${results.filter(r=>r.status==='correct').length} justes · ${results.filter(r=>r.status==='incorrect').length} à revoir · ${results.filter(r=>r.status==='unanswered').length} non terminés</p><p>Temps : ${(game.elapsed/1000).toFixed(1)} s${game.paused?' · avec pause':''}</p><button data-minute-again>Refaire ce tableau</button><button data-minute-next class="primary">Tableau suivant →</button></div>`:''}`}</section>`;
+ root.innerHTML=`<section class="minute-game"><h1>🚀 Défi vitesse</h1>${game.phase==='ready'?`<p>Une minute pour toute la série. Écris les réponses que tu trouves.</p><label>Présentation <select data-minute-format><option value="cards" ${format==='cards'?'selected':''}>Cartes verticales</option><option value="table" ${format==='table'?'selected':''}>Tableau de l’école</option></select></label> ${format==='cards'?`<label>Opérations <select data-minute-operation><option value="mixed" ${operation==='mixed'?'selected':''}>+ et −</option><option value="+" ${operation==='+'?'selected':''}>Additions</option><option value="−" ${operation==='−'?'selected':''}>Soustractions</option></select></label><p>${older?'Nombres de 0 à 12 · sommes jusqu’à 24':'Nombres de 0 à 5 · sommes jusqu’à 10'}</p>`:''}<label ${format==='cards'?'hidden':''}>Tables <select data-minute-table>${(older?[4,5,6]:[1,2,3]).map(n=>`<option value="${n}" ${table===n?'selected':''}>+ et − 1 à ${n}</option>`).join('')}</select></label> <label>Calculs <select data-minute-count>${(older?[18,21]:[6,10]).map(n=>`<option ${count===n?'selected':''}>${n}</option>`).join('')}</select></label><p>Tableau ${variant+1} sur 6</p><button data-minute-start class="primary">Commencer · 1 minute</button>`:`<div class="minute-toolbar"><strong data-minute-clock aria-label="Temps restant">${done?'Terminé':'1:00'}</strong><span>Tableau ${variant+1} · ${count} calculs</span></div>${game.phase==='paused'?'<p>En pause. Cette série sera notée comme entraînement avec pause.</p><button data-minute-resume>Reprendre</button>':format==='cards'&&!done?`<div class="flash-progress">Carte ${cardIndex+1} / ${game.cards.length}</div><div class="arithmetic-flashcard">${verticalCalculation(game.cards[cardIndex])}<input data-minute-input="${cardIndex}" aria-label="Réponse : ${game.cards[cardIndex].text.replace('−','moins').replace('+','plus')}" inputmode="numeric" pattern="[0-9]*" autocomplete="off" value="${game.values[cardIndex]}"><button class="primary" data-flash-next>Valider →</button><button data-flash-skip>Passer</button></div>`:`<div class="minute-board">${game.cards.map((q,i)=>`<label class="minute-cell ${done?results[i].status:''}"><span>${q.text} =</span><input data-minute-input="${i}" aria-label="${q.text.replace('−','moins').replace('+','plus')}" inputmode="numeric" pattern="[0-9]*" autocomplete="off" value="${game.values[i]}" ${done?'disabled':''}>${done?`<small>${results[i].status==='correct'?'✓':results[i].status==='incorrect'?`À revoir : ${q.value}`:'Non terminé'}</small>`:''}</label>`).join('')}</div>`}${playing?'<button data-minute-finish>J’ai terminé</button><button data-minute-pause>Pause</button>':''}${done?`<div role="status"><h2>⭐ Bravo pour ton effort!</h2><p>${results.filter(r=>r.status==='correct').length} justes · ${results.filter(r=>r.status==='incorrect').length} à revoir · ${results.filter(r=>r.status==='unanswered').length} non terminés</p><p>Temps : ${(game.elapsed/1000).toFixed(1)} s${game.paused?' · avec pause':''}</p><button data-minute-again>Refaire ce tableau</button><button data-minute-next class="primary">Tableau suivant →</button></div>`:''}`}</section>`;
+ root.querySelector('[data-minute-format]')?.addEventListener('change',e=>{format=e.target.value;setup();draw();});
+ root.querySelector('[data-minute-operation]')?.addEventListener('change',e=>{operation=e.target.value;setup();});
+ const advance=()=>{game.tick();if(game.phase==='playing'){if(cardIndex<game.cards.length-1)cardIndex++;else game.finish();}if(game.phase==='done')record();draw();root.querySelector('input')?.focus();};
+ root.querySelector('[data-flash-next]')?.addEventListener('click',()=>{if(game.values[cardIndex]!=='')advance();else root.querySelector('input')?.focus();});
+ root.querySelector('[data-flash-skip]')?.addEventListener('click',()=>{game.input(cardIndex,'');advance();});
  root.querySelector('[data-minute-table]')?.addEventListener('change',e=>{table=Number(e.target.value);setup();});
  root.querySelector('[data-minute-count]')?.addEventListener('change',e=>{count=Number(e.target.value);setup();});
  root.querySelector('[data-minute-start]')?.addEventListener('click',()=>{game.start();draw();root.querySelector('input')?.focus();});
@@ -40,7 +62,7 @@ export function mountMinuteMath(root,p,{save,onAnswer}={}){
  root.querySelector('[data-minute-finish]')?.addEventListener('click',()=>{game.finish();record();draw();});
  root.querySelector('[data-minute-next]')?.addEventListener('click',()=>{variant=(variant+1)%6;setup();draw();});
  root.querySelector('[data-minute-again]')?.addEventListener('click',()=>{setup();draw();});
- root.querySelectorAll('[data-minute-input]').forEach((input,i)=>{input.addEventListener('input',()=>{if(!game.input(i,input.value))input.value=game.values[i];if(game.phase==='done'){record();draw();}});input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();root.querySelector(`[data-minute-input="${i+1}"]`)?.focus();}});});
+ root.querySelectorAll('[data-minute-input]').forEach((input)=>{const i=Number(input.dataset.minuteInput);input.addEventListener('input',()=>{if(!game.input(i,input.value))input.value=game.values[i];if(game.phase==='done'){record();draw();}});input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if(format==='cards'){root.querySelector('[data-flash-next]')?.click();return;}root.querySelector(`[data-minute-input="${i+1}"]`)?.focus();}});});
  if(playing){tick();interval=setInterval(tick,100);}
  };
  document.addEventListener('visibilitychange',()=>{if(document.hidden){game.pause();if(game.phase==='done')record();draw();}},{signal:controller.signal});setup();draw();
