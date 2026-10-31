@@ -1,3 +1,15 @@
+# Progression des cartes — 31 octobre 2026 (America/Toronto)
+
+Base bc30916 (cartes PR73 publiées; module public comparé au source).
+Première année : départ à 5 minutes, puis 4, 3, 2 et 1 minute. Plages 0–5 puis 0–8 puis 0–12 débloquées
+par deux variantes distinctes à au moins 80 % du total, sans pause, au même
+palier de temps et dans le même mode (+, −, mélange). Aucun transfert entre profils
+ou entre opérations. Anciens résultats sans plage ignorés pour ce déblocage.
+Troisième année : plage complète et 60 secondes conservées. Bilan de progrès
+sur même tableau/réglage : gain en secondes sur le meilleur temps entièrement
+juste, ou bonnes réponses supplémentaires; aucune prime de vitesse aux erreurs. Progression déterministe locale,
+aucun appel IA payant. Tests et build locaux réussis. Publication à confirmer.
+
 # Cartes verticales — 31 octobre 2026 (America/Toronto)
 
 Base f822eb7 (PR72 publiée et ressources vérifiées au tour précédent).
