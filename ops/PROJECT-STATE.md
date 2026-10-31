@@ -1,3 +1,15 @@
+# Cartes verticales — 31 octobre 2026 (America/Toronto)
+
+Base f822eb7 (PR72 publiée et ressources vérifiées au tour précédent).
+Défi vitesse propose des cartes verticales, une à la fois, ou le tableau scolaire.
+Additions, soustractions ou mélange; nombres 0–12 en troisième année (sommes
+jusqu’à 24) et 0–5 en première (sommes jusqu’à 10). Six variantes par réglage.
+Une minute partagée pour la série, saisie puis Valider/Entrée, bouton Passer;
+bilan final distinct pour erreurs et cartes non terminées. Zéro accepté.
+Les photos servent de référence de disposition; aucun scan ni logo intégré.
+Profils, historiques, pause et tableau existant conservés. Aucun appel payant.
+Tests locaux/build et publication à confirmer; pas de test sur iPad physique.
+
 # Tableaux minute et lecture — 30 octobre 2026 (America/Toronto)
 
 Base 79b5e548. Six variantes de tableaux additions/soustractions par réglage,
