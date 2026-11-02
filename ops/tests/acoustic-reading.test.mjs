@@ -29,7 +29,8 @@ test('every short page uses the original audio with syllable offsets remapped fo
  await Promise.all([player.ready,player.alignmentReady]);
  for(const id of ['p1','p2'])for(const story of storyCards({id}))for(const page of activityPages(story,{id})){
   const events=[];player.speak(page,{onProgress:e=>events.push(e)});assert.equal(fallback,0,story.id+' '+page);
-  const entry=clips[manifest[story.text]],offset=story.text.indexOf(page);player.audio.duration=180;
+  const entry=clips[manifest[story.text]],offset=story.text.indexOf(page);// Streaming MP3 duration may remain Infinity until enough data is decoded.
+  player.audio.duration=Infinity;
   for(const c of entry.syllables.filter(c=>c.charIndex>=offset&&c.charEnd<=offset+page.length)){
    player.audio.currentTime=(c.start+c.end)/2;player.audio.ontimeupdate?.();
    const e=events.at(-1);assert.equal(e?.charIndex,c.charIndex-offset,story.id+' '+page);assert.equal(e.partIndex,c.partIndex);
