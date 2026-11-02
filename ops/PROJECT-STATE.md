@@ -1,3 +1,28 @@
+# Lettres vertes et accès scolaires parent — 2 novembre 2026 (America/Toronto)
+
+Base réellement publiée : cc59a0df (PR81), 66/66 alignements acoustiques.
+Demande parent confirmée : lettres de la syllabe prononcée vertes, sans rectangle.
+Suppression du fond/ombre de la syllabe active et du cadre de secours par mot;
+les lettres muettes restent grises. Repères audio inchangés.
+
+Ajout d'une consultation privée dans Parents → Réglages et accès, après session
+parent réelle et récente. Endpoint POST même origine, aucun accès par simple cookie
+d'appareil familial, Cache-Control no-store. Aucun mot de passe dans le dépôt,
+les assets, les URL, localStorage ou sauvegardes. Masquage à la navigation,
+déconnexion, arrière-plan et après une minute. Nougat : étapes groupe, utilisateur,
+mot de passe puis sélection du cahier. Les valeurs ne sont jamais injectées sur
+un site tiers par un lien.
+
+Le nom de variable serveur p1 Nougat existait déjà. Tentative de mise à jour avec
+les données confirmées par le parent refusée par l'approbation automatique :
+accord explicite de stockage du secret dans Vercel requis. Aucun nouvel écrit
+secret accompli; aucun contournement. Contenu de la variable existante non lu ni
+confirmé. Identifiants MaZone CEC p2 non retrouvés dans les photos recherchées.
+503 tests Node réussis; contrôles navigateur et publication à confirmer.
+Tests navigateur ajoutés avec données fictives : session parent obligatoire,
+deux profils séparés, mot de passe masqué, aucun stockage local, effacement logout.
+Aucune connexion scolaire réelle ni essai iPad physique revendiqué.
+
 # Repères acoustiques des syllabes — 2 novembre 2026 (America/Toronto)
 
 Suivi principal. Base publiée 7a89e8d (PR80) : les 22 lectures manquantes

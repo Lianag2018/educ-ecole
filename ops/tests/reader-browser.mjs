@@ -49,6 +49,8 @@ try{
   const trace=[];for(let i=0;i<100;i++){if(i%5===0)trace.push(await run("({time:window.qaNarrator?.currentTime,boxes:[...document.querySelectorAll('.guided-reading')].map(b=>({text:b.dataset.guidedText,timing:b.dataset.timing,key:b.dataset.cueKey,active:b.querySelector('.ball-active')?.textContent}))})"));if(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"))break;await sleep(100);}
   assert.equal(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"),true,'second syllable must light up on real audio: '+JSON.stringify(trace)+' '+JSON.stringify(await run("({time:window.qaNarrator?.currentTime,paused:window.qaNarrator?.paused,error:window.qaNarrator?.error?.code,src:window.qaNarrator?.currentSrc,status:document.querySelector('.audio-status')?.textContent,timing:document.querySelector('.guided-reading')?.dataset.timing})")));
   await click('[data-action="reading-pause"]');
+  const paint=await run("(()=>{const s=getComputedStyle(document.querySelector('.ball-active'));return {color:s.color,background:s.backgroundColor,shadow:s.boxShadow}})()");
+  assert.deepEqual(paint,{color:'rgb(8, 117, 47)',background:'rgba(0, 0, 0, 0)',shadow:'none'},'active syllable uses green letters without a rectangle');
   const paused=await run("window.qaNarrator.currentTime");await sleep(180);assert.equal(await run("window.qaNarrator.currentTime"),paused);
   const sample=await run(`(()=>{const node=document.querySelector('.ball-active');return {time:window.qaNarrator.currentTime,part:Number(node.dataset.part),word:node.closest('[data-cue]').textContent}})()`);
   const entry=audioAlignments[audioClips[storyCards({id:child?'p2':'p1'})[0].text]];

@@ -1,3 +1,4 @@
+import {schoolCredentialsEndpoint} from './school-credentials.mjs';
 import {createSupabaseClient} from './supabase-client.mjs';
 import {supabaseConfig} from './supabase-config.mjs';
 import {planEndpoint} from './plans.mjs';
@@ -50,6 +51,7 @@ export function runtime(env=process.env,fetcher=fetch){
  };
  const plans=planEndpoint({auth,profiles,ledger,store:planStore,config:c,apiKey:env.EDUC_OPENAI_API_KEY,fetcher});
  return async req=>{
+  if(req.path==='/api/parent/school-access')return schoolCredentialsEndpoint(req,{auth,origin,secrets:{p1:{nougat:env.EDUC_SCHOOL_P1_NOUGAT_CREDENTIALS},p2:{cec:env.EDUC_SCHOOL_P2_CEC_CREDENTIALS}}});
   if(req.path==='/api/parent/provision')return provisionParent(req,{env,sb});
   if(req.path==='/api/parent/activate')return activateParent(req,{env,sb,device});
   if(req.path.startsWith('/api/parent/device/')){
