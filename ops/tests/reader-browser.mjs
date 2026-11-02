@@ -46,8 +46,8 @@ try{
    assert.equal(await run("getComputedStyle(document.querySelector('.guided-text')).maxHeight"),'none');
   }
   await click('[data-action="listen"]');
-  for(let i=0;i<100;i++){if(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"))break;await sleep(100);}
-  assert.equal(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"),true,'second syllable must light up on real audio: '+JSON.stringify(await run("({time:window.qaNarrator?.currentTime,paused:window.qaNarrator?.paused,error:window.qaNarrator?.error?.code,src:window.qaNarrator?.currentSrc,status:document.querySelector('.audio-status')?.textContent,timing:document.querySelector('.guided-reading')?.dataset.timing})")));
+  const trace=[];for(let i=0;i<100;i++){if(i%5===0)trace.push(await run("({time:window.qaNarrator?.currentTime,boxes:[...document.querySelectorAll('.guided-reading')].map(b=>({text:b.dataset.guidedText,timing:b.dataset.timing,key:b.dataset.cueKey,active:b.querySelector('.ball-active')?.textContent}))})"));if(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"))break;await sleep(100);}
+  assert.equal(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"),true,'second syllable must light up on real audio: '+JSON.stringify(trace)+' '+JSON.stringify(await run("({time:window.qaNarrator?.currentTime,paused:window.qaNarrator?.paused,error:window.qaNarrator?.error?.code,src:window.qaNarrator?.currentSrc,status:document.querySelector('.audio-status')?.textContent,timing:document.querySelector('.guided-reading')?.dataset.timing})")));
   await click('[data-action="reading-pause"]');
   const paused=await run("window.qaNarrator.currentTime");await sleep(180);assert.equal(await run("window.qaNarrator.currentTime"),paused);
   const sample=await run(`(()=>{const node=document.querySelector('.ball-active');return {time:window.qaNarrator.currentTime,part:Number(node.dataset.part),word:node.closest('[data-cue]').textContent}})()`);
