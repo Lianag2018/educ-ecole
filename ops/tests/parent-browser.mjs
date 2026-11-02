@@ -69,7 +69,7 @@ try{
  await click('[data-private-access=p1] > button');
  await until('document.querySelector("[data-private-access=p1] [role=status]").textContent.includes("Connecte-toi")');
  assert.equal(await run('!!document.querySelector("[data-private-access=p1] input")'),false);
- await run(`const f=document.querySelector('.parent-login-slot form');f.elements.email.value='parent@example.test';f.elements.password.value='synthetic login';f.requestSubmit();`);
+ await run(`(()=>{const f=document.querySelector('.parent-login-slot form');f.elements.email.value='parent@example.test';f.elements.password.value='synthetic login';f.requestSubmit();})()`);
  await until('document.querySelector("#logout-parent + [role=status]").textContent.includes("Parent connecté")');
  await click('[data-private-access=p1] > button');await until('!!document.querySelector("[data-private-access=p1] input[type=password]")');
  assert.equal(await run('document.querySelector("[data-private-access=p1] input[type=password]").value'),'test-private-é');
@@ -78,7 +78,7 @@ try{
  assert.equal(await run('document.querySelector("[data-private-access=p2] input[type=password]").value'),'test-private-other');
  await click('#logout-parent');await until('document.querySelector("#logout-parent + [role=status]").textContent.includes("Session parent fermée")');
  assert.equal(await run('!!document.querySelector(".private-school-access input")'),false);
- await run(`const f=document.querySelector('.parent-login-slot form');f.elements.email.value='parent@example.test';f.elements.password.value='synthetic login';f.requestSubmit();`);
+ await run(`(()=>{const f=document.querySelector('.parent-login-slot form');f.elements.email.value='parent@example.test';f.elements.password.value='synthetic login';f.requestSubmit();})()`);
  await until('document.querySelector("#logout-parent + [role=status]").textContent.includes("Parent connecté")');
  await click('[data-private-access=p1] > button');await until('!!document.querySelector("[data-private-access=p1] input[type=password]")');
  await click('[data-parent-section=progress]');
