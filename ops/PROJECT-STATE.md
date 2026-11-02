@@ -15,9 +15,13 @@ repères audio, les couleurs restent fixes. L'objectif de synchronisation exacte
 par syllabe reste à terminer par alignement et vérification des enregistrements;
 aucune interpolation ne doit être annoncée comme mesure phonétique.
 
-Tests Node locaux réussis; test navigateur ajouté au contrôle CI. Chromium local
+PR76 : premier SHA distant 40e97ee, contrôles tests/verify et préversion READY.
+486 tests Node locaux réussis après renforcement des pauses et des extraits audio.
+Les petites pages réutilisent les MP3 existants lorsque leurs limites sont
+présentes dans les repères par mot; sinon repli système. Aucun nouveau MP3 créé.
+Test navigateur ajouté au contrôle CI. Chromium local
 indisponible (téléchargement incomplet). Build local réussi. Aucun essai physique
-iPad, aucune nouvelle génération payante ni changement de budget/accès. PR,
+iPad, aucune nouvelle génération payante ni changement de budget/accès. Dernier SHA,
 contrôles distants et publication à confirmer. Prochaine action : vérifier la CI,
 puis la version réellement publiée; produire les repères syllabiques vérifiés.
 

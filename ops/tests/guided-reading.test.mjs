@@ -78,3 +78,25 @@ test('pause and resume keep the prerecorded position and speed',async()=>{
  assert.equal(p.resume(),true);assert.equal(p.audio.currentTime,1.3);assert.equal(p.audio.playbackRate,.8);
  p.stop();assert.equal(p.resume(),false);
 });
+
+import {narrationExcerpt} from '../../src/narration.js';
+test('story pages reuse a measured portion of the original narrator without new generation',async()=>{
+ const file='a'.repeat(64)+'.mp3',text='Le chat dort. Le lapin saute.',page='Le lapin saute.';
+ const alignment={text,cues:[{charIndex:0,charEnd:2,start:.1,end:.3},{charIndex:3,charEnd:7,start:.4,end:.7},{charIndex:8,charEnd:12,start:.8,end:1.1},{charIndex:14,charEnd:16,start:1.5,end:1.7},{charIndex:17,charEnd:22,start:1.8,end:2.2},{charIndex:23,charEnd:28,start:2.3,end:2.7}]};
+ // Source offsets reflect the exact authored text, including its punctuation.
+ alignment.cues=Array.from(text.matchAll(/[\p{L}]+/gu)).map((m,i)=>({...alignment.cues[i],charIndex:m.index,charEnd:m.index+m[0].length}));
+ assert.equal(narrationExcerpt('chat inventé', {[text]:file},{[file]:alignment}),null);
+ const excerpt=narrationExcerpt(page,{[text]:file},{[file]:alignment});assert.equal(excerpt.segments[0].excerpt.start,1.5);
+ let fallback=0;const states=[],events=[];
+ class Audio{pause(){this.paused=true;}setAttribute(){}removeAttribute(){}play(){this.paused=false;return Promise.resolve();}}
+ const player=new NarrationSpeaker({AudioClass:Audio,fallback:{stop(){},speak(){fallback++;}},fetcher:async url=>({ok:true,json:async()=>({version:1,clips:url.includes('alignment')?{[file]:alignment}:{[text]:file}})})});
+ await Promise.all([player.ready,player.alignmentReady]);player.speak(page,{onProgress:e=>events.push(e),onState:s=>states.push(s)});
+ assert.equal(fallback,0);assert.equal(player.audio.src,'/audio/'+file);assert.equal(player.audio.currentTime,1.5);
+ player.audio.duration=3;player.audio.currentTime=1.9;player.audio.ontimeupdate();assert.equal(events.at(-1).charIndex,3);
+ player.audio.currentTime=2.7;player.audio.ontimeupdate();assert.equal(states.at(-1),'ended');assert.equal(player.audio.paused,true);
+});
+test('late failure of resume cannot interrupt a new reading',async()=>{
+ let reject;class Audio{pause(){}setAttribute(){}removeAttribute(){}play(){return this.rejectNext?new Promise((_,no)=>{reject=no;}):Promise.resolve();}}
+ const file='a'.repeat(64)+'.mp3';const player=new NarrationSpeaker({AudioClass:Audio,fallback:{stop(){}},fetcher:async()=>({ok:true,json:async()=>({version:1,clips:{lapin:file,chat:file}})})});
+ await player.ready;const states=[];player.speak('lapin',{onState:s=>states.push(s)});player.pause();player.audio.rejectNext=true;player.resume();player.audio.rejectNext=false;player.speak('chat',{onState:s=>states.push(s)});reject(new Error('late'));await Promise.resolve();assert.equal(states.at(-1),'starting');assert.ok(!states.includes('error'));
+});
