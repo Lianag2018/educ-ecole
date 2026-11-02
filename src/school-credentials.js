@@ -1,8 +1,8 @@
 // Values stay only in the mounted parent view, never in localStorage or backups.
 let cleanups=[];
-export function clearSchoolCredentials(){for(const fn of cleanups.splice(0))fn();}
+export function clearSchoolCredentials(){for(const item of cleanups)item.clear();}
 export function mountSchoolCredentials(root,profiles,{fetcher=globalThis.fetch,clipboard=globalThis.navigator?.clipboard}={}){
- clearSchoolCredentials();
+ for(const item of cleanups.splice(0))item.dispose();
  const host=root.querySelector('.school-access-settings');if(!host)return;
  for(const p of profiles){
   const resource=p.id==='p1'?'nougat':p.id==='p2'?'cec':null;if(!resource)continue;
@@ -16,7 +16,7 @@ export function mountSchoolCredentials(root,profiles,{fetcher=globalThis.fetch,c
   const conceal=()=>{clear();status.textContent='Identifiants masqués.';};
   const visibility=()=>{if(host.ownerDocument.visibilityState==='hidden')conceal();};
   host.ownerDocument.addEventListener('visibilitychange',visibility);
-  cleanups.push(()=>{clear();host.ownerDocument.removeEventListener('visibilitychange',visibility);});
+  cleanups.push({clear:conceal,dispose:()=>{clear();host.ownerDocument.removeEventListener('visibilitychange',visibility);}});
   open.addEventListener('click',async()=>{
    clear();const active=++ticket;open.disabled=true;status.textContent='Chargement des accès privés…';
    try{
