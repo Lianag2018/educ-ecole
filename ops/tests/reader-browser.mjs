@@ -8,11 +8,12 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const root=new URL('../..',import.meta.url).pathname;
 const temp=await mkdtemp(join(tmpdir(),'atelier-chrome-'));
 const server=spawn(process.execPath,['ops/server.mjs','dist'],{cwd:root,stdio:'ignore'});
-const chrome=spawn(process.env.CHROMIUM_PATH||'/usr/bin/chromium',['--headless','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--remote-debugging-port=9223',`--user-data-dir=${temp}`,'about:blank'],{stdio:'ignore'});
+const chrome=spawn(process.env.CHROMIUM_PATH||'/usr/bin/chromium',['--headless=new','--no-first-run','--no-default-browser-check','--disable-extensions','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--remote-debugging-port=9223',`--user-data-dir=${temp}`,'about:blank'],{stdio:['ignore','ignore','pipe']});
+let chromeError='';chrome.stderr.on('data',chunk=>{chromeError=(chromeError+chunk).slice(-4000)});
 let socket;
 try{
- let tabs;for(let i=0;i<60;i++){try{tabs=await(await fetch('http://127.0.0.1:9223/json')).json();break;}catch{await sleep(100);}}
- assert.ok(tabs,'Chromium debugging endpoint unavailable');
+ let tabs;for(let i=0;i<300;i++){try{tabs=await(await fetch('http://127.0.0.1:9223/json')).json();break;}catch{await sleep(100);}}
+ assert.ok(tabs,'Chromium debugging endpoint unavailable: '+chromeError);
  socket=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{socket.onopen=r;socket.onerror=j;});let id=0;const pending=new Map(),errors=[];
  socket.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text);};
  const cdp=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});socket.send(JSON.stringify({id:n,method,params}));});
