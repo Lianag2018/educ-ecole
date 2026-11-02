@@ -189,3 +189,35 @@ body.world-older{--world:#6651b6;--world-dark:#382c72;--world-light:#eee8ff;--sk
  body.reading-page .lesson-work .choices{margin:8px 0}
  body.reading-page .lesson-work .choices button{min-height:44px}
 }
+
+/* One reading surface: the text scrolls inside, controls remain reachable. */
+body.reading-focus{overflow:hidden}
+body.reading-focus header,body.reading-focus footer,body.reading-focus .topline,
+body.reading-focus .child-toolbar,body.reading-focus .adventure-top,
+body.reading-focus .lesson-companion{visibility:hidden}
+body.reading-focus .lesson-work{position:fixed;inset:0;z-index:50;width:100%;height:100dvh;box-sizing:border-box;border:0;border-radius:0;margin:0;padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:#fffdf5;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+body.reading-focus .lesson-work>*{display:none!important}
+body.reading-focus .lesson-work>.lesson-text{display:block!important;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;max-width:1000px;width:100%;margin:auto}
+body.reading-focus .lesson-work>[data-reading-focus]{display:block!important;align-self:center;min-height:48px;order:-1}
+body.reading-focus .lesson-work>.reading-options{display:block!important;flex:none;margin:0;width:100%;max-width:1000px;align-self:center}
+body.reading-focus .reading-options>summary,body.reading-focus .reading-settings,
+body.reading-focus .reading-legend,body.reading-focus .guided-reading>.small,
+body.reading-focus .reader-story>span,body.reading-focus [data-reader-help]{display:none!important}
+body.reading-focus .lesson-text .guided-text{max-height:none;overflow:visible;font-size:clamp(1.6rem,3.3vw,2.4rem);line-height:1.8;padding:16px;background:transparent}
+body.reading-focus .reading-dock{margin:0;padding:8px;flex-wrap:wrap}
+body.reading-focus .reading-dock .audio button{font-size:1rem;min-height:48px}
+body.reading-focus .audio-status{margin:4px 0;font-size:.85rem}
+body.reading-focus .reader-story h2{font-size:1.4rem;margin:0 16px}
+body.reading-focus .reading-coach{font-size:1rem}
+.guided-reading .cue-comma,.guided-reading .cue-stop,.guided-reading .cue-expression,.guided-reading .cue-question{outline:1px solid #b5ad9d;border-radius:.18em;padding:0 .08em}
+
+[data-reading-focus][hidden]{display:none!important}
+
+.guided-reading .liaison-group{white-space:nowrap;display:inline-block}
+
+body.reading-focus .lesson-work>.lesson-text{display:flex!important;flex-direction:column;overflow:hidden}
+body.reading-focus .reader-story{display:flex;flex-direction:column;min-height:0;flex:1}
+body.reading-focus .lesson-text .guided-reading{flex:1;min-height:0;overflow:auto}
+body.reading-focus .sentence-navigation{flex:none;margin:4px 0}
+body.reading-focus .sentence-navigation button{min-height:48px}
+body.reading-focus .guided-reading .reading-coach{display:none}

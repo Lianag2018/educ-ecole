@@ -1,3 +1,4 @@
+import {verifiedReadingPosition} from './reading-timing.js';
 import {mathSpeech} from './math-speech.js';
 import {playbackSpeed} from './speech.js';
 import {numberWords,numberParts} from './numbers.js';
@@ -167,8 +168,9 @@ export class NarrationSpeaker {
      if(plan.numeric){options.onProgress?.({progress:(index+fraction)/plan.segments.length,approximate:true});return;}
      if(plan.segments.length!==1)return;
      const aligned=segment.excerpt?.alignment||this.alignments[segment.src.slice('/audio/'.length)],cues=segment.excerpt||aligned?.text===key?aligned?.cues:null;
-     if(Array.isArray(cues)&&cues.length){
-      const event=mediaReadingEvent(aligned.text,cues,audio.currentTime);
+     const exact=aligned&&(segment.excerpt||aligned.text===key)?verifiedReadingPosition(aligned,aligned.text,audio.currentTime):null;
+     if(exact||(Array.isArray(cues)&&cues.length)){
+      const event=exact||mediaReadingEvent(aligned.text,cues,audio.currentTime);
       if(segment.excerpt){event.charIndex-=segment.excerpt.offset;if(Number.isInteger(event.charEnd))event.charEnd-=segment.excerpt.offset;if(event.charIndex<0||event.charIndex>=key.length)event.charIndex=-1;}
       options.onProgress?.(event);
      }else options.onProgress?.({progress:fraction,timing:'unavailable',approximate:true});

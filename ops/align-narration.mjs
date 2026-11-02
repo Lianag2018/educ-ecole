@@ -38,22 +38,23 @@ export async function alignNarration({env=process.env,fetcher=fetch}={}){
  const manifest=JSON.parse(await readFile('dist/audio/manifest.json','utf8'));
  const items=alignmentItems(narrationCatalog(),manifest.clips);
  if(items.length>80)throw Error('Alignment catalog exceeds reviewed limit');
- let previous={};try{const r=await fetcher('https://educ-ecole.vercel.app/audio/alignment.json',{redirect:'error',signal:AbortSignal.timeout(15000)});if(r.ok){const data=await r.json();if(data.version===1)previous=data.clips||{};}}catch{}
+ let previous={},rejected={};try{const r=await fetcher('https://educ-ecole.vercel.app/audio/alignment.json',{redirect:'error',signal:AbortSignal.timeout(15000)});if(r.ok){const data=await r.json();if(data.version===1){previous=data.clips||{};rejected=data.rejected||{};}}}catch{}
  const clips={},cache='.vercel/cache/educ-alignment';await mkdir(cache,{recursive:true});
- let calls=0,failed=0;const deadline=Date.now()+8*60*1000;
+ const failures=[];let calls=0,failed=0;const deadline=Date.now()+8*60*1000;
  for(const item of items){
-  let entry=previous[item.file];try{entry??=JSON.parse(await readFile(cache+'/'+item.file+'.json','utf8'));}catch{}
-  if(entry?.text===item.text&&alignWords(item.text,entry.words)){clips[item.file]={...entry,cues:alignWords(item.text,entry.words)};continue;}
+  let entry=previous[item.file]||rejected[item.file];try{entry??=JSON.parse(await readFile(cache+'/'+item.file+'.json','utf8'));}catch{}
+  if(entry?.text===item.text&&alignWords(item.text,entry.words)){clips[item.file]={...entry,cues:alignWords(item.text,entry.words)};delete rejected[item.file];continue;}
+  if(entry?.text===item.text&&Array.isArray(entry.words)){failed++;failures.push({file:item.file,reason:'transcript_mismatch_cached'});continue;}
   if(!env.EDUC_OPENAI_API_KEY||Date.now()>deadline||calls>=80)continue;
   // One bounded request per clip, no paid retry. Only built-in narrator audio.
   try{
-   const b=await readFile('dist/audio/'+item.file);if(b.length>2000000)throw Error();
+   const b=await readFile('dist/audio/'+item.file);if(b.length>2000000)throw Error('audio_too_large');
    const form=new FormData();form.set('file',new Blob([b],{type:'audio/mpeg'}),item.file);form.set('model','whisper-1');form.set('language','fr');form.set('response_format','verbose_json');form.append('timestamp_granularities[]','word');form.set('prompt',item.text.slice(0,850));
    calls++;const r=await fetcher('https://api.openai.com/v1/audio/transcriptions',{method:'POST',redirect:'error',signal:AbortSignal.timeout(60000),headers:{Authorization:'Bearer '+env.EDUC_OPENAI_API_KEY},body:form});
-   if(!r.ok)throw Error();const data=await r.json();const cues=alignWords(item.text,data.words);if(!cues){failed++;continue;}
+   if(!r.ok)throw Error('http_'+r.status);const data=await r.json();const cues=alignWords(item.text,data.words);if(!cues){failed++;const words=Array.isArray(data.words)?data.words.map(({word,start,end})=>({word,start,end})):[];rejected[item.file]={text:item.text,words};await writeFile(cache+'/'+item.file+'.json',JSON.stringify(rejected[item.file]));failures.push({file:item.file,reason:words.length?'transcript_mismatch':'timestamps_missing',words});continue;}
    entry={text:item.text,words:data.words.map(({word,start,end})=>({word,start,end})),cues};clips[item.file]=entry;await writeFile(cache+'/'+item.file+'.json',JSON.stringify(entry));
-  }catch{failed++;}
+  }catch(error){failed++;failures.push({file:item.file,reason:/^(http_\d{3}|audio_too_large)$/.test(error.message)?error.message:'request_failed'});}
  }
- const report={version:1,source:'whisper-1',clips,ready:Object.keys(clips).length,total:items.length,calls,failed};
- await writeFile('dist/audio/alignment.json',JSON.stringify(report));console.log('Narration alignment:',JSON.stringify({ready:report.ready,total:report.total,calls,failed}));
+ const report={version:1,source:'whisper-1',clips,rejected,failures,ready:Object.keys(clips).length,total:items.length,calls,failed};
+ await writeFile('dist/audio/alignment.json',JSON.stringify(report));console.log('Narration alignment:',JSON.stringify({ready:report.ready,total:report.total,calls,failed,failures}));
 }

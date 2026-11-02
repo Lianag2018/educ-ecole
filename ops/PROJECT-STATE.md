@@ -1,3 +1,19 @@
+# Réunion des lecteurs PR75/76 — 2 novembre 2026 (America/Toronto)
+
+Base main 59cdd7d (PR76 publiée). Intégration de la vue lecture PR75 f039cc5
+avec pages courtes, pause/reprise et réutilisation des extraits PR76. Questions
+masquées pendant la lecture, commandes et navigation conservées dans la fenêtre.
+Contrat de repères syllabiques revus PR75 conservé; aucune interpolation de mots
+présentée comme une syllabe mesurée. Les liaisons restent sur la même ligne.
+
+Deux échecs d'alignement en production (50/52). Le diagnostic initial masquait
+la cause et réessayait à chaque build. Conservation des transcriptions rejetées
+(des textes intégrés publics uniquement), sans nouvelle facturation au prochain
+build; codes d'erreur bornés et compteurs honnêtes. Les mots rejetés ne servent
+jamais au lecteur. Cause exacte et résolution distante encore à confirmer.
+Aucun enregistrement enfant ni donnée privée impliqué. Tests et publication
+à vérifier sur le SHA final; aucun essai iPad physique revendiqué.
+
 # Lecteur tablette et repères audio — 2 novembre 2026 (America/Toronto)
 
 Base distante bf9421044cb4da48dd0372f53701730dbe45eca7.
