@@ -40,6 +40,7 @@ export async function alignNarration({env=process.env,fetcher=fetch}={}){
  const items=alignmentItems(narrationCatalog(),manifest.clips);
  if(items.length>80)throw Error('Alignment catalog exceeds reviewed limit');
  let previous={},rejected={};try{const r=await fetcher('https://educ-ecole.vercel.app/audio/alignment.json',{redirect:'error',signal:AbortSignal.timeout(15000)});if(r.ok){const data=await r.json();if(data.version===1){previous=data.clips||{};rejected=data.rejected||{};}}}catch{}
+ rejected=Object.fromEntries(Object.entries(rejected).filter(([file])=>items.some(item=>item.file===file)));
  const clips={},cache='.vercel/cache/educ-alignment';await mkdir(cache,{recursive:true});
  const failures=[];let calls=0,failed=0;const deadline=Date.now()+8*60*1000;
  for(const item of items){
