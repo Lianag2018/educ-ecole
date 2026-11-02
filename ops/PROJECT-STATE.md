@@ -1,3 +1,15 @@
+# Réparation des deux transcriptions — 2 novembre 2026 (America/Toronto)
+
+PR77 fusionnée, SHA 8c0992f. PR75 intégrée et fermée comme fusionnée.
+491 tests Node (490 suite + 1 cache), tests navigateur deux profils/trois tailles
+et préversion réussis. Diagnostic production : « Un » omis; plusieurs phrases
+du jardin omises entre 16 et 29 secondes. Aucun problème HTTP constaté.
+Réparation bornée par extraits MP3 de dix secondes, contexte d'une seconde,
+positions conservées depuis les vraies trames audio. Une seule réparation par
+fichier; cache durable des résultats, aucun nouvel essai sur les builds suivants.
+Les passages restent rejetés si la transcription est insuffisante. Les repères
+restent par mot, sans prétention syllabique acoustique. Résultat distant à vérifier.
+
 # Réunion des lecteurs PR75/76 — 2 novembre 2026 (America/Toronto)
 
 Base main 59cdd7d (PR76 publiée). Intégration de la vue lecture PR75 f039cc5

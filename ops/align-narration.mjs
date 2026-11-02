@@ -1,3 +1,4 @@
+import {alignmentChunks,mergeChunkWords} from './mp3-alignment-chunks.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {narrationCatalog} from './narration-catalog.mjs';
 const normalized=s=>s.toLocaleLowerCase('fr-CA').replaceAll('œ','oe').normalize('NFD').replace(/[^a-z0-9]/g,'');
@@ -44,7 +45,23 @@ export async function alignNarration({env=process.env,fetcher=fetch}={}){
  for(const item of items){
   let entry=previous[item.file]||rejected[item.file];try{entry??=JSON.parse(await readFile(cache+'/'+item.file+'.json','utf8'));}catch{}
   if(entry?.text===item.text&&alignWords(item.text,entry.words)){clips[item.file]={...entry,cues:alignWords(item.text,entry.words)};delete rejected[item.file];continue;}
-  if(entry?.text===item.text&&Array.isArray(entry.words)){failed++;failures.push({file:item.file,reason:'transcript_mismatch_cached'});continue;}
+  if(entry?.text===item.text&&Array.isArray(entry.words)){
+   if(entry.repairVersion!==1&&env.EDUC_OPENAI_API_KEY&&Date.now()<deadline){
+    try{
+     const chunks=alignmentChunks(await readFile('dist/audio/'+item.file));
+     if(calls+chunks.length>80)throw Error('repair_budget');
+     for(const chunk of chunks){
+      const form=new FormData();form.set('file',new Blob([chunk.bytes],{type:'audio/mpeg'}),'excerpt.mp3');form.set('model','whisper-1');form.set('language','fr');form.set('temperature','0');form.set('response_format','verbose_json');form.append('timestamp_granularities[]','word');
+      calls++;const r=await fetcher('https://api.openai.com/v1/audio/transcriptions',{method:'POST',redirect:'error',signal:AbortSignal.timeout(60000),headers:{Authorization:'Bearer '+env.EDUC_OPENAI_API_KEY},body:form});
+      if(!r.ok)throw Error('http_'+r.status);chunk.words=(await r.json()).words;
+     }
+     const words=mergeChunkWords(chunks),cues=alignWords(item.text,words);entry={text:item.text,words,repairVersion:1};
+     if(cues){clips[item.file]={...entry,cues};delete rejected[item.file];await writeFile(cache+'/'+item.file+'.json',JSON.stringify(clips[item.file]));continue;}
+    }catch(error){failures.push({file:item.file,reason:/^http_\d{3}$/.test(error.message)?error.message:'chunk_repair_failed'});}
+    entry={...entry,repairVersion:1};rejected[item.file]=entry;await writeFile(cache+'/'+item.file+'.json',JSON.stringify(entry));
+   }
+   failed++;failures.push({file:item.file,reason:'transcript_mismatch_cached'});continue;
+  }
   if(!env.EDUC_OPENAI_API_KEY||Date.now()>deadline||calls>=80)continue;
   // One bounded request per clip, no paid retry. Only built-in narrator audio.
   try{
