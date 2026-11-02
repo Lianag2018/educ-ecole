@@ -15,7 +15,7 @@ for(const id of ['p1','p2']){const story=storyCards({id})[0],pair=Object.entries
 await writeFile(join(root,'dist/audio/manifest.json'),JSON.stringify({version:1,clips:audioClips}));
 await writeFile(join(root,'dist/audio/alignment.json'),JSON.stringify({version:1,clips:audioAlignments}));
 const server=spawn(process.execPath,['ops/server.mjs','dist'],{cwd:root,stdio:'ignore'});
-const chrome=spawn(process.env.CHROMIUM_PATH||'/usr/bin/chromium',['--headless=new','--no-first-run','--no-default-browser-check','--disable-extensions','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--remote-debugging-port=9223',`--user-data-dir=${temp}`,'about:blank'],{stdio:['ignore','ignore','pipe']});
+const chrome=spawn(process.env.CHROMIUM_PATH||'/usr/bin/chromium',['--headless=new','--no-first-run','--no-default-browser-check','--disable-extensions','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--autoplay-policy=no-user-gesture-required','--remote-debugging-port=9223',`--user-data-dir=${temp}`,'about:blank'],{stdio:['ignore','ignore','pipe']});
 let chromeError='';chrome.stderr.on('data',chunk=>{chromeError=(chromeError+chunk).slice(-4000)});
 let socket;
 try{
@@ -47,7 +47,7 @@ try{
   }
   await click('[data-action="listen"]');
   for(let i=0;i<100;i++){if(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"))break;await sleep(100);}
-  assert.equal(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"),true,'second syllable must light up on real audio');
+  assert.equal(await run("Number(document.querySelector('.ball-active')?.dataset.part)>0"),true,'second syllable must light up on real audio: '+JSON.stringify(await run("({time:window.qaNarrator?.currentTime,paused:window.qaNarrator?.paused,error:window.qaNarrator?.error?.code,src:window.qaNarrator?.currentSrc,status:document.querySelector('.audio-status')?.textContent,timing:document.querySelector('.guided-reading')?.dataset.timing})")));
   await click('[data-action="reading-pause"]');
   const paused=await run("window.qaNarrator.currentTime");await sleep(180);assert.equal(await run("window.qaNarrator.currentTime"),paused);
   const sample=await run(`(()=>{const node=document.querySelector('.ball-active');return {time:window.qaNarrator.currentTime,part:Number(node.dataset.part),word:node.closest('[data-cue]').textContent}})()`);
