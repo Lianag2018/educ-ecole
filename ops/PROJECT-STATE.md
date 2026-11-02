@@ -21,7 +21,14 @@ Production utilisera les assets sans retranscription payante des 66 fichiers.
 Tests de couverture des deux profils, toutes les pages, chaque unité et de la
 correspondance aux vrais MP3 ajoutés. Tests navigateur renforcés avec lecture des
 deux enregistrements réels (un par profil), syllabe active, pause/reprise et tailles
-d'écran. Résultats finaux CI/publication à confirmer. Aucun essai iPad physique.
+d'écran. PR81, code 434cb924 : 500 tests Node réussis, verify/tests GitHub verts,
+Chrome confirme les deux profils, syllabe active sur vrai MP3 et pause/reprise.
+Preview Vercel READY. Publication finale à vérifier après fusion.
+Le test a révélé et corrigé un défaut réel : le suivi attendait une durée MP3
+finie. Les repères suivent désormais currentTime même lorsque duration vaut
+Infinity pendant le chargement. Le serveur local sert aussi les seuls assets
+audio autorisés (manifest, alignment et noms MP3 SHA-256).
+Aucun essai iPad physique.
 Reproduction et attribution : ops/acoustic/README.md.
 
 # Suivi principal : synchronisation syllabique — 2 novembre 2026 (America/Toronto)
