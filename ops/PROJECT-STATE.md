@@ -1,3 +1,12 @@
+# Dernier modèle audio court — 2 novembre 2026 (America/Toronto)
+
+PR78 publiée (9d59d72), 493 tests réussis. Jardin réparé par quatre extraits :
+51/52 alignements prêts. Une réparation bornée de « Un bateau » omet encore
+le déterminant. Révision de la consigne de synthèse de cette seule phrase pour
+faire entendre ses deux mots. Nouvelle empreinte pour un seul MP3, autres 2087
+fichiers inchangés. Alignement du nouvel enregistrement et couverture finale à
+vérifier en production. Retrait des rejets devenus hors catalogue.
+
 # Réparation des deux transcriptions — 2 novembre 2026 (America/Toronto)
 
 PR77 fusionnée, SHA 8c0992f. PR75 intégrée et fermée comme fusionnée.
