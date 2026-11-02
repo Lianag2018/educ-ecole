@@ -1,3 +1,4 @@
+import {storyCards} from '../../src/learning.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {alignWords,alignmentItems} from '../align-narration.mjs';
@@ -60,4 +61,10 @@ test('ball uses measured word fraction and waits on punctuation even after a spa
  p.audio.currentTime=1.5;p.audio.ontimeupdate();assert.equal(events.at(-1).wordProgress,.75);
  p.setSpeed(1.5);p.audio.ontimeupdate();assert.equal(events.at(-1).wordProgress,.75);
  p.audio.currentTime=2.5;p.audio.ontimeupdate();assert.equal(events.at(-1).charIndex,6);
+});
+
+test('every story offered to either reader has a prerecorded alignment candidate',()=>{
+ const catalog=narrationCatalog(),clips=Object.fromEntries(catalog.map(x=>[x.text,x.file]));
+ const texts=new Set(alignmentItems(catalog,clips).map(x=>x.text));
+ for(const id of ['p1','p2'])for(const story of storyCards({id}))assert.ok(texts.has(story.text),story.id);
 });

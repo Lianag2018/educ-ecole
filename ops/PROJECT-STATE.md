@@ -1,3 +1,18 @@
+# Suivi principal : synchronisation syllabique — 2 novembre 2026 (America/Toronto)
+
+Cette conversation est le suivi principal demandé par le parent. Base publiée
+vérifiée : b2bb68a, Vercel READY, 52/52 alignements par mot, aucun échec.
+PR75/76 réunies par PR77; PR78 répare le jardin et PR79 remplace « Un bateau ».
+La synchronisation syllabique n'est pas encore publiée.
+
+Audit du parcours réel : six petites lectures p1 et seize récits supplémentaires
+p1/p2 n'avaient pas de MP3. Ajout des 22 textes intégrés au catalogue existant,
+sans changer les empreintes déjà présentes. 74 candidats d'alignement, limite80
+inchangée. Test de couverture de toutes les histoires des deux profils.
+Alignement acoustique MFA local en préparation avec les MP3 publics, sans voix
+ou donnée d'enfant. Modèle français téléchargé; validation phonétique et assets
+syllabiques encore à produire. Aucun résultat de test physique iPad revendiqué.
+
 # Dernier modèle audio court — 2 novembre 2026 (America/Toronto)
 
 PR78 publiée (9d59d72), 493 tests réussis. Jardin réparé par quatre extraits :

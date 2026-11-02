@@ -11,7 +11,7 @@ import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garde
 import {soundCards} from '../src/sound-cards.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
-import {olderReading,mathsFor,socialFor} from '../src/learning.js';
+import {olderReading,mathsFor,socialFor,storyCards} from '../src/learning.js';
 import {oralQuestion,oralFeedback,choiceSpeech,wordLesson,isFrenchWordModel,syllables} from '../src/oral-learning.js';
 import {localHint} from '../src/tutor.js';
 import {stories,mathCards,social,rows} from '../src/garden.js';
@@ -27,7 +27,7 @@ export function narrationCatalog(){
  const numericActivityTexts=new Set([...mathsFor({id:'p1'}),...mathsFor({id:'p2'}),...mathCards].flatMap(q=>[spokenActivity(q),q.explanation]));
  const island=islandChapters.flatMap(c=>['p1','p2'].flatMap(id=>islandCards({id},c.id)));
  const travel=destinations.flatMap(d=>['p1','p2'].flatMap(id=>travelCards({id},d.id)));
- const cards=[...mathsFor({id:'p2'}).filter(q=>!q.practiceExtension),...bank,...olderReading,...stories,...mathCards,social];
+ const cards=[...mathsFor({id:'p2'}).filter(q=>!q.practiceExtension),...bank,...olderReading,...stories,...mathCards,social,...storyCards({id:'p1'}),...storyCards({id:'p2'})];
  for(let n=1;n<=6;n++)for(const op of ['+','−']){
   const practice=tablePractice(n,op);cards.push(...practice);
   for(const q of practice){numericActivityTexts.add(spokenActivity(q));numericActivityTexts.add(q.explanation);}
