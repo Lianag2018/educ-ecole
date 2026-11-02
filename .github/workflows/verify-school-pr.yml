@@ -26,3 +26,7 @@ jobs:
           node-version: '22'
       - run: npm test
       - run: npm run build
+      - name: Tablet reading surface
+        run: node ops/tests/reader-browser.mjs
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
