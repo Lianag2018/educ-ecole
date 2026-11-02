@@ -1,0 +1,11 @@
+import {mkdir,writeFile} from 'node:fs/promises';
+import {join} from 'node:path';
+import {narrationCatalog} from '../narration-catalog.mjs';
+import {alignmentItems} from '../align-narration.mjs';
+const root=process.argv[2];if(!root)throw Error('Pass a temporary corpus directory');
+const r=await fetch('https://educ-ecole.vercel.app/audio/manifest.json',{signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('manifest unavailable');
+const manifest=await r.json(),catalog=narrationCatalog(),items=alignmentItems(catalog,manifest.clips);
+const expected=alignmentItems(catalog,Object.fromEntries(catalog.map(x=>[x.text,x.file])));
+if(items.length!==expected.length)throw Error('Publish missing narration files before alignment');
+await mkdir(root,{recursive:true});await writeFile(join(root,'tokens.json'),JSON.stringify(Object.fromEntries(items.map(x=>[x.file,{text:x.text}]))));
+console.log(`${items.length} public built-in narration files`);

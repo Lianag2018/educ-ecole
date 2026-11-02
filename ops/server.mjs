@@ -7,7 +7,7 @@ import { resolve, extname } from 'node:path';
 
 const root = resolve(process.argv[2] || '.');
 const types = {
-  '.html': 'text/html; charset=utf-8',
+  '.html': 'text/html; charset=utf-8', '.json':'application/json',
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.webp':'image/webp', '.mp3':'audio/mpeg', '.png':'image/png', '.webmanifest':'application/manifest+json',
@@ -23,7 +23,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(result.status,{'Content-Type':'application/json','Cache-Control':'no-store',...result.headers});res.end(JSON.stringify(result.body));return;
     }
     // Never serve server code, config, tests or credentials from the app directory.
-    if(pathname!=='/' && pathname!=='/index.html' && pathname!=='/activation.html' && pathname!=='/manifest.webmanifest' && !/^\/icons\/[a-z0-9-]+\.(png|webp)$/.test(pathname) && !/^\/icons\/phonemes\/[a-z][a-z-]*\.mp3$/.test(pathname) && !/^\/src\/[a-z][a-z0-9-]*\.(js|css)$/.test(pathname) && pathname!=='/src/vendor/fflate.js') throw Error('Invalid path');
+    if(pathname!=='/' && pathname!=='/index.html' && pathname!=='/activation.html' && pathname!=='/manifest.webmanifest' && !/^\/icons\/[a-z0-9-]+\.(png|webp)$/.test(pathname) && !/^\/icons\/phonemes\/[a-z][a-z-]*\.mp3$/.test(pathname) && !/^\/src\/[a-z][a-z0-9-]*\.(js|css)$/.test(pathname) && !/^\/audio\/(?:manifest\.json|alignment\.json|[a-f0-9]{64}\.mp3)$/.test(pathname) && pathname!=='/src/vendor/fflate.js') throw Error('Invalid path');
     const path = resolve(root, '.' + pathname);
     if (!path.startsWith(root + '/') && path !== root) throw Error('Invalid path');
     const file = path === root ? root + '/index.html' : path;

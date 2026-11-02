@@ -38,7 +38,8 @@ export function narrationExcerpt(key,clips,alignments){
   const first=cues.find(c=>c.charIndex===firstIndex),lastIndex=cues.findIndex(c=>c.charEnd===lastEnd),last=cues[lastIndex];
   if(!first||!last||!Number.isFinite(first.start)||!Number.isFinite(last.end)||first.start<0||last.end<=first.start)continue;
   const next=cues[lastIndex+1];
-  const end=next&&Number.isFinite(next.start)&&next.start>=last.end?next.start:last.end;
+  const tail=(alignment.syllables||[]).filter(c=>c.charIndex>=last.charEnd&&c.charEnd<=offset+key.length&&Number.isFinite(c.end)).reduce((end,c)=>Math.max(end,c.end),last.end);
+  const end=next&&Number.isFinite(next.start)&&next.start>=last.end?next.start:tail;
   return {text:key,numeric:false,segments:[{text:key,src:'/audio/'+file,source:'narration',excerpt:{offset,start:first.start,end,alignment}}]};
  }
  return null;
@@ -162,10 +163,10 @@ export class NarrationSpeaker {
     };
     // Number sequences use an approximate overall position. Story anchors remain unchanged.
     const progress=()=>{
-     if(!current()||!Number.isFinite(audio.duration)||audio.duration<=0)return;
+     if(!current())return;
      if(segment.excerpt&&audio.currentTime>=segment.excerpt.end){audio.pause();finish();return;}
-     const fraction=Math.max(0,Math.min(1,audio.currentTime/audio.duration));
-     if(plan.numeric){options.onProgress?.({progress:(index+fraction)/plan.segments.length,approximate:true});return;}
+     const fraction=Number.isFinite(audio.duration)&&audio.duration>0?Math.max(0,Math.min(1,audio.currentTime/audio.duration)):null;
+     if(plan.numeric){if(fraction===null)return;options.onProgress?.({progress:(index+fraction)/plan.segments.length,approximate:true});return;}
      if(plan.segments.length!==1)return;
      const aligned=segment.excerpt?.alignment||this.alignments[segment.src.slice('/audio/'.length)],cues=segment.excerpt||aligned?.text===key?aligned?.cues:null;
      const exact=aligned&&(segment.excerpt||aligned.text===key)?verifiedReadingPosition(aligned,aligned.text,audio.currentTime):null;
@@ -173,7 +174,7 @@ export class NarrationSpeaker {
       const event=exact||mediaReadingEvent(aligned.text,cues,audio.currentTime);
       if(segment.excerpt){event.charIndex-=segment.excerpt.offset;if(Number.isInteger(event.charEnd))event.charEnd-=segment.excerpt.offset;if(event.charIndex<0||event.charIndex>=key.length)event.charIndex=-1;}
       options.onProgress?.(event);
-     }else options.onProgress?.({progress:fraction,timing:'unavailable',approximate:true});
+     }else if(fraction!==null)options.onProgress?.({progress:fraction,timing:'unavailable',approximate:true});
     };
     const frame=()=>{if(!current()||audio.paused)return;progress();if(current()&&!audio.paused)this.readingFrame=globalThis.requestAnimationFrame?.(frame);};
     audio.onplaying=()=>{if(current()){this.cancelLoading();onState('speaking',message(sourceLabel));globalThis.cancelAnimationFrame?.(this.readingFrame);frame();}};

@@ -1,3 +1,36 @@
+# Repères acoustiques des syllabes — 2 novembre 2026 (America/Toronto)
+
+Suivi principal. Base publiée 7a89e8d (PR80) : les 22 lectures manquantes
+correspondent à 14 textes uniques (huit récits partagés). 66 enregistrements
+candidats au total. Corrige les mentions antérieures de 74 candidats : elles
+comptaient deux fois les textes partagés. Les deux profils gardent leurs parcours.
+
+MFA 3.4.3 + modèle french_mfa exécutés localement sur les vrais MP3 publics.
+66 fichiers, 338 occurrences de mots découpés en plusieurs unités, aucune unité
+non résolue à l'export. Ajout des découpages du vocabulaire des récits, lettres
+muettes conservées. Les repères sont des estimations acoustiques de modèle,
+pas une division uniforme du temps ni une certification humaine phonétique.
+Aucune voix d'enfant ni devoir privé traité; aucun appel OpenAI pour cet alignement.
+
+Assets liés au SHA-256 réel de chaque MP3; vérification des empreintes au build,
+des intervalles et des indices côté lecteur. Réutilisation des repères par page,
+pause/vitesse calées sur currentTime. Ponctuation pendant les silences réels,
+pause finale conservée. Mises à jour DOM seulement au changement de syllabe.
+Production utilisera les assets sans retranscription payante des 66 fichiers.
+
+Tests de couverture des deux profils, toutes les pages, chaque unité et de la
+correspondance aux vrais MP3 ajoutés. Tests navigateur renforcés avec lecture des
+deux enregistrements réels (un par profil), syllabe active, pause/reprise et tailles
+d'écran. PR81, code 434cb924 : 500 tests Node réussis, verify/tests GitHub verts,
+Chrome confirme les deux profils, syllabe active sur vrai MP3 et pause/reprise.
+Preview Vercel READY. Publication finale à vérifier après fusion.
+Le test a révélé et corrigé un défaut réel : le suivi attendait une durée MP3
+finie. Les repères suivent désormais currentTime même lorsque duration vaut
+Infinity pendant le chargement. Le serveur local sert aussi les seuls assets
+audio autorisés (manifest, alignment et noms MP3 SHA-256).
+Aucun essai iPad physique.
+Reproduction et attribution : ops/acoustic/README.md.
+
 # Suivi principal : synchronisation syllabique — 2 novembre 2026 (America/Toronto)
 
 Cette conversation est le suivi principal demandé par le parent. Base publiée
