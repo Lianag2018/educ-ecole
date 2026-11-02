@@ -19,3 +19,5 @@
 .school-access-settings input{max-width:100%;min-width:0}
 .school-access-settings [role=status]{font-size:15px}
 @media(max-width:600px){.school-access-bar{margin:8px 0 16px;padding:12px}.school-access-grid{gap:10px}.school-access-card{flex-basis:100%;padding:10px 12px}}
+
+.private-school-access{border-top:1px solid #d7cce9;margin-top:18px;padding-top:10px}.private-school-access label{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.private-school-access input{min-width:0;max-width:100%;flex:1 1 180px}.private-school-access button{min-height:44px}

@@ -16,6 +16,7 @@ const server=createServer(async(req,res)=>{try{
   const reply=(data,status=200)=>{res.writeHead(status);res.end(JSON.stringify(data));};
   if(path==='/api/parent/activate'){parent=true;device=body.rememberDevice;return reply({ok:true,deviceEnabled:device});}
   if(path==='/api/parent/login'){parent=true;return reply({ok:true});}
+  if(path==='/api/parent/school-access'){if(!parent)return reply({},401);return reply({values:body.profileId==='p1'?{group:'test-group',username:'test-child',password:'test-private-é'}:{username:'test-other',password:'test-private-other'}});}
   if(path==='/api/parent/logout'){parent=false;return reply({ok:true});}
   if(path==='/api/voice/status')return reply({authenticated:parent,authConfigured:true,available:false});
   if(path==='/api/parent/device/status')return reply({enabled:device});
@@ -65,6 +66,19 @@ try{
  await click('[data-game-child="0"]');assert.equal(await run('!!document.querySelector("input[type=password]")'),false);
  await click('[data-action=parent]');await click('[data-parent-section=settings]');
  await until('document.querySelector("[data-device-status]").textContent.includes("sans reconnecter")');
+ await click('[data-private-access=p1] > button');
+ await until('document.querySelector("[data-private-access=p1] [role=status]").textContent.includes("Connecte-toi")');
+ assert.equal(await run('!!document.querySelector("[data-private-access=p1] input")'),false);
+ await run(`const f=document.querySelector('.parent-login-slot form');f.elements.email.value='parent@example.test';f.elements.password.value='synthetic login';f.requestSubmit();`);
+ await until('document.querySelector(".parent-login-slot [role=status]").textContent.includes("Parent connecté")');
+ await click('[data-private-access=p1] > button');await until('!!document.querySelector("[data-private-access=p1] input[type=password]")');
+ assert.equal(await run('document.querySelector("[data-private-access=p1] input[type=password]").value'),'test-private-é');
+ assert.equal(await run('JSON.stringify(localStorage).includes("test-private")'),false);
+ await click('[data-private-access=p2] > button');await until('!!document.querySelector("[data-private-access=p2] input[type=password]")');
+ assert.equal(await run('document.querySelector("[data-private-access=p2] input[type=password]").value'),'test-private-other');
+ await click('#logout-parent');await until('document.querySelector(".parent-login-slot [role=status]").textContent.includes("Session parent fermée")');
+ assert.equal(await run('!!document.querySelector(".private-school-access input")'),false);
+
  await click('[data-parent-section=progress]');await click('#learning-enable');
  await until('document.querySelector("#learning-sync-status").textContent.includes("Réponses sauvegardées")');
  await click('[data-parent-section=settings]');await click('[data-device-action=revoke]');

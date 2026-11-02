@@ -168,11 +168,11 @@ body.world-older{--world:#6651b6;--world-dark:#382c72;--world-light:#eee8ff;--sk
 /* Stable syllable colors; no scaling or flashing while following the voice. */
 .guided-reading .read-syllable.syllable-2{color:#a64b08}
 .guided-reading .read-syllable.syllable-3{color:#6845a3}
-.guided-reading .read-syllable.ball-active{color:#075e29;background:#c8f5ce;border-radius:.16em;box-shadow:0 2px 0 #278547}
-.guided-reading .read-syllable.ball-active .silent-letter{color:#737373;background:#f2f2f2}
-.guided-reading .cue-word-only{outline:2px solid #278547;outline-offset:2px}
+.guided-reading .read-syllable.ball-active{color:#08752f;background:transparent;border-radius:0;box-shadow:none}
+.guided-reading .read-syllable.ball-active .silent-letter{color:#737373;background:transparent}
+.guided-reading .cue-word-only{outline:none}
 .guided-reading .cue-active .liaison-letter::after{border-color:#075e29}
-.guided-reading .cue-active .liaison-letter,.guided-reading .cue-active .liaison-arrival{color:#075e29;background:#c8f5ce}
+.guided-reading .cue-active .liaison-letter,.guided-reading .cue-active .liaison-arrival{color:#08752f;background:transparent}
 .reading-options>.reading-dock{margin-top:8px}
 .sentence-navigation{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .sentence-navigation button{min-height:44px}
