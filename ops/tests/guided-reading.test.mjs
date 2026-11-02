@@ -37,3 +37,44 @@ test('ball travels across syllables, then pauses on punctuation for either grade
  assert.deepEqual(syllableParts('inconnuinventé'),['inconnuinventé']);
  assert.equal(syllableParts('bibliothèque').join(''),'bibliothèque');
 });
+
+import {mediaReadingEvent} from '../../src/narration.js';
+import {readingPages,activityPages} from '../../src/beginner-access.js';
+test('measured syllables follow media time including seeks, silence and punctuation',()=>{
+ const text='Cauchemar, puis le chat.',cues=[{start:1,end:2.5,charIndex:0,charEnd:9,syllables:[{start:1,end:1.2},{start:1.2,end:1.9},{start:1.9,end:2.5}]}];
+ const plan=readingCues(text);
+ assert.deepEqual(plan.tokens[0].parts,['Cau','che','mar']);
+ for(const [time,part] of [[1.05,0],[1.8,1],[2.1,2],[1.1,0]]){
+  const e=mediaReadingEvent(text,cues,time);assert.equal(e.timing,'syllable');assert.equal(syllableIndex(plan,0,e),part);
+ }
+ assert.equal(mediaReadingEvent(text,cues,.5).charIndex,-1);
+ assert.equal(mediaReadingEvent(text,cues,2.6).charIndex,9);
+ assert.equal(syllableIndex(plan,0,{timing:'word',wordProgress:.8}),-1);
+ assert.equal(syllableIndex(plan,0,{timing:'unavailable',progress:.4}),-1);
+ const invalid=[{...cues[0],syllables:[{start:1,end:4}]}];
+ assert.equal(mediaReadingEvent(text,invalid,1.1).timing,'word');
+});
+test('silent consonants and four colors preserve the spelling for both readers',()=>{
+ for(const older of [false,true]){
+  const html=guidedMarkup('Cauchemar chat animation',older);
+  assert.match(html,/syllable-2/);assert.match(html,/syllable-3/);
+  assert.match(html,/silent-letter">t<\/span>/);assert.doesNotMatch(html,/silent-letter">r<\/span>/);
+ }
+});
+test('tablet story pages preserve all text and work for both grades',()=>{
+ const text='Une petite licorne regarde les animaux. Elle retrouve son ami près du jardin. Puis ils rentrent ensemble.';
+ for(const id of ['p1','p2']){
+  const pages=activityPages({text,skill:'comprehension'},{id});
+  assert.equal(pages.join(' '),text);
+ }
+ const long=Array.from({length:100},(_,i)=>'mot'+i).join(' ')+'.';
+ const pages=readingPages(long,22);assert.equal(pages.join(' '),long);assert.ok(pages.every(s=>s.split(/\s+/).length<=22));
+});
+test('pause and resume keep the prerecorded position and speed',async()=>{
+ class Audio{pause(){this.paused=true;}setAttribute(){}removeAttribute(){}play(){this.paused=false;return Promise.resolve();}}
+ const p=new NarrationSpeaker({fallback:{stop(){}},AudioClass:Audio,fetcher:async()=>({ok:true,json:async()=>({version:1,clips:{'Les amis.':'a'.repeat(64)+'.mp3'}})})});
+ await p.ready;const states=[];p.speak('Les amis.',{speed:.8,onState:s=>states.push(s)});p.audio.currentTime=1.3;
+ assert.equal(p.pause(),true);assert.equal(states.at(-1),'paused');assert.equal(p.audio.currentTime,1.3);
+ assert.equal(p.resume(),true);assert.equal(p.audio.currentTime,1.3);assert.equal(p.audio.playbackRate,.8);
+ p.stop();assert.equal(p.resume(),false);
+});

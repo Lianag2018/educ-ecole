@@ -24,6 +24,8 @@ export class ReadingSpeaker {
   Object.assign(this,{synth,Utterance,setTimer,clearTimer});this.epoch=0;this.current=null;
  }
  stop(){this.epoch++;this.clearTimer(this.timer);this.current=null;this.synth?.cancel();}
+ pause(){if(!this.current)return false;this.synth?.pause?.();this.resumeOptions?.onState?.('paused','Lecture en pause.');return true;}
+ resume(){if(!this.current)return false;this.synth?.resume?.();this.resumeOptions?.onState?.('speaking','Lecture en cours.');return true;}
  setSpeed(speed){
   if(!this.current||!this.resumeOptions)return;
   const text=this.resumeText,offset=this.resumeOffset||0,options=this.resumeOptions;
@@ -43,7 +45,7 @@ export class ReadingSpeaker {
   const active=()=>this.epoch===epoch&&this.current===u;
   const fail=message=>{if(!active())return;this.stop();onState('error',message);};
   u.onstart=()=>{if(!active())return;this.clearTimer(this.timer);onState('speaking',`Lecture en cours — ${label}.`);};
-  u.onboundary=e=>{if(active()&&Number.isInteger(e.charIndex)){this.resumeOffset=e.charIndex;onProgress({charIndex:e.charIndex,approximate:false});}};
+  u.onboundary=e=>{if(active()&&Number.isInteger(e.charIndex)){this.resumeOffset=e.charIndex;onProgress({charIndex:e.charIndex,timing:'word',approximate:false});}};
   u.onend=()=>{if(!active())return;this.clearTimer(this.timer);this.current=null;onState('ended',`Lecture terminée — ${label}.`);};
   u.onerror=e=>fail(e.error==='not-allowed'?'Lecture bloquée par le navigateur. Touche « Tester la voix » pour la relancer.':'La voix sélectionnée est indisponible. Touche « Réessayer avec la voix système ».');
   this.timer=this.setTimer(()=>fail('La lecture ne démarre pas. Réessaie avec la voix système et vérifie le volume de l’appareil.'),8000);

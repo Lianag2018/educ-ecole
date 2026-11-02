@@ -23,6 +23,22 @@ function narrationPlan(key,clips){
  return {text:key,numeric:false,segments:segments.map(({text,file})=>({text,src:'/audio/'+file,source:'narration'}))};
 }
 
+// Follow media time, never wall-clock timers: buffering, seeking and speed changes
+// keep the same reading position. Optional syllable anchors must be measured.
+export function mediaReadingEvent(text,cues,time){
+ let cue=null;for(const c of cues){if(c.start>time)break;cue=c;}
+ if(!cue)return {charIndex:-1,timing:'word',approximate:false};
+ const pause=Number.isInteger(cue.charEnd)?text.slice(cue.charEnd).match(/^\s*([,!.?…;:])/):null;
+ if(time>=cue.end&&pause)return {charIndex:cue.charEnd+pause[0].length-1,partIndex:0,timing:'word',approximate:false};
+ if(time>=cue.end)return {charIndex:-1,timing:'word',approximate:false};
+ const parts=cue.syllables;
+ if(Array.isArray(parts)&&parts.length&&parts.every((p,i)=>Number.isFinite(p.start)&&Number.isFinite(p.end)&&p.start>=cue.start&&p.end<=cue.end&&p.end>p.start&&(!i||p.start>=parts[i-1].end))){
+  const partIndex=parts.findIndex(p=>time>=p.start&&time<p.end);
+  return {charIndex:cue.charIndex,partIndex,timing:'syllable',approximate:false};
+ }
+ return {charIndex:cue.charIndex,charEnd:cue.charEnd,wordProgress:(time-cue.start)/Math.max(.001,cue.end-cue.start),timing:'word',approximate:false};
+}
+
 // Official number recordings stream from PédagoFA; other narration stays on this site.
 // No user text or microphone data is sent to either media source.
 export class NarrationSpeaker {
@@ -39,6 +55,7 @@ export class NarrationSpeaker {
   this.loadingTimer=null;
  }
  clearMedia(){
+  globalThis.cancelAnimationFrame?.(this.readingFrame);this.readingFrame=null;
   this.segmentEpoch++;
   this.cancelLoading();
   if(!this.audio)return;
@@ -47,11 +64,14 @@ export class NarrationSpeaker {
   // Removing src alone does not abort a media resource's ongoing load.
   this.audio.load?.();
  }
- stop(){this.epoch++;this.usingFallback=false;this.fallback?.stop();this.clearMedia();}
+ pause(){globalThis.cancelAnimationFrame?.(this.readingFrame);this.readingFrame=null;if(this.usingFallback)return this.fallback?.pause?.()||false;if(!this.audio||!this.activeState)return false;this.audio.pause();this.cancelLoading();this.activeState('paused','Lecture en pause.');return true;}
+ resume(){if(this.usingFallback)return this.fallback?.resume?.()||false;if(!this.audio||!this.activeState)return false;const state=this.activeState;try{this.audio.play()?.catch(()=>state('error','La lecture ne peut pas reprendre. Touche Réécouter.'));return true;}catch{state('error','La lecture ne peut pas reprendre. Touche Réécouter.');return false;}}
+ stop(){this.activeState=null;this.epoch++;this.usingFallback=false;this.fallback?.stop();this.clearMedia();}
  setSpeed(value){this.speed=playbackSpeed(value);if(this.audio){this.audio.playbackRate=this.speed;this.audio.preservesPitch=true;}if(this.usingFallback)this.fallback?.setSpeed?.(value);}
  speak(text,options={}){
   this.stop();this.setSpeed(options.speed);
   const epoch=this.epoch,key=mathSpeech(String(text).trim()),onState=options.onState||(()=>{}),audio=this.audio;
+  this.activeState=onState;
   let finished=false,retried=false,recoveryMessage='';
   const active=()=>this.epoch===epoch&&!finished;
   const message=value=>recoveryMessage?`${recoveryMessage} ${value}`:value;
@@ -61,7 +81,7 @@ export class NarrationSpeaker {
   };
   const finish=()=>{
    if(!active())return;
-   finished=true;this.segmentEpoch++;this.usingFallback=false;this.cancelLoading();
+   finished=true;this.activeState=null;globalThis.cancelAnimationFrame?.(this.readingFrame);this.readingFrame=null;this.segmentEpoch++;this.usingFallback=false;this.cancelLoading();
    if(audio){audio.onplaying=null;audio.onended=null;audio.onerror=null;audio.ontimeupdate=null;audio.onwaiting=null;}
    onState('ended',message('À ton tour! Tu peux réécouter aussi souvent que tu veux.'));
   };
@@ -71,7 +91,7 @@ export class NarrationSpeaker {
    if(!this.fallback?.speak){fail('Lecture audio indisponible. Réessaie avec une voix française dans les réglages de l’appareil.');return;}
    try{this.fallback.speak(key,{...options,speed:this.speed,onState:(status,detail)=>{
     if(!active())return;
-    if(status==='ended'||status==='error'){finished=true;this.usingFallback=false;}
+    if(status==='ended'||status==='error'){finished=true;this.activeState=null;this.usingFallback=false;}
     onState(status,message(detail||''));
    },onProgress:event=>{if(active())options.onProgress?.(event);}});}
    catch{fail('La voix française ne peut pas démarrer. Touche Écouter pour réessayer.');}
@@ -121,13 +141,11 @@ export class NarrationSpeaker {
      if(plan.segments.length!==1)return;
      const aligned=this.alignments[segment.src.slice('/audio/'.length)],cues=aligned?.text===key?aligned.cues:null;
      if(Array.isArray(cues)&&cues.length){
-      const time=audio.currentTime;let cue=null;
-      for(const c of cues){if(c.start>time)break;cue=c;}
-      const pause=cue&&Number.isInteger(cue.charEnd)?key.slice(cue.charEnd).match(/^\s*([,!.?…;:])/):null;
-      options.onProgress?.({charIndex:cue?(time>=cue.end&&pause?cue.charEnd+pause[0].length-1:cue.charIndex):-1,charEnd:cue?.charEnd,wordProgress:cue?Math.max(0,Math.min(1,(time-cue.start)/Math.max(.001,cue.end-cue.start))):0,approximate:false});
-     }else options.onProgress?.({progress:fraction,approximate:true});
+      options.onProgress?.(mediaReadingEvent(key,cues,audio.currentTime));
+     }else options.onProgress?.({progress:fraction,timing:'unavailable',approximate:true});
     };
-    audio.onplaying=()=>{if(current()){this.cancelLoading();onState('speaking',message(sourceLabel));progress();}};
+    const frame=()=>{if(!current()||audio.paused)return;progress();this.readingFrame=globalThis.requestAnimationFrame?.(frame);};
+    audio.onplaying=()=>{if(current()){this.cancelLoading();onState('speaking',message(sourceLabel));globalThis.cancelAnimationFrame?.(this.readingFrame);frame();}};
     audio.ontimeupdate=progress;
     audio.onwaiting=armLoading;
     audio.onerror=()=>reject(audio.error);
