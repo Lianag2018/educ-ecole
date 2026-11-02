@@ -43,3 +43,17 @@ test('iOS empty voice list requests French Canadian synthesis instead of remaini
  assert.equal(f.reader.current.voice,undefined);
  assert.equal(f.calls.filter(x=>typeof x==='object').length,1);
 });
+
+test('pause before native startup cancels the watchdog, resumes it and preserves a paused speed change',()=>{
+ const callbacks=new Map(),states=[];let next=0,paused=false;
+ class Utterance{constructor(text){this.text=text;}}
+ const synth={getVoices:()=>[{lang:'fr-CA',name:'Amélie',voiceURI:'fr'}],cancel(){},speak(){},pause(){paused=true;},resume(){paused=false;}};
+ const reader=new ReadingSpeaker({synth,Utterance,setTimer:fn=>{callbacks.set(++next,fn);return next;},clearTimer:id=>callbacks.delete(id)});
+ reader.speak('Les amis lisent',{onState:s=>states.push(s)});assert.equal(callbacks.size,1);
+ reader.pause();assert.equal(callbacks.size,0);assert.equal(states.at(-1),'paused');
+ reader.resume();assert.equal(callbacks.size,1);assert.equal(states.at(-1),'starting');
+ reader.current.onstart();assert.equal(callbacks.size,0);
+ reader.pause();reader.setSpeed(.7);assert.equal(reader.paused,true);assert.equal(states.at(-1),'paused');
+ reader.current.onstart();assert.equal(paused,true);assert.equal(states.at(-1),'paused');
+ reader.resume();assert.equal(paused,false);assert.equal(states.at(-1),'speaking');reader.stop();
+});

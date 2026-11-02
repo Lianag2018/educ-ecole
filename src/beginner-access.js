@@ -37,7 +37,27 @@ export function beginnerCard(q,p,subject='Français'){
  return out;
 }
 export function beginnerPages(text){return String(text||'').match(/[^.!?]+[.!?]*/gu)?.map(s=>s.trim()).filter(Boolean)||[''];}
-export function activityPages(q,p){return beginnerProfile(p)&&!q.earlyReader?beginnerPages(q.spokenText||q.text):[q.spokenText||q.text];}
+export function activityPages(q,p){
+ const text=q.spokenText||q.text||'';
+ if(beginnerProfile(p)&&!q.earlyReader)return beginnerPages(text).flatMap(s=>readingPages(s,22));
+ if(q.earlyReader||q.skill==='comprehension')return readingPages(text,beginnerProfile(p)?22:36);
+ return beginnerProfile(p)?beginnerPages(text):[text];
+}
+// Preserve every character of the passage (apart from whitespace between pages).
+// Sentence boundaries first; long sentences use word boundaries, never cropped text.
+export function readingPages(text,maxWords=30){
+ const sentences=String(text).match(/[^.!?…]+[.!?…]*|[.!?…]+/gu)||[''];
+ const pages=[];let page='';
+ for(const sentence of sentences){
+  const words=sentence.trim().split(/\s+/).filter(Boolean);
+  while(words.length){
+   const chunk=words.splice(0,maxWords).join(' ');
+   if(page&&(page+' '+chunk).split(/\s+/).length>maxWords){pages.push(page);page='';}
+   page+=(page?' ':'')+chunk;
+  }
+ }
+ if(page)pages.push(page);return pages.length?pages:[''];
+}
 // Shared pictorial choices for concrete objects; text and audio remain available.
 const pictures={'Une carte':'🗺️','Une fleur':'🌸','Un livre':'📖','Un ballon':'⚽','Une plume':'🪶','Une pomme':'🍎','Ses bottes':'👢','Son chapeau':'👒','Sur le tapis':'🐈','Sur le lit':'🛏️','Il pleut':'🌧️','Il neige':'🌨️','Sur un nuage':'☁️','Sur la mer':'🌊','L’étoile':'⭐','La licorne':'🦄','Un vélo':'🚲','Sur la pierre':'🪨','Sur le livre':'📖','Sur la plage':'🏖️','Le nuage':'☁️','Le hibou':'🦉','Le poisson':'🐟','Vers la mer':'🌊','Vers le lit':'🛏️'};
 export const choicePicture=text=>pictures[text]||'';

@@ -23,6 +23,42 @@ function narrationPlan(key,clips){
  return {text:key,numeric:false,segments:segments.map(({text,file})=>({text,src:'/audio/'+file,source:'narration'}))};
 }
 
+// Page-sized excerpts reuse the original narration and its word timestamps.
+// Never invent an audio cut when either boundary is missing from the alignment.
+export function narrationExcerpt(key,clips,alignments){
+ if(key.trim().split(/\s+/).length<2)return null;
+ for(const [file,alignment] of Object.entries(alignments)){
+  const source=alignment?.text,cues=alignment?.cues;
+  if(typeof source!=='string'||clips[source]!==file||!/^[a-f0-9]{64}\.mp3$/.test(file)||!Array.isArray(cues))continue;
+  const offset=source.indexOf(key);if(offset<0)continue;
+  if(/[\p{L}\p{N}]/u.test(source[offset-1]||'')||/[\p{L}\p{N}]/u.test(source[offset+key.length]||''))continue;
+  const words=Array.from(key.matchAll(/[\p{L}\p{N}]+/gu));if(!words.length)continue;
+  const firstIndex=offset+words[0].index,lastWord=words.at(-1),lastEnd=offset+lastWord.index+lastWord[0].length;
+  const first=cues.find(c=>c.charIndex===firstIndex),lastIndex=cues.findIndex(c=>c.charEnd===lastEnd),last=cues[lastIndex];
+  if(!first||!last||!Number.isFinite(first.start)||!Number.isFinite(last.end)||first.start<0||last.end<=first.start)continue;
+  const next=cues[lastIndex+1];
+  const end=next&&Number.isFinite(next.start)&&next.start>=last.end?next.start:last.end;
+  return {text:key,numeric:false,segments:[{text:key,src:'/audio/'+file,source:'narration',excerpt:{offset,start:first.start,end,alignment}}]};
+ }
+ return null;
+}
+
+// Follow media time, never wall-clock timers: buffering, seeking and speed changes
+// keep the same reading position. Optional syllable anchors must be measured.
+export function mediaReadingEvent(text,cues,time){
+ let cue=null;for(const c of cues){if(c.start>time)break;cue=c;}
+ if(!cue)return {charIndex:-1,timing:'word',approximate:false};
+ const pause=Number.isInteger(cue.charEnd)?text.slice(cue.charEnd).match(/^\s*([,!.?…;:])/):null;
+ if(time>=cue.end&&pause)return {charIndex:cue.charEnd+pause[0].length-1,partIndex:0,timing:'word',approximate:false};
+ if(time>=cue.end)return {charIndex:-1,timing:'word',approximate:false};
+ const parts=cue.syllables;
+ if(Array.isArray(parts)&&parts.length&&parts.every((p,i)=>Number.isFinite(p.start)&&Number.isFinite(p.end)&&p.start>=cue.start&&p.end<=cue.end&&p.end>p.start&&(!i||p.start>=parts[i-1].end))){
+  const partIndex=parts.findIndex(p=>time>=p.start&&time<p.end);
+  return {charIndex:cue.charIndex,partIndex,timing:'syllable',approximate:false};
+ }
+ return {charIndex:cue.charIndex,charEnd:cue.charEnd,wordProgress:(time-cue.start)/Math.max(.001,cue.end-cue.start),timing:'word',approximate:false};
+}
+
 // Official number recordings stream from PédagoFA; other narration stays on this site.
 // No user text or microphone data is sent to either media source.
 export class NarrationSpeaker {
@@ -39,19 +75,29 @@ export class NarrationSpeaker {
   this.loadingTimer=null;
  }
  clearMedia(){
+  globalThis.cancelAnimationFrame?.(this.readingFrame);this.readingFrame=null;
   this.segmentEpoch++;
   this.cancelLoading();
   if(!this.audio)return;
-  this.audio.onplaying=null;this.audio.onended=null;this.audio.onerror=null;this.audio.ontimeupdate=null;this.audio.onwaiting=null;
+  this.audio.onplaying=null;this.audio.onended=null;this.audio.onerror=null;this.audio.ontimeupdate=null;this.audio.onwaiting=null;this.audio.onloadedmetadata=null;
   this.audio.pause();this.audio.removeAttribute?.('src');
   // Removing src alone does not abort a media resource's ongoing load.
   this.audio.load?.();
  }
- stop(){this.epoch++;this.usingFallback=false;this.fallback?.stop();this.clearMedia();}
+ pause(){globalThis.cancelAnimationFrame?.(this.readingFrame);this.readingFrame=null;if(this.usingFallback)return this.fallback?.pause?.()||false;if(!this.audio||!this.activeState)return false;this.audio.pause();this.cancelLoading();this.activeState('paused','Lecture en pause.');return true;}
+ resume(){
+  if(this.usingFallback)return this.fallback?.resume?.()||false;
+  if(!this.audio||!this.activeState)return false;
+  const epoch=this.epoch,state=this.activeState;
+  const fail=()=>{if(this.epoch!==epoch||this.activeState!==state)return;this.stop();state('error','La lecture ne peut pas reprendre. Touche Réécouter.');};
+  try{this.audio.play()?.catch(fail);return true;}catch{fail();return false;}
+ }
+ stop(){this.activeState=null;this.epoch++;this.usingFallback=false;this.fallback?.stop();this.clearMedia();}
  setSpeed(value){this.speed=playbackSpeed(value);if(this.audio){this.audio.playbackRate=this.speed;this.audio.preservesPitch=true;}if(this.usingFallback)this.fallback?.setSpeed?.(value);}
  speak(text,options={}){
   this.stop();this.setSpeed(options.speed);
   const epoch=this.epoch,key=mathSpeech(String(text).trim()),onState=options.onState||(()=>{}),audio=this.audio;
+  this.activeState=onState;
   let finished=false,retried=false,recoveryMessage='';
   const active=()=>this.epoch===epoch&&!finished;
   const message=value=>recoveryMessage?`${recoveryMessage} ${value}`:value;
@@ -61,8 +107,8 @@ export class NarrationSpeaker {
   };
   const finish=()=>{
    if(!active())return;
-   finished=true;this.segmentEpoch++;this.usingFallback=false;this.cancelLoading();
-   if(audio){audio.onplaying=null;audio.onended=null;audio.onerror=null;audio.ontimeupdate=null;audio.onwaiting=null;}
+   finished=true;this.activeState=null;globalThis.cancelAnimationFrame?.(this.readingFrame);this.readingFrame=null;this.segmentEpoch++;this.usingFallback=false;this.cancelLoading();
+   if(audio){audio.onplaying=null;audio.onended=null;audio.onerror=null;audio.ontimeupdate=null;audio.onwaiting=null;audio.onloadedmetadata=null;}
    onState('ended',message('À ton tour! Tu peux réécouter aussi souvent que tu veux.'));
   };
   const useSystem=()=>{
@@ -71,7 +117,7 @@ export class NarrationSpeaker {
    if(!this.fallback?.speak){fail('Lecture audio indisponible. Réessaie avec une voix française dans les réglages de l’appareil.');return;}
    try{this.fallback.speak(key,{...options,speed:this.speed,onState:(status,detail)=>{
     if(!active())return;
-    if(status==='ended'||status==='error'){finished=true;this.usingFallback=false;}
+    if(status==='ended'||status==='error'){finished=true;this.activeState=null;this.usingFallback=false;}
     onState(status,message(detail||''));
    },onProgress:event=>{if(active())options.onProgress?.(event);}});}
    catch{fail('La voix française ne peut pas démarrer. Touche Écouter pour réessayer.');}
@@ -116,18 +162,19 @@ export class NarrationSpeaker {
     // Number sequences use an approximate overall position. Story anchors remain unchanged.
     const progress=()=>{
      if(!current()||!Number.isFinite(audio.duration)||audio.duration<=0)return;
+     if(segment.excerpt&&audio.currentTime>=segment.excerpt.end){audio.pause();finish();return;}
      const fraction=Math.max(0,Math.min(1,audio.currentTime/audio.duration));
      if(plan.numeric){options.onProgress?.({progress:(index+fraction)/plan.segments.length,approximate:true});return;}
      if(plan.segments.length!==1)return;
-     const aligned=this.alignments[segment.src.slice('/audio/'.length)],cues=aligned?.text===key?aligned.cues:null;
+     const aligned=segment.excerpt?.alignment||this.alignments[segment.src.slice('/audio/'.length)],cues=segment.excerpt||aligned?.text===key?aligned?.cues:null;
      if(Array.isArray(cues)&&cues.length){
-      const time=audio.currentTime;let cue=null;
-      for(const c of cues){if(c.start>time)break;cue=c;}
-      const pause=cue&&Number.isInteger(cue.charEnd)?key.slice(cue.charEnd).match(/^\s*([,!.?…;:])/):null;
-      options.onProgress?.({charIndex:cue?(time>=cue.end&&pause?cue.charEnd+pause[0].length-1:cue.charIndex):-1,charEnd:cue?.charEnd,wordProgress:cue?Math.max(0,Math.min(1,(time-cue.start)/Math.max(.001,cue.end-cue.start))):0,approximate:false});
-     }else options.onProgress?.({progress:fraction,approximate:true});
+      const event=mediaReadingEvent(aligned.text,cues,audio.currentTime);
+      if(segment.excerpt){event.charIndex-=segment.excerpt.offset;if(Number.isInteger(event.charEnd))event.charEnd-=segment.excerpt.offset;if(event.charIndex<0||event.charIndex>=key.length)event.charIndex=-1;}
+      options.onProgress?.(event);
+     }else options.onProgress?.({progress:fraction,timing:'unavailable',approximate:true});
     };
-    audio.onplaying=()=>{if(current()){this.cancelLoading();onState('speaking',message(sourceLabel));progress();}};
+    const frame=()=>{if(!current()||audio.paused)return;progress();if(current()&&!audio.paused)this.readingFrame=globalThis.requestAnimationFrame?.(frame);};
+    audio.onplaying=()=>{if(current()){this.cancelLoading();onState('speaking',message(sourceLabel));globalThis.cancelAnimationFrame?.(this.readingFrame);frame();}};
     audio.ontimeupdate=progress;
     audio.onwaiting=armLoading;
     audio.onerror=()=>reject(audio.error);
@@ -138,6 +185,10 @@ export class NarrationSpeaker {
     };
     try{
      audio.src=segment.src;audio.playbackRate=this.speed;audio.preservesPitch=true;audio.volume=1;audio.muted=false;
+     if(segment.excerpt){
+      audio.currentTime=segment.excerpt.start;
+      audio.onloadedmetadata=()=>{if(current())audio.currentTime=segment.excerpt.start;};
+     }
      armLoading();
      // Safari requires play() inside the original user gesture. Do not call the
      // app's onState handler first: it rerenders the entire page synchronously.
@@ -153,7 +204,7 @@ export class NarrationSpeaker {
   const numeric=checkedNumberPlan(planNumberAudio(key,this.clips));
   if(numeric){playPlan(numeric);return;}
   if(options.preferredURI){useSystem();return;}
-  const plan=narrationPlan(key,this.clips);
+  const plan=narrationPlan(key,this.clips)||narrationExcerpt(key,this.clips,this.alignments);
   if(plan)playPlan(plan);else useSystem();
  }
 }

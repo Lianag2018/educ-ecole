@@ -23,11 +23,14 @@ export class ReadingSpeaker {
  constructor({synth=globalThis.speechSynthesis,Utterance=globalThis.SpeechSynthesisUtterance,setTimer=(fn,ms)=>globalThis.setTimeout(fn,ms),clearTimer=id=>globalThis.clearTimeout(id)}={}) {
   Object.assign(this,{synth,Utterance,setTimer,clearTimer});this.epoch=0;this.current=null;
  }
- stop(){this.epoch++;this.clearTimer(this.timer);this.current=null;this.synth?.cancel();}
+ stop(){this.epoch++;this.clearTimer(this.timer);this.current=null;this.paused=false;this.armStartup=null;this.synth?.cancel();}
+ pause(){if(!this.current||!this.synth?.pause)return false;this.paused=true;this.clearTimer(this.timer);this.synth.pause();this.resumeOptions?.onState?.('paused','Lecture en pause.');return true;}
+ resume(){if(!this.current||!this.synth?.resume)return false;this.paused=false;if(!this.started)this.armStartup?.();this.synth.resume();this.resumeOptions?.onState?.(this.started?'speaking':'starting','La lecture reprend.');return true;}
  setSpeed(speed){
   if(!this.current||!this.resumeOptions)return;
-  const text=this.resumeText,offset=this.resumeOffset||0,options=this.resumeOptions;
+  const text=this.resumeText,offset=this.resumeOffset||0,options=this.resumeOptions,paused=this.paused;
   this.speak(text.slice(offset),{...options,speed,onProgress:e=>options.onProgress?.({...e,charIndex:e.charIndex+offset})});
+  if(paused)this.pause();
  }
  speak(text,{preferredURI='',speed,natural=false,systemVoice=false,onState=()=>{},onProgress=()=>{}}={}) {
   this.stop();text=mathSpeech(text);this.resumeText=String(text);this.resumeOffset=0;this.resumeOptions={preferredURI,natural,systemVoice,onState,onProgress};const epoch=this.epoch;
@@ -36,17 +39,18 @@ export class ReadingSpeaker {
   // iOS Safari can report zero voices until its synthesizer initializes. In that case,
   // request fr-CA explicitly rather than refusing to speak. Never choose an English-only voice.
   if(!voice&&this.synth.getVoices().length){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
-  const u=new this.Utterance(String(text));this.current=u;
+  const u=new this.Utterance(String(text));this.current=u;this.started=false;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
   u.rate=natural?playbackSpeed(speed):readingRate(speed);u.pitch=1;u.volume=1;
   const label=voice?`${voice.name} · ${voice.lang}`:'Voix système · français canadien demandé';
   const active=()=>this.epoch===epoch&&this.current===u;
   const fail=message=>{if(!active())return;this.stop();onState('error',message);};
-  u.onstart=()=>{if(!active())return;this.clearTimer(this.timer);onState('speaking',`Lecture en cours — ${label}.`);};
-  u.onboundary=e=>{if(active()&&Number.isInteger(e.charIndex)){this.resumeOffset=e.charIndex;onProgress({charIndex:e.charIndex,approximate:false});}};
+  u.onstart=()=>{if(!active())return;this.started=true;this.clearTimer(this.timer);if(this.paused){this.synth.pause();return;}onState('speaking',`Lecture en cours — ${label}.`);};
+  u.onboundary=e=>{if(active()&&Number.isInteger(e.charIndex)){this.resumeOffset=e.charIndex;onProgress({charIndex:e.charIndex,timing:'word',approximate:false});}};
   u.onend=()=>{if(!active())return;this.clearTimer(this.timer);this.current=null;onState('ended',`Lecture terminée — ${label}.`);};
   u.onerror=e=>fail(e.error==='not-allowed'?'Lecture bloquée par le navigateur. Touche « Tester la voix » pour la relancer.':'La voix sélectionnée est indisponible. Touche « Réessayer avec la voix système ».');
-  this.timer=this.setTimer(()=>fail('La lecture ne démarre pas. Réessaie avec la voix système et vérifie le volume de l’appareil.'),8000);
+  this.armStartup=()=>{this.clearTimer(this.timer);this.timer=this.setTimer(()=>fail('La lecture ne démarre pas. Réessaie avec la voix système et vérifie le volume de l’appareil.'),8000);};
+  this.armStartup();
   // Stay in the tap handler: deferring speak can lose Safari user activation.
   try{if(this.synth.paused)this.synth.resume();this.synth.speak(u);if(active())onState('starting',`Démarrage de la lecture — ${label}.`);}catch{fail('Le navigateur ne peut pas démarrer la voix. Touche « Réessayer avec la voix système ».');}
  }

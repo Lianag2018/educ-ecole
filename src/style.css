@@ -164,3 +164,28 @@ body.world-older{--world:#6651b6;--world-dark:#382c72;--world-light:#eee8ff;--sk
 
 /* Vertical arithmetic cards: units align, answers stay hidden until the recap. */
 .arithmetic-flashcard{width:min(100%,340px);margin:12px auto;padding:20px 26px;background:#fffefa;border:12px solid #6953b8;border-radius:24px;box-shadow:0 7px 0 #443575;display:flex;flex-direction:column;gap:12px}.flash-operation{display:grid;grid-template-columns:1fr 2fr;color:#58409e;font-size:clamp(3rem,12vw,5.4rem);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;border-bottom:5px solid #6953b8;padding-bottom:12px}.flash-top{grid-column:2;text-align:right}.flash-sign{grid-column:1;align-self:end}.flash-bottom{grid-column:2;text-align:right}.arithmetic-flashcard input{width:100%;box-sizing:border-box;text-align:right;font-size:2.2rem;min-height:60px}.arithmetic-flashcard button{margin:0;min-height:44px}.flash-progress{text-align:center;font-weight:700;margin-top:14px}.arithmetic-flashcard *{min-width:0}@media(max-height:700px){.arithmetic-flashcard{padding:12px 20px;gap:8px}.flash-operation{font-size:3rem}}
+
+/* Stable syllable colors; no scaling or flashing while following the voice. */
+.guided-reading .read-syllable.syllable-2{color:#a64b08}
+.guided-reading .read-syllable.syllable-3{color:#6845a3}
+.guided-reading .read-syllable.ball-active{color:#075e29;background:#c8f5ce;border-radius:.16em;box-shadow:0 2px 0 #278547}
+.guided-reading .read-syllable.ball-active .silent-letter{color:#737373;background:#f2f2f2}
+.guided-reading .cue-word-only{outline:2px solid #278547;outline-offset:2px}
+.guided-reading .cue-active .liaison-letter::after{border-color:#075e29}
+.guided-reading .cue-active .liaison-letter,.guided-reading .cue-active .liaison-arrival{color:#075e29;background:#c8f5ce}
+.reading-options>.reading-dock{margin-top:8px}
+.sentence-navigation{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sentence-navigation button{min-height:44px}
+@media(min-width:700px){
+ body.reading-page header,body.reading-page footer,body.reading-page .topline,body.reading-page .lesson-companion,body.reading-page .adventure-lesson>.landscape{display:none}
+ body.reading-page main{padding-top:8px}
+ body.reading-page .adventure-layout{display:block;max-width:1050px;margin:auto}
+ body.reading-page .adventure-lesson{padding:10px 18px}
+ body.reading-page .lesson-heading h1{font-size:clamp(20px,2.4vw,27px);margin:6px 0}
+ body.reading-page .lesson-text .guided-text{max-height:none;overflow:visible;font-size:clamp(27px,3.2vw,38px);line-height:1.7;padding:12px}
+ body.reading-page .reading-legend,body.reading-page .guided-reading>.small,body.reading-page .lesson-text>.reader-story>.reading-coach{display:none}
+ body.reading-page .reading-coach{min-height:0;margin:6px 0;padding:6px 10px}
+ body.reading-page .reading-dock{margin:6px 0;padding:6px}
+ body.reading-page .lesson-work .choices{margin:8px 0}
+ body.reading-page .lesson-work .choices button{min-height:44px}
+}

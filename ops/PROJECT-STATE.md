@@ -1,3 +1,30 @@
+# Lecteur tablette et repères audio — 2 novembre 2026 (America/Toronto)
+
+Base distante bf9421044cb4da48dd0372f53701730dbe45eca7.
+Commandes Écouter/Pause/Reprendre/Réécouter visibles, pages courtes des histoires
+pour les deux niveaux, suppression du plafond défilant du texte sur tablette.
+Quatre couleurs stables, cau/che/mar ajouté, lettres muettes conservées grises,
+syllabe active verte sans déplacement ni changement de taille. Ponts de liaison
+existants conservés; pas de promesse d'alignement phonétique des liaisons.
+
+Le lecteur accepte des repères syllabiques explicites liés au temps média et
+actualise l'affichage à chaque frame de lecture. Pause, recherche et vitesse
+conservent la position. Les données de production existantes ne fournissent que
+des mots : elles encadrent le mot, sans inventer une position syllabique. Sans
+repères audio, les couleurs restent fixes. L'objectif de synchronisation exacte
+par syllabe reste à terminer par alignement et vérification des enregistrements;
+aucune interpolation ne doit être annoncée comme mesure phonétique.
+
+PR76 : premier SHA distant 40e97ee, contrôles tests/verify et préversion READY.
+486 tests Node locaux réussis après renforcement des pauses et des extraits audio.
+Les petites pages réutilisent les MP3 existants lorsque leurs limites sont
+présentes dans les repères par mot; sinon repli système. Aucun nouveau MP3 créé.
+Test navigateur ajouté au contrôle CI. Chromium local
+indisponible (téléchargement incomplet). Build local réussi. Aucun essai physique
+iPad, aucune nouvelle génération payante ni changement de budget/accès. Dernier SHA,
+contrôles distants et publication à confirmer. Prochaine action : vérifier la CI,
+puis la version réellement publiée; produire les repères syllabiques vérifiés.
+
 # Progression des cartes — 31 octobre 2026 (America/Toronto)
 
 Base bc30916 (cartes PR73 publiées; module public comparé au source).

@@ -64,5 +64,21 @@ try{
  await until('!!document.querySelector("[data-action=practice-more]")');await click('[data-action=practice-more]');
  assert.ok(!texts.includes(await run("document.querySelector('.lesson-text').innerText")));
  assert.equal((await state()).profiles[0].history.length,4);assert.equal((await state()).profiles[1].history.length,6);
+ // Reading UI uses the real app, with native audio events simulated locally.
+ await click('[data-action=home]');await click('[data-action=french]');await click('[data-scene=reading]');
+ await cdp('Emulation.setDeviceMetricsOverride',{width:1180,height:820,deviceScaleFactor:1,mobile:true});
+ assert.equal(await run("document.body.classList.contains('reading-page')"),true);
+ assert.equal(await run("getComputedStyle(document.querySelector('.lesson-companion')).display"),'none');
+ assert.equal(await run("document.querySelector('[data-action=reading-pause]').getBoundingClientRect().height>=44"),true);
+ const readingChecks=await run(`(async()=>{
+  const {guidedMarkup,updateReadingCue}=await import('/src/guided-reading.js');
+  const root=document.createElement('div');root.innerHTML=guidedMarkup('Cauchemar, le chat.');document.body.append(root);
+  updateReadingCue(root,'Cauchemar, le chat.',{charIndex:0,partIndex:1,timing:'syllable'});
+  const active=root.querySelector('.ball-active');
+  const result={part:active.textContent,color:getComputedStyle(active).color,silent:getComputedStyle(root.querySelector('.silent-letter')).color};
+  updateReadingCue(root,'Cauchemar, le chat.',{charIndex:0,timing:'word'});result.estimatedCount=root.querySelectorAll('.ball-active').length;
+  root.remove();return result;
+ })()`);
+ assert.equal(readingChecks.part,'che');assert.equal(readingChecks.color,'rgb(7, 94, 41)');assert.equal(readingChecks.silent,'rgb(115, 115, 115)');assert.equal(readingChecks.estimatedCount,0);
  assert.deepEqual(errors,[]);console.log('PASS: new daily series, reload mid-series, separate profiles, six-question batches and uncropped mobile choices.');
 }finally{socket?.close();chrome.kill('SIGTERM');server.close();await sleep(500);await rm(temporary,{recursive:true,force:true,maxRetries:5,retryDelay:200});}
