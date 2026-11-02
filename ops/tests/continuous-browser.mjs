@@ -75,10 +75,10 @@ try{
   const root=document.createElement('div');root.innerHTML=guidedMarkup('Cauchemar, le chat.');document.body.append(root);
   updateReadingCue(root,'Cauchemar, le chat.',{charIndex:0,partIndex:1,timing:'syllable'});
   const active=root.querySelector('.ball-active');
-  const result={part:active.textContent,color:getComputedStyle(active).color,silent:getComputedStyle(root.querySelector('.silent-letter')).color};
+  const result={part:active.textContent,color:getComputedStyle(active).color,background:getComputedStyle(active).backgroundColor,shadow:getComputedStyle(active).boxShadow,silent:getComputedStyle(root.querySelector('.silent-letter')).color};
   updateReadingCue(root,'Cauchemar, le chat.',{charIndex:0,timing:'word'});result.estimatedCount=root.querySelectorAll('.ball-active').length;
   root.remove();return result;
  })()`);
- assert.equal(readingChecks.part,'che');assert.equal(readingChecks.color,'rgb(7, 94, 41)');assert.equal(readingChecks.silent,'rgb(115, 115, 115)');assert.equal(readingChecks.estimatedCount,0);
+ assert.equal(readingChecks.part,'che');assert.equal(readingChecks.color,'rgb(8, 117, 47)');assert.equal(readingChecks.background,'rgba(0, 0, 0, 0)');assert.equal(readingChecks.shadow,'none');assert.equal(readingChecks.silent,'rgb(115, 115, 115)');assert.equal(readingChecks.estimatedCount,0);
  assert.deepEqual(errors,[]);console.log('PASS: new daily series, reload mid-series, separate profiles, six-question batches and uncropped mobile choices.');
 }finally{socket?.close();chrome.kill('SIGTERM');server.close();await sleep(500);await rm(temporary,{recursive:true,force:true,maxRetries:5,retryDelay:200});}
