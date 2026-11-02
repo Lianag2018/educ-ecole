@@ -1,3 +1,5 @@
+import {createHash} from 'node:crypto';
+import {validReadingAlignment} from '../src/reading-timing.js';
 import {alignmentChunks,mergeChunkWords} from './mp3-alignment-chunks.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {narrationCatalog} from './narration-catalog.mjs';
@@ -38,12 +40,19 @@ export async function alignNarration({env=process.env,fetcher=fetch}={}){
  if(env.VERCEL_ENV!=='production'||env.VERCEL!=='1'||env.VERCEL_GIT_COMMIT_REF!=='main')return;
  const manifest=JSON.parse(await readFile('dist/audio/manifest.json','utf8'));
  const items=alignmentItems(narrationCatalog(),manifest.clips);
+ let acoustic={};try{acoustic=JSON.parse(await readFile('src/reading-acoustic-data.json','utf8')).clips||{};}catch{}
  if(items.length>80)throw Error('Alignment catalog exceeds reviewed limit');
  let previous={},rejected={};try{const r=await fetcher('https://educ-ecole.vercel.app/audio/alignment.json',{redirect:'error',signal:AbortSignal.timeout(15000)});if(r.ok){const data=await r.json();if(data.version===1){previous=data.clips||{};rejected=data.rejected||{};}}}catch{}
  rejected=Object.fromEntries(Object.entries(rejected).filter(([file])=>items.some(item=>item.file===file)));
  const clips={},cache='.vercel/cache/educ-alignment';await mkdir(cache,{recursive:true});
  const failures=[];let calls=0,failed=0;const deadline=Date.now()+8*60*1000;
  for(const item of items){
+  const measured=acoustic[item.file];
+  if(measured){
+   const digest=createHash('sha256').update(await readFile('dist/audio/'+item.file)).digest('hex');
+   if(digest!==measured.audioSha256||!validReadingAlignment(measured,item.text))throw Error('acoustic_alignment_invalid:'+item.file);
+   clips[item.file]=measured;delete rejected[item.file];continue;
+  }
   let entry=previous[item.file]||rejected[item.file];try{entry??=JSON.parse(await readFile(cache+'/'+item.file+'.json','utf8'));}catch{}
   if(entry?.text===item.text&&alignWords(item.text,entry.words)){clips[item.file]={...entry,cues:alignWords(item.text,entry.words)};delete rejected[item.file];continue;}
   if(entry?.text===item.text&&Array.isArray(entry.words)){
@@ -73,6 +82,7 @@ export async function alignNarration({env=process.env,fetcher=fetch}={}){
    entry={text:item.text,words:data.words.map(({word,start,end})=>({word,start,end})),cues};clips[item.file]=entry;await writeFile(cache+'/'+item.file+'.json',JSON.stringify(entry));
   }catch(error){failed++;failures.push({file:item.file,reason:/^(http_\d{3}|audio_too_large)$/.test(error.message)?error.message:'request_failed'});}
  }
- const report={version:1,source:'whisper-1',clips,rejected,failures,ready:Object.keys(clips).length,total:items.length,calls,failed};
+ const acousticReady=Object.values(clips).filter(e=>e.source==='mfa-french-3.4.3').length;
+ const report={version:1,source:acousticReady===items.length?'mfa-french-3.4.3':acousticReady?'mixed':'whisper-1',acousticReady,clips,rejected,failures,ready:Object.keys(clips).length,total:items.length,calls,failed};
  await writeFile('dist/audio/alignment.json',JSON.stringify(report));console.log('Narration alignment:',JSON.stringify({ready:report.ready,total:report.total,calls,failed,failures}));
 }

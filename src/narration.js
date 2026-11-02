@@ -38,7 +38,8 @@ export function narrationExcerpt(key,clips,alignments){
   const first=cues.find(c=>c.charIndex===firstIndex),lastIndex=cues.findIndex(c=>c.charEnd===lastEnd),last=cues[lastIndex];
   if(!first||!last||!Number.isFinite(first.start)||!Number.isFinite(last.end)||first.start<0||last.end<=first.start)continue;
   const next=cues[lastIndex+1];
-  const end=next&&Number.isFinite(next.start)&&next.start>=last.end?next.start:last.end;
+  const tail=(alignment.syllables||[]).filter(c=>c.charIndex>=last.charEnd&&c.charEnd<=offset+key.length&&Number.isFinite(c.end)).reduce((end,c)=>Math.max(end,c.end),last.end);
+  const end=next&&Number.isFinite(next.start)&&next.start>=last.end?next.start:tail;
   return {text:key,numeric:false,segments:[{text:key,src:'/audio/'+file,source:'narration',excerpt:{offset,start:first.start,end,alignment}}]};
  }
  return null;
