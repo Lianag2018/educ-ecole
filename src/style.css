@@ -164,3 +164,32 @@ body.world-older{--world:#6651b6;--world-dark:#382c72;--world-light:#eee8ff;--sk
 
 /* Vertical arithmetic cards: units align, answers stay hidden until the recap. */
 .arithmetic-flashcard{width:min(100%,340px);margin:12px auto;padding:20px 26px;background:#fffefa;border:12px solid #6953b8;border-radius:24px;box-shadow:0 7px 0 #443575;display:flex;flex-direction:column;gap:12px}.flash-operation{display:grid;grid-template-columns:1fr 2fr;color:#58409e;font-size:clamp(3rem,12vw,5.4rem);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;border-bottom:5px solid #6953b8;padding-bottom:12px}.flash-top{grid-column:2;text-align:right}.flash-sign{grid-column:1;align-self:end}.flash-bottom{grid-column:2;text-align:right}.arithmetic-flashcard input{width:100%;box-sizing:border-box;text-align:right;font-size:2.2rem;min-height:60px}.arithmetic-flashcard button{margin:0;min-height:44px}.flash-progress{text-align:center;font-weight:700;margin-top:14px}.arithmetic-flashcard *{min-width:0}@media(max-height:700px){.arithmetic-flashcard{padding:12px 20px;gap:8px}.flash-operation{font-size:3rem}}
+
+/* Reading: steady syllable colors, green only for the current audio cue. */
+.guided-reading .read-syllable.syllable-2{color:#8a4b08}
+.guided-reading .read-syllable.ball-active{color:#116629;background:#d9ffb2;border-radius:.18em;box-shadow:0 0 0 2px #74bf39;text-shadow:none}
+.guided-reading .read-syllable.ball-active .silent-letter{color:#737373;background:none;text-shadow:none}
+.guided-reading .cue-active:not(.cue-word){background:#d9ffb2;border-radius:.18em;outline:2px solid #74bf39}
+.guided-reading .liaison-active .liaison-letter::after{border-color:#40c900;filter:drop-shadow(0 0 2px #8cff45)}
+/* One reading surface: the text scrolls inside, controls remain reachable. */
+body.reading-focus{overflow:hidden}
+body.reading-focus header,body.reading-focus footer,body.reading-focus .topline,
+body.reading-focus .child-toolbar,body.reading-focus .adventure-top,
+body.reading-focus .lesson-companion{visibility:hidden}
+body.reading-focus .lesson-work{position:fixed;inset:0;z-index:50;width:100%;height:100dvh;box-sizing:border-box;border:0;border-radius:0;margin:0;padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:#fffdf5;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+body.reading-focus .lesson-work>*{display:none!important}
+body.reading-focus .lesson-work>.lesson-text{display:block!important;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;max-width:1000px;width:100%;margin:auto}
+body.reading-focus .lesson-work>[data-reading-focus]{display:block!important;align-self:center;min-height:48px;order:-1}
+body.reading-focus .lesson-work>.reading-options{display:block!important;flex:none;margin:0;width:100%;max-width:1000px;align-self:center}
+body.reading-focus .reading-options>summary,body.reading-focus .reading-settings,
+body.reading-focus .reading-legend,body.reading-focus .guided-reading>.small,
+body.reading-focus .reader-story>span,body.reading-focus [data-reader-help]{display:none!important}
+body.reading-focus .lesson-text .guided-text{max-height:none;overflow:visible;font-size:clamp(1.6rem,3.3vw,2.4rem);line-height:1.8;padding:16px;background:transparent}
+body.reading-focus .reading-dock{margin:0;padding:8px;flex-wrap:wrap}
+body.reading-focus .reading-dock .audio button{font-size:1rem;min-height:48px}
+body.reading-focus .audio-status{margin:4px 0;font-size:.85rem}
+body.reading-focus .reader-story h2{font-size:1.4rem;margin:0 16px}
+body.reading-focus .reading-coach{font-size:1rem}
+.guided-reading .cue-comma,.guided-reading .cue-stop,.guided-reading .cue-expression,.guided-reading .cue-question{outline:1px solid #b5ad9d;border-radius:.18em;padding:0 .08em}
+
+[data-reading-focus][hidden]{display:none!important}

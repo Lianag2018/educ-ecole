@@ -1,3 +1,4 @@
+import {verifiedReadingPosition} from './reading-timing.js';
 import {mathSpeech} from './math-speech.js';
 import {playbackSpeed} from './speech.js';
 import {numberWords,numberParts} from './numbers.js';
@@ -27,7 +28,7 @@ function narrationPlan(key,clips){
 // No user text or microphone data is sent to either media source.
 export class NarrationSpeaker {
  constructor({fallback,AudioClass=globalThis.Audio,fetcher=globalThis.fetch,setTimer=(fn,ms)=>globalThis.setTimeout(fn,ms),clearTimer=id=>globalThis.clearTimeout(id)}={}){
-  this.fallback=fallback;this.clips={};this.alignments={};this.epoch=0;this.segmentEpoch=0;this.audio=AudioClass?new AudioClass():null;
+  this.frame=null;this.fallback=fallback;this.clips={};this.alignments={};this.epoch=0;this.segmentEpoch=0;this.audio=AudioClass?new AudioClass():null;
   this.setTimer=setTimer;this.clearTimer=clearTimer;this.loadingTimer=null;this.loadingTicket=null;
   if(this.audio){this.audio.preload='auto';this.audio.setAttribute?.('playsinline','');}
   this.alignmentReady=fetcher('/audio/alignment.json').then(r=>r.ok?r.json():null).then(m=>{if(m?.version===1)this.alignments=m.clips||{};}).catch(()=>{});
@@ -39,6 +40,7 @@ export class NarrationSpeaker {
   this.loadingTimer=null;
  }
  clearMedia(){
+  if(this.frame!==null)globalThis.cancelAnimationFrame?.(this.frame);this.frame=null;
   this.segmentEpoch++;
   this.cancelLoading();
   if(!this.audio)return;
@@ -61,7 +63,7 @@ export class NarrationSpeaker {
   };
   const finish=()=>{
    if(!active())return;
-   finished=true;this.segmentEpoch++;this.usingFallback=false;this.cancelLoading();
+   finished=true;if(this.frame!==null)globalThis.cancelAnimationFrame?.(this.frame);this.frame=null;this.segmentEpoch++;this.usingFallback=false;this.cancelLoading();
    if(audio){audio.onplaying=null;audio.onended=null;audio.onerror=null;audio.ontimeupdate=null;audio.onwaiting=null;}
    onState('ended',message('À ton tour! Tu peux réécouter aussi souvent que tu veux.'));
   };
@@ -120,15 +122,19 @@ export class NarrationSpeaker {
      if(plan.numeric){options.onProgress?.({progress:(index+fraction)/plan.segments.length,approximate:true});return;}
      if(plan.segments.length!==1)return;
      const aligned=this.alignments[segment.src.slice('/audio/'.length)],cues=aligned?.text===key?aligned.cues:null;
+     const exact=verifiedReadingPosition(aligned,key,audio.currentTime);
+     if(exact){options.onProgress?.(exact);return;}
      if(Array.isArray(cues)&&cues.length){
       const time=audio.currentTime;let cue=null;
       for(const c of cues){if(c.start>time)break;cue=c;}
       const pause=cue&&Number.isInteger(cue.charEnd)?key.slice(cue.charEnd).match(/^\s*([,!.?…;:])/):null;
-      options.onProgress?.({charIndex:cue?(time>=cue.end&&pause?cue.charEnd+pause[0].length-1:cue.charIndex):-1,charEnd:cue?.charEnd,wordProgress:cue?Math.max(0,Math.min(1,(time-cue.start)/Math.max(.001,cue.end-cue.start))):0,approximate:false});
+      options.onProgress?.({charIndex:cue?(time>=cue.end?(pause?cue.charEnd+pause[0].length-1:-1):cue.charIndex):-1,charEnd:cue?.charEnd,wordProgress:cue?Math.max(0,Math.min(1,(time-cue.start)/Math.max(.001,cue.end-cue.start))):0,approximate:false});
      }else options.onProgress?.({progress:fraction,approximate:true});
     };
     audio.onplaying=()=>{if(current()){this.cancelLoading();onState('speaking',message(sourceLabel));progress();}};
     audio.ontimeupdate=progress;
+    const frame=()=>{if(!current())return;progress();this.frame=globalThis.requestAnimationFrame?.(frame)??null;};
+    if(globalThis.requestAnimationFrame)this.frame=globalThis.requestAnimationFrame(frame);
     audio.onwaiting=armLoading;
     audio.onerror=()=>reject(audio.error);
     audio.onended=()=>{

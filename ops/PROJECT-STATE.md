@@ -1,3 +1,11 @@
+## 2026-11-02 — Lecteur syllabique : préparation, pas de publication
+
+Base vérifiée : bf9421044cb4da48dd0372f53701730dbe45eca7. Branche feat/lecture-synchronisee.
+Vue de lecture plein écran pour les deux profils, commandes fixes et texte défilant à taille lisible; retour explicite aux questions. Trois couleurs de syllabes, lettres muettes grises et contour de ponctuation. Découpage cau/che/mar ajouté.
+Le surlignage syllabique interpolé est retiré. Les repères par mot restent disponibles. Le lecteur accepte des intervalles syllabiques validés, liés au fichier audio et au texte exact, et suit currentTime sans minuterie indépendante. Le vert syllabique n'est pas une preuve d'alignement tant que les fichiers réels ne contiennent pas ces intervalles.
+Preuves locales : suite Node réussie et build statique réussi; tests ciblés des bornes, vitesse, retour arrière et callbacks périmés. Les données de test sont synthétiques, pas des enregistrements validés. Test navigateur ajouté à la CI pour les deux profils et trois formats d'écran.
+Bloquant : aucun jeu de repères syllabiques réels revu n'est disponible. Aucun appel OpenAI payant lancé; ni consentement, ni budget, ni données de progrès modifiés. Ne pas annoncer la synchronisation complète ou une livraison en production. Prochaine étape : vérifier la CI navigateur, puis produire/revoir les intervalles syllabiques sur les MP3 existants et tester la voix réelle avant fusion.
+
 # Progression des cartes — 31 octobre 2026 (America/Toronto)
 
 Base bc30916 (cartes PR73 publiées; module public comparé au source).
