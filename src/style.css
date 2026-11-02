@@ -193,3 +193,5 @@ body.reading-focus .reading-coach{font-size:1rem}
 .guided-reading .cue-comma,.guided-reading .cue-stop,.guided-reading .cue-expression,.guided-reading .cue-question{outline:1px solid #b5ad9d;border-radius:.18em;padding:0 .08em}
 
 [data-reading-focus][hidden]{display:none!important}
+
+.guided-reading .liaison-group{white-space:nowrap;display:inline-block}

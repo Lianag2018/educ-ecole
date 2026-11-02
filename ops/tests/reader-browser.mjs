@@ -26,7 +26,7 @@ try{
  for(const child of [0,1]){
   await run('localStorage.clear()');await cdp('Page.reload');
   for(let i=0;i<60;i++){if(await run("!!document.querySelector('[data-game-child]')"))break;await sleep(100);}
-  await run(`Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{getVoices:()=>[{name:'Amélie',lang:'fr-CA',voiceURI:'amelie'}],cancel(){},speak(){}}});`);
+  await run(`void Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{getVoices:()=>[{name:'Amélie',lang:'fr-CA',voiceURI:'amelie'}],cancel(){},speak(){}}});`);
   await click(`[data-game-child="${child}"]`);await click('[data-action="french"]');await click('[data-scene="reading"]');
   assert.equal(await run("document.body.classList.contains('reading-focus')"),true);
   for(const [width,height] of [[820,1180],[1180,820],[390,844]]){
