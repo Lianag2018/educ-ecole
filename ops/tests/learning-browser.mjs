@@ -58,5 +58,26 @@ try{
  await until('document.querySelector("#learning-sync-status").textContent.includes("Réponses sauvegardées")');
  state=JSON.parse(await run('localStorage.getItem("atelier-mots-v1")'));assert.equal(state.profiles[1].history.length,1);assert.equal(state.profiles[1].records['synthetic-card'].result,'correct');
  assert.ok(!JSON.stringify(uploaded).includes('PRIVATE_NAME'));assert.deepEqual(errors,[]);
+ for(const profileId of ['p1','p2']){
+  const review=await run(`(async()=>{
+   const {reviewPlanDraft}=await import('/src/plan-review.js');
+   const root=document.createElement('div');document.body.append(root);
+   const controller=new AbortController(),calls=[];
+   const preview={profileId:'${profileId}',week:'2026-11-02',tasks:[{subject:'Français',topic:'<img src=x onerror=alert(1)>',instruction:'Lire',words:['chat'],tables:[],operations:[],missing:false}]};
+   const pending=reviewPlanDraft(root,{preview,draft:'synthetic-token'},{profileId:'${profileId}',signal:controller.signal,request:async(path,body)=>{calls.push({path,body});return {plan:preview};}});
+   const before=calls.length,escaped=!root.querySelector('img')&&root.textContent.includes('<img');
+   root.querySelector('[data-review-approve]').click();
+   root.querySelector('[data-review-approve]')?.click();
+   const approved=await pending;
+   const cancelled=reviewPlanDraft(root,{preview,draft:'synthetic-token'},{profileId:'${profileId}',signal:controller.signal,request:async()=>{throw Error('must not call');}}).then(()=>null,e=>e.message);
+   root.querySelector('[data-review-cancel]').click();const cancelledCode=await cancelled;
+   const abandoned=reviewPlanDraft(root,{preview,draft:'synthetic-token'},{profileId:'${profileId}',signal:controller.signal,request:async()=>{throw Error('must not call');}}).then(()=>null,e=>e.message);
+   controller.abort();const abortedCode=await abandoned,cleared=root.textContent==='';root.remove();
+   return {before,escaped,calls,profile:approved.profileId,cancelledCode,abortedCode,cleared};
+  })()`);
+  assert.equal(review.before,0);assert.equal(review.escaped,true);assert.equal(review.calls.length,1);
+  assert.equal(review.calls[0].path,'/api/plans/approve');assert.equal(review.calls[0].body.profileId,profileId);
+  assert.equal(review.profile,profileId);assert.equal(review.cancelledCode,'draft_cancelled');assert.equal(review.abortedCode,'aborted');assert.equal(review.cleared,true);
+ }
  console.log('Browser: parent reconnection, real fetch, private merge, separate children and tablet layout passed.');
 }finally{socket?.close();if(chrome.pid&&chrome.exitCode===null)await new Promise(r=>{chrome.once('exit',r);chrome.kill();});server.close();await rm(temporary,{recursive:true,force:true,maxRetries:10,retryDelay:100});}

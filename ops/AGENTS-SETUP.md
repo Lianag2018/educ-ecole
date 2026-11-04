@@ -55,7 +55,9 @@ sur la seule base des fichiers YAML. La publication et son SHA doivent toujours
 2. Tester les imports des deux profils avec le parent; tests CI fictifs seulement.
 3. Vérifier l'accès au moteur GitHub, lancer une mission technique synthétique et
    confirmer la PR produite. Aucun agent autonome actif n'est revendiqué ici.
-4. Construire le brouillon privé → validation parent → disponibilité enfant et
-   la transmission expurgée des nouvelles fonctionnalités vers l'agent. Le
-   parcours actuel installe les plans validés par le schéma, sans cette nouvelle
-   étape éditoriale. Ne pas confondre ces deux validations.
+4. Vérifier le brouillon privé → validation parent → disponibilité enfant en
+   production après activation, puis construire la transmission expurgée des
+   nouvelles fonctionnalités vers l'agent. Le
+   parcours photo dispose maintenant de cette validation éditoriale : aperçu signé
+   en mémoire, puis approbation parent serveur avant sauvegarde. La transmission
+   vers un agent de code reste distincte et non raccordée.

@@ -1,3 +1,27 @@
+# Validation parent des activités — 4 novembre 2026 (America/Toronto)
+
+Base publiée vérifiée : 1b64fb0e4f7c2dcebcc6cfd5483d84dad9cbd7c6, PR83.
+Les deux imports photo retournent désormais un aperçu signé, non sauvegardé et
+non synchronisé vers les enfants. La validation parent appelle /api/plans/approve,
+vérifie signature, parent, profil, niveau et expiration de 30 minutes avant de
+sauvegarder le plan avec la RPC existante. Aucun nouvel appel OpenAI à la validation
+ou à sa reprise. Les plans historiques déjà publiés sont conservés.
+
+Le brouillon reste en mémoire de page : navigation, changement de profil et
+logout l'annulent. Annulation avant validation : aucune activité de cette photo
+publiée. Le lot conserve les pages antérieures déjà approuvées. Le serveur ne
+renvoie plus un champ plan à l'import, pour empêcher un ancien client d'installer
+le brouillon sans passer par l'approbation. Préférence ajoutée aussi au formulaire
+principal Photo → activités. Aucune migration ou nouvelle clé nécessaire.
+
+Tests locaux et build réussis; tests navigateur des deux profils ajoutés :
+approbation, double clic, annulation, effacement et échappement HTML. CI distante
+et publication à vérifier sur le SHA final. Aucun appel réel d'enfant/OpenAI.
+Les conditions d'activation fournisseur/budget restent inchangées. La création
+autonome de code via GitHub depuis une demande privée n'est pas installée par ce
+parcours : ce sont les activités prises en charge qui seront préparées après
+activation, pas des types de jeux arbitraires.
+
 # Agents, Actions et demandes parent — 4 novembre 2026 (America/Toronto)
 
 Base distante vérifiée ef402377d08f86e63e14ffa28c7f465822294d98 (PR82).
