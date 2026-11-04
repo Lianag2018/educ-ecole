@@ -74,7 +74,7 @@ export function runtime(env=process.env,fetcher=fetch){
   if(req.path.startsWith('/api/learning/'))return learning(req);
   if(req.path.startsWith('/api/plans/')){
    if(!authConfigured())return {status:503,body:{code:'plan_unavailable'}};
-   if(!['/api/plans/import','/api/plans/list','/api/plans/status'].includes(req.path))return {status:404,body:{code:'not_found'}};
+   if(!['/api/plans/import','/api/plans/approve','/api/plans/list','/api/plans/status'].includes(req.path))return {status:404,body:{code:'not_found'}};
    return plans(req);
   }
 

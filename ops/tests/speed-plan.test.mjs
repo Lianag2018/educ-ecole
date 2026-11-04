@@ -36,7 +36,21 @@ test('missing words/pages never become invented school questions; invalid dates 
 const image='data:image/jpeg;base64,'+Buffer.concat([Buffer.from([255,216,255]),Buffer.alloc(100)]).toString('base64');
 function fixture(overrides={}){const calls=[];return {calls,args:{auth:{authenticateParent:async()=>({id:'parent'})},profiles:{ownedBy:async()=>({stage:'3e année'})},ledger:{durable:true,reserve:async()=>calls.push('budget')},store:{find:async()=>null,list:async()=>[],save:async(...a)=>calls.push(['saved',...a])},config:{plansEnabled:true,paidEnabled:true,parentConsent:true,zeroDataRetentionVerified:true,endpointRetentionVerified:true,childDataEligibilityReviewed:true,dedicatedHosting:true,otherCostsMicros:1000000},apiKey:'test',fetcher:async(url,req)=>{calls.push(['provider',JSON.parse(req.body)]);return {ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify({readable:true,...plan})}}]})};},...overrides}};}
 const req={method:'POST',path:'/api/plans/import',body:{profileId:'p2',week:plan.week,consent:true,image}};
-test('photo pipeline reserves before provider, stores no photo, uses fixed model and no tools',async()=>{const f=fixture();assert.equal((await planEndpoint(f.args)(req)).status,200);assert.equal(f.calls[0],'budget');assert.equal(f.calls[1][1].store,false);assert.equal(f.calls[1][1].tools,undefined);assert.ok(!JSON.stringify(f.calls.at(-1)).includes('data:image'));});
+test('draft approval alone saves the plan, with no additional provider or budget call',async()=>{
+ const f=fixture(),endpoint=planEndpoint(f.args),prepared=await endpoint(req);
+ assert.equal(prepared.body.approvalRequired,true);
+ assert.ok(!f.calls.some(x=>x[0]==='saved'));
+ const before=f.calls.length;
+ const approved=await endpoint({method:'POST',path:'/api/plans/approve',body:{profileId:'p2',draft:prepared.body.draft,approved:true}});
+ assert.equal(approved.status,200);assert.deepEqual(approved.body.plan,plan);
+ assert.equal(f.calls.length,before+1);assert.equal(f.calls.at(-1)[0],'saved');
+});
+test('approval rejects forged, cross-profile and unconfirmed drafts without saving',async()=>{
+ const f=fixture(),endpoint=planEndpoint(f.args),prepared=await endpoint(req);f.calls.length=0;
+ for(const body of [{profileId:'p2',draft:prepared.body.draft,approved:false},{profileId:'p1',draft:prepared.body.draft,approved:true},{profileId:'p2',draft:prepared.body.draft+'x',approved:true}])assert.equal((await endpoint({method:'POST',path:'/api/plans/approve',body})).status,422);
+ assert.deepEqual(f.calls,[]);
+});
+test('photo pipeline reserves before provider, returns a private draft without saving, uses fixed model and no tools',async()=>{const f=fixture();assert.equal((await planEndpoint(f.args)(req)).status,200);assert.equal(f.calls[0],'budget');assert.equal(f.calls[1][1].store,false);assert.equal(f.calls[1][1].tools,undefined);assert.ok(!f.calls.some(x=>x[0]==='saved')); });
 test('missing auth, config, budget and bad images prevent any provider charge',async()=>{
  for(const override of [{auth:{authenticateParent:async()=>null}},{config:{}},{ledger:{durable:true,reserve:async()=>{throw Error();}}}]){const f=fixture(override);assert.notEqual((await planEndpoint(f.args)(req)).status,200);assert.ok(!f.calls.some(x=>x[0]==='provider'));}
  const f=fixture();assert.equal((await planEndpoint(f.args)({...req,body:{...req.body,image:'https://internal/private'}})).status,422);assert.equal(f.calls.length,0);
@@ -55,7 +69,7 @@ test('parent preference stays in user context, changes the cache and is not stor
   const response=await planEndpoint(f.args)({...req,body:{...req.body,request}});
   assert.equal(response.status,200);
   const body=f.calls.find(x=>x[0]==='provider')[1];
-  if(request){assert.ok(body.messages[1].content[0].text.includes(request));assert.ok(!body.messages[0].content.includes(request));assert.ok(!JSON.stringify(f.calls.at(-1)).includes(request));}
+  if(request){assert.ok(body.messages[1].content[0].text.includes(request));assert.ok(!body.messages[0].content.includes(request));assert.ok(!f.calls.some(x=>x[0]==='saved'));}
  }
  assert.notEqual(keys[0],keys[1]);
 });
