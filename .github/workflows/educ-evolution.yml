@@ -61,5 +61,6 @@ jobs:
         with:
           node-version: '22'
       - name: Adapter les activités privées si le service est activé
+        shell: bash
         run: |
           node ops/run-learning-job.mjs | tee -a "$GITHUB_STEP_SUMMARY"
