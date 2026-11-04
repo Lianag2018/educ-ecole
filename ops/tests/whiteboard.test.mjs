@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {draftKey,readDraft,acceptsPointer} from '../../src/whiteboard.js';
+const memory=new Map(),storage={getItem:k=>memory.get(k)};
+const a=draftKey('p1','math'),b=draftKey('p2','math');
+assert.notEqual(a,b);assert.notEqual(a,draftKey('p1','reading'));
+const strokes=[{tool:'pen',points:[[40,20,.5],[60,20,.9]]},{tool:'erase',points:[[40,20,.5]]}];
+memory.set(a,JSON.stringify(strokes));assert.deepEqual(readDraft(storage,a),strokes);assert.deepEqual(readDraft(storage,b),[]);
+memory.set(a,'broken');assert.deepEqual(readDraft(storage,a),[]);
+memory.set(a,JSON.stringify([{tool:'pen',points:[[Infinity,-1,2]]}]));assert.deepEqual(readDraft(storage,a),[]);
+assert.deepEqual(readDraft({getItem(){throw Error('denied');}},a),[]);
+assert.equal(acceptsPointer({pointerType:'touch'}),false);assert.equal(acceptsPointer({pointerType:'pen'}),true);assert.equal(acceptsPointer({pointerType:'touch'},true),true);assert.equal(acceptsPointer({pointerType:'mouse',button:2}),false);
+console.log('Whiteboard: isolation, recovery, storage failure and palm filtering passed.');

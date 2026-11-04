@@ -1,3 +1,22 @@
+# Tableau de travail au stylet — 4 novembre 2026 (UTC)
+
+Base distante vérifiée : b9877c498db4a32b10342848433e815f5ba53be1.
+Les missions ouvrent maintenant un brouillon à côté de l’énoncé, avec deux
+volets défilants; sur petit écran les volets se superposent verticalement.
+Crayon sensible à la pression Pointer Events, gomme, annulation et quadrillage.
+Le dessin tactile est désactivé par défaut et peut être choisi explicitement.
+La lecture plein écran reste un choix manuel, et ne s’ouvre plus automatiquement.
+
+Brouillons locaux isolés par profil et identifiant de carte, conservés après
+navigation; aucun envoi réseau, correction automatique ou crédit de réussite.
+Un échec de stockage est signalé. Les traits sont bornés et validés au chargement.
+L’effacement complet est annulable jusqu’au prochain trait ou démontage.
+
+Tests Node et build local réussis. Prévisualisation locale indisponible : le
+serveur du dépôt écoute 5173, alors que la passerelle requiert 4173. Aucun essai
+physique Safari/Apple Pencil revendiqué. Publication et revue visuelle distante
+à confirmer sur la PR. Configuration voix et données des profils inchangées.
+
 # Validation parent des activités — 4 novembre 2026 (America/Toronto)
 
 Base publiée vérifiée : 1b64fb0e4f7c2dcebcc6cfd5483d84dad9cbd7c6, PR83.
