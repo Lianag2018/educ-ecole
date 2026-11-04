@@ -1,0 +1,11 @@
+/* Keep the exercise and writing surface simultaneously visible. */
+.adventure-layout.has-whiteboard{display:block;max-width:none}.has-whiteboard>.lesson-companion{display:none}
+.writing-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:stretch;height:75dvh;min-height:450px}
+.writing-workspace>.lesson-work{min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;margin:0;padding:16px}
+.whiteboard{display:flex;flex-direction:column;min-width:0;min-height:0;padding:12px;border:2px solid #bfd8cf;border-radius:20px;background:#f4fbf7;color:#263f43}
+.whiteboard[hidden]{display:none}.whiteboard h2{font-size:21px;margin:0}.whiteboard p{font-size:13px;margin:6px 0}.board-tools,.board-options{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0}.board-tools button{min-height:44px;padding:8px 10px;font-size:14px}.board-tools button[aria-pressed=true]{background:#294b72;color:white}.board-options label{font-size:13px;display:flex;align-items:center;gap:4px;min-height:32px}.board-options input{width:20px;height:20px}
+.board-paper{overflow:auto;min-height:0;flex:1;background:white;border:1px solid #aebec8;overscroll-behavior:contain}
+.board-paper canvas{display:block;width:100%;height:auto;aspect-ratio:4/5;touch-action:none;user-select:none;-webkit-user-select:none;background-image:linear-gradient(#dce5ec 1px,transparent 1px),linear-gradient(90deg,#dce5ec 1px,transparent 1px);background-size:5% 4%;cursor:crosshair}.no-grid canvas{background-image:none}
+.board-toggle{margin:8px 0;min-height:44px}.writing-workspace.board-closed{display:block;height:auto}.board-closed>.lesson-work{overflow:visible}
+.writing-workspace .lesson-text .guided-text{max-height:none}.writing-workspace .lesson-text{flex-shrink:0}
+@media(max-width:650px){.writing-workspace{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) minmax(0,1fr);height:85dvh;min-height:600px;gap:8px}.whiteboard{padding:8px}.whiteboard>p:first-of-type{display:none}.whiteboard h2{font-size:16px}.board-tools button{font-size:12px;padding:6px}.board-options{margin:0}.writing-workspace>.lesson-work{padding:12px}}

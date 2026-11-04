@@ -36,6 +36,22 @@ try{
   for(let i=0;i<60;i++){if(await run("!!document.querySelector('[data-game-child]')"))break;await sleep(100);}
   await run(`void Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{getVoices:()=>[{name:'Amélie',lang:'fr-CA',voiceURI:'amelie'}],cancel(){},speak(){}}});`);
   await click(`[data-game-child="${child}"]`);await click('[data-action="french"]');await click('[data-scene="reading"]');
+  assert.equal(await run("document.body.classList.contains('reading-focus')"),false);
+  for(const [width,height] of [[820,1180],[1180,820],[390,844]]){
+   await cdp('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});
+   assert.equal(await run("document.documentElement.scrollWidth<=innerWidth"),true,'no horizontal overflow');
+   assert.equal(await run(`(()=>{const a=document.querySelector('.lesson-work').getBoundingClientRect(),b=document.querySelector('.whiteboard').getBoundingClientRect();return a.width>0&&b.width>0&&(a.right<=b.left||a.bottom<=b.top)})()`),true,'exercise and board must not overlap');
+  }
+  await run(`(()=>{const c=document.querySelector('.whiteboard canvas'),r=c.getBoundingClientRect();for(const type of ['pointerdown','pointermove','pointerup'])c.dispatchEvent(new PointerEvent(type,{pointerId:7,pointerType:'pen',clientX:r.left+50,clientY:r.top+50,pressure:.7,bubbles:true}));})()`);
+  assert.match(await run("document.querySelector('.board-status').textContent"),/sauvegardé/);
+  assert.equal(await run("Object.keys(localStorage).filter(k=>k.startsWith('atelier-board-v1:')).length"),1);
+  await click('[data-clear]');
+  assert.equal(await run("JSON.parse(localStorage.getItem(Object.keys(localStorage).find(k=>k.startsWith('atelier-board-v1:')))).length"),0);
+  await click('[data-undo]');
+  assert.equal(await run("JSON.parse(localStorage.getItem(Object.keys(localStorage).find(k=>k.startsWith('atelier-board-v1:')))).length"),1);
+  await click('.board-toggle');assert.equal(await run("document.querySelector('.whiteboard').hidden"),true);
+  await click('.board-toggle');assert.equal(await run("document.querySelector('.whiteboard').hidden"),false);
+  await click('[data-reading-focus]');
   assert.equal(await run("document.body.classList.contains('reading-focus')"),true);
   for(const [width,height] of [[820,1180],[1180,820],[390,844]]){
    await cdp('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});
