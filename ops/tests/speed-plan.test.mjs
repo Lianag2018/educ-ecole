@@ -48,3 +48,19 @@ test('plan readiness requires owned parent profile and config but never calls pr
  const blocked=fixture({config:{}});assert.equal((await planEndpoint(blocked.args)({...req,path:'/api/plans/status'})).body.ready,false);
  const anonymous=fixture({auth:{authenticateParent:async()=>null}});assert.equal((await planEndpoint(anonymous.args)({...req,path:'/api/plans/status'})).status,401);
 });
+test('parent preference stays in user context, changes the cache and is not stored verbatim',async()=>{
+ const keys=[];
+ for(const request of ['', 'Commencer par les mots visibles']){
+  const f=fixture();f.args.store.find=async(...args)=>{keys.push(args[2]);return null;};
+  const response=await planEndpoint(f.args)({...req,body:{...req.body,request}});
+  assert.equal(response.status,200);
+  const body=f.calls.find(x=>x[0]==='provider')[1];
+  if(request){assert.ok(body.messages[1].content[0].text.includes(request));assert.ok(!body.messages[0].content.includes(request));assert.ok(!JSON.stringify(f.calls.at(-1)).includes(request));}
+ }
+ assert.notEqual(keys[0],keys[1]);
+});
+test('invalid parent preferences never reserve or call OpenAI',async()=>{
+ for(const request of [null,{},'a'.repeat(601)]){
+  const f=fixture();assert.equal((await planEndpoint(f.args)({...req,body:{...req.body,request}})).status,422);assert.deepEqual(f.calls,[]);
+ }
+});

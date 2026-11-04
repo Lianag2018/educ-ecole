@@ -1,7 +1,9 @@
 name: Évolution Educ École
 on:
   pull_request:
-    paths: ['src/**', 'ops/**', 'api/**', '.github/workflows/educ-evolution.yml']
+  push:
+    branches: [main]
+  merge_group:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
@@ -9,7 +11,7 @@ permissions:
   contents: read
 jobs:
   verify:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'merge_group'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     services:
@@ -58,4 +60,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node ops/run-learning-job.mjs
+      - name: Adapter les activités privées si le service est activé
+        shell: bash
+        run: |
+          node ops/run-learning-job.mjs | tee -a "$GITHUB_STEP_SUMMARY"
