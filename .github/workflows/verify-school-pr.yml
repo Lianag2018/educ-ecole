@@ -1,13 +1,11 @@
-name: Vérifier le cahier de Mely-Ann
+name: Vérifier Éduc École — deux profils
 on:
   pull_request:
-    paths:
-      - 'src/**'
-      - 'ops/**'
-      - '.github/workflows/verify-school-pr.yml'
   push:
     branches:
-      - 'fix/mely-grade1-audio'
+      - main
+  merge_group:
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:

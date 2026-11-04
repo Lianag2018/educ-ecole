@@ -1,3 +1,25 @@
+# Agents, Actions et demandes parent — 4 novembre 2026 (America/Toronto)
+
+Base distante vérifiée ef402377d08f86e63e14ffa28c7f465822294d98 (PR82).
+Cinq derniers runs évolution consultés : succès. Cela ne prouve pas une analyse
+payante : le mode automatique est désactivé dans la dernière configuration connue.
+
+Deux profils GitHub ajoutés : développement et vérification, limités au dépôt
+personnel et aux données synthétiques. Aucune session autonome lancée. CI étendue
+à toutes les PR, main et merge queue; le résumé horaire distingue désactivation
+et traitement. Aucune protection administrative de branche configurée.
+
+Formulaire photo : préférence parent facultative bornée, passée au raccordement
+OpenAI existant dans le contexte utilisateur, cache différencié. Aucune clé
+copiée; aucun appel fournisseur pendant les tests. Les préférences peuvent
+prioriser les notions visibles, pas inventer un jeu logiciel arbitraire.
+L'erreur fournisseur ne prétend plus qu'aucun envoi n'a eu lieu après un échec.
+
+Activation réelle encore bloquée : approbation ZDR/éligibilité et configuration
+budgétaire non confirmées. Aucune valeur de rétention forcée. Parcours privé de
+brouillon/validation et déclenchement d'un agent depuis Parents restent à
+implémenter; voir AGENTS-SETUP.md. Publication/CI distante à confirmer sur la PR.
+
 # Lettres vertes et accès scolaires parent — 2 novembre 2026 (America/Toronto)
 
 Base réellement publiée : cc59a0df (PR81), 66/66 alignements acoustiques.
