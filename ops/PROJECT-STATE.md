@@ -1,3 +1,13 @@
+# Chanson de la table de 1 — 6 novembre 2026 (UTC)
+
+Base publiée vérifiée : da74ef5354d8eed0282a61d5f3ebf8dd2162c342 (PR86).
+Ajout du lecteur officiel « Apprendre la table de 1 », Les Titischools,
+vidéo g5EoCRYHgQQ. Identité et intégration confirmées par YouTube oEmbed.
+Même parcours : Liana → Maths → Tables en chansons → 1; groupes et exercices
+existants conservés. Chargement uniquement au toucher, sans copie audio.
+PR86 : 509 tests et vérification navigateur CI réussis, production confirmée.
+Validation et publication de cet ajout suivies sur sa PR.
+
 # Tables en chansons — 5 novembre 2026 (America/Toronto)
 
 Base distante et production vérifiées : d0ed43b54a883cf751615268649f1f27eb073220 (PR85).
