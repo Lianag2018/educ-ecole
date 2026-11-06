@@ -43,5 +43,34 @@ try{
  assert.match(await run("document.querySelector('iframe').src"),/youtube-nocookie.com/);
  await run("window.testPlayer=document.querySelector('iframe')");await click('[data-more]');assert.equal(await run("window.testPlayer===document.querySelector('iframe')"),true);
  await click('[data-action=home]');assert.equal(await run("document.querySelector('iframe')===null"),true);
+
+ // Song practice is local to the selected child and no iframe loads until requested.
+ await click('[data-action=french]');await click('[data-action=songs-french]');
+ assert.equal(await run("document.querySelector('iframe')===null"),true);
+ await click('[data-music-id=adjective]');await click('[data-music-play]');
+ assert.match(await run("document.querySelector('iframe').src"),/d-USt7R_A1U/);
+ await click('[data-music-quiz]');assert.equal(await run("document.querySelector('iframe')===null"),true);
+ await click('[data-music-answer="1"]');await click('[data-music-next]');await click('[data-music-answer="0"]');await click('[data-music-next]');
+ assert.match(await run("document.querySelector('.learning-panel').textContent"),/1 réponse/);
+ let data=JSON.parse(await run("localStorage.getItem('atelier-mots-v1')"));assert.equal(data.profiles[1].songPractice.adjective.firstChoices,1);assert.equal(data.profiles[0].songPractice,undefined);
+ await click('[data-action=home]');
+ await run("document.querySelector('#profile').value='p1';document.querySelector('#profile').dispatchEvent(new Event('change'))");
+ await click('[data-action=maths]');await click('[data-action=skip-counting]');
+ assert.equal(await run("document.querySelector('[data-skip-limit]').value"),'20');
+ await click('[data-step="10"]');await run("document.querySelector('[data-skip-limit]').value='100';document.querySelector('[data-skip-limit]').dispatchEvent(new Event('change'))");
+ for(let i=0;i<10;i++)await click('[data-skip-more]');assert.equal(await run("document.querySelector('.skip-number').textContent"),'100');assert.equal(await run("document.querySelector('[data-skip-more]').disabled"),true);
+ assert.equal(await run('document.documentElement.scrollWidth<=innerWidth'),true);
+ await click('[data-skip-start]');
+ await run("document.querySelector('#skip-answer').value='7';document.querySelector('[data-skip-form]').requestSubmit()");
+ await click('[data-skip-help]');
+ for(const n of [10,20,30]){await run(`document.querySelector('#skip-answer').value='${n}';document.querySelector('[data-skip-form]').requestSubmit()`);await click('[data-skip-next]');}
+ assert.match(await run("document.querySelector('.learning-panel').textContent"),/2 réponse/);
+ data=JSON.parse(await run("localStorage.getItem('atelier-mots-v1')"));assert.equal(data.profiles[0].skipPractice['10-100'].lastUnaided,2);assert.equal(data.profiles[1].skipPractice,undefined);
+ await click('[data-action=home]');await click('[data-action=songs-world]');await click('[data-music-id=days]');
+ await click('[data-music-play]');await click('[data-music-category=feelings]');assert.equal(await run("document.querySelector('iframe')===null"),true);
+ await click('[data-music-id=calm]');await click('[data-music-play]');
+ await run("Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'));Object.defineProperty(document,'hidden',{configurable:true,get:()=>false})");
+ assert.equal(await run("document.querySelector('iframe')===null"),true);assert.ok(await run("!!document.querySelector('.learning-room')"));
+ await click('[data-action=home]');
  assert.deepEqual(errors,[]);console.log('Tables browser: groups, quiz, help, profile isolation, mobile layout and player cleanup passed');
 }finally{socket?.close();chrome.kill();server.kill();await sleep(150);await rm(temp,{recursive:true,force:true});}
