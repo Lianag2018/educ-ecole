@@ -1,3 +1,29 @@
+# Démarrage du microphone Grok — 6 novembre 2026 (America/Toronto)
+
+Base distante : main 9b2d10c, PR96. Le parent signale un échec d’ouverture du
+microphone. À 18 h 09, Supabase confirme les appels Auth/profils, sans appel au
+relais ni réservation Grok dans la fenêtre observée. Les journaux disponibles
+ne donnent pas l’exception Safari; la cause exacte sur l’iPhone reste à vérifier.
+
+Le client attendait la création du ticket avant de demander le microphone, et
+imposait 24 kHz au périphérique avant cette demande. Le correctif demande le
+micro dans le geste du bouton, garde le format natif de l’appareil et convertit
+l’audio entrant vers le format du relais. Aucun échantillon n’est traité ou
+transmis avant l’autorisation serveur. Un refus du micro ne crée plus de ticket
+payant. Le refus serveur, l’arrêt, le changement de page/profil ou le délai de
+démarrage ferment la capture, y compris une permission accordée tardivement.
+
+Messages distincts pour accès micro refusé, micro absent/occupé, son, serveur,
+connexion et session parent expirée. Cette dernière restaure le raccourci parent.
+Une fermeture avant le signal ready n’efface plus l’erreur de connexion.
+Authentification serveur, clés, budget et relais Supabase inchangés.
+
+Validation : 35 tests ciblés réussis, dont débit PCM natif 48 kHz converti vers
+24 kHz, permission dans le clic, refus sans session, arrêt et réponses tardives.
+Parcours navigateur synthétique ajouté; CI et déploiement à confirmer sur la PR.
+Aucune capture réelle, aucun essai physique iPhone/iPad ni nouveau retour audio
+Grok revendiqué. Après livraison, vérifier le prompt micro sur l’appareil parent.
+
 # Limite des courriels de récupération — 6 novembre 2026 (America/Toronto)
 
 Production observée : main a15dfce (PR95). La redirection Supabase a été
