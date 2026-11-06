@@ -88,6 +88,28 @@ try{
   }
  }
  assert.deepEqual(errors,[]);
+ // Real button wiring, synthetic capture/transport only: no microphone or xAI.
+ await run(`(async()=>{
+  const {grokLive}=await import('/src/grok-live.js');
+  window.voiceStartProof={requests:0,tracksStopped:0,transportClosed:0};
+  grokLive.prepareAudio=()=>({resumed:Promise.resolve(),close(){}});
+  grokLive.microphone=()=>Promise.reject(new DOMException('synthetic refusal','NotAllowedError'));
+  grokLive.request=async()=>{window.voiceStartProof.requests++;return {ok:true,json:async()=>({durationSeconds:120})};};
+  grokLive.connect=async()=>({close(){window.voiceStartProof.transportClosed++;}});
+ })()`);
+ await click('[data-grok-start]');await until('document.querySelector("[data-grok-state]").textContent.includes("accès au microphone a été refusé")');
+ assert.equal(await run('window.voiceStartProof.requests'),0);
+ await run(`(async()=>{const {grokLive}=await import('/src/grok-live.js');grokLive.microphone=async()=>({getTracks:()=>[{stop(){window.voiceStartProof.tracksStopped++;}}]});})()`);
+ await click('[data-grok-start]');await until('document.querySelector("[data-grok-state]").textContent.includes("Je t’écoute")');
+ assert.equal(await run('window.voiceStartProof.requests'),1);
+ await click('[data-grok-stop]');
+ assert.equal(await run('window.voiceStartProof.tracksStopped'),1);assert.equal(await run('window.voiceStartProof.transportClosed'),1);
+ await run(`(async()=>{const {grokLive}=await import('/src/grok-live.js');grokLive.request=async()=>({ok:false,json:async()=>({code:'parent_login_required'})});})()`);
+ await click('[data-grok-start]');await until('document.querySelector("[data-grok-state]").textContent.includes("connexion parent a expiré")');
+ assert.equal(await run('document.querySelector("[data-grok-parent]").hidden'),false);
+ assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),true);
+ assert.equal(await run('window.voiceStartProof.tracksStopped'),2);
+ await cdp('Page.reload');await until('!!document.querySelector("[data-action=parent]")');
  for(const profileId of ['p1','p2']){
   const review=await run(`(async()=>{
    const {reviewPlanDraft}=await import('/src/plan-review.js');
