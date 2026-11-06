@@ -2,6 +2,14 @@
 
 Référence du 21 octobre 2026. Aucun secret en clair dans ce document.
 
+## Complément — transfert xAI terminé le 6 novembre 2026
+
+`EDUC_XAI_API_KEY` est présente sur Vercel personnel, type sensible, production.
+Reçu GitHub : https://github.com/luxurahair/kenebec-ai/actions/runs/42265378847.
+Inventaire contrôlé sans déchiffrement. Ce constat remplace les absences de clé
+mentionnées ci-dessous; il ne prouve pas l’accès à la voix. Aucun nouveau transfert
+nécessaire. Production vidéos confirmée au SHA `c1f9cc88a1b19cd81331c16aaf7922170d86278e`.
+
 ## Contrôle actualisé — 6 novembre 2026 (America/Toronto)
 
 Cette section prévaut sur les états historiques ci-dessous.

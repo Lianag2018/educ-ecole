@@ -1,3 +1,64 @@
+# Grok — relais déployé et raccordement en validation — 6 novembre 2026
+
+Cette entrée remplace les anciens états « transport non construit ». Le parent
+renonce explicitement à l’essai adulte préalable; aucun indicateur adulte fictif
+n’est ajouté. Les tests techniques restent requis.
+
+Relais personnel Supabase `educ-grok-relay` déployé, version 1; schéma
+`grok_relay_single_use_reservations` appliqué. Autorisation par ticket chiffré
+AES-GCM/HKDF, durée 120 secondes, consommation atomique d’une réservation
+existante, refus des messages de configuration du navigateur. La clé xAI reste
+sur Vercel; seul le relais récupère le jeton éphémère dans le ticket chiffré.
+Aucune donnée vocale ou transcription n’est enregistrée par notre relais.
+
+Adaptateur PCM navigateur et session Vercel ajoutés. Contexte scolaire fourni par
+identifiant serveur, nombre borné au profil. AudioContext ouvert au toucher pour
+Safari, fermeture capture/lecture/transport sur abandon et arrière-plan.
+
+Validation locale : 20 tests ciblés réussis; 81 suites générales réussies.
+Deux suites ne s’exécutent pas complètement dans la copie locale partielle :
+assets icônes/manifest et phonèmes non téléchargés. CI complète requise.
+Contrôle réel SQL : ticket inconnu refusé, RPC interdit à anon/authenticated et
+autorisé au seul service_role. Aucun essai vocal réel ni iPad physique.
+
+Activation restante : configuration Grok de production distincte d’OpenAI,
+contrôles CI, fusion et probe de connexion xAI/relais côté build pour un SHA
+précis. Le probe est payant, réservé au budget et ne transmet aucun audio.
+La présence du relais ACTIVE ne prouve pas une connexion fournisseur réussie.
+
+# Grok — raccordement commencé, non activé — 6 novembre 2026 (America/Toronto)
+
+Base vérifiée : main `c1f9cc88a1b19cd81331c16aaf7922170d86278e` (PR91),
+production Vercel `dpl_EtQFeXdFq4fiphiXYXkC21XvA3De`, vidéos publiées.
+Branche de travail : `codex/grok-reading-live`. Cette entrée décrit du code
+préparatoire, pas une voix opérationnelle ni une nouvelle production.
+
+`EDUC_XAI_API_KEY` est désormais installée côté serveur personnel, variable
+sensible, production uniquement. Transfert GitHub autorisé terminé, reçu
+`luxurahair/kenebec-ai/actions/runs/42265378847`; inventaire Vercel vérifié sans
+déchiffrement. Aucun secret n'a été exposé. Ne pas refaire le transfert.
+
+Ajouts : trois boutons initialement indisponibles, statut dédié, cycle de vie
+annulable du microphone et contrat de transport injectable. Nettoyage sur arrêt,
+changement de profil, navigation, arrière-plan et déconnexion. Aucun transport
+Grok réel n'est fourni par cette branche; le serveur refuse toute émission.
+Les tests utilisent uniquement un faux micro et un faux transport.
+
+Vérification : suite `npm test` réussie, dont 11 nouveaux tests de refus et de
+courses asynchrones. Aucun essai vocal réel/adulte/enfant ni Safari physique.
+
+Blocage précis : le jeton éphémère xAI expire pour l'ouverture, mais ne ferme pas
+la session ouverte. Le serveur doit posséder le transport et sa coupure pour
+respecter le plafond familial durable. La documentation xAI précise que la session
+survit à l'expiration du jeton; ne pas remplacer cette garantie par un minuteur
+client. Le transport serveur borné, la validation d'accès voix du compte, la revue
+xAI et le premier essai adulte restent à réaliser. Ne pas fusionner ce brouillon
+en présentant les boutons comme fonctionnels.
+
+Prochaine action : implémenter et héberger le relais personnel borné, raccorder
+réservation durable et contexte scolaire validé côté serveur, puis tester avec
+un adulte. Aucun service professionnel à modifier pour cette étape.
+
 # Reprise de la livraison Nougat — 6 novembre 2026 (America/Toronto)
 
 PR91 reprise au SHA `486fee84fc597018cceedf110143097e8d5f34d8`.
@@ -1336,3 +1397,4 @@ navigateur. Aperçu sauvegardé confirmé à 800×1000 sur préversion 075341e.
 Le même décodeur sert à préparer l’image pour l’analyse. Galerie actualisée
 après sauvegarde automatique. Aucune photo d’enfant transmise, aucun appel
 OpenAI réel validé. PR52 prête à examiner; production non modifiée à ce stade.
+
