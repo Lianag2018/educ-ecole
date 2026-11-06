@@ -109,5 +109,22 @@ try{
   assert.equal(review.calls[0].path,'/api/plans/approve');assert.equal(review.calls[0].body.profileId,profileId);
   assert.equal(review.profile,profileId);assert.equal(review.cancelledCode,'draft_cancelled');assert.equal(review.abortedCode,'aborted');assert.equal(review.cleared,true);
  }
+ // Password recovery UI: synthetic token only, no real email or password change.
+ await cdp('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/recovery.html`});
+ await until('!!document.querySelector("#request-recovery")');
+ assert.equal(await run('document.querySelector("#reset-password").hidden'),true);
+ await run(`window.__calls=[];window.fetch=async(path,options)=>{window.__calls.push({path,body:JSON.parse(options.body)});return {ok:true,json:async()=>({ok:true})};};document.querySelector('#request-recovery input').value='synthetic@example.test';document.querySelector('#request-recovery').requestSubmit();`);
+ await until('document.querySelector("#recovery-status").textContent.includes("Si ce courriel")');
+ assert.equal(await run('window.__calls[0].path'),'/api/parent/recover');
+ await cdp('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/recovery.html?reset=1#type=recovery&access_token=synthetic.token.signature`});
+ await until('!!document.querySelector("#reset-password") && !document.querySelector("#reset-password").hidden');
+ assert.equal(await run('location.hash'),'');
+ await run(`window.__calls=[];window.fetch=async(path,options)=>{window.__calls.push({path,body:JSON.parse(options.body)});return {ok:true,json:async()=>({ok:true})};};const f=document.querySelector('#reset-password');f.elements.password.value='synthetic-long-password';f.elements.confirmation.value='different';f.requestSubmit();`);
+ assert.equal(await run('window.__calls.length'),0);
+ assert.match(await run('document.querySelector("#recovery-status").textContent'),/identiques/);
+ await run(`(()=>{const f=document.querySelector('#reset-password');f.elements.confirmation.value=f.elements.password.value;f.requestSubmit();})()`);
+ await until('document.querySelector("#recovery-status").textContent.includes("Mot de passe renouvelé")');
+ assert.equal(await run('window.__calls[0].path'),'/api/parent/reset-password');
+ assert.equal(await run('document.querySelector("#reset-password input").value'),'');
  console.log('Browser: parent reconnection, real fetch, private merge, separate children and tablet layout passed.');
 }finally{socket?.close();if(chrome.pid&&chrome.exitCode===null)await new Promise(r=>{chrome.once('exit',r);chrome.kill();});server.close();await rm(temporary,{recursive:true,force:true,maxRetries:10,retryDelay:100});}
