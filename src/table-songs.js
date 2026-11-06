@@ -6,11 +6,11 @@ export function mountTableSongs(root,profile,{save=()=>{}}={}){
  let table=3,groups=2,mode='explore',index=0,round=0,help=false,missed=false,solved=false,score=0,dead=false;
  const progress=profile.tableSongPractice&&typeof profile.tableSongPractice==='object'?profile.tableSongPractice:{};
  const stopVideo=()=>root.querySelector('[data-song-player]')?.replaceChildren();
- function draw(){
+ function draw(preserveSong=false){
   if(dead)return;
   const fact=mode==='quiz'?tableRound(table,round)[index]:tableFacts(table)[groups];
   const visible=mode!=='quiz'||help||solved;
-  root.innerHTML=`<section class="table-island" aria-label="Tables en chansons"><header class="table-banner"><span aria-hidden="true">🏝️ 🎵</span><h1>Mon île des multiplications</h1><p>J’écoute, je compte, puis j’essaie.</p></header>
+  const markup=`<section class="table-island" aria-label="Tables en chansons"><header class="table-banner"><span aria-hidden="true">🏝️ 🎵</span><h1>Mon île des multiplications</h1><p>J’écoute, je compte, puis j’essaie.</p></header>
   <nav class="table-picker" aria-label="Choisir une table">${Array.from({length:10},(_,i)=>`<button data-table="${i+1}" aria-pressed="${table===i+1}">${i+1}</button>`).join('')}</nav>
   <p class="table-caption">Tables de 1 à 6 pour commencer · 7 à 10 pour aller plus loin avec ton parent.</p>
   <h2>Table de ${table}</h2>
@@ -22,9 +22,10 @@ export function mountTableSongs(root,profile,{save=()=>{}}={}){
   ${visible?`<p>${fact.groups} groupe${fact.groups>1?'s':''} de ${table} coquillage${table>1?'s':''}.</p><div class="shell-groups" aria-label="${fact.groups} groupes de ${table}">${Array.from({length:fact.groups},()=>`<div class="shell-group" aria-hidden="true">${'<span>🐚</span>'.repeat(table)}</div>`).join('')||'<p>Aucun groupe : zéro coquillage.</p>'}</div><p class="table-addition">${fact.groups?Array(fact.groups).fill(table).join(' + '):'0'} = ${fact.total}</p>`:''}
   ${mode==='quiz'?`<form data-answer><label for="table-answer">Combien de coquillages en tout?</label><input id="table-answer" name="answer" type="number" inputmode="numeric" min="0" max="100" step="1" required ${solved?'disabled':''}><button ${solved?'disabled':''}>Vérifier</button></form><button data-help ${solved?'disabled':''}>Voir les groupes</button><p role="status" data-feedback></p>${solved?'<button data-next>Continuer →</button>':''}`:'<button data-start>3. À moi de jouer · 3 questions</button>'}</div>`}
   <p class="table-caption">Pratique locale · ${Number.isSafeInteger(progress[table])?progress[table]:0} petite(s) mission(s) terminée(s). Écouter ne valide pas une table.</p></section>`;
+  if(preserveSong){const template=document.createElement('template');template.innerHTML=markup;root.querySelector('.table-panel').replaceWith(template.content.querySelector('.table-panel'));}else root.innerHTML=markup;
   root.querySelectorAll('[data-table]').forEach(b=>b.onclick=()=>{stopVideo();table=Number(b.dataset.table);groups=2;mode='explore';round=0;draw();});
   const on=(selector,fn)=>{const el=root.querySelector(selector);if(el)el.onclick=fn;};
-  on('[data-more]',()=>{groups++;draw();});on('[data-less]',()=>{groups--;draw();});
+  on('[data-more]',()=>{groups++;draw(true);});on('[data-less]',()=>{groups--;draw(true);});
   on('[data-song]',()=>{const box=root.querySelector('[data-song-player]');if(box.firstChild){stopVideo();return;}const frame=document.createElement('iframe');frame.title=`Chanson de la table de ${table}`;frame.src=`https://www.youtube-nocookie.com/embed/${tableSongs[table]}?playsinline=1&rel=0`;frame.referrerPolicy='strict-origin-when-cross-origin';frame.allow='encrypted-media; fullscreen; picture-in-picture';frame.allowFullscreen=true;box.append(frame);});
   const start=()=>{mode='quiz';index=0;score=0;help=false;missed=false;solved=false;draw();root.querySelector('input')?.focus();};
   on('[data-start]',start);on('[data-replay]',()=>{round++;start();});on('[data-explore]',()=>{mode='explore';draw();});

@@ -41,6 +41,7 @@ try{
  assert.equal(await run('document.documentElement.scrollWidth<=innerWidth'),true);
  await click('[data-table="3"]');await click('[data-song]');
  assert.match(await run("document.querySelector('iframe').src"),/youtube-nocookie.com/);
+ await run("window.testPlayer=document.querySelector('iframe')");await click('[data-more]');assert.equal(await run("window.testPlayer===document.querySelector('iframe')"),true);
  await click('[data-action=home]');assert.equal(await run("document.querySelector('iframe')===null"),true);
  assert.deepEqual(errors,[]);console.log('Tables browser: groups, quiz, help, profile isolation, mobile layout and player cleanup passed');
 }finally{socket?.close();chrome.kill();server.kill();await sleep(150);await rm(temp,{recursive:true,force:true});}
