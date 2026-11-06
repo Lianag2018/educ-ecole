@@ -1,3 +1,4 @@
+import {serviceHeaders} from '../grok-relay/headers.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sealTicket,openTicket} from '../grok-relay/ticket.mjs';
@@ -44,3 +45,5 @@ test('vault failure stops before budget reservation and provider access',async()
  const {route,calls}=setup({loadRelaySecret:async()=>{throw Error('vault unavailable');}});
  assert.equal((await route(req({profileId:'p1',mode:'owl'}))).status,503);assert.deepEqual(calls,[]);
 });
+
+test('opaque Supabase service keys are not mislabelled as JWTs',()=>{const opaque='sb_secret_'+('a'.repeat(40));assert.equal(serviceHeaders(opaque).apikey,opaque);assert.equal(serviceHeaders(opaque).Authorization,undefined);const legacy='eyJ'+('a'.repeat(40));assert.equal(serviceHeaders(legacy).Authorization,'Bearer '+legacy);});

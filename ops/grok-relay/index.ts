@@ -1,3 +1,4 @@
+import {serviceHeaders} from './headers.mjs';
 import {openTicket} from './ticket.mjs';
 import {bridge} from './relay.mjs';
 const origin='https://educ-ecole.vercel.app';
@@ -17,11 +18,11 @@ Deno.serve(req=>{
    const message=JSON.parse(e.data);if(message.type!=='authenticate')throw Error();
    phase='relay_key';
    const key=JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS')||'{}').default||Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-   const keyResponse=await fetch(Deno.env.get('SUPABASE_URL')+'/rest/v1/rpc/famille_grok_relay_key',{method:'POST',redirect:'error',signal:AbortSignal.timeout(4000),headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json'},body:'{}'});
+   const keyResponse=await fetch(Deno.env.get('SUPABASE_URL')+'/rest/v1/rpc/famille_grok_relay_key',{method:'POST',redirect:'error',signal:AbortSignal.timeout(4000),headers:serviceHeaders(key),body:'{}'});
    if(!keyResponse.ok)throw Error();
    const ticketKey=await keyResponse.json();phase='ticket';
    const ticket=await openTicket(message.ticket,ticketKey);
-   phase='reservation';const r=await fetch(Deno.env.get('SUPABASE_URL')+'/rest/v1/rpc/famille_consume_grok_ticket',{method:'POST',redirect:'error',signal:AbortSignal.timeout(4000),headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({p_id:ticket.id,p_parent:ticket.parent})});
+   phase='reservation';const r=await fetch(Deno.env.get('SUPABASE_URL')+'/rest/v1/rpc/famille_consume_grok_ticket',{method:'POST',redirect:'error',signal:AbortSignal.timeout(4000),headers:serviceHeaders(key),body:JSON.stringify({p_id:ticket.id,p_parent:ticket.parent})});
    if(!r.ok||await r.json()!==true||closed)throw Error();
    phase='upstream';const upstream=new WebSocket('wss://api.x.ai/v1/realtime?model=grok-voice-latest',['xai-client-secret.'+ticket.credential]);
    clearTimeout(timer);bridge({client:socket,upstream,ticket,onDiagnostic:status=>console.log('EDUC_GROK_RELAY '+JSON.stringify(status))});
