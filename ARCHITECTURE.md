@@ -58,6 +58,39 @@ ni désactiver les protections de contenu, de confidentialité ou de budget pour
 faire apparaître le service comme disponible. L’accord du parent est donné pour
 préparer ce raccordement; l’état technique du compte reste à vérifier.
 
+### Deux entrées vocales sur l’accueil — demande du 6 novembre
+
+Les deux commandes existantes doivent devenir des entrées du même service Grok,
+intégré au travail scolaire du profil choisi, pas des démonstrations isolées.
+
+| Entrée enfant | Comportement demandé |
+|---|---|
+| Parler avec la chouette | Conversation pédagogique en direct : comprendre la consigne, demander un indice, expliquer son raisonnement, parler du texte ou du calcul courant |
+| Lis ce nombre à voix haute | Écouter le nombre réellement prononcé, le comparer au nombre affiché, proposer un indice ou une décomposition et permettre un nouvel essai |
+
+Pour le nombre, garder les rôles explicites : le haut-parleur lit le modèle;
+le microphone écoute l’enfant. Une aide ou un modèle entendu est conservé comme
+aide, sans crédit automatique de lecture autonome. Un résultat incertain doit
+faire réessayer, pas annoncer une faute de prononciation. Nombres et formulation
+respectent le niveau du profil; pas de mélange entre les deux filles.
+
+« En parallèle avec leur éducation » signifie intégrer ces outils aux exercices
+et à la progression. Cela ne signifie pas ouvrir deux micros ou deux sessions
+facturables simultanément. Une seule session active par appareil : basculer entre
+la chouette, le nombre et la lecture arrête proprement le mode précédent.
+
+Les deux boutons démarrent seulement après action explicite; ils indiquent le
+mode, le profil et l’état réel (écoute, réponse, arrêt, indisponible). L’arrêt est
+toujours visible, l’autorisation du navigateur est respectée. Le contexte minimal
+se limite à la tâche scolaire; aucun accès libre aux comptes, aux secrets ou aux
+outils administrateurs. L’IA reste identifiée comme une aide et ne remplace pas
+la validation pédagogique ni une évaluation professionnelle.
+
+L’activation des deux entrées doit être testée ensemble avec la lecture live,
+les changements de profil et de page, le budget et la coupure du microphone.
+Les boutons seuls ne constituent pas une activation; leur état indisponible doit
+expliquer un blocage réel sans lancer une fausse conversation ou un faux succès.
+
 ### Écrans enfants sans défilement obligatoire — à implémenter
 
 Périmètre : accueil, menus de matières, histoires, questions, nombres, calculs,

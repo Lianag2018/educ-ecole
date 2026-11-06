@@ -17,6 +17,14 @@ et [accès Grok](ops/ACCESS-RUNBOOK.md#réutilisation-autorisée-de-laccès-grok
   existante. Ne pas les appliquer mécaniquement à xAI ni les mettre à vrai pour
   contourner un refus. Prévoir une configuration fournisseur séparée et vérifiable.
 
+## Entrées à raccorder
+
+Accueil : « Parler avec la chouette » et « Lis ce nombre à voix haute ».
+Même service vocal que la lecture accompagnée, contexte scolaire du profil actif,
+haut-parleur modèle distinct du micro enfant, une seule capture/session à la fois.
+Voir les comportements et critères dans ARCHITECTURE.md. Ces raccordements ne
+sont pas encore activés par cette mise à jour documentaire.
+
 ## Travail restant pour le direct
 
 Adaptateur vocal xAI, session authentifiée du bon profil, texte scolaire borné,

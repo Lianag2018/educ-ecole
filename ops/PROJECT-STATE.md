@@ -10,6 +10,11 @@ Demande parent intégrée dans ARCHITECTURE, VOICE-SETUP et ACCESS-RUNBOOK :
 XAI_API_KEY existant dans Luxura, écrans enfants entièrement utilisables sans
 défilement obligatoire, pagination des contenus longs et adaptation p1/p2.
 
+Complément demandé : raccorder « Parler avec la chouette » et « Lis ce nombre à
+voix haute » sur l’accueil au même service Grok, avec contexte scolaire du profil
+actif et une seule session micro à la fois. Contrat ajouté dans ARCHITECTURE et
+VOICE-SETUP; ces deux fonctions live restent à développer.
+
 Cette livraison est documentaire uniquement. Aucun écran modifié, aucune clé
 copiée, aucun appel vocal, aucun réglage enfant ou de rétention désactivé.
 Le transport Grok et la refonte des écrans restent à implémenter puis tester.
