@@ -5,7 +5,7 @@ export function mountWelcomeMagic(root){
  let busy=false,replay=false;
  nav.addEventListener('click',event=>{
   const button=event.target.closest('.picture-link');
-  if(!button||replay)return;
+  if(!button||replay||button.hasAttribute('data-welcome-voice'))return;
   if(busy){event.preventDefault();event.stopImmediatePropagation();return;}
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||!root.querySelector('.welcome-motion input')?.checked)return;
   event.preventDefault();event.stopImmediatePropagation();busy=true;

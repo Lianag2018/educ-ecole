@@ -71,19 +71,19 @@ try{
     assert.equal(await run(`(()=>{const el=document.querySelector('${selector}');el.scrollIntoView();const r=el.getBoundingClientRect();return r.width>=44&&r.height>=44&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})()`),true);
    }
    await click('[data-welcome-voice=owl]');
-   await until('document.querySelector("[data-grok-state]").textContent.includes("Connexion parent requise")');
+   await until('document.querySelector("[data-grok-state]")?.textContent.includes("Connexion parent requise")');
    assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),true);
    await click('[data-grok-parent]');
    assert.equal(await run('!document.querySelector("#parent-settings").hidden && !!document.querySelector("#parent-settings input[type=password]")'),true);
    authenticated=true;
    await cdp('Page.reload');await until('!!document.querySelector("[data-welcome-voice=owl]")');
-   await click('[data-welcome-voice=owl]');await until('!document.querySelector("[data-grok-start]").disabled');
+   await click('[data-welcome-voice=owl]');await until('document.querySelector("[data-grok-start]")?.disabled===false');
    assert.equal(await run('document.querySelector("[data-grok-parent]").hidden'),true);
    for(const selector of ['.picture-number-task','.picture-number-mic']){
     await cdp('Page.reload');await until('!!document.querySelector("[data-welcome-voice=owl]")');
     await click(selector);await until('!!document.querySelector("[data-grok-mode=number]")');
     assert.equal(await run('Number(document.querySelector("#chosen-number").value)'),profileId==='p1'?7:307);
-    await until('!document.querySelector("[data-grok-start]").disabled');
+    await until('document.querySelector("[data-grok-start]")?.disabled===false');
    }
   }
  }
