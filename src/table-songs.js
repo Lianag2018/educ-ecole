@@ -1,5 +1,5 @@
 // Official player links only: no copied audio or lyrics, no third-party request before a click.
-export const tableSongs=Object.freeze({2:'tbseH34CCno',3:'eEtHFttLJyo',4:'V08QMp1wkLI',5:'faP9QbHiXlM',6:'Cs1fEoWy5iA'});
+export const tableSongs=Object.freeze({1:'g5EoCRYHgQQ',2:'tbseH34CCno',3:'eEtHFttLJyo',4:'V08QMp1wkLI',5:'faP9QbHiXlM',6:'Cs1fEoWy5iA'});
 export function tableFacts(table){if(!Number.isInteger(table)||table<1||table>10)throw new RangeError('Table invalide');return Array.from({length:11},(_,groups)=>({groups,table,total:groups*table}));}
 export function tableRound(table,round=0){const facts=tableFacts(table);return [0,1,2].map(i=>facts[(round*3+i)%11]);}
 export function mountTableSongs(root,profile,{save=()=>{}}={}){
@@ -15,7 +15,7 @@ export function mountTableSongs(root,profile,{save=()=>{}}={}){
   <p class="table-caption">Tables de 1 à 6 pour commencer · 7 à 10 pour aller plus loin avec ton parent.</p>
   <h2>Table de ${table}</h2>
   ${mode==='done'?`<div class="table-panel"><h3>Ta petite mission est terminée!</h3><p>${score} réponse${score>1?'s':''} sans aide sur 3. Chaque essai compte.</p><button data-replay>Trois autres calculs</button><button data-explore>Retour aux groupes</button></div>`:`
-  ${mode==='explore'?`<div class="table-song"><h3>1. J’écoute</h3>${tableSongs[table]?`<button data-song>▶ Écouter la chanson de ${table}</button><div data-song-player></div><p class="table-caption">${table===2?'YourKid TV':table===6?'Un prof et sa guitare':'EspaceFrancais'} · lecteur YouTube externe, chargé seulement au toucher. <a href="https://www.youtube.com/watch?v=${tableSongs[table]}" target="_blank" rel="noopener noreferrer">Ouvrir la chanson si le lecteur ne fonctionne pas</a></p>`:'<p>La chanson de cette table n’est pas encore ajoutée. Tu peux déjà jouer avec les groupes!</p>'}</div>`:''}
+  ${mode==='explore'?`<div class="table-song"><h3>1. J’écoute</h3>${tableSongs[table]?`<button data-song>▶ Écouter la chanson de ${table}</button><div data-song-player></div><p class="table-caption">${table===1?'Les Titischools':table===2?'YourKid TV':table===6?'Un prof et sa guitare':'EspaceFrancais'} · lecteur YouTube externe, chargé seulement au toucher. <a href="https://www.youtube.com/watch?v=${tableSongs[table]}" target="_blank" rel="noopener noreferrer">Ouvrir la chanson si le lecteur ne fonctionne pas</a></p>`:'<p>La chanson de cette table n’est pas encore ajoutée. Tu peux déjà jouer avec les groupes!</p>'}</div>`:''}
   <div class="table-panel"><h3>${mode==='quiz'?`À toi! · Question ${index+1} sur 3`:'2. Je découvre les groupes'}</h3>
   <p class="table-equation">${fact.groups} × ${table} = ${visible?fact.total:'?'}</p>
   ${mode==='explore'?`<div class="table-controls"><button data-less ${groups===0?'disabled':''}>− Un groupe</button><button data-more ${groups===10?'disabled':''}>+ Un groupe</button></div>`:''}
