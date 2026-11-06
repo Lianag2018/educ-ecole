@@ -5,6 +5,9 @@ Deno.serve(req=>{
  if(req.method==='GET'&&new URL(req.url).pathname.endsWith('/health'))return Response.json({relay:'educ-grok-v2',durationSeconds:120});
  if((req.headers.get('origin')!==null&&req.headers.get('origin')!==origin)||req.headers.get('upgrade')?.toLowerCase()!=='websocket')return new Response(null,{status:403});
  const {socket,response}=Deno.upgradeWebSocket(req);let started=false,closed=false;
+ // Keep the worker alive after the HTTP upgrade; resolve on actual socket close.
+ const lifetime=new Promise<void>(resolve=>socket.addEventListener('close',()=>resolve(),{once:true}));
+ EdgeRuntime.waitUntil(lifetime);
  const timer=setTimeout(()=>{closed=true;try{socket.close(1008,'unauthorized');}catch{}},5000);
  socket.onclose=socket.onerror=()=>{closed=true;clearTimeout(timer);};
  socket.onmessage=async e=>{

@@ -24,7 +24,7 @@ export function bridge({client,upstream,ticket,now=Date.now,setTimer=setTimeout,
    send(upstream,{type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text:GREETING}]}});
    return;
   }
-  if(m.type==='conversation.item.added'&&configured==='acked'&&!ready){
+  if(['conversation.item.added','conversation.item.created'].includes(m.type)&&configured==='acked'&&!ready){
    ready=true;clearTimer(connectTimeout);send(client,{type:'ready'});send(upstream,{type:'response.create'});return;
   }
   if(!ready)return;

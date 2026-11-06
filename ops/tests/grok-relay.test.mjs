@@ -19,3 +19,13 @@ test('server deadline closes both sockets independently of client timers',()=>{c
 test('browser cannot replace instructions, enable tools or send extra text',()=>{for(const type of ['session.update','conversation.item.create','response.create']){const {client,upstream}=sockets();upstream.onopen();upstream.onmessage({data:JSON.stringify({type:'session.created'})});upstream.onmessage({data:JSON.stringify({type:'session.updated'})});client.onmessage({data:JSON.stringify({type,session:{tools:[{type:'web_search'}]}})});assert.equal(upstream.closed,1);assert.equal(upstream.sent.length,2);assert.equal(upstream.sent[1].type,'conversation.item.create');assert.equal(upstream.sent[1].item.content[0].text.includes('test'),false);}});
 test('greeting waits for a server turn before any audio is requested',()=>{const {client,upstream}=sockets();upstream.onmessage({data:JSON.stringify({type:'session.updated'})});assert.equal(upstream.sent.length,0);upstream.onmessage({data:JSON.stringify({type:'session.created'})});assert.equal(upstream.sent[0].type,'session.update');upstream.onmessage({data:JSON.stringify({type:'session.updated'})});assert.equal(upstream.sent[1].type,'conversation.item.create');assert.equal(client.sent.length,0);assert.equal(upstream.sent.some(m=>m.type==='response.create'),false);upstream.onmessage({data:JSON.stringify({type:'conversation.item.added'})});assert.equal(upstream.sent[2].type,'response.create');assert.deepEqual(client.sent,[{type:'ready'}]);client.onmessage({data:JSON.stringify({type:'audio',data:'AAAA'})});assert.equal(upstream.sent[3].type,'input_audio_buffer.append');client.onclose();assert.equal(upstream.closed,1);});
 test('PCM is signed little endian',()=>{assert.deepEqual([...Buffer.from(pcmBase64(new Float32Array([-1,0,1])),'base64')],[0,128,0,0,255,127]);});
+test('documented created event starts audio once and duplicates do not replay greeting',()=>{
+ const {client,upstream}=sockets();
+ const event=type=>upstream.onmessage({data:JSON.stringify({type})});
+ event('session.created');event('session.updated');event('conversation.item.created');
+ event('conversation.item.added');event('conversation.item.created');event('session.updated');
+ assert.equal(upstream.sent.filter(m=>m.type==='response.create').length,1);
+ assert.equal(upstream.sent.filter(m=>m.type==='conversation.item.create').length,1);
+ assert.deepEqual(client.sent,[{type:'ready'}]);
+ event('response.done');assert.equal(upstream.closed,0);
+});
