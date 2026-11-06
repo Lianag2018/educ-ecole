@@ -1,3 +1,22 @@
+# Récupération du mot de passe parent — 6 novembre 2026 (America/Toronto)
+
+Base distante vérifiée : 8e940d4 (PR94), accueil vocal publié. Ajout du lien
+« Mot de passe oublié » et de recovery.html. Demande à Supabase Auth avec clé
+publique et limites fournisseur; seul le compte parent configuré peut recevoir
+un lien via ce formulaire. Réponse neutre pour les autres adresses.
+
+Le lien fournisseur doit rediriger vers /recovery.html. Le jeton du fragment est
+effacé de l'URL, gardé en mémoire puis vérifié côté serveur avec Supabase avant
+le changement par JWT utilisateur. Identité parent, courriel confirmé et jeton
+récent obligatoires. Aucun mot de passe administrateur, secret client, nouveau
+compte ni modification des progrès. Connexion parent placée avant les réglages;
+le raccourci vocal fait défiler directement jusqu'au formulaire.
+
+Tests de refus, isolation, durée, clé publique et parcours navigateur synthétique
+ajoutés. Livraison et envoi réel du courriel à confirmer sur la PR. La console
+Supabase demande une reconnexion; réglage de redirection et SMTP non attestés.
+Aucune réception de courriel ou réinitialisation réelle annoncée sans preuve.
+
 # Accueil vocal — 6 novembre 2026 (America/Toronto)
 
 Base main vérifiée b2ef287 (PR93). Production Grok activée, déploiement

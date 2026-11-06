@@ -60,3 +60,13 @@ sur la base familiale. Les tests HTTP simulent Supabase et n'envoient pas de mai
 
 Références : https://supabase.com/docs/reference/javascript/auth-admin-generatelink
 et https://supabase.com/docs/reference/javascript/auth-verifyotp
+
+## Mot de passe oublié
+
+Le formulaire /recovery.html demande un lien à Supabase Auth. Ajouter exactement
+https://educ-ecole.vercel.app/recovery.html aux Redirect URLs du projet personnel.
+La messagerie Auth (SMTP ou expéditeur Supabase admissible) doit être opérationnelle.
+Le lien doit revenir avec type=recovery et access_token dans le fragment; aucune
+clé serveur ni jeton dans les logs. Le mot de passe est choisi par le parent,
+vérifié par Supabase et modifié via son JWT, jamais via admin/update-user.
+Le formulaire affiche honnêtement un échec d'envoi et permet de redemander un lien.

@@ -1,3 +1,4 @@
+import {recoverParent} from './parent-recovery.mjs';
 import {createGrokEndpoints} from './grok-live.mjs';
 import {schoolCredentialsEndpoint} from './school-credentials.mjs';
 import {createSupabaseClient} from './supabase-client.mjs';
@@ -56,6 +57,7 @@ export function runtime(env=process.env,fetcher=fetch){
  return async req=>{
   if(req.path==='/api/parent/school-access')return schoolCredentialsEndpoint(req,{auth,origin,secrets:{p1:{nougat:env.EDUC_SCHOOL_P1_NOUGAT_CREDENTIALS},p2:{cec:env.EDUC_SCHOOL_P2_CEC_CREDENTIALS}}});
   if(req.path==='/api/parent/provision')return provisionParent(req,{env,sb});
+  if(['/api/parent/recover','/api/parent/reset-password'].includes(req.path))return recoverParent(req,{env,sb});
   if(req.path==='/api/parent/activate')return activateParent(req,{env,sb,device});
   if(req.path.startsWith('/api/parent/device/')){
    if(!authConfigured())return {status:503,body:{code:'parent_setup_required'}};
