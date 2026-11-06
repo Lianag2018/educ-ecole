@@ -20,6 +20,11 @@ export function createSupabaseClient({url, key, anon, fetcher = fetch}) {
       ...(body ? {body: JSON.stringify(body)} : {}),
     });
     if (!response.ok) {
+      // Keep the recovery quota distinct from an outage without copying any
+      // provider message, address, token or other error-body field.
+      if (method === 'POST' && path.startsWith('/auth/v1/recover?redirect_to=') && response.status === 429) {
+        throw Error('recovery_rate_limited');
+      }
       if (path === VOID_BUDGET_RPC) {
         const error = await response.json().catch(() => null);
         if (error?.message === 'rate_limit') throw Error('rate_limit');
