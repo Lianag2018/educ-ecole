@@ -1,3 +1,15 @@
+# Comptines.tv par niveau — 6 novembre 2026 (America/Toronto)
+
+Base main : 88ecbe1b2e564ac5085a2266a7813c1ced7e1cc1, PR88 publiée et contrôles verts.
+Ajout de cinq activités ciblées, dans les catégories enfant déjà présentes :
+1re/2e → Français (voyelles, son ou), Maths (compter 1–12 et deux groupes de six).
+3e → Français (compréhension de la forêt, vocabulaire et pluriels en ou).
+Le niveau initial suit le profil; le sélecteur permet de revoir les bases.
+Deux questions originales par activité; progrès locaux séparés existants conservés.
+Liens externes directs Comptines.tv vérifiés; les pages proposent chanson et/ou
+texte. Aucun lecteur intégré ajouté, aucun audio/paroles copié, aucune activation IA.
+Validation locale et CI à confirmer sur la PR avant publication.
+
 # Chansons par matière et bonds — 5 novembre 2026 (America/Toronto)
 
 Base main et production vérifiée : ebf4248a96779a4caa8f9ebbe0b13fe2e590e0a0 (PR87).
