@@ -32,10 +32,12 @@ export class GrokLive {
  }
 }
 export const grokLive=new GrokLive({connect:connectGrok,prepareAudio:prepareGrokAudio});
-export function grokMarkup(mode){return `<section class="grok-live" data-grok-mode="${mode}" aria-label="Aide vocale"><button type="button" data-grok-start disabled>${labels[mode]}</button> <button type="button" data-grok-stop>Arrêter</button><p data-grok-state role="status">Préparation de la voix Grok. Microphone fermé.</p></section>`;}
-export function mountGrok(root,context,{beforeStart=()=>{}}={}){
+export function grokMarkup(mode){return `<section class="grok-live" data-grok-mode="${mode}" aria-label="Aide vocale"><button type="button" data-grok-start disabled>${labels[mode]}</button> <button type="button" data-grok-stop>Arrêter</button><button type="button" data-grok-parent hidden>Connexion parent pour la voix</button><p data-grok-state role="status">Préparation de la voix Grok. Microphone fermé.</p></section>`;}
+export function mountGrok(root,context,{beforeStart=()=>{},onParent=()=>{}}={}){
  if(!root)return;
  const start=root.querySelector('[data-grok-start]'),status=root.querySelector('[data-grok-state]');
+ const parent=root.querySelector('[data-grok-parent]');
+ parent.onclick=()=>{grokLive.stop();onParent();};
  let destroyed=false;const abort=new AbortController();
  const update=message=>{if(!destroyed)status.textContent=message;};grokLive.onState=update;grokLive.available=false;
  root.querySelector('[data-grok-stop]').onclick=()=>grokLive.stop();
@@ -43,7 +45,8 @@ export function mountGrok(root,context,{beforeStart=()=>{}}={}){
  fetch('/api/voice/grok/status',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}',signal:abort.signal})
   .then(r=>{if(!r.ok)throw Error('status');return r.json();}).then(s=>{
    if(destroyed)return;grokLive.available=s.available===true&&s.authenticated===true;start.disabled=!grokLive.available;
-   update(grokLive.available?'Voix envoyée à xAI pendant la séance. Touche pour commencer; Arrêter ferme le micro.':'La voix Grok se prépare. Pour le moment, utilise Écouter et les indices. Microphone fermé.');
+   parent.hidden=s.authenticated===true;
+   update(grokLive.available?'Voix envoyée à xAI pendant la séance. Touche pour commencer; Arrêter ferme le micro.':s.authenticated!==true?'Connexion parent requise pour parler. Touche « Connexion parent pour la voix ». Microphone fermé.':'La voix Grok est indisponible pour le moment. Tu peux utiliser Écouter. Microphone fermé.');
   }).catch(()=>{if(!destroyed)update('Voix Grok indisponible. Microphone fermé.');});
  return {destroy(){destroyed=true;abort.abort();grokLive.stop();grokLive.available=false;}};
 }

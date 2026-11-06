@@ -1,3 +1,22 @@
+# Accueil vocal — 6 novembre 2026 (America/Toronto)
+
+Base main vérifiée b2ef287 (PR93). Production Grok activée, déploiement
+ dpl_3xwqQjXXogmk7TWvmDfrENDh3Tbd READY; statut public available:true.
+Retour audio réel vérifié au déploiement précédent, sans audio entrant.
+Les indications historiques ci-dessous sur l'activation sont remplacées.
+
+Correction des commandes illustrées sans cible tactile : chouette, nombre,
+haut-parleur et micro du nombre. La chouette ouvre son écran; le nombre ouvre
+l'exercice adapté au profil actif (7 ou 307); le haut-parleur lit le 307 illustré.
+La navigation seule ne capture aucune voix. Le bouton explicite de la séance
+conserve le contrôle d'accès serveur et la coupure existante.
+
+Le statut différencie désormais connexion parent absente et service indisponible;
+un bouton mène directement à Réglages et accès. Aucun secret, budget, mécanisme
+d'authentification ni donnée familiale modifié. Validation navigateur avec faux
+statuts prévue sur les deux profils; publication à confirmer sur la PR.
+Aucun essai physique iPhone/iPad revendiqué.
+
 # Grok — cause de refus du ticket isolée — 6 novembre 2026 (America/Toronto)
 
 PR93 ouverte sur Lianag2018 depuis le fork personnel, correctif complété.
