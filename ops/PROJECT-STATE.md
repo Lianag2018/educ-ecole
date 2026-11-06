@@ -1,3 +1,27 @@
+# Architecture actualisée — 6 novembre 2026 (America/Toronto)
+
+Base distante et production vérifiées :
+`164b733f8294fbc1e6723c6593cd9e59d390ae4c` (PR89), Vercel READY, source Git/main.
+PR88/89 publiées; PR89 : 513 tests locaux, build et contrôles CI réussis lors
+ de sa livraison. Les mentions « à confirmer » de ces entrées sont historiques.
+
+Demande parent intégrée dans ARCHITECTURE, VOICE-SETUP et ACCESS-RUNBOOK :
+écoute Grok en direct avec aide sur la lecture, reprise sécurisée de l’accès
+XAI_API_KEY existant dans Luxura, écrans enfants entièrement utilisables sans
+défilement obligatoire, pagination des contenus longs et adaptation p1/p2.
+
+Cette livraison est documentaire uniquement. Aucun écran modifié, aucune clé
+copiée, aucun appel vocal, aucun réglage enfant ou de rétention désactivé.
+Le transport Grok et la refonte des écrans restent à implémenter puis tester.
+
+Prochaine action : auditer le chemin serveur autorisé du secret existant sans
+le divulguer, vérifier les capacités vocales/configuration du compte, préparer
+l’adaptateur; en parallèle logique, réaliser les vues paginées et vérifier les
+deux profils. Une console xAI déconnectée n’est pas une preuve d’absence de clé.
+
+Validation de cette livraison : revue documentaire et diff; contrôles CI à suivre
+sur le SHA de la PR. Aucun test acoustique ou physique iPad revendiqué.
+
 # Comptines.tv par niveau — 6 novembre 2026 (America/Toronto)
 
 Base main : 88ecbe1b2e564ac5085a2266a7813c1ced7e1cc1, PR88 publiée et contrôles verts.

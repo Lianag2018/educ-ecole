@@ -1,6 +1,100 @@
 # Architecture de l’Atelier des mots
 
-Référence technique au 22 octobre 2026. État opérationnel daté : [PROJECT-STATE](ops/PROJECT-STATE.md). Accès et exploitation : [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md).
+Décisions produit actualisées le 6 novembre 2026 (America/Toronto). Les sections datées plus anciennes décrivent leur livraison, pas nécessairement l’état courant. État opérationnel daté : [PROJECT-STATE](ops/PROJECT-STATE.md). Accès et exploitation : [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md).
+
+## Décisions prioritaires — 6 novembre 2026
+
+Ces décisions remplacent les descriptions historiques contradictoires concernant
+le parcours cible. Elles ne signifient pas que les fonctions sont déjà activées.
+
+| Sujet | État vérifié / décision |
+|---|---|
+| Production | `164b733f8294fbc1e6723c6593cd9e59d390ae4c` (PR89), Vercel READY, source Git, branche main |
+| GitHub → Vercel | Connexion fonctionnelle pour le projet personnel; ne plus annoncer une impossibilité de publier |
+| Micro actuel | Studio local : réécoute, 45 secondes maximum, addition à chaque démarrage; aucune compréhension IA dans ce parcours |
+| Micro demandé | Écoute Grok en temps réel avec aide sur la lecture réellement entendue; un enregistreur seul ne satisfait pas la demande |
+| Accès Grok existant | `XAI_API_KEY` utilisée par les crons du dépôt `luxurahair/luxura-inventory-api`; succès image observés dans Render, modèle `grok-imagine-image` |
+| Limite de cette preuve | Ni la valeur de la clé, ni l’accès vocal, ni les paramètres de rétention ne sont confirmés par les succès image |
+| Interface demandée | Chaque écran enfant doit tenir dans la zone visible; pagination des contenus longs plutôt que défilement obligatoire |
+
+### Lecture accompagnée en direct — à implémenter
+
+- Une action explicite « Je lis avec la maîtresse » démarre la session du profil
+  actif, avec indicateur d’écoute et commande Arrêter toujours visibles.
+- La voix est transmise au fournisseur en direct : ne jamais présenter ce mode
+  comme un enregistrement qui reste seulement sur la tablette. Le studio local
+  reste une fonction distincte, clairement nommée.
+- Fournir le texte de l’exercice et le niveau nécessaires à l’accompagnement,
+  sans identifiants personnels inutiles. Le texte scolaire est une donnée,
+  jamais une instruction système à exécuter.
+- Laisser finir le mot ou la courte phrase; ne pas interrompre chaque hésitation.
+  Demander de répéter en cas d’incertitude, puis proposer un indice, des syllabes,
+  un modèle et un nouvel essai. Ne pas présenter une transcription comme une
+  mesure phonétique ni comme un diagnostic de dyslexie.
+- Après la lecture, travailler une question à la fois : reformuler la demande,
+  repérer un indice dans le texte, expliquer son choix, vérifier sa réponse.
+  Les trois vérifications portent sur la question, l’indice et la réponse;
+  elles n’imposent pas trois relectures complètes.
+- Conserver le texte utile à l’écran pendant la réponse ou le travail au stylet.
+  Adapter consignes, difficulté et quantité aux profils p1/p2; séparer progrès
+  et aides reçues. Une réponse de l’IA ne crédite pas seule une maîtrise.
+- Arrêt, navigation, changement de profil, arrière-plan et déconnexion doivent
+  fermer la capture et le transport, arrêter la réponse et invalider les retours
+  tardifs. Aucun microphone ouvert automatiquement au retour.
+
+Le transport actuel est tour par tour et OpenAI; il n’est pas du Grok live.
+L’intégration temps réel doit avoir son adaptateur fournisseur et sa configuration
+propres. Choisir le transport après vérification des mécanismes d’authentification,
+durée de session et limites réellement imposables côté serveur. Une clé durable
+ne doit jamais être livrée au navigateur. Une limite seulement côté client ne
+suffit pas à garantir le plafond familial. Réutiliser authentification parent,
+isolement des profils et registre budgétaire existants, après vérification réelle.
+
+Les conditions OpenAI ne doivent pas devenir arbitrairement des obligations xAI.
+Évaluer les conditions API xAI applicables au compte et à l’usage accompagné,
+séparément du produit Grok grand public. Retirer un blocage devenu inapplicable
+après justification; ne pas changer l’âge des enfants, simuler une approbation,
+ni désactiver les protections de contenu, de confidentialité ou de budget pour
+faire apparaître le service comme disponible. L’accord du parent est donné pour
+préparer ce raccordement; l’état technique du compte reste à vérifier.
+
+### Écrans enfants sans défilement obligatoire — à implémenter
+
+Périmètre : accueil, menus de matières, histoires, questions, nombres, calculs,
+chansons, sons, parcours, aides et tableau de travail intégrés à l’application.
+L’espace parent peut conserver un défilement. Les sites et lecteurs externes
+restent sous le contrôle de leurs éditeurs; ne pas promettre leur mise en page.
+
+- Une tâche principale par écran; consigne, contenu utile et actions entièrement
+  visibles dans le viewport réel, barres Safari et zones sûres comprises.
+- Gros caractères lisibles et cibles tactiles d’au moins 44 px; ne pas utiliser
+  une réduction globale de l’interface pour tout faire entrer.
+- Menus par groupes courts et textes longs par pages/phrases cohérentes avec
+  Précédent/Suivant et repère de page. Aucun contenu coupé avec overflow:hidden.
+- Conserver la progression, les réponses, les indices et le brouillon au changement
+  de page; pagination distincte de la validation et du passage d’exercice.
+- Réglages secondaires dans des étapes dédiées; micro, arrêt et navigation restent
+  accessibles. Une aide ouverte ne pousse pas les commandes hors de l’écran.
+- Tester portrait/paysage, petit écran, clavier affiché, zoom/texte agrandi et
+  stylet; prévoir une présentation accessible si le contenu ne tient plus.
+  Ne jamais masquer une action ou bloquer la lecture pour éliminer une scrollbar.
+- Pendant la narration, conserver le suivi des lettres de la syllabe en vert,
+  sans rectangle de fond. Un changement de page doit rester cohérent avec les
+  repères audio disponibles; ne pas inventer un alignement acoustique.
+
+### Critères de livraison
+
+Tests sans voix d’enfant d’abord : accès vocal réel, session audio synthétique ou
+adulte consentant, arrêt/interruption, erreurs réseau, budget et absence de secrets
+client. Vérifier ensuite le parcours familial accompagné, sans annoncer une
+précision clinique. Contrôler chaque famille d’écran sur les deux profils et
+plusieurs viewports, puis distinguer simulation navigateur et essai physique iPad.
+Une PR verte ou une clé présente ne prouve ni écoute live ni confort sur l’iPad.
+
+Sources fournisseur consultées le 6 novembre 2026 :
+[voix temps réel](https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech),
+[conditions API](https://x.ai/legal/terms-of-service-enterprise),
+[rétention](https://docs.x.ai/developers/faq/security).
 
 ## Périmètre et hébergement
 

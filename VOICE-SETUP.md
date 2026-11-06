@@ -1,3 +1,40 @@
+# Voix — état et direction au 6 novembre 2026 (America/Toronto)
+
+Le parcours demandé est **Grok en direct : écouter la lecture et aider pendant
+la séance**. Le studio local et le transport OpenAI tour par tour ne remplissent
+pas ce besoin. Voir [Architecture](ARCHITECTURE.md#décisions-prioritaires--6-novembre-2026)
+et [accès Grok](ops/ACCESS-RUNBOOK.md#réutilisation-autorisée-de-laccès-grok-luxura).
+
+## État vérifié
+
+- Studio publié : 45 secondes maximum, addition à chaque enregistrement,
+  réécoute locale; aucun diagnostic ni compréhension automatique.
+- Grok : clé utilisée avec succès pour les images Luxura, pas encore branchée
+  à Éduc École. Ni essai vocal réel ni réglages de rétention confirmés.
+- GitHub/Vercel personnel : publication fonctionnelle; les anciens blocages
+  d’accès décrits plus bas sont historiques.
+- Les conditions et variables OpenAI ci-dessous décrivent l’implémentation
+  existante. Ne pas les appliquer mécaniquement à xAI ni les mettre à vrai pour
+  contourner un refus. Prévoir une configuration fournisseur séparée et vérifiable.
+
+## Travail restant pour le direct
+
+Adaptateur vocal xAI, session authentifiée du bon profil, texte scolaire borné,
+flux audio bidirectionnel, arrêt fiable et budget imposé côté serveur. Choisir
+le mécanisme de transport/authentification après vérification de ses capacités;
+ne jamais exposer une clé durable. Présenter clairement la transmission de voix.
+Tester les mots mal entendus sans correction autoritaire, les pauses, les
+interruptions, les changements d’écran/profil et les erreurs fournisseur.
+
+Le parent a déjà autorisé la préparation du raccordement. Aucun changement de
+rétention Luxura, de clé, de service ou d’indicateur d’admissibilité n’a été fait.
+L’autorisation technique et les conditions du compte ne se déduisent pas d’un
+appel image réussi. Les détails de l’accès existant sont dans le runbook.
+
+---
+
+## Historique technique OpenAI — ne vaut pas activation actuelle
+
 > **Reprise et accès :** consulter [PROJECT-STATE](ops/PROJECT-STATE.md) et [ACCESS-RUNBOOK](ops/ACCESS-RUNBOOK.md). Les rubriques datées ci-dessous distinguent l’état récent et les livraisons historiques; ne pas confondre narration et conversation micro.
 
 ## Retour oral court — 22 octobre 2026

@@ -2,6 +2,46 @@
 
 Référence du 21 octobre 2026. Aucun secret en clair dans ce document.
 
+## Contrôle actualisé — 6 novembre 2026 (America/Toronto)
+
+Cette section prévaut sur les états historiques ci-dessous.
+
+- GitHub `Lianag2018/educ-ecole` et Vercel Personnel sont accessibles. La production
+  READY correspond à main `164b733f8294fbc1e6723c6593cd9e59d390ae4c`, source Git.
+  Le parcours branche → PR → contrôles → fusion → déploiement Git est fonctionnel.
+- `EDUC_OPENAI_API_KEY`, `EDUC_PARENT_ID` et `EDUC_VOICE_CONFIG` sont présents.
+  Le dernier contrôle de configuration donne `learningEnabled:true` et
+  `learningAutoEnabled:false`; il ne confirme pas l’activation vocale.
+- Aucun nom de variable Grok/xAI n’était présent dans l’inventaire du projet
+  personnel lors de ce contrôle. Ne pas confondre clé Luxura et raccordement école.
+
+### Réutilisation autorisée de l’accès Grok Luxura
+
+Le parent demande explicitement de reprendre la clé existante, sans lui redemander
+un jeton. Source confirmée : `luxurahair/luxura-inventory-api`, crons Render
+Facebook, Genius et Halo, variable `XAI_API_KEY`, modèle `grok-imagine-image`.
+Dernier succès Halo observé : 5 novembre 2026 à 11 h 02, America/Toronto.
+La valeur de la clé n’a pas été extraite; ces preuves ne testent pas l’API voix.
+
+1. Retrouver le chemin serveur autorisé permettant de consommer cette variable
+   sans l’imprimer, l’écrire au dépôt ni l’exposer dans un résultat d’outil.
+   Le connecteur Render consulté ne propose pas de lecture des variables.
+2. Le workflow `educ-ecole-openai-transfer.yml` existant est limité à OpenAI.
+   Il ne constitue pas déjà un transfert xAI : une extension exige un changement
+   explicite, revu et testé, avec ses verrous conservés, sans modifier les crons.
+3. Vérifier l’accès vocal, les conditions API et la rétention du compte effectif.
+   Une console navigateur déconnectée n’annule pas l’existence de la clé serveur;
+   elle bloque seulement la vérification des réglages par cette console.
+4. Ne pas modifier la rétention globale de l’équipe Luxura : selon la documentation
+   xAI, ZDR s’applique à toute l’équipe et peut rendre des fonctions indisponibles.
+   Évaluer une équipe école distincte si une configuration différente est nécessaire;
+   ne pas prétendre qu’une nouvelle clé de la même équipe isole cette rétention.
+5. Tester d’abord avec un signal synthétique ou un adulte consentant, vérifier
+   l’isolement et le budget, puis seulement activer le parcours familial validé.
+
+Aucun raccordement xAI ni changement de rétention n’est réalisé par cette mise à
+jour documentaire. Les services, clés et publications Luxura sont à préserver.
+
 ## Contrôle actualisé du 27 octobre 2026
 
 Le connecteur Vercel **Personnel** fonctionne maintenant pour l'équipe et le
@@ -31,7 +71,7 @@ https://developers.openai.com/api/reference/resources/models/methods/retrieve
 | GitHub application | Lianag2018/educ-ecole; lecture, écriture et PR vérifiées |
 | Vercel personnel | lianag2018s-projects; team_cXAfCdSOp4u1HERGC1eFwg34 |
 | Projet Vercel personnel | educ-ecole; prj_pxl5Jmoxwmgvtp9zDUXxvIGFFxo2 |
-| Connecteur Vercel ChatGPT | Ne liste que luxurahair; 403 sur l’équipe personnelle lors des derniers essais |
+| Connecteur Vercel ChatGPT | Personnel accessible au contrôle du 6 novembre; anciens 403 résolus |
 | Jeton EDUC_ECOLE_VERCEL | Existence montrée par capture du parent; valeur et validité actuelles non vérifiées ici |
 | Coffre signalé par le parent | Secrets GitHub Actions de luxurahair/kenebec-ai |
 | Agent Codex / superviseur | Parcours demandé par le parent pour consommer les secrets; ses accès doivent être vérifiés à l’exécution |
@@ -53,7 +93,7 @@ Un secret de dépôt GitHub n’est ni lisible en clair par l’API ni automatiq
 1. Le workflow de kenebec-ai `.github/workflows/educ-ecole-openai-transfer.yml` a été relu le 21 octobre. Modes audit/apply; exécution main; reviewed_sha doit correspondre exactement au SHA exécuté; tests sans secrets puis superviseur déterministe. Il reçoit EDUC_ECOLE_VERCEL, RENDER_API_KEY et AGENT_LOCK_TOKEN. Son but est le transfert contrôlé de la variable OpenAI manquante, PAS un déploiement général.
 2. Conserver ses verrous, son SHA revu et ses contrôles. Avant une opération, vérifier que le mode couvre réellement l’objectif. Ne pas élargir ce workflow professionnel en douce, ni annoncer un run simplement parce qu’un agent a reçu une consigne.
 3. Le workflow local `.github/workflows/educ-ecole-vercel.yml` est historique : audit, preview-static, audit-supabase. Il cible via `ops/educ-ecole-vercel.mjs` le projet **educ-ecole-famille**, distinct du site actuel. Sa liste de fichiers statiques exclut le dossier audio. Il n’est pas une procédure de déploiement production de l’app actuelle.
-4. La connexion Git Vercel du projet actuel doit être vérifiée avant de compter sur un push. Les commits récents n’avaient aucun statut de déploiement lors des derniers contrôles; la cause n’est pas démontrée par le 403 du connecteur.
+4. La connexion Git Vercel du projet actuel est confirmée au 6 novembre. Vérifier le SHA et READY après chaque livraison; un ancien 403 du connecteur ne décrit pas l’état actuel.
 
 ## Procédure de reprise
 
