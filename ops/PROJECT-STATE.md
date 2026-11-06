@@ -1,3 +1,36 @@
+# Grok — raccordement commencé, non activé — 6 novembre 2026 (America/Toronto)
+
+Base vérifiée : main `c1f9cc88a1b19cd81331c16aaf7922170d86278e` (PR91),
+production Vercel `dpl_EtQFeXdFq4fiphiXYXkC21XvA3De`, vidéos publiées.
+Branche de travail : `codex/grok-reading-live`. Cette entrée décrit du code
+préparatoire, pas une voix opérationnelle ni une nouvelle production.
+
+`EDUC_XAI_API_KEY` est désormais installée côté serveur personnel, variable
+sensible, production uniquement. Transfert GitHub autorisé terminé, reçu
+`luxurahair/kenebec-ai/actions/runs/42265378847`; inventaire Vercel vérifié sans
+déchiffrement. Aucun secret n'a été exposé. Ne pas refaire le transfert.
+
+Ajouts : trois boutons initialement indisponibles, statut dédié, cycle de vie
+annulable du microphone et contrat de transport injectable. Nettoyage sur arrêt,
+changement de profil, navigation, arrière-plan et déconnexion. Aucun transport
+Grok réel n'est fourni par cette branche; le serveur refuse toute émission.
+Les tests utilisent uniquement un faux micro et un faux transport.
+
+Vérification : suite `npm test` réussie, dont 11 nouveaux tests de refus et de
+courses asynchrones. Aucun essai vocal réel/adulte/enfant ni Safari physique.
+
+Blocage précis : le jeton éphémère xAI expire pour l'ouverture, mais ne ferme pas
+la session ouverte. Le serveur doit posséder le transport et sa coupure pour
+respecter le plafond familial durable. La documentation xAI précise que la session
+survit à l'expiration du jeton; ne pas remplacer cette garantie par un minuteur
+client. Le transport serveur borné, la validation d'accès voix du compte, la revue
+xAI et le premier essai adulte restent à réaliser. Ne pas fusionner ce brouillon
+en présentant les boutons comme fonctionnels.
+
+Prochaine action : implémenter et héberger le relais personnel borné, raccorder
+réservation durable et contexte scolaire validé côté serveur, puis tester avec
+un adulte. Aucun service professionnel à modifier pour cette étape.
+
 # Reprise de la livraison Nougat — 6 novembre 2026 (America/Toronto)
 
 PR91 reprise au SHA `486fee84fc597018cceedf110143097e8d5f34d8`.

@@ -9,8 +9,10 @@ et [accès Grok](ops/ACCESS-RUNBOOK.md#réutilisation-autorisée-de-laccès-grok
 
 - Studio publié : 45 secondes maximum, addition à chaque enregistrement,
   réécoute locale; aucun diagnostic ni compréhension automatique.
-- Grok : clé utilisée avec succès pour les images Luxura, pas encore branchée
-  à Éduc École. Ni essai vocal réel ni réglages de rétention confirmés.
+- Grok : clé serveur `EDUC_XAI_API_KEY` installée en production personnelle.
+  Ni essai vocal réel ni réglages de rétention confirmés. Le brouillon
+  `codex/grok-reading-live` prépare les trois entrées et leurs arrêts; il ne
+  contient pas encore le relais audio serveur. Son endpoint refuse toute session.
 - GitHub/Vercel personnel : publication fonctionnelle; les anciens blocages
   d’accès décrits plus bas sont historiques.
 - Les conditions et variables OpenAI ci-dessous décrivent l’implémentation
@@ -136,3 +138,13 @@ La borne réserve une minute entière STT (audio accepté ≤10 s), 16 000 token
 `npm run test:rls` puis `npm run test:voice-db`, uniquement avec `FAMILLE_TEST_DATABASE_URL` vers PostgreSQL local jetable `/famille_test`, vérifient les permissions et 20 processus concurrents. Le workflow les exécute avant les jobs avec secrets. La concurrence SQL n’a pas pu être exécutée dans le sandbox de cette livraison (sockets refusées). `npm run test:browser` a également été tenté : Chromium n’a pas pu démarrer dans ce sandbox. Aucun Safari/iPad réel n’est revendiqué. Les anciennes preuves importées appartiennent à la base et ne constituent pas une validation de cette modification.
 
 Sources officielles : [transcription](https://developers.openai.com/api/docs/guides/speech-to-text), [Whisper/prix](https://developers.openai.com/api/docs/models/whisper-1), [GPT-4.1 mini/prix/snapshot](https://developers.openai.com/api/docs/models/gpt-4.1-mini), [TTS-1/prix](https://developers.openai.com/api/docs/models/tts-1), [speech](https://developers.openai.com/api/docs/guides/text-to-speech), [mineurs](https://developers.openai.com/api/docs/guides/safety-checks/under-18-api-guidance), [rétention](https://developers.openai.com/api/docs/guides/your-data).
+
+## Limite vérifiée du jeton xAI
+
+La documentation officielle indique que la session continue après l’expiration
+du jeton : https://docs.x.ai/cookbook/examples/live-interpreter .
+Le plafond de 120 minutes fournisseur n’est pas une séance de trois minutes :
+https://docs.x.ai/developers/models/speech-to-speech .
+Un relais contrôlé par le serveur est nécessaire pour la coupure et la
+réservation du budget familial; aucune variable « vérifié » ne le remplace.
+Les conditions xAI doivent rester séparées des anciens indicateurs OpenAI.
