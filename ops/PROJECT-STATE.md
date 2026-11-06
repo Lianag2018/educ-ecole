@@ -1,3 +1,31 @@
+# Chansons par matière et bonds — 5 novembre 2026 (America/Toronto)
+
+Base main et production vérifiée : ebf4248a96779a4caa8f9ebbe0b13fe2e590e0a0 (PR87).
+22 fiches musicales / collections : Français, Maths, Temps et nature, Émotions
+et respect. Niveau exploré 1–3 sans changer le profil; 2 questions originales
+par fiche, résultats de pratique séparés par enfant, sans crédit de maîtrise.
+Tables existantes conservées. Collections externes clairement distinguées des
+lecteurs intégrés. Vidéo chargée au clic, arrêt à la navigation et arrière-plan.
+
+Bonds de 2, 5, 10 : plages 0–20 (départ), 0–50, 0–100, représentation de tous
+les bonds, écoute d’un nombre via narration existante, séries de 2–3 questions.
+Aide ou erreur exclut la réussite sans aide. Aucun changement automatique de
+niveau, aucune nouvelle génération audio payante ni configuration fournisseur.
+
+Demande de test de dyslexie réorientée par le parent : il veut une écoute réelle,
+pas un formulaire d’observations. Aucun parcours manuel ni test clinique ajouté.
+Grok STT documente le français et des repères par mot; aucune validation clinique
+chez les enfants ni admissibilité de traitement de leurs voix dans ce compte
+confirmée. ZDR, conditions fournisseur et activation restent non vérifiées.
+Aucune voix d’enfant transmise, aucun raccordement Grok activé.
+Sources examinées : docs.x.ai/developers/model-capabilities/audio/speech-to-text,
+docs.x.ai/developers/faq/security, x.ai/legal/terms-of-service-enterprise,
+OOAQ troubles-apprentissage, Dyslexia Canada evaluations-psychoeducatives.
+
+Tests Node locaux réussis; navigateur CI étendu aux chansons, bonds, deux profils,
+plafond100, aide, erreur, arrêt vidéo et petit écran. Publication à confirmer
+sur la PR de cette livraison. Aucun essai physique Safari/iPad annoncé.
+
 # Chanson de la table de 1 — 6 novembre 2026 (UTC)
 
 Base publiée vérifiée : da74ef5354d8eed0282a61d5f3ebf8dd2162c342 (PR86).

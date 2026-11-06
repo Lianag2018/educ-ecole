@@ -204,3 +204,17 @@ uniquement par la synchronisation des réponses et la lecture des plans existant
 Les imports, évolutions déclenchées par navigateur et conversations continuent
 d'exiger le parent. Le travail horaire existant conserve ses propres contrôles.
 Voir [PARENT-SETUP](ops/PARENT-SETUP.md) pour les limites et la mise en service.
+
+## Chansons et bonds — 5 novembre 2026
+
+`learning-songs.js` contient le catalogue public de liens officiels et des
+questions originales. Quatre catégories, niveau d’exploration indépendant de
+l’année du profil. `songPractice` compte seulement les séries et premiers choix;
+il n’alimente pas les paliers de lecture. Aucun téléchargement de musique.
+Le lecteur externe est créé au clic et démonté à la sortie / arrière-plan.
+
+`skip-counting.js` produit les suites exactes de 2, 5, 10 jusqu’à 20, 50 ou100.
+Petite série de 2–3 calculs, aide/erreur conservées dans la tentative; compteur
+`skipPractice` isolé par profil. Narration numérique existante, aucun STT.
+`learning-room.css` porte les surfaces adaptatives communes. Aucun outil de
+diagnostic clinique, aucune analyse automatique de voix ajouté à cette livraison.
