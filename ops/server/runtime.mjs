@@ -51,7 +51,8 @@ export function runtime(env=process.env,fetcher=fetch){
   async save(parent,slot,digest,plan){await sb('/rest/v1/rpc/famille_save_plan',{p_parent:parent,p_slot:slot,p_digest:digest,p_plan:plan});}
  };
  const plans=planEndpoint({auth,profiles,ledger,store:planStore,config:c,apiKey:env.EDUC_OPENAI_API_KEY,fetcher});
- const grok=createGrokEndpoints({auth,apiKey:env.EDUC_XAI_API_KEY});
+ let grokConfig;try{grokConfig=JSON.parse(env.EDUC_GROK_CONFIG||'null');}catch{}
+ const grok=createGrokEndpoints({auth,apiKey:env.EDUC_XAI_API_KEY,relaySecret:env.SUPABASE_SERVICE_ROLE_KEY,config:grokConfig,ledger,profiles,fetcher});
  return async req=>{
   if(req.path==='/api/parent/school-access')return schoolCredentialsEndpoint(req,{auth,origin,secrets:{p1:{nougat:env.EDUC_SCHOOL_P1_NOUGAT_CREDENTIALS},p2:{cec:env.EDUC_SCHOOL_P2_CEC_CREDENTIALS}}});
   if(req.path==='/api/parent/provision')return provisionParent(req,{env,sb});
@@ -98,3 +99,4 @@ export function runtime(env=process.env,fetcher=fetch){
   return {status:404,body:{code:'not_found'}};
  };
 }
+

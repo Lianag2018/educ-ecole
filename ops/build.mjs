@@ -11,3 +11,6 @@ const {generateNarration}=await import('./generate-narration.mjs');
 await generateNarration();
 const {alignNarration}=await import('./align-narration.mjs');
 await alignNarration();
+
+const {probeProductionGrok}=await import('./grok-relay/probe.mjs');
+await probeProductionGrok();

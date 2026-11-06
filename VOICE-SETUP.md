@@ -1,3 +1,28 @@
+## Complément prioritaire — relais Grok du 6 novembre 2026
+
+L’essai adulte préalable est retiré à la demande du parent. Les trois entrées
+utilisent maintenant le relais `educ-grok-relay`; disponibilité effective à
+vérifier dans PROJECT-STATE. Config séparée `EDUC_GROK_CONFIG` : enabled,
+parentConsent, childDataEligibilityReviewed, endpointRetentionReviewed,
+otherCostsMicros et pricing (même conversion conservatrice que le budget existant).
+Aucun indicateur OpenAI ni Zero Data Retention OpenAI n’est réutilisé.
+
+Durée serveur : 120 secondes. Réservation conservatrice : trois minutes au tarif
+xAI vérifié de 0,08 USD/minute, soit 240 000 microdollars USD, convertis et majorés
+avant ouverture. Aucun outil ni message texte arbitraire n’est autorisé par le
+relais. Les réservations restent comptées en cas d’échec ou d’abandon; aucun
+nouvel appel payant automatique. Le plafond du foyer reste 40 CAD.
+
+Les conditions API xAI sont distinctes du produit grand public; données API non
+utilisées pour entraînement par défaut, rétention ordinaire jusqu’à 30 jours sous
+réserves prévues au contrat. Aucune promesse ZDR n’est faite et aucune configuration
+Luxura n’est modifiée. Source : https://x.ai/legal/terms-of-service-enterprise et
+https://x.ai/legal/faq-enterprise (consultées le 6 novembre 2026).
+
+`EDUC_GROK_PROBE_SHA` active uniquement pour ce SHA de production/main un test de
+connexion sans micro, facturable et réservé au budget. Le journal expurgé
+EDUC_GROK_PROBE indique succès ou étape fautive sans clé, ticket ou audio.
+
 # Voix — état et direction au 6 novembre 2026 (America/Toronto)
 
 Le parcours demandé est **Grok en direct : écouter la lecture et aider pendant
@@ -148,3 +173,4 @@ https://docs.x.ai/developers/models/speech-to-speech .
 Un relais contrôlé par le serveur est nécessaire pour la coupure et la
 réservation du budget familial; aucune variable « vérifié » ne le remplace.
 Les conditions xAI doivent rester séparées des anciens indicateurs OpenAI.
+

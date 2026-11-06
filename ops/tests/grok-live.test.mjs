@@ -35,8 +35,8 @@ test('new session cancels the prior mode and sends only selected context',async(
  await c.start(context);await c.start({profileId:'p2',mode:'number'});assert.equal(closed,1);assert.deepEqual(bodies,[context,{profileId:'p2',mode:'number'}]);c.stop();
 });
 test('all three entry buttons start disabled',()=>{for(const mode of ['reading','owl','number'])assert.match(grokMarkup(mode),/data-grok-start disabled/);});
-test('key and review flags alone never bypass the missing server relay',()=>{
- const config={voiceAccessVerified:true,childDataEligibilityReviewed:true,endpointRetentionReviewed:true,adultTrialPassed:true};assert.deepEqual(grokReadiness({apiKey:'test-only',config}),{available:false,missing:['bounded_transport']});
+test('key and review flags alone never bypass the budget and relay configuration',()=>{
+ const config={voiceAccessVerified:true,childDataEligibilityReviewed:true,endpointRetentionReviewed:true,adultTrialPassed:true};const state=grokReadiness({apiKey:'test-only',config});assert.equal(state.available,false);assert.ok(state.missing.includes('budget_pricing'));assert.ok(state.missing.includes('relay_key'));assert.ok(!state.missing.includes('adult_trial'));
 });
 test('status conceals configuration from guests; sessions fail closed',async()=>{
  const parent={id:'test-parent',role:'parent',emailVerified:true,recentLogin:true,csrfVerified:true};
@@ -46,3 +46,4 @@ test('production router never calls xAI on status or unauthorized session',async
  let calls=0;const route=runtime({EDUC_XAI_API_KEY:'test-only'},()=>{calls++;throw Error('network forbidden');});
  for(const path of ['/api/voice/grok/status','/api/voice/grok/session'])await route({path,method:'POST',headers:{},body:context});assert.equal(calls,0);
 });
+
