@@ -14,3 +14,12 @@ test('catalogue classé, deux questions par notion et liens HTTPS autorisés',()
  assert.ok(songsFor('french',1).every(s=>s.level===1));assert.ok(songsFor('french',3).some(s=>s.id==='adjective'));
 });
 test('chansons et bonds accessibles séparément dans les deux profils',()=>{for(const p of fresh().profiles){assert.match(subjectHome(p,'maths'),/data-action="skip-counting"/);assert.match(subjectHome(p,'french'),/data-action="songs-french"/);assert.match(childHome(p,'2026-11-05'),/data-action="songs-world"/);} });
+
+test('Comptines.tv propose les activités adaptées au niveau exploré',()=>{
+ const ctv=(category,level)=>songsFor(category,level).filter(s=>s.id.startsWith('ctv-')).map(s=>s.id);
+ assert.deepEqual(ctv('french',1),['ctv-vowels','ctv-sounds']);
+ assert.deepEqual(ctv('maths',1),['ctv-count']);
+ assert.deepEqual(ctv('french',3),['ctv-forest-story','ctv-ou-words']);
+ assert.deepEqual(ctv('maths',3),[]);
+ for(const s of learningSongs.filter(s=>s.id.startsWith('ctv-'))){assert.equal(new URL(s.url).hostname,'comptines.tv');assert.equal(s.video,null);assert.ok(s.sourceLabel);}
+});
