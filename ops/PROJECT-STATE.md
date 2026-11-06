@@ -1,3 +1,47 @@
+# Reprise de la livraison Nougat — 6 novembre 2026 (America/Toronto)
+
+PR91 reprise au SHA `486fee84fc597018cceedf110143097e8d5f34d8`.
+Les deux workflows du dernier SHA sont réussis : vérification des deux profils
+`42244613667` et vérification de l'évolution `42244613748`. Le job d'évolution
+payante est skipped sur une PR, comme prévu; cela ne signifie pas qu'il est activé.
+Les contrôles comprennent les parcours navigateur, la base de test, les imports
+parent, la pagination, l'isolation des profils et l'arrêt des lecteurs.
+
+Revue du diff complet, trois tests ciblés vidéo et build local réussis à la
+reprise. Préversion Vercel `dpl_Ejj3QkLX6YKd6bHryfEzZLcW2meN` READY sur ce SHA.
+Le navigateur de revue atteint la protection Vercel; aucun accès partagé créé
+et aucune protection modifiée. La validation UI distante automatisée est verte;
+aucun essai manuel de cette préversion ni essai physique iPad revendiqué.
+
+Prochaine action : fusionner la PR91 vérifiée, attendre le déploiement Git et
+contrôler le SHA de `educ-ecole.vercel.app` et le parcours public. Grok live et
+la refonte des autres écrans restent à réaliser; ne pas annoncer leur activation.
+
+# Vidéos et exercices adaptés — 6 novembre 2026 (America/Toronto)
+
+Base main : `6e1ab7ca9abf283c1cfd459cfd671eeee257f83d` (PR90 architecture).
+Ajout d’une salle vidéo, entrées Prof à la guitare et Maître Lucas dans le monde
+des deux filles et entrées par matière. Catalogue officiel : 37 vidéos du Prof,
+huit de Maître Lucas, autres vidéos existantes conservées. Déterminants en
+priorité parmi les leçons disponibles aux deux profils.
+
+Chaque vidéo a deux exercices originaux. Aides et erreurs conservées par journée,
+reprises prioritaires, deux journées indépendantes avant consolidation; variantes
+pour noms/déterminants/adjectifs et tables. Les autres notions gardent leur
+pratique initiale. Progrès locaux isolés, aucune maîtrise clinique annoncée.
+
+Lecteurs intégrés au toucher, arrêt navigation/arrière-plan; catalogue paginé
+et étapes vidéo/questions séparées. Aucun fichier de créateur téléchargé.
+Sources publiques officielles vérifiées le 6 novembre; intégration réellement
+disponible encore dépendante de YouTube. Pas de prétention d’essai de tous les
+enregistrements ni de l’iPad physique.
+
+Validation : 516 tests Node et build local réussis. Chromium local ne fournit
+pas de point de débogage dans cet environnement; test navigateur ajouté au
+workflow existant pour les deux profils, pagination, tailles tablette/téléphone,
+lecture au toucher, arrêt et sauvegarde. CI et production à confirmer sur la PR.
+Grok live et refonte des autres écrans restent en cours, pas activés ici.
+
 # Architecture actualisée — 6 novembre 2026 (America/Toronto)
 
 Base distante et production vérifiées :

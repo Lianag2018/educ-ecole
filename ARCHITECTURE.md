@@ -345,3 +345,34 @@ Petite série de 2–3 calculs, aide/erreur conservées dans la tentative; compt
 `skipPractice` isolé par profil. Narration numérique existante, aucun STT.
 `learning-room.css` porte les surfaces adaptatives communes. Aucun outil de
 diagnostic clinique, aucune analyse automatique de voix ajouté à cette livraison.
+
+## Vidéos et pratique adaptée — 6 novembre 2026
+
+`video-catalog.js` rassemble les vidéos déjà sélectionnées et complète le
+catalogue du Prof à la guitare (37 vidéos retrouvées dans son catalogue officiel,
+tables 3–9 comprises) et huit leçons Maître Lucas. Catégories et repères de niveau
+sont proposés par l’app; CP/CE1/CE2 français ne valent pas une conformité exhaustive
+au programme québécois. Les notions plus avancées restent dans « Tout · avec un
+adulte ». Chaque vidéo a deux questions originales; aucune parole, partition,
+fiche payante ou vidéo n’est copiée. Sources : boutique officielle du créateur,
+chaînes YouTube officielles et pages des leçons Maître Lucas.
+
+`video-learning.js` fournit un accès direct par créateur depuis le monde de
+chaque profil et par matière dans Français/Maths. Catalogue paginé (4 cartes,
+2 sur téléphone), puis vidéo et quiz sur des étapes séparées. Lecteur
+youtube-nocookie au toucher, lien officiel de secours, arrêt à la sortie, au
+changement de mode et à l’arrière-plan. La disponibilité/publicité dépend du
+fournisseur; l’app n’annonce pas une lecture garantie de chaque vidéo.
+
+`videoPractice` est local, distinct de `songPractice` historique et des paliers
+de lecture; aucune migration destructive. Deux réponses, aide explicite,
+sauvegarde par profil et vidéo, au plus 30 journées. Le pire résultat d’une
+journée reste conservé même après répétition. Reprises aidées prioritaires,
+puis révision; deux journées réussies sans aide permettent la consolidation.
+Nouveaux exemples pour déterminants/noms/adjectifs, groupes plus grands pour
+les tables; les autres vidéos gardent leurs questions de pratique. Aucun
+changement automatique d’année, diagnostic ou preuve de maîtrise.
+
+La salle vidéo vise un écran visible en portrait/paysage; zoom et clavier peuvent
+conserver un débordement accessible plutôt que couper du contenu. Cette livraison
+ne refait pas encore tous les autres écrans de l’application.

@@ -72,5 +72,37 @@ try{
  await run("Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'));Object.defineProperty(document,'hidden',{configurable:true,get:()=>false})");
  assert.equal(await run("document.querySelector('iframe')===null"),true);assert.ok(await run("!!document.querySelector('.learning-room')"));
  await click('[data-action=home]');
+ // Embedded video room: both profiles, pagination, adaptation, help and media cleanup.
+ await cdp('Emulation.setDeviceMetricsOverride',{width:820,height:1180,deviceScaleFactor:1,mobile:true});
+ await click('[data-action=videos-prof]');
+ assert.equal(await run("document.querySelectorAll('[data-video-id]').length<=4"),true);
+ assert.equal(await run("document.querySelector('iframe')===null"),true);
+ assert.equal(await run('document.documentElement.scrollHeight<=innerHeight+2'),true);
+ await run("document.querySelector('[data-video-author]').value='lucas';document.querySelector('[data-video-author]').dispatchEvent(new Event('change'))");
+ await click('[data-video-id=lucas-determiners]');await click('[data-video-play]');
+ assert.match(await run("document.querySelector('iframe').src"),/E9Srsa4AtmI/);
+ assert.equal(await run('document.documentElement.scrollHeight<=innerHeight+2'),true);
+ await click('[data-video-start]');assert.equal(await run("document.querySelector('iframe')===null"),true);
+ await click('[data-video-help]');await click('[data-video-answer="0"]');await click('[data-video-continue]');await click('[data-video-answer="1"]');await click('[data-video-continue]');
+ assert.match(await run("document.querySelector('.video-stage').textContent"),/1 réponse/);
+ data=JSON.parse(await run("localStorage.getItem('atelier-mots-v1')"));
+ assert.equal(data.profiles[0].videoPractice['lucas-determiners'].days.at(-1).unaided,1);assert.equal(data.profiles[1].videoPractice,undefined);
+ await click('[data-video-home]');
+ await run("document.querySelector('#profile').value='p2';document.querySelector('#profile').dispatchEvent(new Event('change'))");
+ await click('[data-action=videos-lucas]');
+ await cdp('Emulation.setDeviceMetricsOverride',{width:1180,height:820,deviceScaleFactor:1,mobile:true});await sleep(100);
+ assert.equal(await run('document.documentElement.scrollHeight<=innerHeight+2'),true);
+ assert.equal(await run("document.querySelector('[data-video-author]').value"),'lucas');
+ await click('[data-video-next-page]');assert.ok(await run("!!document.querySelector('[data-video-id=lucas-adjective]')"));
+ await click('[data-video-id=lucas-adjective]');await click('[data-video-play]');
+ assert.match(await run("document.querySelector('iframe').src"),/CoFoz-mIHrg/);
+ await run("Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'));Object.defineProperty(document,'hidden',{configurable:true,get:()=>false})");
+ assert.equal(await run("document.querySelector('iframe')===null"),true);
+ await click('[data-video-back]');
+ await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await sleep(100);
+ assert.equal(await run('document.documentElement.scrollWidth<=innerWidth'),true);
+ assert.equal(await run('document.documentElement.scrollHeight<=innerHeight+2'),true);
+ assert.ok(await run("document.querySelectorAll('[data-video-id]').length<=2"));
+ await click('[data-video-home]');
  assert.deepEqual(errors,[]);console.log('Tables browser: groups, quiz, help, profile isolation, mobile layout and player cleanup passed');
 }finally{socket?.close();chrome.kill();server.kill();await sleep(150);await rm(temp,{recursive:true,force:true});}
