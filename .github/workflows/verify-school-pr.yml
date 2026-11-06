@@ -28,3 +28,7 @@ jobs:
         run: node ops/tests/reader-browser.mjs
         env:
           CHROMIUM_PATH: /usr/bin/google-chrome
+      - name: Tables en chansons — groupes et profils
+        run: node ops/tests/table-songs-browser.mjs
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
