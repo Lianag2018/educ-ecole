@@ -1,3 +1,25 @@
+# Limite des courriels de récupération — 6 novembre 2026 (America/Toronto)
+
+Production observée : main a15dfce (PR95). La redirection Supabase a été
+corrigée vers le site public et recovery.html par le workflow éducatif
+#10 (42307528738), puis relue par l’audit #9, tentative 2 : verified=true.
+Aucun mot de passe ni donnée familiale modifié pendant cette opération.
+
+L’échec suivant est distinct : Supabase renvoie HTTP 429 avec
+`over_email_send_rate_limit`, confirmé dans les logs à 17 h 55. Le formulaire
+transformait toute erreur en « Réessaie dans quelques minutes », ce qui cachait
+la limite et encourageait des essais inutiles. Le correctif conserve le 429
+sur la seule route d’envoi, affiche la limite et recommande une heure avant
+une nouvelle demande. Les autres pannes ne promettent plus un délai précis.
+Aucun corps d’erreur fournisseur n’est affiché; aucune relance automatique,
+contournement du quota ou modification SMTP. La clé publique est conservée.
+
+Validation : 31 tests serveur ciblés réussis, incluant réponse native 429,
+absence de nouvelle tentative et absence de lecture du corps privé. Scénarios
+navigateur synthétiques pour quota et panne ajoutés; CI et publication à
+confirmer. Aucun nouveau courriel réel ni changement de mot de passe testé.
+Le quota temporaire doit se libérer avant le prochain envoi réel du parent.
+
 # Récupération du mot de passe parent — 6 novembre 2026 (America/Toronto)
 
 Base distante vérifiée : 8e940d4 (PR94), accueil vocal publié. Ajout du lien

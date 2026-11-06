@@ -28,3 +28,22 @@ test('expired tokens, short passwords, provider rejection and unverified tokens 
 test('recovery email uses public key so provider rate limits remain active',async()=>{
  let headers;const sb=createSupabaseClient({url:'https://example.supabase.co',anon:'sb_publishable_test',key:'sb_secret_test',fetcher:async(u,o)=>{headers=o.headers;return {ok:true,json:async()=>({})};}});await sb('/auth/v1/recover?redirect_to=https%3A%2F%2Fschool.example%2Frecovery.html',{email:user.email});assert.equal(headers.apikey,'sb_publishable_test');assert.equal(headers.Authorization,undefined);
 });
+
+test('provider recovery quota stays HTTP 429 and is not retried or exposed',async()=>{
+ const calls=[];let parsed=false;
+ const sb=createSupabaseClient({url:'https://example.supabase.co',anon:'sb_publishable_test',key:'sb_secret_test',fetcher:async(url)=>{
+  calls.push(url);
+  if(url.includes('/admin/users/'))return new Response(JSON.stringify(user));
+  const response=new Response('private provider error with email and token',{status:429});
+  response.json=async()=>{parsed=true;throw Error('must_not_read_private_body');};
+  return response;
+ }});
+ const result=await recoverParent(req('recover',{email:user.email}),{env,sb});
+ assert.deepEqual(result,{status:429,body:{code:'recovery_rate_limited'}});
+ assert.equal(calls.length,2);assert.equal(parsed,false);
+});
+
+test('an unrelated upstream 429 remains an unavailable service',async()=>{
+ const sb=createSupabaseClient({url:'https://example.supabase.co',anon:'sb_publishable_test',key:'sb_secret_test',fetcher:async()=>new Response('private',{status:429})});
+ assert.deepEqual(await recoverParent(req('recover',{email:user.email}),{env,sb}),{status:503,body:{code:'recovery_unavailable'}});
+});

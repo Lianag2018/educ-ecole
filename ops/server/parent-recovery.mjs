@@ -14,7 +14,7 @@ export async function recoverParent(req,{env,sb,now=Date.now}){
    if(!parent.email_confirmed_at||parent.is_anonymous||parent.email?.toLowerCase()!==b.email.trim().toLowerCase())return accepted();
    await sb('/auth/v1/recover?redirect_to='+encodeURIComponent(env.EDUC_ORIGIN+'/recovery.html'),{email:parent.email});
    return accepted();
-  }catch{return fail(503,'recovery_unavailable');}
+  }catch(e){return e.message==='recovery_rate_limited'?fail(429,'recovery_rate_limited'):fail(503,'recovery_unavailable');}
  }
  if(req.path!=='/api/parent/reset-password')return fail(404,'not_found');
  if(!b||Object.keys(b).some(k=>!['accessToken','password'].includes(k))||typeof b.accessToken!=='string'||b.accessToken.length>8192||!/^[-\w]+\.[-\w]+\.[-\w]+$/.test(b.accessToken)||typeof b.password!=='string'||b.password.length<12||b.password.length>256)return fail(400,'invalid_request');

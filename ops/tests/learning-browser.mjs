@@ -116,6 +116,13 @@ try{
  await run(`window.__calls=[];window.fetch=async(path,options)=>{window.__calls.push({path,body:JSON.parse(options.body)});return {ok:true,json:async()=>({ok:true})};};document.querySelector('#request-recovery input').value='synthetic@example.test';document.querySelector('#request-recovery').requestSubmit();`);
  await until('document.querySelector("#recovery-status").textContent.includes("Si ce courriel")');
  assert.equal(await run('window.__calls[0].path'),'/api/parent/recover');
+ await run(`window.__calls=[];window.fetch=async()=>{window.__calls.push('recover');return {ok:false,json:async()=>({code:'recovery_rate_limited'})};};document.querySelector('#request-recovery').requestSubmit();`);
+ await until('document.querySelector("#recovery-status").textContent.includes("limite temporaire")');
+ assert.equal(await run('window.__calls.length'),1);
+ assert.match(await run('document.querySelector("#recovery-status").textContent'),/Aucun nouveau lien.*une heure/);
+ assert.doesNotMatch(await run('document.querySelector("#recovery-status").textContent'),/quelques minutes/);
+ await run(`window.fetch=async()=>{throw Error('offline')};document.querySelector('#request-recovery').requestSubmit();`);
+ await until('document.querySelector("#recovery-status").textContent.includes("Aucun envoi n’a pu être confirmé")');
  await cdp('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/recovery.html?reset=1#type=recovery&access_token=synthetic.token.signature`});
  await until('!!document.querySelector("#reset-password") && !document.querySelector("#reset-password").hidden');
  assert.equal(await run('location.hash'),'');
