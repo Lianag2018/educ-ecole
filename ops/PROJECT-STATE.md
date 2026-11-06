@@ -1,3 +1,22 @@
+# Reprise de la livraison Nougat — 6 novembre 2026 (America/Toronto)
+
+PR91 reprise au SHA `486fee84fc597018cceedf110143097e8d5f34d8`.
+Les deux workflows du dernier SHA sont réussis : vérification des deux profils
+`42244613667` et vérification de l'évolution `42244613748`. Le job d'évolution
+payante est skipped sur une PR, comme prévu; cela ne signifie pas qu'il est activé.
+Les contrôles comprennent les parcours navigateur, la base de test, les imports
+parent, la pagination, l'isolation des profils et l'arrêt des lecteurs.
+
+Revue du diff complet, trois tests ciblés vidéo et build local réussis à la
+reprise. Préversion Vercel `dpl_Ejj3QkLX6YKd6bHryfEzZLcW2meN` READY sur ce SHA.
+Le navigateur de revue atteint la protection Vercel; aucun accès partagé créé
+et aucune protection modifiée. La validation UI distante automatisée est verte;
+aucun essai manuel de cette préversion ni essai physique iPad revendiqué.
+
+Prochaine action : fusionner la PR91 vérifiée, attendre le déploiement Git et
+contrôler le SHA de `educ-ecole.vercel.app` et le parcours public. Grok live et
+la refonte des autres écrans restent à réaliser; ne pas annoncer leur activation.
+
 # Vidéos et exercices adaptés — 6 novembre 2026 (America/Toronto)
 
 Base main : `6e1ab7ca9abf283c1cfd459cfd671eeee257f83d` (PR90 architecture).
