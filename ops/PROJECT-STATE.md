@@ -1,3 +1,17 @@
+# Grok — le jeton seul ne fait pas parler — 6 novembre 2026
+
+Le déploiement `dpl_DBeyT18czQ8CGeUW3EYZFc8eKg1H` échoue parce que le probe
+entend le relais, crée le jeton, puis ne reçoit aucun audio. Cause dans le
+relais v1 : `response.create` part dès `session.updated`, sans tour. Avec la
+détection de silence, Grok attend une phrase et ne salue pas.
+
+Correctif : après `session.created`, envoyer `session.update`; après
+`session.updated`, insérer un seul tour texte fixe; seulement ensuite
+`response.create`. Le modèle du socket est `grok-voice-latest`. Santé attendue
+après redéploiement du relais : `educ-grok-v2`. Le probe Vercel reste un échec
+tant que Supabase sert encore v1. `enabled: false` laisse aussi les boutons
+fermés; ce n’est pas corrigé par ce diff.
+
 # Grok — relais déployé et raccordement en validation — 6 novembre 2026
 
 Cette entrée remplace les anciens états « transport non construit ». Le parent
