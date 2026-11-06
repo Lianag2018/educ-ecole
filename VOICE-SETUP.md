@@ -1,3 +1,13 @@
+## Correctif prioritaire — clé des tickets du relais
+
+Le chiffrement des tickets utilise maintenant la clé dédiée
+`educ_grok_relay_ticket_key` dans Supabase Vault. Le RPC serveur
+`famille_grok_relay_key()` est SECURITY INVOKER, autorisé uniquement à
+service_role. Aucun navigateur ne peut le lire. Ne plus utiliser la chaîne
+SUPABASE_SERVICE_ROLE_KEY comme secret partagé entre hébergeurs.
+Les clés API Supabase servent uniquement à authentifier les deux serveurs.
+Schéma appliqué : `ops/grok-relay/vault-key-schema.sql`.
+
 ## Complément prioritaire — relais Grok du 6 novembre 2026
 
 L’essai adulte préalable est retiré à la demande du parent. Les trois entrées

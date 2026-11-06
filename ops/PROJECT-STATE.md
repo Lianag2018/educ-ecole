@@ -1,3 +1,25 @@
+# Grok — cause de refus du ticket isolée — 6 novembre 2026 (America/Toronto)
+
+PR93 ouverte sur Lianag2018 depuis le fork personnel, correctif complété.
+Le diagnostic réel du relais montre `authentication_failed`, phase `ticket`,
+code `ticket_decrypt_failed`. Le tour de parole manquant n'était donc pas
+l'unique cause du probe échoué. L'utilisation de la valeur d'une clé API comme
+secret partagé exigeait que les deux environnements aient exactement la même
+chaîne; elle est remplacée par une clé dédiée dans le coffre Supabase.
+
+Migration `grok_relay_dedicated_vault_key` appliquée. La clé est générée dans
+Vault, jamais imprimée ou copiée au dépôt. RPC SECURITY INVOKER, exécution
+réservée à service_role, droits anon/authenticated refusés et vérifiés.
+Vercel et le relais chargent cette même clé pour les tickets AES-GCM.
+Le budget durable, l'usage unique et la coupure serveur 120 secondes restent.
+
+Relais déployé version Supabase 6, santé `educ-grok-v3`. Il garde le worker actif
+et reconnaît `conversation.item.created` ainsi que l'ancien alias `added`.
+Diagnostics limités aux noms d'étapes fixes, sans corps fournisseur ni audio.
+24 tests ciblés passent; suite générale en cours à cette écriture. Retour audio
+réel encore à vérifier après fusion et redéploiement de Vercel. `enabled` reste
+false jusqu'à cette preuve. Aucun essai physique iPad revendiqué.
+
 # Grok — le jeton seul ne fait pas parler — 6 novembre 2026
 
 Le déploiement `dpl_DBeyT18czQ8CGeUW3EYZFc8eKg1H` échoue parce que le probe

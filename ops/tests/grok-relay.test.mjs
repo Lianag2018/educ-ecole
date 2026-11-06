@@ -29,3 +29,18 @@ test('documented created event starts audio once and duplicates do not replay gr
  assert.deepEqual(client.sent,[{type:'ready'}]);
  event('response.done');assert.equal(upstream.closed,0);
 });
+test('relay failure diagnostics contain only fixed stages, no upstream data',()=>{
+ const reports=[];const ws=()=>({readyState:1,bufferedAmount:0,send(){},close(){}});
+ const client=ws(),upstream=ws();bridge({client,upstream,ticket:{instructions:'private school context'},setTimer:()=>0,clearTimer(){},onDiagnostic:s=>reports.push(s)});
+ upstream.onmessage({data:JSON.stringify({type:'error',error:{message:'private provider details'}})});
+ assert.deepEqual(reports,[{reason:'provider_error',configured:'idle',ready:false}]);
+});
+test('dedicated vault key is used instead of environment API credentials',async()=>{
+ const {route,calls}=setup({relaySecret:'different-api-credential'.repeat(4),loadRelaySecret:async()=>secret});
+ const r=await route(req({profileId:'p1',mode:'owl'}));assert.equal(r.status,200);
+ assert.equal((await openTicket(r.body.ticket,secret)).slot,'p1');assert.deepEqual(calls,['reserve','provider']);
+});
+test('vault failure stops before budget reservation and provider access',async()=>{
+ const {route,calls}=setup({loadRelaySecret:async()=>{throw Error('vault unavailable');}});
+ assert.equal((await route(req({profileId:'p1',mode:'owl'}))).status,503);assert.deepEqual(calls,[]);
+});
