@@ -1,3 +1,23 @@
+# Tables en chansons — 5 novembre 2026 (America/Toronto)
+
+Base distante et production vérifiées : d0ed43b54a883cf751615268649f1f27eb073220 (PR85).
+Maths du profil avancé : nouvelle île, table de 3 par défaut, tables 1–10,
+groupes manipulables 0–10 et trois questions par série sans chrono. Une erreur
+ou l'affichage des groupes exclut la réussite sans aide. Compteur de missions
+local par profil, sans crédit artificiel en lecture ni diagnostic de maîtrise.
+
+Lecteurs officiels YouTube chargés uniquement après clic; aucun audio/paroles
+copiés, aucun envoi de voix/photo ni appel OpenAI. Vidéo retirée à la sortie,
+au changement de table et en arrière-plan. Lien externe si l'intégration échoue.
+La manipulation est indépendante du rythme de la vidéo, pas une synchronisation.
+CSP autorise uniquement youtube-nocookie.com pour les cadres; referrer limité à
+l'origine pour identifier le lecteur sans nom/profil. Disponibilité et publicité
+restent sous contrôle YouTube. Certaines tables n'ont pas encore de chanson.
+
+Tests Node/build locaux réussis; test navigateur ajouté à la CI. Chromium local
+ne démarre pas (socket interdit), donc aucune validation iPad physique annoncée.
+CI distante, revue et déploiement à confirmer sur la PR de cette livraison.
+
 # Tableau de travail au stylet — 4 novembre 2026 (UTC)
 
 Base distante vérifiée : b9877c498db4a32b10342848433e815f5ba53be1.
