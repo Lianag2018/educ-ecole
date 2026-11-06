@@ -1,3 +1,4 @@
+import {serviceHeaders} from '../grok-relay/headers.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sealTicket,openTicket} from '../grok-relay/ticket.mjs';
@@ -16,6 +17,33 @@ test('invalid profile, number, instructions or activity never reserves',async()=
 test('expired price refuses issuance',()=>{assert.equal(grokReadiness({apiKey:'test',relaySecret:secret,ledger:{durable:true},config:{...config,pricing:{...config.pricing,validUntil:'2000-01-01'}}}).available,false);});
 function sockets(){const ws=()=>({readyState:1,bufferedAmount:0,sent:[],closed:0,send(m){this.sent.push(JSON.parse(m));},close(){this.closed++;this.readyState=3;}});const client=ws(),upstream=ws(),timers=[];const b=bridge({client,upstream,ticket:{instructions:'test'},setTimer:(fn,ms)=>{const t={fn,ms};timers.push(t);return t;},clearTimer:t=>{t.cleared=true;}});return {client,upstream,timers,b};}
 test('server deadline closes both sockets independently of client timers',()=>{const {client,upstream,timers}=sockets();timers.find(t=>t.ms===120000).fn();assert.equal(client.closed,1);assert.equal(upstream.closed,1);upstream.onopen();assert.equal(upstream.sent.length,0);});
-test('browser cannot replace instructions, enable tools or send extra text',()=>{for(const type of ['session.update','conversation.item.create','response.create']){const {client,upstream}=sockets();upstream.onopen();upstream.onmessage({data:JSON.stringify({type:'session.updated'})});client.onmessage({data:JSON.stringify({type,session:{tools:[{type:'web_search'}]}})});assert.equal(upstream.closed,1);assert.equal(upstream.sent.length,2);}});
-test('only audio is forwarded; disconnect closes upstream; provider metadata stays private',()=>{const {client,upstream}=sockets();upstream.onopen();upstream.onmessage({data:JSON.stringify({type:'session.updated',secret:'hidden'})});client.onmessage({data:JSON.stringify({type:'audio',data:'AAAA'})});assert.equal(upstream.sent[2].type,'input_audio_buffer.append');assert.deepEqual(client.sent,[{type:'ready'}]);client.onclose();assert.equal(upstream.closed,1);});
+test('browser cannot replace instructions, enable tools or send extra text',()=>{for(const type of ['session.update','conversation.item.create','response.create']){const {client,upstream}=sockets();upstream.onopen();upstream.onmessage({data:JSON.stringify({type:'session.created'})});upstream.onmessage({data:JSON.stringify({type:'session.updated'})});client.onmessage({data:JSON.stringify({type,session:{tools:[{type:'web_search'}]}})});assert.equal(upstream.closed,1);assert.equal(upstream.sent.length,2);assert.equal(upstream.sent[1].type,'conversation.item.create');assert.equal(upstream.sent[1].item.content[0].text.includes('test'),false);}});
+test('greeting waits for a server turn before any audio is requested',()=>{const {client,upstream}=sockets();upstream.onmessage({data:JSON.stringify({type:'session.updated'})});assert.equal(upstream.sent.length,0);upstream.onmessage({data:JSON.stringify({type:'session.created'})});assert.equal(upstream.sent[0].type,'session.update');upstream.onmessage({data:JSON.stringify({type:'session.updated'})});assert.equal(upstream.sent[1].type,'conversation.item.create');assert.equal(client.sent.length,0);assert.equal(upstream.sent.some(m=>m.type==='response.create'),false);upstream.onmessage({data:JSON.stringify({type:'conversation.item.added'})});assert.equal(upstream.sent[2].type,'response.create');assert.deepEqual(client.sent,[{type:'ready'}]);client.onmessage({data:JSON.stringify({type:'audio',data:'AAAA'})});assert.equal(upstream.sent[3].type,'input_audio_buffer.append');client.onclose();assert.equal(upstream.closed,1);});
 test('PCM is signed little endian',()=>{assert.deepEqual([...Buffer.from(pcmBase64(new Float32Array([-1,0,1])),'base64')],[0,128,0,0,255,127]);});
+test('documented created event starts audio once and duplicates do not replay greeting',()=>{
+ const {client,upstream}=sockets();
+ const event=type=>upstream.onmessage({data:JSON.stringify({type})});
+ event('session.created');event('session.updated');event('conversation.item.created');
+ event('conversation.item.added');event('conversation.item.created');event('session.updated');
+ assert.equal(upstream.sent.filter(m=>m.type==='response.create').length,1);
+ assert.equal(upstream.sent.filter(m=>m.type==='conversation.item.create').length,1);
+ assert.deepEqual(client.sent,[{type:'ready'}]);
+ event('response.done');assert.equal(upstream.closed,0);
+});
+test('relay failure diagnostics contain only fixed stages, no upstream data',()=>{
+ const reports=[];const ws=()=>({readyState:1,bufferedAmount:0,send(){},close(){}});
+ const client=ws(),upstream=ws();bridge({client,upstream,ticket:{instructions:'private school context'},setTimer:()=>0,clearTimer(){},onDiagnostic:s=>reports.push(s)});
+ upstream.onmessage({data:JSON.stringify({type:'error',error:{message:'private provider details'}})});
+ assert.deepEqual(reports,[{reason:'provider_error',configured:'idle',ready:false}]);
+});
+test('dedicated vault key is used instead of environment API credentials',async()=>{
+ const {route,calls}=setup({relaySecret:'different-api-credential'.repeat(4),loadRelaySecret:async()=>secret});
+ const r=await route(req({profileId:'p1',mode:'owl'}));assert.equal(r.status,200);
+ assert.equal((await openTicket(r.body.ticket,secret)).slot,'p1');assert.deepEqual(calls,['reserve','provider']);
+});
+test('vault failure stops before budget reservation and provider access',async()=>{
+ const {route,calls}=setup({loadRelaySecret:async()=>{throw Error('vault unavailable');}});
+ assert.equal((await route(req({profileId:'p1',mode:'owl'}))).status,503);assert.deepEqual(calls,[]);
+});
+
+test('opaque Supabase service keys are not mislabelled as JWTs',()=>{const opaque='sb_secret_'+('a'.repeat(40));assert.equal(serviceHeaders(opaque).apikey,opaque);assert.equal(serviceHeaders(opaque).Authorization,undefined);const legacy='eyJ'+('a'.repeat(40));assert.equal(serviceHeaders(legacy).Authorization,'Bearer '+legacy);});

@@ -16,7 +16,8 @@ export async function sealTicket(payload,secret){
 export async function openTicket(ticket,secret,now=Date.now()){
  if(typeof ticket!=='string'||ticket.length>20000||!/^[\w-]+\.[\w-]+$/.test(ticket))throw Error('invalid_ticket');
  const [iv,cipher]=ticket.split('.').map(decode);
- const p=JSON.parse(decoder.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad},await key(secret),cipher)));
- if(p.version!==1||!Number.isSafeInteger(p.expiresAt)||p.expiresAt<=now||p.expiresAt>now+60000||p.durationSeconds!==120||!/^[-a-f0-9]{36}$/.test(p.id||'')||!/^[-a-f0-9]{36}$/.test(p.parent||'')||!['p1','p2'].includes(p.slot)||typeof p.credential!=='string'||p.credential.length>4000||typeof p.instructions!=='string'||p.instructions.length>6000)throw Error('invalid_ticket');
+ const derivedKey=await key(secret);
+ let p;try{p=JSON.parse(decoder.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad},derivedKey,cipher)));}catch{throw Error('ticket_decrypt_failed');}
+ if(p.version!==1||!Number.isSafeInteger(p.expiresAt)||p.expiresAt<=now||p.expiresAt>now+60000||p.durationSeconds!==120||!/^[-a-f0-9]{36}$/.test(p.id||'')||!/^[-a-f0-9]{36}$/.test(p.parent||'')||!['p1','p2'].includes(p.slot)||typeof p.credential!=='string'||p.credential.length>4000||typeof p.instructions!=='string'||p.instructions.length>6000)throw Error('ticket_payload_invalid');
  return p;
 }
