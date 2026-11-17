@@ -71,8 +71,12 @@ try{
     assert.equal(await run(`(()=>{const el=document.querySelector('${selector}');el.scrollIntoView();const r=el.getBoundingClientRect();return r.width>=44&&r.height>=44&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})()`),true);
    }
    await click('[data-welcome-voice=owl]');
-   await until('document.querySelector("[data-grok-state]")?.textContent.includes("Connexion parent requise")');
-   assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),true);
+   await until('document.querySelector("[data-grok-state]")?.textContent.includes("Un parent doit autoriser cette tablette")');
+   // The button is never dead: without authorization the tap explains and shows the parent login.
+   assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),false);
+   await click('[data-grok-start]');
+   await until('document.querySelector("[data-grok-state]")?.textContent.includes("Ouvre « Connexion parent pour la voix »")');
+   assert.equal(await run('document.querySelector("[data-grok-parent]").hidden'),false);
    await click('[data-grok-parent]');
    assert.equal(await run('!document.querySelector("#parent-settings").hidden && !!document.querySelector("#parent-settings input[type=password]")'),true);
    authenticated=true;
@@ -107,7 +111,12 @@ try{
  await run(`(async()=>{const {grokLive}=await import('/src/grok-live.js');grokLive.request=async()=>({ok:false,json:async()=>({code:'parent_login_required'})});})()`);
  await click('[data-grok-start]');await until('document.querySelector("[data-grok-state]").textContent.includes("connexion parent a expiré")');
  assert.equal(await run('document.querySelector("[data-grok-parent]").hidden'),false);
- assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),true);
+ assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),false);
+ assert.equal(await run('window.voiceStartProof.tracksStopped'),2);
+ // After expiry a new tap opens no microphone and no session; it explains what a parent must do.
+ await run('window.voiceStartProof.before=window.voiceStartProof.requests');
+ await click('[data-grok-start]');await until('document.querySelector("[data-grok-state]").textContent.includes("Un parent doit autoriser cette tablette")');
+ assert.equal(await run('window.voiceStartProof.requests===window.voiceStartProof.before'),true);
  assert.equal(await run('window.voiceStartProof.tracksStopped'),2);
  await cdp('Page.reload');await until('!!document.querySelector("[data-action=parent]")');
  for(const profileId of ['p1','p2']){

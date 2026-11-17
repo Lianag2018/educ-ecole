@@ -1,3 +1,19 @@
+# Test navigateur aligné sur le bouton de la chouette — 17 novembre 2026 (America/Toronto)
+
+Base : main feb95b7 (PR98 fusionnée par le parent). Après la fusion, le flux
+« Évolution Educ École » échoue à l'étape learning-browser : ce test attendait
+encore l'ancien texte « Connexion parent requise » et un bouton désactivé.
+Le comportement livré par PR98 est voulu; seul le test était en retard. Les
+tests unitaires et le flux « Vérifier Éduc École — deux profils » réussissent
+sur feb95b7; Vercel signale le déploiement terminé pour ce commit.
+
+Correctif sur la branche claude/chouette-test-navigateur : le test vérifie le
+nouveau texte, le bouton actif sans autorisation, l'affichage de la connexion
+parent au toucher, et qu'après expiration un nouveau toucher n'ouvre ni micro
+ni séance. Validation locale : learning-browser, parent-browser et
+continuous-browser réussis sous Chromium, tests Node réussis. Toujours non
+vérifié : micro réel, voix Grok réelle, iPad/iPhone, statut vocal en production.
+
 # Chouette sans reconnexion parent — 17 novembre 2026 (America/Toronto)
 
 Base : main 3a87000. Branche claude/chouette-tablette-familiale, non fusionnée,
