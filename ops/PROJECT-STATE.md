@@ -1,3 +1,28 @@
+# Accueil et Mon monde sur un seul écran — 17 novembre 2026 (America/Toronto)
+
+Base : main feb95b7, plus le correctif de test de la PR99 (inclus par fusion).
+Branche claude/accueil-monde-un-ecran, non fusionnée, non déployée. Demande du
+parent : interface simplifiée, un écran à la fois sans défilement, en gardant
+l'accueil illustré et animé des deux sœurs.
+
+Changements, présentation seulement : l'accueil illustré (image et vidéo
+animée inchangées) est réduit pour tenir dans la hauteur de l'écran. Mon monde,
+Français et Maths tiennent sur un écran : « Mes accès » devient un volet fermé
+par défaut, la carte de l'aventure du jour passe à l'horizontale, les tuiles
+sont compactes, vidéos, chansons et coffre sont regroupés sur une ligne, le
+bloc vocal de la chouette est aligné. Style autocollant (contour, ombre dure,
+bouton qui s'enfonce) et entrée d'écran glissée, coupée si le système demande
+moins d'animations. Aucune activité, donnée, route ou règle serveur modifiée.
+
+Validation : mesure Chromium sans défilement vertical ni horizontal pour les
+deux profils sur accueil, Mon monde, Français et Maths en 1024×768, 768×1024,
+1366×768 et 390×844. Tests Node réussis; learning-browser, parent-browser,
+continuous-browser et table-songs-browser réussis en local. Non exécutés ici :
+reader-browser (demande le site en ligne, réseau fermé) et ops/tests/browser.mjs
+(échoue déjà sur main, hors des flux). Aucun essai sur iPad/iPhone réel.
+Prochaine action : revue du parent sur l'aperçu Vercel, puis activités de Liana
+(feuille lignée, dictée, calcul debout, dés) dans une PR séparée.
+
 # Test navigateur aligné sur le bouton de la chouette — 17 novembre 2026 (America/Toronto)
 
 Base : main feb95b7 (PR98 fusionnée par le parent). Après la fusion, le flux
