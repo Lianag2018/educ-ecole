@@ -66,14 +66,17 @@ export function mountGrok(root,context,{beforeStart=()=>{},onParent=()=>{}}={}){
  parent.onclick=()=>{grokLive.stop();onParent();};
  let destroyed=false;const abort=new AbortController();
  const update=message=>{if(!destroyed)status.textContent=message;};grokLive.onState=update;grokLive.available=false;
- grokLive.onAuthRequired=()=>{if(!destroyed){parent.hidden=false;start.disabled=true;}};
+ grokLive.onAuthRequired=()=>{if(!destroyed){parent.hidden=false;needsParent=true;start.disabled=false;}};
  root.querySelector('[data-grok-stop]').onclick=()=>grokLive.stop();
- start.onclick=()=>{beforeStart();grokLive.start(typeof context==='function'?context():context);};
+ let needsParent=false;
+ start.onclick=()=>{if(needsParent){update('Un parent doit autoriser cette tablette une fois. Ouvre « Connexion parent pour la voix ». Microphone fermé.');parent.hidden=false;parent.focus();return;}beforeStart();grokLive.start(typeof context==='function'?context():context);};
  fetch('/api/voice/grok/status',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}',signal:abort.signal})
   .then(r=>{if(!r.ok)throw Error('status');return r.json();}).then(s=>{
-   if(destroyed)return;grokLive.available=s.available===true&&s.authenticated===true;start.disabled=!grokLive.available;
+   if(destroyed)return;grokLive.available=s.available===true&&s.authenticated===true;needsParent=s.authenticated!==true;
+   // Never leave a dead button: without authorization the tap explains what a parent must do.
+   start.disabled=!grokLive.available&&!needsParent;
    parent.hidden=s.authenticated===true;
-   update(grokLive.available?'Voix envoyée à xAI pendant la séance. Touche pour commencer; Arrêter ferme le micro.':s.authenticated!==true?'Connexion parent requise pour parler. Touche « Connexion parent pour la voix ». Microphone fermé.':'La voix Grok est indisponible pour le moment. Tu peux utiliser Écouter. Microphone fermé.');
+   update(grokLive.available?'Voix envoyée à xAI pendant la séance. Touche pour commencer; Arrêter ferme le micro.':s.authenticated!==true?'Un parent doit autoriser cette tablette une fois pour parler (Parents → Appareil familial). Microphone fermé.':'La voix Grok est indisponible pour le moment. Tu peux utiliser Écouter. Microphone fermé.');
   }).catch(()=>{if(!destroyed)update('Voix Grok indisponible. Microphone fermé.');});
  return {destroy(){destroyed=true;abort.abort();grokLive.stop();grokLive.available=false;}};
 }

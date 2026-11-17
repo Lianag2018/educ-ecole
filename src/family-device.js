@@ -4,13 +4,13 @@ function lock(value){busy=value;document.querySelectorAll('[data-device-action]'
 export async function refreshFamilyDevice(){
  const box=current;if(!box)return;
  try{const r=await post('status'),data=await r.json();if(box!==current||!box.isConnected)return;
-  box.querySelector('[data-device-status]').textContent=!r.ok?'L’activation serveur reste à terminer.':data.enabled?'Cet appareil peut sauvegarder les progrès sans reconnecter le parent.':'Cet appareil n’est pas autorisé à sauvegarder sans connexion parent.';
+  box.querySelector('[data-device-status]').textContent=!r.ok?'L’activation serveur reste à terminer.':data.enabled?'Cet appareil peut sauvegarder les progrès et ouvrir la voix de la chouette sans reconnecter le parent.':'Cet appareil n’est pas autorisé à sauvegarder sans connexion parent.';
  }catch{if(box===current&&box.isConnected)box.querySelector('[data-device-status]').textContent='Statut indisponible. Les progrès locaux restent sur cet appareil.';}
 }
 export function mountFamilyDevice({onChange=()=>{}}={}){
  const panel=document.querySelector('.parent-login-slot')||document.querySelector('.parent');if(!panel)return;
  const box=document.createElement('section');box.className='panel';
- box.innerHTML='<h2>Appareil familial</h2><p>Après ta connexion parent, autorise cette tablette à sauvegarder les progrès pendant 90 jours. Les filles n’ont rien à saisir. La sauvegarde des deux enfants démarre automatiquement sur cet appareil, sauf si tu l’as suspendue dans Parents → Progrès.</p><p>L’analyse en ligne des documents et le tuteur demandent toujours une connexion parent. La sauvegarde des réponses ne transmet pas les photos ni les codes d’accès.</p><button data-device-action="enable">Autoriser cet appareil pour 90 jours</button><button data-device-action="revoke">Retirer l’autorisation de cet appareil</button><button data-device-action="all">Retirer toutes les autorisations</button><p data-device-status role="status">Vérification de l’appareil…</p>';
+ box.innerHTML='<h2>Appareil familial</h2><p>Après ta connexion parent, autorise cette tablette pendant 90 jours : elle sauvegarde les progrès et les filles peuvent parler avec la chouette sans te reconnecter (séances courtes, voix envoyée à xAI pendant la séance, plafond de budget inchangé). Les filles n’ont rien à saisir. La sauvegarde des deux enfants démarre automatiquement sur cet appareil, sauf si tu l’as suspendue dans Parents → Progrès.</p><p>L’analyse en ligne des documents demande toujours une connexion parent. La sauvegarde des réponses ne transmet pas les photos ni les codes d’accès.</p><button data-device-action="enable">Autoriser cet appareil pour 90 jours</button><button data-device-action="revoke">Retirer l’autorisation de cet appareil</button><button data-device-action="all">Retirer toutes les autorisations</button><p data-device-status role="status">Vérification de l’appareil…</p>';
  panel.append(box);current=box;lock(busy);refreshFamilyDevice();
  for(const button of box.querySelectorAll('[data-device-action]'))button.addEventListener('click',async()=>{
   if(busy)return;lock(true);const action=button.dataset.deviceAction;
