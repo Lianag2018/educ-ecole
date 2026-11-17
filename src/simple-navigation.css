@@ -120,3 +120,43 @@ body.child-navigation:not(.montage-home) main{padding:8px 12px}
 .simple-subject .popit-art{font-size:11px;letter-spacing:2px;padding:4px}
 .simple-subject .number-art{font-size:15px;padding:4px 6px}
 .simple-subject .school-vocabulary-links a{flex-direction:row;justify-content:flex-start;text-align:left;min-height:48px}
+
+/* Écran d'exercice : la question, le texte et les réponses d'abord, entiers et lisibles.
+   Les outils (voix, studio, aide adulte) passent dessous. */
+.lesson-work>.grok-live,.lesson-work>.oral-word-practice{order:8}
+.lesson-work .audio-status{order:8}
+.lesson-work>.grok-live{padding:0;margin:8px 0 0;gap:8px}
+.lesson-work>.grok-live>button{min-height:44px;padding:6px 14px;font-size:14px;box-shadow:0 3px 0 #24163f}
+.lesson-work>.grok-live>p{font-size:12px}
+.lesson-heading h1{margin:0 0 6px}
+.lesson-heading .question-audio{min-height:44px;padding:6px 14px;font-size:15px}
+.game-lesson .lesson-work .choices{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px;margin:10px 0}
+.game-lesson .lesson-work .oral-choice>[data-choice]{white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none;justify-content:flex-start;text-align:left;
+  min-height:58px;padding:8px 14px;font-size:clamp(18px,2.1vw,24px);font-weight:700;line-height:1.2;color:#24163f;background:#fff;border:3px solid #24163f;border-radius:18px;box-shadow:0 5px 0 #24163f;transition:transform .12s,box-shadow .12s}
+.game-lesson .lesson-work .oral-choice>[data-choice-audio]{flex:0 0 54px;min-height:58px;padding:0;border:3px solid #24163f;border-radius:18px;background:#d8f0ec;box-shadow:0 5px 0 #24163f}
+.game-lesson .lesson-work .oral-choice>button:active{transform:translateY(4px);box-shadow:0 1px 0 #24163f}
+.game-lesson .lesson-work .oral-choice>[data-choice][disabled]{opacity:.7}
+.game-lesson .lesson-work .choice-marker{flex:none}
+.lesson-work>.help{min-height:44px}
+.lesson-work>.reading-options,.lesson-work>[data-reading-focus],.lesson-work>.lesson-popit-helper{order:6}
+.lesson-work .lesson-text{margin:6px 0}
+/* Avec le brouillon ouvert, la colonne d'exercice est étroite : on serre le décor, pas les réponses. */
+.game-lesson .writing-workspace{height:calc(100dvh - 228px);min-height:420px}
+.game-lesson .writing-workspace.board-closed{height:auto;min-height:0}
+.game-lesson .lesson-work .oral-choice>[data-choice-audio]{display:grid;place-items:center;font-size:22px;line-height:1}
+.writing-workspace:not(.board-closed) .lesson-heading h1{font-size:clamp(19px,2.2vw,24px);line-height:1.2}
+.writing-workspace:not(.board-closed) .lesson-text .reading-legend{display:none}
+.writing-workspace:not(.board-closed) .lesson-text .reading-coach{font-size:12px;line-height:1.3;padding:4px 10px;margin:4px 0 0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+.writing-workspace:not(.board-closed) .syllable-strip{font-size:1.5rem;gap:6px;margin:2px}
+.writing-workspace:not(.board-closed) .syllable-strip button,.writing-workspace:not(.board-closed) .syllable-strip span{min-height:52px;padding:2px 12px}
+.writing-workspace:not(.board-closed) .play-scene{padding:8px 10px}
+.writing-workspace:not(.board-closed) .scene-equation{font-size:clamp(26px,3vw,34px);margin:2px 0}
+.writing-workspace:not(.board-closed) .scene-instruction{margin:0;font-size:15px}
+.writing-workspace:not(.board-closed) .choices{gap:8px;margin:8px 0}
+.game-lesson .writing-workspace:not(.board-closed) .oral-choice>[data-choice],.game-lesson .writing-workspace:not(.board-closed) .oral-choice>[data-choice-audio]{min-height:50px;box-shadow:0 4px 0 #24163f}
+.writing-workspace:not(.board-closed) .play-scene{padding:8px 10px 30px}
+.writing-workspace:not(.board-closed) .pearl-basket{min-height:64px;padding:4px!important}
+.writing-workspace:not(.board-closed) .pearl-basket svg{width:20px;height:20px}
+.writing-workspace:not(.board-closed) .pearl-groups{gap:8px}
+.game-lesson .writing-workspace:not(.board-closed) .lesson-text .guided-text{font-size:clamp(20px,2.2vw,26px);line-height:1.55;padding:10px 14px}
+.writing-workspace:not(.board-closed) .play-scene{min-height:0}
