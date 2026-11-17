@@ -1,3 +1,30 @@
+# Chouette sans reconnexion parent — 17 novembre 2026 (America/Toronto)
+
+Base : main 3a87000. Branche claude/chouette-tablette-familiale, non fusionnée,
+non déployée. Le parent signale que « Parler avec la chouette » ne réagit pas.
+Cause observée dans le code : le bouton restait désactivé, sans action, tant que
+le statut ne renvoyait pas à la fois service prêt et session parent récente.
+L'état réel du service en production n'a pas pu être lu depuis cette session
+(réseau fermé vers le site) : configuration Grok à vérifier après déploiement.
+
+Décision du parent (17 novembre) : les filles parlent à la chouette sans
+connexion parent à chaque fois, sur la tablette familiale autorisée 90 jours.
+Changements : les routes vocales Grok acceptent l'appareil familial enregistré
+en plus de la session parent; prêt-à-servir, budget, relais et durée de deux
+minutes inchangés; le statut ne révèle pas la configuration à l'appareil. Le
+bouton n'est plus muet : sans autorisation, il explique quoi faire et montre la
+connexion parent. Texte de l'autorisation d'appareil mis à jour pour annoncer
+la voix. Consignes de la chouette : rester dans les études; hors sujet, une
+petite blague adaptée puis retour au travail; sujet sensible, renvoi au parent.
+
+Validation : tests Node ciblés Grok réussis, dont appareil accepté, invité et
+requête non vérifiée refusés, indicateurs de préparation toujours bloquants.
+Aucun essai réel de micro, de voix Grok ni d'appareil iPad/iPhone. Les
+autorisations d'appareil données avant ce changement couvrent maintenant aussi
+la voix : le parent peut les retirer dans Parents → Appareil familial.
+Prochaine action : fusion par PR, puis vérifier le statut vocal en production
+et un essai réel sur la tablette.
+
 # Démarrage du microphone Grok — 6 novembre 2026 (America/Toronto)
 
 Base distante : main 9b2d10c, PR96. Le parent signale un échec d’ouverture du

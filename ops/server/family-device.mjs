@@ -5,7 +5,8 @@ const readCookie=(req,name)=>(req.headers.cookie||'').split(';').map(s=>s.trim()
 export const digest=value=>createHash('sha256').update(value).digest('hex');
 
 // A family device is NOT a parent session. Its authority is limited at each
-// caller to structured progress and already analysed plans; never paid imports.
+// caller to structured progress, already analysed plans and short budgeted
+// voice sessions with the owl; never paid document imports.
 export function familyDevice({sb,parentId,origin}){
  const readToken=req=>{const value=readCookie(req,'educ_device');return /^[A-Za-z0-9_-]{43}$/.test(value||'')?value:null;};
  return {

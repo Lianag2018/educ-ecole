@@ -77,3 +77,26 @@ test('startup timeout stops a permission granted late without issuing a session'
  permission.resolve({getTracks:()=>[{stop:()=>stopped++}]});await pending;assert.equal(requests,0);assert.equal(stopped,1);assert.match(states.at(-1),/pris trop de temps/);
 });
 
+
+test('a registered family device opens a voice session without a fresh parent login',async()=>{
+ const device={id:'test-parent',role:'family_device',csrfVerified:true};
+ const ready={enabled:true,parentConsent:true,childDataEligibilityReviewed:true,endpointRetentionReviewed:true,pricing:{fxPpm:2000000,bufferPpm:500000,feeMicros:10000,pricingReviewedAt:'2026-11-06',validUntil:'2099-01-01'},otherCostsMicros:1000};
+ let reserved=0,provider=0;
+ const make=(who,config)=>createGrokEndpoints({auth:{authenticateParent:async()=>null,authenticateLearner:async()=>who},apiKey:'test-only',relaySecret:'x'.repeat(40),config,ledger:{durable:true,reserve:async()=>{reserved++;}},profiles:{ownedBy:async(id,slot)=>id==='test-parent'?{stage:'3e année'}:null},fetcher:async()=>{provider++;return {ok:false};}});
+ // Guests and a device with an unverified request stay locked out.
+ for(const who of [null,{...device,csrfVerified:false},{...device,role:'other'}]){const r=make(who,ready);assert.equal((await r({method:'POST',path:'/api/voice/grok/status'})).body.authenticated,false);assert.equal((await r({method:'POST',path:'/api/voice/grok/session',body:{profileId:'p2',mode:'owl'}})).status,401);}
+ assert.equal(reserved,0);assert.equal(provider,0);
+ // The device is authenticated but never sees the configuration details.
+ const status=(await make(device,ready)({method:'POST',path:'/api/voice/grok/status'})).body;
+ assert.equal(status.authenticated,true);assert.equal('missing' in status,false);
+ // Readiness flags still gate the device: nothing is reserved while setup is incomplete.
+ assert.equal((await make(device,{...ready,parentConsent:false})({method:'POST',path:'/api/voice/grok/session',body:{profileId:'p2',mode:'owl'}})).status,503);
+ assert.equal(reserved,0);
+ // Fully configured: the device reaches the budget reservation and the provider call.
+ const open=await make(device,ready)({method:'POST',path:'/api/voice/grok/session',body:{profileId:'p2',mode:'owl'}});
+ assert.equal(open.body.code,'grok_provider_unavailable');assert.equal(reserved,1);assert.equal(provider,1);
+});
+test('owl instructions keep the conversation inside the studies',async()=>{
+ const {STUDY_FOCUS}=await import('../server/grok-live.mjs');
+ assert.match(STUDY_FOCUS,/études/);assert.match(STUDY_FOCUS,/blague/);assert.match(STUDY_FOCUS,/parent/);
+});
