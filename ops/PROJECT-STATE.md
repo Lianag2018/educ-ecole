@@ -1,3 +1,18 @@
+# Séries plus longues et banque de 3e année — 18 novembre 2026 (America/Toronto)
+
+Branche claude/plus-de-questions (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : « tu as seulement 5 exercices », « il faut alimenter plus que ça ».
+Livré : une série compte 8 questions en 1re année et 10 en 3e année (au lieu de
+5 à 6); nouvelle banque originale de 3e année (src/grade3-bank.js, 38 cartes :
+vocabulaire, sons, liaisons, intonation, compréhension) — Liana n'avait que 2
+cartes par compétence hors syllabes, elle passait donc surtout par des syllabes
+trop faciles. Aucune réponse n'est écrite dans le texte de la carte (test).
+Preuves : 579 tests unitaires OK; 4 suites navigateur OK (continuous mis à jour :
+séries de 10 pour Liana).
+En attente : la 1re année a peu de cartes hors syllabes/sons (3 par compétence);
+les séries se complètent avec les syllabes et les sons. Pas testé sur appareil réel.
+Prochaine action : relire le diff, fusionner, vérifier la version déployée.
+
 # Liana : nombres jusqu'à 9 999 et lecture à voix haute — 18 novembre 2026 (America/Toronto)
 
 Branche claude/liana-9999 (cut de main), PR à ouvrir; non fusionnée, non déployée.
