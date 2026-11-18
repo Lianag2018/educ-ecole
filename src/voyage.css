@@ -93,3 +93,6 @@ html[data-voyage-paused] .popit-advanced .full-pop-bubble{transition:none}
 .picture-number-task{left:32%;top:83%;width:22%;height:14%}
 .picture-number-listen{left:54%;top:86%;width:8%;height:10%}
 .picture-number-mic{left:62%;top:86%;width:9%;height:10%}
+
+/* L'accueil illustré et animé tient dans un seul écran, sans défilement. */
+.original-welcome.welcome-direct .choose-art{max-width:min(1400px,calc((100svh - 84px)*4/3))}

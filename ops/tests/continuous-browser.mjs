@@ -69,6 +69,15 @@ try{
  await cdp('Emulation.setDeviceMetricsOverride',{width:1180,height:820,deviceScaleFactor:1,mobile:true});
  assert.equal(await run("document.body.classList.contains('reading-page')"),true);
  assert.equal(await run("getComputedStyle(document.querySelector('.lesson-companion')).display"),'none');
+ // Mode enfant : plus de boutons d'écoute; toucher le texte relance la lecture, toucher la question la relit.
+ assert.equal(await run("getComputedStyle(document.querySelector('.reading-options')).display"),'none');
+ assert.equal(await run("getComputedStyle(document.querySelector('.question-audio')).display"),'none');
+ await run("window.__speaks=0;const synth=window.speechSynthesis;if(synth){const real=synth.speak.bind(synth);synth.speak=u=>{window.__speaks++;try{real(u);}catch{}};}");
+ await run("document.querySelector('.lesson-text').click()");
+ for(let i=0;i<40&&!(await run('window.__speaks>0'));i++)await sleep(100);
+ assert.equal(await run('window.__speaks>0'),true,'touching the text starts the reading');
+ // La clé Adulte réaffiche la ligne d'écoute complète (Écouter, Pause).
+ await run("document.querySelector('[data-adult-key]').dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}))");
  assert.equal(await run("document.querySelector('[data-action=reading-pause]').getBoundingClientRect().height>=44"),true);
  const readingChecks=await run(`(async()=>{
   const {guidedMarkup,updateReadingCue}=await import('/src/guided-reading.js');

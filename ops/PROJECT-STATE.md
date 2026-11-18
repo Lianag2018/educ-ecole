@@ -1,3 +1,143 @@
+# Toucher le texte pour écouter — 18 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du
+parent : plus de défilement, relire en touchant le texte plutôt qu'un bouton,
+retirer les autorisations parent au-dessus du texte, consignes plus compactes.
+Mode enfant : la ligne Écouter/Pause/Réécouter et le bouton « Écouter la
+question » disparaissent; toucher le texte relance la lecture (qui compte comme
+une aide, comme le bouton Écouter), toucher la question la relit; une mention
+« Touche ici pour écouter » et un haut-parleur sur la question l'annoncent.
+La chouette pose la question (consigne sur une ligne avec la chouette); l'image
+et le titre de l'histoire tiennent sur une ligne. Les autorisations parent de la
+voix (« Je lis avec la maîtresse », « Connexion parent ») restent masquées dans
+l'exercice. Clé Adulte : réaffiche Écouter et Pause. Mesure Chromium, deux
+profils, 1024×768, 1600×960 et 768×1024 : tous les types d'exercice tiennent
+sans défilement. Tests Node (562) et quatre suites navigateur locales réussis;
+continuous-browser vérifie le toucher sur le texte. Non vérifié : écoute réelle
+sur la tablette.
+
+# Voix douce et naturelle, sans curseur de vitesse — 18 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du
+parent : enlever le contrôle de vitesse et mettre une voix douce et naturelle.
+Le curseur (0,6 à 1,5 ×) est retiré partout (lecture, nombres). La vitesse
+enregistrée par un appareil (par exemple 1,1 ×) n'est plus appliquée. La voix
+préenregistrée garde son rythme d'origine (générée à 0,85 avec consigne de voix
+douce québécoise); une voix système de repli lit à 0,92 du rythme natif. Le choix
+de la voix système préfère le français canadien, les voix « Natural »/« Online »
+et les voix douces connues (Sylvie, Amélie, Denise, Éloïse), et écarte les voix
+masculines ou compactes; le choix du parent reste prioritaire. Non modifié :
+les 2 102 enregistrements (les refaire demande la clé OpenAI et un budget),
+le choix de voix manuel dans l'espace adulte.
+
+Validation : tests Node (562) dont choix de voix et vitesse par défaut; quatre
+suites navigateur locales réussies; reader-browser adapté (plus de curseur).
+Non vérifié : écoute réelle sur la tablette, voix installées sur l'appareil.
+
+# Mode enfant simple — 18 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Le parent
+rapporte qu'une enfant de 6 ans a fermé la tablette après cinq minutes : trop
+compliqué, trop de menus sans rapport; l'autre a 8 ans. Mesure Chromium
+1024×768, première version en ligne (feb95b7) : monde de l'enfant 4 boutons
+visibles avec défilement, première question 15–17 boutons et ~140 mots avec
+défilement. Première version de PR100 : tout tenait sur un écran mais avec 15–16
+boutons (erreur : on avait tassé au lieu d'enlever).
+
+Changements : un mode enfant, actif par défaut sur tous les écrans enfants
+(classe body.kid-simple), qui ne montre que l'essentiel : monde = « Jouer ! »,
+Français, Maths (et la chouette seulement si elle peut vraiment parler);
+matières = pages de quatre grandes tuiles avec « Encore › »; exercice = question,
+une écoute, grandes réponses (texte à gauche et réponses à droite en tablette
+horizontale); le reste (codes d'accès, voix, vitesse, studio, brouillon,
+« Avec un adulte », réglages) est masqué. Rien n'est supprimé : les cartes et
+fiches (Défi vitesse, Mes tables, fiches de nombres, liens Météormath/MaZone,
+chansons, Pop-it, mini-défis, voyage) restent atteignables par les pages
+« Encore ». Une clé « Adulte » (appui long de deux secondes, en haut à droite)
+réaffiche l'interface complète jusqu'au rechargement. Les étoiles et le plan de
+la semaine restent dans le petit bouton d'étoiles du monde.
+
+Mesures après changement (deux profils) : pages de matière 6 boutons et ~20 mots
+sans défilement; monde 5 boutons et 14 mots; première question 11–14 boutons et
+~30 mots; « Les nombres » 5 boutons et ~25 mots (avant 10 boutons, 158 mots).
+Encore à simplifier : carte du voyage, mini-défis, listes de chansons, bonds de
+nombres, jardin des sons (défilent de 60 à 1 000 px). Tests Node, learning-,
+parent-, continuous- et table-songs-browser réussis; reader-browser adapté
+(vérifie le mode enfant puis ouvre la clé Adulte) et à confirmer par le flux de
+la PR. Aucun essai sur iPad/iPhone réel ni avec une vraie enfant.
+
+# Écran d'exercice lisible et séries d'au moins cinq questions — 17 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Le parent
+signale sur l'aperçu que les réponses sont illisibles pour une enfant (mots
+coupés en morceaux, haut-parleurs séparés) et qu'une série ne compte que deux
+questions.
+
+Causes observées : le bloc vocal et les commandes d'écoute passaient avant le
+texte et repoussaient les réponses sous le bas de l'écran; dans la colonne
+étroite à côté du brouillon, les réponses étaient rangées trois par ligne et
+les mots coupés n'importe où. « Mes mots » de 3e année ne contient que deux
+cartes.
+
+Changements : ordre question, texte, réponses, puis outils (écoute, voix,
+studio, aide adulte). Une réponse par ligne quand la colonne est étroite, mots
+jamais coupés, haut-parleur accolé à sa réponse, style autocollant. Décor
+resserré quand le brouillon est ouvert; le brouillon reste ouvert par défaut.
+Dans app.js, une série lancée par begin() est complétée jusqu'à cinq questions
+avec des cartes proches du même niveau (même habileté d'abord) pour Français,
+Lecture et Maths; les missions du plan scolaire, le voyage, l'univers social
+et l'aventure du jour (trois jeux) ne sont pas modifiés.
+
+Validation Chromium, deux profils, 1024×768, 1600×960 et 768×1024 : aucun mot
+coupé; réponses visibles sans défilement pour mots, syllabes, calculs de Liana
+et aventure du jour; « Mes mots » de Liana passe de 2 à 5 questions. Limite
+connue : pour les histoires, et pour les calculs illustrés de Mely-Ann en
+1024×768, il faut encore faire défiler la colonne d'exercice pour atteindre
+les réponses. Tests Node, learning-browser, parent-browser, continuous-browser,
+table-songs-browser et build réussis en local; reader-browser à confirmer par
+le flux de la PR. Aucun essai iPad/iPhone réel.
+
+# Accueil et Mon monde sur un seul écran — 17 novembre 2026 (America/Toronto)
+
+Base : main feb95b7, plus le correctif de test de la PR99 (inclus par fusion).
+Branche claude/accueil-monde-un-ecran, non fusionnée, non déployée. Demande du
+parent : interface simplifiée, un écran à la fois sans défilement, en gardant
+l'accueil illustré et animé des deux sœurs.
+
+Changements, présentation seulement : l'accueil illustré (image et vidéo
+animée inchangées) est réduit pour tenir dans la hauteur de l'écran. Mon monde,
+Français et Maths tiennent sur un écran : « Mes accès » devient un volet fermé
+par défaut, la carte de l'aventure du jour passe à l'horizontale, les tuiles
+sont compactes, vidéos, chansons et coffre sont regroupés sur une ligne, le
+bloc vocal de la chouette est aligné. Style autocollant (contour, ombre dure,
+bouton qui s'enfonce) et entrée d'écran glissée, coupée si le système demande
+moins d'animations. Aucune activité, donnée, route ou règle serveur modifiée.
+
+Validation : mesure Chromium sans défilement vertical ni horizontal pour les
+deux profils sur accueil, Mon monde, Français et Maths en 1024×768, 768×1024,
+1366×768 et 390×844. Tests Node réussis; learning-browser, parent-browser,
+continuous-browser et table-songs-browser réussis en local. Non exécutés ici :
+reader-browser (demande le site en ligne, réseau fermé) et ops/tests/browser.mjs
+(échoue déjà sur main, hors des flux). Aucun essai sur iPad/iPhone réel.
+Prochaine action : revue du parent sur l'aperçu Vercel, puis activités de Liana
+(feuille lignée, dictée, calcul debout, dés) dans une PR séparée.
+
+# Test navigateur aligné sur le bouton de la chouette — 17 novembre 2026 (America/Toronto)
+
+Base : main feb95b7 (PR98 fusionnée par le parent). Après la fusion, le flux
+« Évolution Educ École » échoue à l'étape learning-browser : ce test attendait
+encore l'ancien texte « Connexion parent requise » et un bouton désactivé.
+Le comportement livré par PR98 est voulu; seul le test était en retard. Les
+tests unitaires et le flux « Vérifier Éduc École — deux profils » réussissent
+sur feb95b7; Vercel signale le déploiement terminé pour ce commit.
+
+Correctif sur la branche claude/chouette-test-navigateur : le test vérifie le
+nouveau texte, le bouton actif sans autorisation, l'affichage de la connexion
+parent au toucher, et qu'après expiration un nouveau toucher n'ouvre ni micro
+ni séance. Validation locale : learning-browser, parent-browser et
+continuous-browser réussis sous Chromium, tests Node réussis. Toujours non
+vérifié : micro réel, voix Grok réelle, iPad/iPhone, statut vocal en production.
+
 # Chouette sans reconnexion parent — 17 novembre 2026 (America/Toronto)
 
 Base : main 3a87000. Branche claude/chouette-tablette-familiale, non fusionnée,

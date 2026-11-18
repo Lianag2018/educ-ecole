@@ -55,23 +55,39 @@ export function childHome(p,day){
  <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
  <div class="simple-doors" aria-label="Mes activités">
- <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Continuer mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
+ <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Continuer mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
  ${tile('Français',advanced(p)?'Mes mots et mes histoires':'Les sons et les mots','<span class="book-art">Aa</span>','data-action="french"')}
  ${tile('Maths','Les nombres et les calculs','<span class="number-art">1 2<br>3 4</span>','data-action="maths"')}
- </div><div class="video-entry"><button data-action="videos-prof">🎸 Un prof et sa guitare</button><button data-action="videos-lucas">🎓 Maître Lucas</button></div><button data-action="songs-world">🎵 Chansons · Temps, nature et émotions</button><details class="simple-treasure"><summary>✦ ${travelPoints(p)} étoiles · Mon coffre</summary><p>${s.reward?'Tes ailes de la semaine sont dans ton coffre!':'Chaque petit effort fait avancer ton voyage.'}</p>${s.tasks.length?`<p>${s.done} / ${s.tasks.length} étapes du plan confirmées avec ton parent.</p>`:''}<button data-action="adventure">La carte de notre voyage</button><button data-action="school-plan">Mes étapes de la semaine</button></details>
+ </div><div class="video-entry simple-chips"><button data-action="videos-prof">🎸 Un prof et sa guitare</button><button data-action="videos-lucas">🎓 Maître Lucas</button><button data-action="songs-world">🎵 Chansons</button><details class="simple-treasure"><summary>✦ ${travelPoints(p)} étoiles · Mon coffre</summary><p>${s.reward?'Tes ailes de la semaine sont dans ton coffre!':'Chaque petit effort fait avancer ton voyage.'}</p>${s.tasks.length?`<p>${s.done} / ${s.tasks.length} étapes du plan confirmées avec ton parent.</p>`:''}<button data-action="adventure">La carte de notre voyage</button><button data-action="school-plan">Mes étapes de la semaine</button></details></div>
  </section>`;
 }
-export function subjectHome(p,subject){
+export function subjectHome(p,subject,page=0){
  const older=advanced(p),french=subject==='french';
- const tiles=french?[tile('Vidéos et petits défis','Maître Lucas · Prof à la guitare','🎬','data-action="videos-french"'),tile('Le français en chansons','Écouter, jouer et comprendre','🎵','data-action="songs-french"'),
-  ...(!older?[tile('Je lis de petites histoires','Lire et comprendre','📖','data-scene="reading"')]:[]),
-  tile(older?'Mes mots':'Les syllabes',older?'Vocabulaire et orthographe':'Des mots de deux ou trois syllabes','🦋',older?'data-action="words"':'data-scene="syllables"'),
-  ...(older?[tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"')]:[tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"')]),
-  ...(older?[tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"')]:[])
- ]:[tile('Vidéos et petits défis','Calculs et chansons expliqués','🎬','data-action="videos-maths"'),tile('Les maths en chansons','Calculs, mesures et fractions','🎵','data-action="songs-maths"'),tile('Mes bonds de nombres','De 2, de 5 et de 10 · jusqu’à 100','🐸','data-action="skip-counting"'),...(older?[tile('Tables en chansons','Écouter, compter et jouer','🏝️ 🎵','data-action="table-songs"')]:[]),tile('Défi vitesse','Cartes et tableaux · chrono adapté','🚀','data-action="speed-math"'),tile('Les nombres',older?'Compter jusqu’à 1 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),tile('Mon Pop-it','Appuyer et chercher','<span class="popit-art">● ● ●<br>● ● ●<br>● ● ●</span>','data-popit')];
- return `<section class="simple-subject">${heading(p,french?'Français':'Maths')}<div class="simple-grid">${tiles.join('')}</div>
- ${french?schoolVocabularyLinks(p,{installation:false}):''}
- <details class="simple-more"><summary>${french?'Encore des découvertes':'D’autres jeux de maths'}</summary><div class="simple-extra">
- ${french?`${older?'<button data-action="squishy">Mon archipel Squishy</button>':'<button data-action="sound-garden">Toutes mes cartes de sons</button>'}<button data-action="adventure">Nos histoires de voyage</button><button data-subject="3">Découvrir le monde</button>`:`${older?'<button data-action="weekly">Mes tables</button>':'<button data-action="mini-garden">Mes mini-défis</button>'}${schoolMathLinks(p)}`}
- </div></details></section>`;
+ // Pages de quatre grandes tuiles pour l'enfant : rien n'est retiré, tout reste atteignable avec « Encore ».
+ // L'adulte voit toutes les pages d'un coup.
+ const groups=french?[
+  [...(!older?[tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"'),tile('Les syllabes','Des mots de deux ou trois syllabes','🦋','data-scene="syllables"'),tile('Je lis de petites histoires','Lire et comprendre','📖','data-scene="reading"')]
+          :[tile('Mes mots','Vocabulaire et orthographe','🦋','data-action="words"'),tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"'),tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"')]),
+   tile('Vidéos et petits défis','Maître Lucas · Prof à la guitare','🎬','data-action="videos-french"')],
+  [tile('Le français en chansons','Écouter, jouer et comprendre','🎵','data-action="songs-french"'),
+   older?tile('Mon archipel Squishy','12 compagnons · 3 chemins','🫧','data-action="squishy"'):tile('Toutes mes cartes de sons','Écouter et découvrir','🔤','data-action="sound-garden"'),
+   tile('Nos histoires de voyage','La carte de notre voyage','🏝️','data-action="adventure"'),
+   tile('Découvrir le monde','Mon école et mon quartier','🌍','data-subject="3"')]
+ ]:[
+  [tile('Les nombres',older?'Compter jusqu’à 1 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
+   tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),
+   tile('Défi vitesse','Cartes et tableaux · chrono adapté','🚀','data-action="speed-math"'),
+   tile('Vidéos et petits défis','Calculs et chansons expliqués','🎬','data-action="videos-maths"')],
+  [tile('Mes bonds de nombres','De 2, de 5 et de 10 · jusqu’à 100','🐸','data-action="skip-counting"'),
+   older?tile('Mes tables','Tables et opérations de la semaine','🔢','data-action="weekly"'):tile('Mes mini-défis','Petits jeux de maths','🌻','data-action="mini-garden"'),
+   tile('Les maths en chansons','Calculs, mesures et fractions','🎵','data-action="songs-maths"'),
+   ...(older?[tile('Tables en chansons','Écouter, compter et jouer','🏝️ 🎵','data-action="table-songs"')]:[tile('Mon Pop-it','Appuyer et chercher','<span class="popit-art">● ● ●<br>● ● ●<br>● ● ●</span>','data-popit')])],
+  ...(older?[[tile('Mon Pop-it','Appuyer et chercher','<span class="popit-art">● ● ●<br>● ● ●<br>● ● ●</span>','data-popit')]]:[])
+ ];
+ const links=french?schoolVocabularyLinks(p,{installation:false}):schoolMathLinks(p);
+ const pages=groups.map(g=>`<div class="simple-grid">${g.join('')}</div>`);
+ if(links)pages.push(links);
+ const current=((page%pages.length)+pages.length)%pages.length;
+ return `<section class="simple-subject">${heading(p,french?'Français':'Maths')}${pages.map((html,i)=>`<div class="kid-page${i===current?' is-current':''}">${html}</div>`).join('')}
+ ${pages.length>1?`<button type="button" class="kid-more" data-action="subject-more" aria-label="${current===pages.length-1?'Revenir au début':'Voir d’autres jeux'}">${current===pages.length-1?'‹ Début':'Encore ›'}</button>`:''}</section>`;
 }

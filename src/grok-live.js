@@ -69,10 +69,10 @@ export function mountGrok(root,context,{beforeStart=()=>{},onParent=()=>{}}={}){
  grokLive.onAuthRequired=()=>{if(!destroyed){parent.hidden=false;needsParent=true;start.disabled=false;}};
  root.querySelector('[data-grok-stop]').onclick=()=>grokLive.stop();
  let needsParent=false;
- start.onclick=()=>{if(needsParent){update('Un parent doit autoriser cette tablette une fois. Ouvre « Connexion parent pour la voix ». Microphone fermé.');parent.hidden=false;parent.focus();return;}beforeStart();grokLive.start(typeof context==='function'?context():context);};
+ start.onclick=()=>{root.dataset.grokTouched='yes';if(needsParent){update('Un parent doit autoriser cette tablette une fois. Ouvre « Connexion parent pour la voix ». Microphone fermé.');parent.hidden=false;parent.focus();return;}beforeStart();grokLive.start(typeof context==='function'?context():context);};
  fetch('/api/voice/grok/status',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}',signal:abort.signal})
   .then(r=>{if(!r.ok)throw Error('status');return r.json();}).then(s=>{
-   if(destroyed)return;grokLive.available=s.available===true&&s.authenticated===true;needsParent=s.authenticated!==true;
+   if(destroyed)return;grokLive.available=s.available===true&&s.authenticated===true;needsParent=s.authenticated!==true;root.dataset.grokReady=grokLive.available?'yes':'no';
    // Never leave a dead button: without authorization the tap explains what a parent must do.
    start.disabled=!grokLive.available&&!needsParent;
    parent.hidden=s.authenticated===true;

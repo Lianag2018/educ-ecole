@@ -53,3 +53,276 @@ body.child-navigation .lesson-companion p{display:none}
 @media(prefers-reduced-motion:reduce){.simple-world *, .simple-subject *{animation:none!important;transition:none!important}}
 
 .simple-voice-help{max-width:1050px;margin:12px auto;padding:12px 20px;border:1px solid #d9d5c7;border-radius:18px;background:#fffaf0}.simple-voice-help summary{min-height:44px;align-content:center;cursor:pointer}.lesson-popit-helper{min-height:48px;border-radius:18px;margin:10px 0}
+
+/* Un écran à la fois, sans défilement sur tablette. Autocollants : contour encre,
+   ombre dure, bouton qui s'enfonce. Les illustrations existantes sont conservées. */
+body.child-navigation:not(.montage-home) main{padding:8px 12px}
+.school-access-bar{margin:0 auto 8px;padding:4px 16px;border:3px solid #24163f;border-radius:20px;box-shadow:0 4px 0 #24163f}
+.school-access-bar>summary{min-height:44px;align-content:center;cursor:pointer;font-weight:700;font-size:16px}
+.school-access-bar[open]{padding-bottom:14px}
+.simple-world,.simple-subject{padding:6px 18px 10px;display:flex;flex-direction:column;gap:12px;animation:simple-in .35s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes simple-in{from{opacity:0;transform:translateX(28px)}}
+.simple-heading{margin:0;gap:14px}
+.simple-heading .portrait{width:64px;height:64px;border:3px solid #24163f;box-shadow:0 4px 0 #24163f}
+.simple-heading h1{margin:0;color:#24163f}
+.simple-top button,.simple-chips>button,.simple-treasure>summary{min-height:48px;padding:8px 16px;border:3px solid #24163f;border-radius:999px;background:#fff;color:#24163f;font-size:15px;font-weight:700;box-shadow:0 4px 0 #24163f;transition:transform .12s,box-shadow .12s}
+.simple-doors{gap:14px}
+.daily-door{display:flex;align-items:stretch;border:3px solid #24163f;border-radius:26px;background:#ffc93c;color:#24163f;box-shadow:0 6px 0 #24163f;transition:transform .12s,box-shadow .12s}
+.daily-door img{width:44%;height:clamp(120px,24svh,210px);object-position:50% 30%;border-right:3px solid #24163f}
+.daily-copy{flex:1;min-width:0;justify-content:center;gap:8px;padding:12px 20px;background:none}
+.daily-copy strong{color:#24163f;font-size:clamp(22px,3.4vw,32px)}
+.daily-copy small{color:#4a3b66;font-weight:700}
+.daily-copy>span{color:#24163f;background:#fff;border:3px solid #24163f;border-radius:999px;padding:4px 16px;font-size:18px}
+.simple-tile{min-height:96px;padding:12px 18px;gap:14px;border:3px solid #24163f;border-radius:24px;box-shadow:0 6px 0 #24163f;transition:transform .12s,box-shadow .12s}
+.simple-tile[data-action=maths],.simple-subject .simple-tile:nth-child(2){box-shadow:0 6px 0 #24163f}
+.simple-tile strong{font-size:clamp(20px,2.6vw,26px)}
+.simple-tile small{font-size:14px;margin-top:3px}
+.simple-art{font-size:34px;flex:0 0 58px;min-height:58px}
+.simple-art svg{width:58px;height:58px}
+.book-art{font-size:26px;padding:8px 6px}.number-art{font-size:18px;padding:6px}.popit-art{font-size:15px;padding:5px}
+.simple-grid{gap:12px}
+.simple-grid .simple-tile{flex-direction:row;align-items:center;min-height:88px}
+.simple-grid .simple-arrow{position:static;margin-left:auto}
+.simple-chips{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;position:relative}
+.simple-treasure{margin:0;padding:0;border:0;background:none;border-radius:0}
+.simple-treasure>summary{display:flex;align-items:center;background:#ffc93c;list-style:none}
+.simple-treasure>summary::-webkit-details-marker{display:none}
+.simple-treasure[open]{position:absolute;right:0;bottom:0;z-index:5;max-width:min(420px,100%);padding:12px 16px;background:#fffaf0;border:3px solid #24163f;border-radius:22px;box-shadow:0 6px 0 #24163f}
+.simple-treasure[open]>summary{margin-bottom:8px}
+.simple-more{margin:0;padding:6px 16px;border:3px solid #24163f;border-radius:20px}
+.simple-subject .school-vocabulary-links{margin-top:0}
+.simple-world button:active,.simple-tile:active,.daily-door:active,.simple-chips>button:active{transform:translateY(5px);box-shadow:0 1px 0 #24163f}
+.grok-live{max-width:1100px;margin:0 auto;padding:0 18px 8px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grok-live>button{min-height:48px;padding:8px 18px;border:3px solid #24163f;border-radius:999px;background:#fff;color:#24163f;font-size:16px;font-weight:700;box-shadow:0 4px 0 #24163f}
+.grok-live>[data-grok-start]{background:#e2366f;color:#fff}
+.grok-live>button[disabled]{opacity:.55}
+.grok-live>p{flex:1 1 220px;margin:0;font-size:14px;line-height:1.3}
+@media(max-width:650px){.simple-world,.simple-subject{padding:4px 8px 8px;gap:10px}.daily-door{flex-direction:column}.daily-door img{width:100%;height:112px;border-right:0;border-bottom:3px solid #24163f}.simple-tile{flex-direction:row;align-items:center;min-height:76px;padding:10px 14px}.simple-grid .simple-tile{min-height:72px}.simple-art{flex:0 0 46px;min-height:46px;font-size:28px}.simple-top button,.simple-chips>button,.simple-treasure>summary{min-height:44px;padding:6px 12px;font-size:13px}.grok-live>p{font-size:12px}}
+
+/* Écrans de matière : tuiles compactes, tout visible d'un coup. */
+.child-toolbar{margin:0 0 6px}
+.simple-subject .simple-grid .simple-tile{min-height:72px;padding:8px 14px;gap:12px;border-radius:20px;box-shadow:0 5px 0 #24163f}
+.simple-subject .simple-tile strong{font-size:clamp(17px,2vw,21px);line-height:1.15}
+.simple-subject .simple-tile small{font-size:13px;line-height:1.25;margin-top:2px}
+.simple-subject .simple-art{flex:0 0 44px;min-height:44px;font-size:28px;line-height:1}
+.simple-subject .simple-art svg{width:44px;height:44px}
+.simple-subject .school-vocabulary-links{margin:0;padding:8px 14px;border:3px solid #24163f;border-radius:20px}
+.simple-subject .school-vocabulary-links h2{font-size:16px;margin:0 0 6px}
+.simple-subject .school-vocabulary-links a{min-height:52px;gap:12px;padding:6px 12px}
+.simple-subject .school-vocabulary-links a>span{font-size:24px}
+.simple-subject .school-vocabulary-links details summary{min-height:36px;align-content:center;font-size:14px}
+.simple-more>summary{min-height:40px;font-size:16px}
+@media(max-width:650px){.simple-grid{grid-template-columns:1fr 1fr;gap:8px}.simple-subject .simple-grid .simple-tile{min-height:60px;padding:6px 8px;gap:8px}.simple-subject .simple-tile strong{font-size:14px}.simple-subject .simple-tile small{display:none}.simple-subject .simple-art{flex:0 0 32px;min-height:32px;font-size:22px}.simple-subject .simple-art svg{width:32px;height:32px}.simple-grid .simple-arrow{display:none}.simple-doors .simple-tile small{display:none}.daily-door img{height:96px}.daily-copy{padding:8px 14px;gap:4px}.school-access-bar{margin-bottom:4px}.simple-heading .portrait{width:52px;height:52px}.grok-live{padding:0 8px 6px;gap:6px}.grok-live>button{min-height:44px;padding:6px 12px;font-size:13px}}
+
+.daily-door:hover:not(:disabled){background:#ffc93c;color:#24163f}
+@media(max-width:650px){.simple-world{gap:8px}}
+.number-art,.popit-art{white-space:nowrap;line-height:1.15}
+.simple-subject .popit-art{font-size:11px;letter-spacing:2px;padding:4px}
+.simple-subject .number-art{font-size:15px;padding:4px 6px}
+.simple-subject .school-vocabulary-links a{flex-direction:row;justify-content:flex-start;text-align:left;min-height:48px}
+
+/* Écran d'exercice : la question, le texte et les réponses d'abord, entiers et lisibles.
+   Les outils (voix, studio, aide adulte) passent dessous. */
+.lesson-work>.grok-live,.lesson-work>.oral-word-practice{order:8}
+.lesson-work .audio-status{order:8}
+.lesson-work>.grok-live{padding:0;margin:8px 0 0;gap:8px}
+.lesson-work>.grok-live>button{min-height:44px;padding:6px 14px;font-size:14px;box-shadow:0 3px 0 #24163f}
+.lesson-work>.grok-live>p{font-size:12px}
+.lesson-heading h1{margin:0 0 6px}
+.lesson-heading .question-audio{min-height:44px;padding:6px 14px;font-size:15px}
+.game-lesson .lesson-work .choices{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px;margin:10px 0}
+.game-lesson .lesson-work .oral-choice>[data-choice]{white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none;justify-content:flex-start;text-align:left;
+  min-height:58px;padding:8px 14px;font-size:clamp(18px,2.1vw,24px);font-weight:700;line-height:1.2;color:#24163f;background:#fff;border:3px solid #24163f;border-radius:18px;box-shadow:0 5px 0 #24163f;transition:transform .12s,box-shadow .12s}
+.game-lesson .lesson-work .oral-choice>[data-choice-audio]{flex:0 0 54px;min-height:58px;padding:0;border:3px solid #24163f;border-radius:18px;background:#d8f0ec;box-shadow:0 5px 0 #24163f}
+.game-lesson .lesson-work .oral-choice>button:active{transform:translateY(4px);box-shadow:0 1px 0 #24163f}
+.game-lesson .lesson-work .oral-choice>[data-choice][disabled]{opacity:.7}
+.game-lesson .lesson-work .choice-marker{flex:none}
+.lesson-work>.help{min-height:44px}
+.lesson-work>.reading-options,.lesson-work>[data-reading-focus],.lesson-work>.lesson-popit-helper{order:6}
+.lesson-work .lesson-text{margin:6px 0}
+/* Avec le brouillon ouvert, la colonne d'exercice est étroite : on serre le décor, pas les réponses. */
+.game-lesson .writing-workspace{height:calc(100dvh - 228px);min-height:420px}
+.game-lesson .writing-workspace.board-closed{height:auto;min-height:0}
+.game-lesson .lesson-work .oral-choice>[data-choice-audio]{display:grid;place-items:center;font-size:22px;line-height:1}
+.writing-workspace:not(.board-closed) .lesson-heading h1{font-size:clamp(19px,2.2vw,24px);line-height:1.2}
+.writing-workspace:not(.board-closed) .lesson-text .reading-legend{display:none}
+.writing-workspace:not(.board-closed) .lesson-text .reading-coach{font-size:12px;line-height:1.3;padding:4px 10px;margin:4px 0 0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+.writing-workspace:not(.board-closed) .syllable-strip{font-size:1.5rem;gap:6px;margin:2px}
+.writing-workspace:not(.board-closed) .syllable-strip button,.writing-workspace:not(.board-closed) .syllable-strip span{min-height:52px;padding:2px 12px}
+.writing-workspace:not(.board-closed) .play-scene{padding:8px 10px}
+.writing-workspace:not(.board-closed) .scene-equation{font-size:clamp(26px,3vw,34px);margin:2px 0}
+.writing-workspace:not(.board-closed) .scene-instruction{margin:0;font-size:15px}
+.writing-workspace:not(.board-closed) .choices{gap:8px;margin:8px 0}
+.game-lesson .writing-workspace:not(.board-closed) .oral-choice>[data-choice],.game-lesson .writing-workspace:not(.board-closed) .oral-choice>[data-choice-audio]{min-height:50px;box-shadow:0 4px 0 #24163f}
+.writing-workspace:not(.board-closed) .play-scene{padding:8px 10px 30px}
+.writing-workspace:not(.board-closed) .pearl-basket{min-height:64px;padding:4px!important}
+.writing-workspace:not(.board-closed) .pearl-basket svg{width:20px;height:20px}
+.writing-workspace:not(.board-closed) .pearl-groups{gap:8px}
+.game-lesson .writing-workspace:not(.board-closed) .lesson-text .guided-text{font-size:clamp(20px,2.2vw,26px);line-height:1.55;padding:10px 14px}
+.writing-workspace:not(.board-closed) .play-scene{min-height:0}
+
+/* ===== Mode enfant : presque rien à l'écran, de grands boutons, aucun menu d'adulte =====
+   Pour une enfant de 6 ou 8 ans : au plus trois choix par écran. Les outils d'adulte (codes d'accès,
+   voix, brouillon, réglages) reviennent avec la clé « Adulte » (appui long de deux secondes). */
+.adult-key{position:fixed;right:10px;top:10px;z-index:40;min-height:36px;padding:4px 12px;border:2px solid #24163f55;border-radius:999px;background:#fffdf6cc;color:#24163faa;font-size:13px;font-weight:700;touch-action:none;user-select:none;-webkit-user-select:none}
+.adult-key.pressing{background:#ffc93c;color:#24163f;border-color:#24163f}
+body:not(.kid-simple) .adult-key{opacity:1;color:#24163f}
+
+body.kid-simple .school-access-bar,body.kid-simple .simple-top [data-action=parent],body.kid-simple .simple-level,body.kid-simple .simple-chips>button,
+body.kid-simple .simple-tile small,body.kid-simple .simple-subject .simple-arrow,body.kid-simple .simple-world .simple-arrow,
+body.kid-simple .school-math-links details,body.kid-simple .school-vocabulary-links details,body.kid-simple .school-math-links>p,body.kid-simple .kid-page:not(.is-current){display:none!important}
+body.kid-simple .child-toolbar span{display:none}
+body.kid-simple .simple-top [data-action=choose-child],body.kid-simple .child-toolbar [data-action=home],body.kid-simple .child-toolbar button{font-size:0;min-height:56px;min-width:56px;padding:0;border:3px solid #24163f;border-radius:50%;background:#fff;box-shadow:0 4px 0 #24163f;display:grid;place-items:center}
+body.kid-simple .simple-top [data-action=choose-child]::before,body.kid-simple .child-toolbar button::before{content:'‹';font-size:40px;line-height:1;color:#24163f;font-family:var(--display,inherit);font-weight:800;margin-top:-4px}
+
+/* Son monde : un grand « Jouer », deux grandes portes, la chouette si elle peut parler */
+body.kid-simple .simple-world{gap:14px;padding-top:4px}
+body.kid-simple .simple-top{justify-content:flex-start}
+body.kid-simple .simple-heading{margin:0}
+body.kid-simple .simple-heading h1{font-size:clamp(26px,3.6vw,38px)}
+body.kid-simple .daily-door{min-height:clamp(170px,32svh,300px)}
+body.kid-simple .daily-door img{width:50%;height:auto;min-height:100%}
+body.kid-simple .daily-copy{align-items:center;justify-content:center;text-align:center}
+body.kid-simple .daily-copy small,body.kid-simple .daily-copy strong,body.kid-simple .daily-copy>span:not(.kid-label){display:none}
+.daily-copy .kid-label{display:none}
+body.kid-simple .daily-copy .kid-label{display:block;font-family:var(--display,inherit);font-weight:800;font-size:clamp(40px,7vw,76px);line-height:1;color:#24163f}
+body.kid-simple .simple-doors{grid-template-columns:1fr 1fr;gap:14px}
+body.kid-simple .simple-doors .simple-tile{min-height:clamp(110px,19svh,170px);flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px}
+body.kid-simple .simple-doors .simple-tile strong{font-size:clamp(26px,3.6vw,38px)}
+body.kid-simple .simple-doors .simple-art{flex:none;font-size:48px}
+body.kid-simple .simple-doors .book-art{font-size:34px}body.kid-simple .simple-doors .number-art{font-size:22px}
+
+/* La chouette : un seul bouton rond, seulement si elle peut vraiment parler */
+body.kid-simple .grok-live{justify-content:center;padding:0 0 4px}
+body.kid-simple .grok-live>[data-grok-stop],body.kid-simple .grok-live>[data-grok-parent],body.kid-simple .grok-live>p{display:none!important}
+body.kid-simple .grok-live:not([data-grok-ready=yes])>[data-grok-start]{display:none}
+body.kid-simple .grok-live[data-grok-touched=yes]>[data-grok-stop]{display:inline-flex!important}
+body.kid-simple .grok-live[data-grok-touched=yes]>p{display:block!important;flex:1 1 100%;text-align:center;font-size:15px}
+body.kid-simple .grok-live>[data-grok-start]{min-height:64px;padding:8px 26px;font-size:21px}
+
+/* Écran de matière : quatre grandes tuiles, une image et un mot */
+body.kid-simple .simple-subject{gap:14px}
+body.kid-simple .simple-grid{grid-template-columns:1fr 1fr;gap:14px}
+body.kid-simple .simple-subject .simple-grid .simple-tile{flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:clamp(120px,24svh,210px);gap:8px;padding:12px}
+body.kid-simple .simple-subject .simple-tile strong{font-size:clamp(22px,3vw,32px)}
+body.kid-simple .simple-subject .simple-art{flex:none;font-size:54px;min-height:0}
+body.kid-simple .simple-subject .simple-art svg{width:64px;height:64px}
+body.kid-simple .simple-subject .book-art{font-size:34px}body.kid-simple .simple-subject .number-art{font-size:22px}body.kid-simple .simple-subject .popit-art{font-size:12px}
+
+/* Écran d'exercice : la question, un seul bouton d'écoute, de grandes réponses */
+body.kid-simple .adventure-top .world-badge,body.kid-simple .board-toggle,body.kid-simple .whiteboard,
+body.kid-simple .lesson-work>.grok-live,body.kid-simple .lesson-work [data-reading-focus],body.kid-simple .lesson-work .oral-word-practice,
+body.kid-simple .lesson-work .tutor-details,body.kid-simple .lesson-work .lesson-popit-helper,body.kid-simple .lesson-work .reading-settings,
+body.kid-simple .lesson-work .audio-status,body.kid-simple .lesson-work .reading-dock .speed-control,
+body.kid-simple .lesson-work .reading-dock .audio button:nth-child(3),body.kid-simple .lesson-heading .eyebrow,body.kid-simple .lesson-text .reading-coach,
+body.kid-simple .lesson-text .reading-legend,body.kid-simple .lesson-work .game-hint{display:none!important}
+body.kid-simple .writing-workspace{display:block;height:auto;min-height:0}
+body.kid-simple .writing-workspace>.lesson-work{overflow:visible;padding:14px 18px}
+body.kid-simple .lesson-heading h1{font-size:clamp(26px,3.6vw,38px)!important;line-height:1.2!important}
+body.kid-simple .lesson-heading .question-audio{min-height:56px!important;padding:6px 20px!important;font-size:19px!important}
+body.kid-simple .syllable-strip{font-size:2.4rem!important;gap:10px}
+body.kid-simple .syllable-strip button,body.kid-simple .syllable-strip span{min-height:72px!important;padding:4px 18px!important}
+body.kid-simple .lesson-work .reading-dock{background:none;padding:0;margin:6px 0}
+body.kid-simple .lesson-work .reading-dock .audio button{min-height:56px;padding:6px 22px;font-size:20px}
+body.kid-simple.game-lesson .lesson-work .choices,body.kid-simple .writing-workspace .choices{grid-template-columns:1fr;gap:12px;margin:12px 0}
+body.kid-simple.game-lesson .lesson-work .oral-choice>[data-choice]{min-height:72px!important;font-size:clamp(26px,3.4vw,34px)!important;padding:8px 22px!important}
+body.kid-simple .lesson-work .choice-marker{display:none}
+body.kid-simple.game-lesson .lesson-work .oral-choice>[data-choice-audio]{flex:0 0 72px!important;min-height:72px!important;font-size:28px!important}
+body.kid-simple.game-lesson .writing-workspace .lesson-text .guided-text{font-size:clamp(26px,3.2vw,34px)!important;line-height:1.5;max-height:none!important}
+body.kid-simple .lesson-work>.help{min-height:56px;font-size:18px}
+body.kid-simple .daily-door{min-height:clamp(190px,36svh,330px)}
+body.kid-simple .simple-doors .simple-tile{min-height:clamp(120px,22svh,190px)}
+body.kid-simple .simple-subject .simple-grid .simple-tile{min-height:clamp(130px,26svh,230px)}
+body.kid-simple .child-toolbar{margin:0 0 4px}
+body.kid-simple .adventure-lesson{padding:8px}
+body.kid-simple .adventure-top{margin:0}
+body.kid-simple .lesson-heading{margin:0}
+body.kid-simple .lesson-heading progress{margin:4px 0}
+body.kid-simple.game-lesson .lesson-work .oral-choice>[data-choice]{min-height:64px!important}
+body.kid-simple.game-lesson .lesson-work .oral-choice>[data-choice-audio]{flex:0 0 64px!important;min-height:64px!important}
+body.kid-simple .game-lesson .lesson-work .choices,body.kid-simple .writing-workspace .choices{gap:10px;margin:8px 0}
+body.kid-simple .syllable-strip{margin:2px 0}
+body.kid-simple .syllable-strip button,body.kid-simple .syllable-strip span{min-height:60px!important}
+body.kid-simple .lesson-work .reading-dock{margin:2px 0}
+body.kid-simple .lesson-work .reading-dock .audio button{min-height:52px}
+body.kid-simple .lesson-work>.help{min-height:52px;margin:4px 0 0}
+body.kid-simple .writing-workspace>.lesson-work{padding:10px 16px}
+/* Tablette à l'horizontale : le texte ou l'image à gauche, les réponses à droite, tout d'un coup d'œil. */
+body.kid-simple .play-scene{min-height:0!important;padding:10px 10px 26px!important}
+body.kid-simple .play-scene .scene-equation{font-size:clamp(26px,3.4vw,38px);margin:2px 0 6px}
+body.kid-simple .pearl-basket{min-height:60px!important}
+@media (min-width:900px) and (min-aspect-ratio:4/3){
+ body.kid-simple .writing-workspace>.lesson-work{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:18px;row-gap:6px;align-content:start;align-items:start}
+ body.kid-simple .lesson-work>.lesson-heading{grid-column:1/-1;order:0}
+ body.kid-simple .lesson-work>.lesson-text{grid-column:1;grid-row:2/span 4;order:0}
+ body.kid-simple .lesson-work>.reading-options{grid-column:1;order:0}
+ body.kid-simple .lesson-work>.choices{grid-column:2;grid-row:2;order:0;margin:0}
+ body.kid-simple .lesson-work>.help{grid-column:2;order:0;justify-self:start}
+ body.kid-simple .lesson-work>.feedback{grid-column:2;order:0}
+ body.kid-simple .lesson-work>.lesson-text .guided-text{font-size:clamp(22px,2.6vw,30px)!important}
+}
+body.kid-simple .lesson-text details,body.kid-simple .lesson-text .reading-hints,body.kid-simple .lesson-work>.reading-options .reading-dock .audio-status{display:none!important}
+@media (min-width:900px) and (min-aspect-ratio:4/3){
+ body.kid-simple .lesson-work>.lesson-text .guided-text{font-size:clamp(20px,2.3vw,26px)!important;line-height:1.4!important;padding:8px 12px!important}
+ body.kid-simple .lesson-heading h1{font-size:clamp(24px,3vw,32px)!important}
+ body.kid-simple .lesson-work .lesson-text img,body.kid-simple .lesson-work .lesson-text .story-picture{max-height:70px}
+}
+
+/* Pages de quatre tuiles : « Encore » montre la suite, rien n'est retiré. */
+.kid-page+.kid-page{margin-top:14px}
+body:not(.kid-simple) .kid-more{display:none}
+body.kid-simple .kid-more{align-self:center;min-height:60px;padding:6px 34px;border:3px solid #24163f;border-radius:999px;background:#ffc93c;color:#24163f;font-family:var(--display,inherit);font-weight:800;font-size:26px;box-shadow:0 5px 0 #24163f}
+body.kid-simple .kid-more:active{transform:translateY(4px);box-shadow:0 1px 0 #24163f}
+body.kid-simple .school-math-links,body.kid-simple .school-vocabulary-links{margin:0;padding:10px 14px;border:3px solid #24163f;border-radius:22px;box-shadow:0 5px 0 #24163f}
+body.kid-simple .school-math-links h2,body.kid-simple .school-vocabulary-links h2{font-size:20px;margin:0 0 8px}
+body.kid-simple .school-math-grid{grid-template-columns:1fr 1fr;gap:12px}
+body.kid-simple .school-math-grid a{min-height:120px;border:3px solid #24163f;border-radius:20px}
+body.kid-simple .school-math-grid a small{display:none}
+body.kid-simple .school-math-links .squishy-banner{min-height:64px;font-size:20px;margin:0 0 10px}
+body.kid-simple .school-math-links .squishy-banner small{display:none}
+/* Étoiles et coffre : un petit bouton en haut, pas un menu. */
+body.kid-simple .simple-world{position:relative}
+body.kid-simple .simple-chips{position:static;height:0;margin:0;padding:0;min-height:0}
+body.kid-simple .simple-treasure{position:absolute;top:10px;right:92px;left:auto;bottom:auto;z-index:30}
+body.kid-simple .simple-treasure>summary{min-height:44px;padding:4px 14px;font-size:15px}
+body.kid-simple .simple-treasure[open]{top:10px;right:92px;bottom:auto;max-width:min(360px,70vw)}
+
+/* ===== Mode enfant, tous les écrans d'activité : on coupe ce qui est pour l'adulte ===== */
+body.kid-simple details:not(.simple-treasure),body.kid-simple .speed-control,body.kid-simple #oral-check-mount,body.kid-simple #number-coach-mount,
+body.kid-simple .audio-status,body.kid-simple [data-action=silence],body.kid-simple [data-action=row-mode],body.kid-simple [data-action=row-confirm],
+body.kid-simple [data-action=row-retry],body.kid-simple [data-action=test-voice],body.kid-simple [data-action=parent]:not(.picture-parent),
+body.kid-simple label:has(#number-row),body.kid-simple label:has(#chosen-number),body.kid-simple [data-number-decomposition],
+body.kid-simple .number-adventure>p,body.kid-simple .number-adventure>.adventure-top,body.kid-simple [data-action=choose-child]:not(.simple-top *),
+body.kid-simple .school-vocabulary-links .school-math-grid a:nth-child(n+2),body.kid-simple label:has(select#level),body.kid-simple .skip-counting select{display:none!important}
+/* Les nombres : le grand nombre, écouter, avant, après, mes fiches */
+body.kid-simple .number-adventure{display:flex;flex-direction:column;gap:12px;padding:10px 16px;min-height:0}
+body.kid-simple .number-adventure h1{font-size:clamp(22px,3vw,30px);margin:0}
+body.kid-simple .number-adventure [data-number-display]{font-size:clamp(70px,16svh,130px);text-align:center;margin:0}
+body.kid-simple .number-adventure button{min-height:60px;font-size:20px;border:3px solid #24163f;border-radius:999px;box-shadow:0 4px 0 #24163f;background:#fff;color:#24163f}
+body.kid-simple .number-adventure [data-action=number-audio]{background:#ffc93c;font-size:26px;min-height:68px}
+body.kid-simple .number-adventure [data-action=number-prev],body.kid-simple .number-adventure [data-action=number-next]{display:inline-flex;align-items:center;justify-content:center;min-width:140px}
+body.kid-simple .travel-hero>img{max-height:34svh;width:100%;object-fit:cover}
+body.kid-simple .simple-subject .school-math-links .school-math-grid a>span{font-size:34px}
+
+/* Plus attirant pour une enfant : la chouette pose la question, chaque réponse a sa couleur. */
+body.kid-simple .lesson-heading{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
+body.kid-simple .lesson-heading::before{content:'🦉';font-size:clamp(46px,8svh,68px);line-height:1;flex:none}
+body.kid-simple .lesson-heading h1{flex:1 1 60%;min-width:0}
+body.kid-simple .lesson-heading>:not(h1){flex:1 1 100%}
+body.kid-simple .lesson-heading>.question-audio{flex:0 0 auto}
+body.kid-simple .oral-choice:nth-child(4n+1)>[data-choice]:not([disabled]){background:#ffe0ea}
+body.kid-simple .oral-choice:nth-child(4n+2)>[data-choice]:not([disabled]){background:#dcf1ff}
+body.kid-simple .oral-choice:nth-child(4n+3)>[data-choice]:not([disabled]){background:#e2f7d4}
+body.kid-simple .oral-choice:nth-child(4n+4)>[data-choice]:not([disabled]){background:#fff0c2}
+body.kid-simple .oral-choice>[data-choice]{text-align:center!important;justify-content:center!important}
+body.kid-simple .oral-choice>[data-choice-audio]{background:#fff!important}
+
+/* Écoute par le toucher : le texte et la question se touchent pour être lus; plus de ligne de boutons d'écoute. */
+body.kid-simple .lesson-work>.reading-options,body.kid-simple .lesson-heading>.question-audio{display:none!important}
+body.kid-simple .lesson-heading h1::after{content:' 🔊';font-size:.7em}
+body.kid-simple .lesson-heading,body.kid-simple .lesson-text{cursor:pointer;-webkit-tap-highlight-color:#ffc93c55}
+body.kid-simple .lesson-text::before{content:'🔊 Touche ici pour écouter';display:block;font-size:14px;font-weight:700;color:#6b5a85;margin:0 0 4px}
+body.kid-simple .reader-story{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px}
+body.kid-simple .reader-story>span{font-size:34px;line-height:1}
+body.kid-simple .reader-story>h2{font-size:22px;margin:0}
+body.kid-simple .reader-story>.guided-reading{flex:1 1 100%}
