@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ReadingSpeaker} from '../../src/speech.js';
+import {ReadingSpeaker,GENTLE_SYSTEM_SPEED} from '../../src/speech.js';
 function fixture(){
  const calls=[],states=[],timers=new Map();let next=0;
  const synth={paused:true,cancel(){calls.push('cancel');},resume(){this.paused=false;calls.push('resume');},getVoices(){return [{voiceURI:'a',name:'Amélie',lang:'fr-CA'}];},speak(u){assert.equal(this.paused,false);calls.push(u);}};
@@ -9,7 +9,7 @@ function fixture(){
 }
 test('paused engine resumes synchronously and retains slow French utterance',()=>{
  const f=fixture();f.reader.speak('lapin',f.opts);const u=f.reader.current;
- assert.deepEqual(f.calls.slice(0,2),['cancel','resume']);assert.equal(f.calls[2],u);assert.equal(u.text,'lapin');assert.equal(u.rate,1);assert.equal(u.lang,'fr-CA');
+ assert.deepEqual(f.calls.slice(0,2),['cancel','resume']);assert.equal(f.calls[2],u);assert.equal(u.text,'lapin');assert.equal(u.rate,GENTLE_SYSTEM_SPEED);assert.equal(u.lang,'fr-CA');
  u.onstart();assert.equal(f.timers.size,0);u.onend();assert.equal(f.reader.current,null);assert.equal(f.states.at(-1)[0],'ended');
 });
 test('stale callbacks cannot overwrite new reading or restart after stop',()=>{

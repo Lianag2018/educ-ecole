@@ -1,3 +1,21 @@
+# Voix douce et naturelle, sans curseur de vitesse — 18 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du
+parent : enlever le contrôle de vitesse et mettre une voix douce et naturelle.
+Le curseur (0,6 à 1,5 ×) est retiré partout (lecture, nombres). La vitesse
+enregistrée par un appareil (par exemple 1,1 ×) n'est plus appliquée. La voix
+préenregistrée garde son rythme d'origine (générée à 0,85 avec consigne de voix
+douce québécoise); une voix système de repli lit à 0,92 du rythme natif. Le choix
+de la voix système préfère le français canadien, les voix « Natural »/« Online »
+et les voix douces connues (Sylvie, Amélie, Denise, Éloïse), et écarte les voix
+masculines ou compactes; le choix du parent reste prioritaire. Non modifié :
+les 2 102 enregistrements (les refaire demande la clé OpenAI et un budget),
+le choix de voix manuel dans l'espace adulte.
+
+Validation : tests Node (562) dont choix de voix et vitesse par défaut; quatre
+suites navigateur locales réussies; reader-browser adapté (plus de curseur).
+Non vérifié : écoute réelle sur la tablette, voix installées sur l'appareil.
+
 # Mode enfant simple — 18 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Le parent

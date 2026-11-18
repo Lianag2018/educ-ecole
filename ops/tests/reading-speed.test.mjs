@@ -35,3 +35,15 @@ test('new story narration keeps the soft Quebec voice at natural generation spee
  for(const id of ['p1','p2']){const story=islandCards({id},'bateau')[0];const item=clips.find(x=>x.text===story.text);assert.equal(item.speed,1);assert.match(item.instructions,/voix féminine douce/);assert.match(item.instructions,/rythme naturel et fluide/);assert.match(item.instructions,/français québécois/);assert.ok(!item.instructions.includes('Lis lentement'));}
  const old=clips.find(x=>x.text==='Bonjour! On prend notre temps pour lire ensemble.');assert.equal(old.instructions,INSTRUCTIONS);assert.equal(old.speed,.85);
 });
+test('without a speed control, a system voice reads gently and the recorded voice keeps its natural pace',async()=>{
+ const {GENTLE_SYSTEM_SPEED}=await import('../../src/speech.js');
+ const utterances=[];class Utterance{constructor(text){this.text=text;}}
+ const reader=new ReadingSpeaker({synth:{cancel(){},getVoices(){return[{lang:'fr-CA',name:'Microsoft Sylvie Online (Natural)',voiceURI:'s'}];},speak(u){utterances.push(u);}},Utterance,setTimer(){},clearTimer(){}});
+ reader.speak('Les amis lisent');
+ assert.equal(utterances.at(-1).rate,GENTLE_SYSTEM_SPEED);assert.ok(GENTLE_SYSTEM_SPEED<1&&GENTLE_SYSTEM_SPEED>=.85);
+ reader.speak('Les amis lisent',{speed:1.2});assert.equal(utterances.at(-1).rate,1.2);
+ class Audio{pause(){}setAttribute(){}removeAttribute(){}play(){return Promise.resolve();}}
+ const spoken=[],p=new NarrationSpeaker({fallback:{stop(){},speak(text,o){spoken.push(o.speed);}},AudioClass:Audio,fetcher:async()=>({ok:true,json:async()=>({version:1,clips:{}})})});
+ await Promise.all([p.ready,p.alignmentReady]);p.speak('Pas enregistré',{});
+ assert.equal(p.speed,1);assert.equal(spoken.at(-1),undefined);
+});

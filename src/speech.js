@@ -8,13 +8,20 @@ export function chooseReadingVoice(voices, preferredURI='') {
  const french=voices.filter(v=>/^fr(?:-|_)/i.test(v.lang));
  const preferred=french.find(v=>v.voiceURI===preferredURI);
  if(preferred)return preferred;
- // Voice APIs expose no gender. Prefer familiar French voice names when present;
- // the parent can choose another voice after listening on the actual device.
- const score=v=>(/^fr[-_]CA$/i.test(v.lang)?100:0)+(/am[eé]lie|julie|sylvie|ch[aâ]ntal/i.test(v.name)?40:0)+(/enhanced|premium|améliorée/i.test(v.name)?10:0);
+ // Voice APIs expose no gender. Prefer a soft, natural French voice: Canadian French first, neural
+ // ("Natural", "Online") and enhanced voices over compact ones, familiar soft female names over
+ // known male or robotic voices. The parent can still choose another voice on the actual device.
+ const score=v=>(/^fr[-_]CA$/i.test(v.lang)?100:0)
+  +(/natural|neural|online/i.test(v.name)?60:0)
+  +(/enhanced|premium|améliorée|siri/i.test(v.name)?30:0)
+  +(/sylvie|am[eé]lie|julie|ch[aâ]ntal|denise|[ée]loise|audrey|aur[eé]lie|marie|google fran/i.test(v.name)?40:0)
+  -(/antoine|thomas|paul|claude|henri|jean|mathieu|nicolas|daniel|bernard|fabrice|pierre|compact|espeak/i.test(v.name)?80:0);
  return french.slice().sort((a,b)=>score(b)-score(a))[0];
 }
 
 export const playbackSpeed = value => value==='very-slow' ? .8 : Number.isFinite(Number(value)) && Number(value)>0 ? Math.max(.6,Math.min(1.5,Number(value))) : 1;
+// A system voice reads a little slower than its native rate: soft and clear for a child. No speed control is shown.
+export const GENTLE_SYSTEM_SPEED = .92;
 // Keep explicit legacy phonics pacing; ordinary narration starts at the native rate.
 export const readingRate = mode => mode==='very-slow' ? .45 : playbackSpeed(mode);
 
@@ -41,7 +48,7 @@ export class ReadingSpeaker {
   if(!voice&&this.synth.getVoices().length){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
   const u=new this.Utterance(String(text));this.current=u;this.started=false;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
-  u.rate=natural?playbackSpeed(speed):readingRate(speed);u.pitch=1;u.volume=1;
+  const pace=speed===undefined?GENTLE_SYSTEM_SPEED:speed;u.rate=natural?playbackSpeed(pace):readingRate(pace);u.pitch=1;u.volume=1;
   const label=voice?`${voice.name} · ${voice.lang}`:'Voix système · français canadien demandé';
   const active=()=>this.epoch===epoch&&this.current===u;
   const fail=message=>{if(!active())return;this.stop();onState('error',message);};

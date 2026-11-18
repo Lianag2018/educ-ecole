@@ -117,7 +117,7 @@ export class NarrationSpeaker {
    if(!active())return;
    this.clearMedia();this.usingFallback=true;
    if(!this.fallback?.speak){fail('Lecture audio indisponible. Réessaie avec une voix française dans les réglages de l’appareil.');return;}
-   try{this.fallback.speak(key,{...options,speed:this.speed,onState:(status,detail)=>{
+   try{this.fallback.speak(key,{...options,speed:options.speed===undefined?undefined:this.speed,onState:(status,detail)=>{
     if(!active())return;
     if(status==='ended'||status==='error'){finished=true;this.activeState=null;this.usingFallback=false;}
     onState(status,message(detail||''));
