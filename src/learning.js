@@ -1,5 +1,6 @@
 import {earlyReaderStories,readerBlends} from './early-reader.js';
 import {extraReading,extraMath,extraStories} from './practice-bank.js';
+import {grade3Bank} from './grade3-bank.js';
 import {bank} from './content.js';
 import {rows,stories,mathCards,social} from './garden.js';
 
@@ -21,7 +22,7 @@ export const olderReading=[
  card('g3-co1','comprehension','Pourquoi la sœur qui vole devant ralentit-elle?','Les deux sœurs volent vers un nuage doré. Mely-Ann reste un peu derrière. Liana ralentit et lui montre un passage sans vent. Bientôt, elles volent côte à côte.',['Pour aider sa sœur à la rejoindre','Parce qu’elle veut rentrer seule'],0,'Mely-Ann est derrière, puis elles volent côte à côte : Liana l’aide à la rejoindre.'),
  card('g3-co2','comprehension','Quel indice montre que la pluie approche?','Le ciel s’assombrit. Les feuilles se retournent sous le vent. Liana referme son livre et les deux sœurs courent vers la maison.',['Le ciel s’assombrit','Le livre est ouvert'],0,'Le ciel qui s’assombrit et le vent donnent des indices. Explique ton raisonnement avec ces détails.',2)
 ];
-export const readingBank=p=>[...(advanced(p)?olderReading:bank),...extraReading(p),...(!advanced(p)?readerBlends:[])];
+export const readingBank=p=>[...(advanced(p)?olderReading:bank),...(advanced(p)?grade3Bank():[]),...extraReading(p),...(!advanced(p)?readerBlends:[])];
 export const skillCards=(p,skill)=>readingBank(p).filter(q=>q.skill===skill).sort((a,b)=>!advanced(p)?Number(!!b.readerBlend)-Number(!!a.readerBlend)||(a.order??100)-(b.order??100):0);
 export const storyCards=p=>[...(!advanced(p)?earlyReaderStories:[]),...stories.filter(q=>q.grade===(advanced(p)?3:1)),...extraStories(advanced(p))];
 const youngerMath=[

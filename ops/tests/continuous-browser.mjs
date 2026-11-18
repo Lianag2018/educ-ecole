@@ -60,10 +60,10 @@ try{
  await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  assert.equal(await run("[...document.querySelectorAll('[data-choice]')].every(b=>b.scrollWidth<=b.clientWidth+1)"),true);
  assert.equal(await run('document.documentElement.scrollWidth<=document.documentElement.clientWidth'),true);
- const texts=[];for(let i=0;i<6;i++){texts.push(await run("document.querySelector('.lesson-text').innerText"));await finish(1);}
+ const texts=[];for(let i=0;i<10;i++){texts.push(await run("document.querySelector('.lesson-text').innerText"));await finish(1);}
  await until('!!document.querySelector("[data-action=practice-more]")');await click('[data-action=practice-more]');
  assert.ok(!texts.includes(await run("document.querySelector('.lesson-text').innerText")));
- assert.equal((await state()).profiles[0].history.length,4);assert.equal((await state()).profiles[1].history.length,6);
+ assert.equal((await state()).profiles[0].history.length,4);assert.equal((await state()).profiles[1].history.length,10);
  // Reading UI uses the real app, with native audio events simulated locally.
  await click('[data-action=home]');await click('[data-action=french]');await click('[data-scene=reading]');
  await cdp('Emulation.setDeviceMetricsOverride',{width:1180,height:820,deviceScaleFactor:1,mobile:true});
