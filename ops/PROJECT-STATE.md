@@ -1,3 +1,35 @@
+# Mode enfant simple — 18 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Le parent
+rapporte qu'une enfant de 6 ans a fermé la tablette après cinq minutes : trop
+compliqué, trop de menus sans rapport; l'autre a 8 ans. Mesure Chromium
+1024×768, première version en ligne (feb95b7) : monde de l'enfant 4 boutons
+visibles avec défilement, première question 15–17 boutons et ~140 mots avec
+défilement. Première version de PR100 : tout tenait sur un écran mais avec 15–16
+boutons (erreur : on avait tassé au lieu d'enlever).
+
+Changements : un mode enfant, actif par défaut sur tous les écrans enfants
+(classe body.kid-simple), qui ne montre que l'essentiel : monde = « Jouer ! »,
+Français, Maths (et la chouette seulement si elle peut vraiment parler);
+matières = pages de quatre grandes tuiles avec « Encore › »; exercice = question,
+une écoute, grandes réponses (texte à gauche et réponses à droite en tablette
+horizontale); le reste (codes d'accès, voix, vitesse, studio, brouillon,
+« Avec un adulte », réglages) est masqué. Rien n'est supprimé : les cartes et
+fiches (Défi vitesse, Mes tables, fiches de nombres, liens Météormath/MaZone,
+chansons, Pop-it, mini-défis, voyage) restent atteignables par les pages
+« Encore ». Une clé « Adulte » (appui long de deux secondes, en haut à droite)
+réaffiche l'interface complète jusqu'au rechargement. Les étoiles et le plan de
+la semaine restent dans le petit bouton d'étoiles du monde.
+
+Mesures après changement (deux profils) : pages de matière 6 boutons et ~20 mots
+sans défilement; monde 5 boutons et 14 mots; première question 11–14 boutons et
+~30 mots; « Les nombres » 5 boutons et ~25 mots (avant 10 boutons, 158 mots).
+Encore à simplifier : carte du voyage, mini-défis, listes de chansons, bonds de
+nombres, jardin des sons (défilent de 60 à 1 000 px). Tests Node, learning-,
+parent-, continuous- et table-songs-browser réussis; reader-browser adapté
+(vérifie le mode enfant puis ouvre la clé Adulte) et à confirmer par le flux de
+la PR. Aucun essai sur iPad/iPhone réel ni avec une vraie enfant.
+
 # Écran d'exercice lisible et séries d'au moins cinq questions — 17 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Le parent

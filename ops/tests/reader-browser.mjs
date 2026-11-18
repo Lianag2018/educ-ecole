@@ -37,6 +37,14 @@ try{
   await run(`void Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{getVoices:()=>[{name:'Amélie',lang:'fr-CA',voiceURI:'amelie'}],cancel(){},speak(){}}});`);
   await click(`[data-game-child="${child}"]`);await click('[data-action="french"]');await click('[data-scene="reading"]');
   assert.equal(await run("document.body.classList.contains('reading-focus')"),false);
+  // Mode enfant par défaut : pas de brouillon ni d'outils d'adulte à l'écran, une seule écoute.
+  assert.equal(await run("getComputedStyle(document.querySelector('.whiteboard')).display"),'none','kid mode hides the draft pad');
+  assert.equal(await run("getComputedStyle(document.querySelector('.speed-control')).display"),'none','kid mode hides the speed control');
+  assert.equal(await run("document.body.classList.contains('kid-simple')"),true);
+  // La clé Adulte rouvre les outils complets pour la suite des vérifications.
+  await run("document.querySelector('[data-adult-key]').dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}))");
+  for(let i=0;i<50;i++){if(await run("!!document.querySelector('.whiteboard')&&document.querySelector('.whiteboard').getBoundingClientRect().width>0"))break;await sleep(100);}
+  assert.equal(await run("document.body.classList.contains('kid-simple')"),false);
   for(const [width,height] of [[820,1180],[1180,820],[390,844]]){
    await cdp('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});
    assert.equal(await run("document.documentElement.scrollWidth<=innerWidth"),true,'no horizontal overflow');
