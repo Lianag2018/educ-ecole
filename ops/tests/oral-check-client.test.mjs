@@ -225,7 +225,7 @@ test('target changes cancel active audio and keep consent; invalid targets never
   assert.equal(h.streams[0].track.stopped, true); assert.equal(h.check.snapshot().authorized, true); assert.equal(h.check.context.target.value, 1999);
   callback({inputBuffer:{getChannelData:() => new Float32Array(44100)}, outputBuffer:{getChannelData:() => new Float32Array(1)}});
   assert.equal(h.checks().length, 0); h.check.setContext({...context, target:null}); assert.equal(await h.check.start(), false); assert.equal(h.check.context.target, null);
-  for (const target of [{kind:'number', value:56, text:'fake'}, {kind:'number', value:-1}, {kind:'number', value:2000}, {kind:'word', activityId:'private-word'}]) {
+  for (const target of [{kind:'number', value:56, text:'fake'}, {kind:'number', value:-1}, {kind:'number', value:10000}, {kind:'word', activityId:'private-word'}]) {
     h.check.setContext({...context, target}); assert.equal(h.check.context.target, null); assert.equal(await h.check.start(), false);
   }
   h.check.setContext({...context, profileId:'p1', target:{kind:'number', value:1999}});

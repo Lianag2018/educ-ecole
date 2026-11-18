@@ -1,3 +1,24 @@
+# Liana : nombres jusqu'à 9 999 et lecture à voix haute — 18 novembre 2026 (America/Toronto)
+
+Branche claude/liana-9999 (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Livré : plage de la 3e année étendue à 9 999 (numberWords, audio des nombres,
+mini-défis, coach, vérification orale serveur et client, plan de semaine);
+lignes en suites logiques (J échelle scolaire, L de mille en mille, M de cent en
+cent en 2000, N chiffres répétés, P de cent en cent en 9000) au lieu de
+nombres au hasard. Mode enfant : écran « Dis ce nombre à voix haute » — grand
+nombre, 10 points de progression, « ✔ Bien dit » (suivant, puis ligne suivante)
+et « ↻ À revoir » (l'app dit le nombre, elle le redit). Le parent écoute et
+valide; aucune transcription ni note automatique. Le mode adulte garde les
+anciens contrôles (row-confirm / row-retry).
+Preuves : 571 tests unitaires OK; suites navigateur learning, parent,
+continuous, table-songs OK; écran vérifié sans défilement à 390×740, 800×1000,
+1024×700 (Chromium, pas d'appareil réel Safari/iPad).
+En attente : « Bien dit » en mode enfant ne crédite pas de progression
+persistante (seul le parent confirme la ligne); voix enregistrée des milliers
+(« deux mille »…« neuf mille ») dépend du build de production avec clé de
+narration, sinon voix système. Prochaine action : relire le diff, fusionner,
+vérifier la version déployée.
+
 # Toucher le texte pour écouter — 18 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du

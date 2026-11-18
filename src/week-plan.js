@@ -1,7 +1,7 @@
 export const schoolWeek={id:'2026-10-19',title:'Ma semaine · 19 au 23 octobre',tasks:[
  'Lire 4 fois pendant 15 minutes. Défi de lecture à remettre le 29 octobre.',
  'Orthographe : bloc 1, semaine 5, page 7, 21 mots. Étudier au moins 2 fois. Liste des mots à ajouter.',
- 'Feuille rose 1 000 à 9 999 : lignes G, H et I. Feuille exacte à ajouter. Ici, on s’entraîne progressivement de 0 à 1 999.',
+ 'Feuille rose 1 000 à 9 999 : lignes G, H et I. Feuille exacte à ajouter. Ici, on s’entraîne progressivement de 0 à 9 999.',
  'Tables d’addition et de soustraction de 1 à 6. Cahier jaune, pages 4 à 17 selon la progression. Test le jeudi 22 octobre.',
  'Axel : page 8, activité du bas. Page à ajouter.',
  'Ma zone CEC : exercice 5, le plan cartésien; exercice 6, révision de la section 2.',

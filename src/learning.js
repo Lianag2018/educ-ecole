@@ -34,5 +34,5 @@ export const mathsFor=p=>[...(advanced(p)?mathCards:youngerMath),...extraMath(ad
 const youngerSocial=card('g1-social','comprehension','Où peux-tu emprunter un livre?','Je vais à la bibliothèque. Je choisis un livre. Je le rapporte après ma lecture.',['À la bibliothèque','Au parc'],0,'La bibliothèque permet d’emprunter des livres. Nomme un endroit que tu connais dans ton quartier.');
 export const socialFor=p=>advanced(p)?social:youngerSocial;
 const smallRows=Object.fromEntries(Object.keys(rows).map((k,i)=>[k,Array.from({length:10},(_,j)=>i*10+j+1)]));
-export const numberRows=p=>advanced(p)?{...rows,J:[1000,1001,1010,1024,1100,1208,1370,1500,1809,1999],K:[0,1,9,10,11,20,71,80,91,99]}:smallRows;
+export const numberRows=p=>advanced(p)?{...rows,J:[1000,1001,1010,1024,1100,1208,1370,1500,1809,1999],K:[0,1,9,10,11,20,71,80,91,99],L:[1000,2000,3000,4000,5000,6000,7000,8000,9000,9999],M:[2000,2100,2200,2300,2400,2500,2600,2700,2800,2900],N:[1000,1111,2222,3333,4444,5555,6666,7777,8888,9999],P:[9000,9100,9200,9300,9400,9500,9600,9700,9800,9900]}:smallRows;
 export const firstNumberRow=p=>advanced(p)?'J':'A';

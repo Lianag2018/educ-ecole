@@ -15,7 +15,7 @@ const normalize=text=>text.normalize('NFC').trim().toLocaleLowerCase('fr-CA')
 // received word or arbitrary phrase. A collision must fail instead of guessing.
 export function buildOralNumberAliases(numberName=numberWords){
  const forms=new Map();
- for(let value=0;value<=1999;value++){
+ for(let value=0;value<=9999;value++){
   let aliases=[''];
   for(const token of normalize(numberName(value)).split(' ')){
    const variants=['cent','cents'].includes(token)?['cent','cents']:['vingt','vingts'].includes(token)?['vingt','vingts']:[token];
@@ -53,8 +53,8 @@ export function hasOralSignal(wav){
 
 function result(kind,target,ai){return {status:200,body:{result:kind,feedback:ORAL_FEEDBACK[kind],feedbackKey:kind,ai,targetText:target.text}};}
 function parseNumber(text){
- if(/^(?:0|[1-9]\d{0,3})$/u.test(text)){const value=Number(text);return value<=1999?value:null;}
- if(/^1 \d{3}$/u.test(text))return Number(text.replace(' ',''));
+ if(/^(?:0|[1-9]\d{0,3})$/u.test(text)){const value=Number(text);return value<=9999?value:null;}
+ if(/^[1-9] \d{3}$/u.test(text))return Number(text.replace(' ',''));
  return frenchNumbers.get(text)??null;
 }
 

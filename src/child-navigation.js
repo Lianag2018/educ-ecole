@@ -74,7 +74,7 @@ export function subjectHome(p,subject,page=0){
    tile('Nos histoires de voyage','La carte de notre voyage','🏝️','data-action="adventure"'),
    tile('Découvrir le monde','Mon école et mon quartier','🌍','data-subject="3"')]
  ]:[
-  [tile('Les nombres',older?'Compter jusqu’à 1 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
+  [tile('Les nombres',older?'Compter jusqu’à 9 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
    tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),
    tile('Défi vitesse','Cartes et tableaux · chrono adapté','🚀','data-action="speed-math"'),
    tile('Vidéos et petits défis','Calculs et chansons expliqués','🎬','data-action="videos-maths"')],

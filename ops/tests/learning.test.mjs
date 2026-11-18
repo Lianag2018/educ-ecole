@@ -39,3 +39,19 @@ test('weekly arithmetic covers addition and subtraction tables 1 to 6',()=>{
  cards.forEach((q,i)=>assert.equal(Number(q.choices[q.answer]),op==='+'?table+i+1:i+1));
  }
 });
+test('Liana counts up to 9 999 through ordered rows of ten, while the first row stays at 1 000–1 999',()=>{
+ const older={id:'p2',schoolContext:{stage:'3e année'}},younger={id:'p1',schoolContext:{stage:'1re année'}};
+ const rows=numberRows(older);
+ assert.ok(rows[firstNumberRow(older)].every(n=>n>=1000&&n<=1999));
+ const step=(r)=>r.slice(1).map((n,i)=>n-r[i]);
+ for(const key of ['L','M','N','P']){assert.equal(rows[key].length,10);assert.equal(new Set(rows[key]).size,10);assert.ok(rows[key].every(n=>Number.isInteger(n)&&n>=1000&&n<=9999),key);assert.ok(step(rows[key]).every(d=>d>0),key+' croissante');}
+ assert.ok(step(rows.L.slice(0,9)).every(d=>d===1000),'L : de mille en mille');
+ assert.ok(step(rows.M).every(d=>d===100)&&rows.M[0]===2000,'M : de cent en cent');
+ assert.ok(step(rows.P).every(d=>d===100)&&rows.P[0]===9000,'P : de cent en cent');
+ assert.ok(rows.N.slice(1).every(n=>new Set(String(n)).size===1),'N : chiffres répétés');
+ assert.ok(Object.values(rows).flat().includes(9999));assert.ok(Math.max(...Object.values(rows).flat())===9999);
+ for(const n of Object.values(rows).flat())assert.ok(numberWords(n)&&!/[0-9]|undefined/.test(numberWords(n)));
+ assert.equal(rows.L,undefined||rows.L);assert.equal(numberRows(younger).L,undefined);assert.equal(numberRows(younger).M,undefined);
+ assert.equal(numberWords(9999),'neuf mille neuf cent quatre-vingt-dix-neuf');
+ assert.throws(()=>numberWords(10000),/9999/);
+});
