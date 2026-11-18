@@ -19,3 +19,14 @@ test('Word practice starts with two/three syllables while preserving elementary 
  for(const q of readerBlends)assert.equal(q.text.replace(/\s|\+/g,''),q.choices[q.answer]);
  assert.match(subjectHome(p1,'french'),/Je lis de petites histoires/);
 });
+test('listening comprehension hides the sentence until the answer, then shows it',async()=>{
+ const {beginnerCard,hidesListeningText,listenCardMarkup}=await import('../../src/beginner-access.js');
+ const [p1,p2]=fresh().profiles;
+ const card=beginnerCard({id:'unicorn-cloud-1',skill:'comprehension',text:'x',prompt:'y',choices:['a','b'],answer:0},p1,'Français');
+ assert.equal(card.learningMode,'listening');assert.match(card.text,/licorne/);
+ assert.equal(hidesListeningText(card,null),true);assert.equal(hidesListeningText(card,'correct'),false);
+ // Reading practice and older readers keep their text.
+ assert.equal(hidesListeningText({learningMode:undefined},null),false);
+ assert.equal(hidesListeningText(beginnerCard({id:'garden-story-1',skill:'comprehension',text:'x',prompt:'y',choices:['a','b'],answer:0},p2,'Français'),null),false);
+ const markup=listenCardMarkup();assert.match(markup,/data-action="listen"/);assert.doesNotMatch(markup,/licorne|carte|livre/i);
+});

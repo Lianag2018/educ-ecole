@@ -19,6 +19,43 @@ persistante (seul le parent confirme la ligne); voix enregistrée des milliers
 narration, sinon voix système. Prochaine action : relire le diff, fusionner,
 vérifier la version déployée.
 
+# Compréhension orale sans texte affiché — 18 novembre 2026 (America/Toronto)
+
+Base : main acfb645 (PR100 fusionnée, mode enfant en ligne). Branche
+claude/ecoute-sans-texte, non fusionnée. Le parent signale, sur une capture de la
+version en ligne, qu'un exercice de Mely-Ann affiche « Voici la carte. » à gauche
+sous la question « Que vois-tu? » : la phrase donne la réponse. Cause : les
+exercices de compréhension orale de 1re année (mode « listening », écrits dans
+beginner-access.js) affichaient la phrase à lire malgré la consigne d'écouter.
+Correction : pendant l'écoute, un grand bouton « Écoute » remplace la phrase;
+la phrase apparaît après la réponse, pour relier ce qui est entendu à ce qui est
+écrit. Lecture de histoires et profil de 3e année inchangés. Validation : test
+unitaire (563 réussis) et parcours Chromium du chapitre « La carte du bateau
+pirate » (carte d'écoute avant, phrase après); quatre suites navigateur locales
+réussies. Non vérifié : écoute réelle sur la tablette.
+
+# Tableau de 100 pour Mely-Ann — 18 novembre 2026 (America/Toronto)
+
+Base : main acfb645. Branche claude/tableau-cent, non fusionnée. Demande du
+parent : sur l'écran des nombres, un quadrillage en dizaines jusqu'à 100; on
+donne le nombre écrit en lettres, l'enfant le touche, et sa prononciation est
+entendue. Ajout (1re année seulement, écran « Mon jardin des nombres ») : tableau
+de 10 lignes de 10 (1 à 100), fins de dizaines en jaune; un nombre à trouver
+écrit en lettres avec bouton Écouter; chaque nombre touché est prononcé (voix et
+extraits existants de « Écouter le nombre ») et affiché en grand; bonne réponse =
+case verte et une étoile (non conservée), mauvaise = phrase explicative et, après
+deux essais, la ligne du nombre cherché éclairée. Mode enfant : le tableau
+remplace l'ancien « un nombre à la fois » (précédent, suivant); l'ancien contrôle
+reste derrière la clé Adulte. Le titre n'indique plus « de 0 à 99 » (le tableau
+va de 1 à 100). Profil de 3e année inchangé.
+
+Logique dans src/hundred-chart.js (tirage sans boucle qui exclut le nombre
+précédent). Validation : 5 nouveaux tests Node (567 réussis), 20 000 tirages
+valides, quatre suites navigateur locales réussies, parcours Chromium à 1024×768,
+1600×960, 768×1024 et 390×844 sans défilement. Non vérifié : écoute réelle de
+chaque nombre sur la tablette (les 100 prononciations passent par la narration
+et les extraits existants).
+
 # Toucher le texte pour écouter — 18 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du
