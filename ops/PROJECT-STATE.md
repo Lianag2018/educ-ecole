@@ -1,3 +1,18 @@
+# Compréhension orale sans texte affiché — 18 novembre 2026 (America/Toronto)
+
+Base : main acfb645 (PR100 fusionnée, mode enfant en ligne). Branche
+claude/ecoute-sans-texte, non fusionnée. Le parent signale, sur une capture de la
+version en ligne, qu'un exercice de Mely-Ann affiche « Voici la carte. » à gauche
+sous la question « Que vois-tu? » : la phrase donne la réponse. Cause : les
+exercices de compréhension orale de 1re année (mode « listening », écrits dans
+beginner-access.js) affichaient la phrase à lire malgré la consigne d'écouter.
+Correction : pendant l'écoute, un grand bouton « Écoute » remplace la phrase;
+la phrase apparaît après la réponse, pour relier ce qui est entendu à ce qui est
+écrit. Lecture de histoires et profil de 3e année inchangés. Validation : test
+unitaire (563 réussis) et parcours Chromium du chapitre « La carte du bateau
+pirate » (carte d'écoute avant, phrase après); quatre suites navigateur locales
+réussies. Non vérifié : écoute réelle sur la tablette.
+
 # Toucher le texte pour écouter — 18 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du
