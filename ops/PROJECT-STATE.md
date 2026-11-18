@@ -1,3 +1,21 @@
+# Toucher le texte pour écouter — 18 novembre 2026 (America/Toronto)
+
+Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du
+parent : plus de défilement, relire en touchant le texte plutôt qu'un bouton,
+retirer les autorisations parent au-dessus du texte, consignes plus compactes.
+Mode enfant : la ligne Écouter/Pause/Réécouter et le bouton « Écouter la
+question » disparaissent; toucher le texte relance la lecture (qui compte comme
+une aide, comme le bouton Écouter), toucher la question la relit; une mention
+« Touche ici pour écouter » et un haut-parleur sur la question l'annoncent.
+La chouette pose la question (consigne sur une ligne avec la chouette); l'image
+et le titre de l'histoire tiennent sur une ligne. Les autorisations parent de la
+voix (« Je lis avec la maîtresse », « Connexion parent ») restent masquées dans
+l'exercice. Clé Adulte : réaffiche Écouter et Pause. Mesure Chromium, deux
+profils, 1024×768, 1600×960 et 768×1024 : tous les types d'exercice tiennent
+sans défilement. Tests Node (562) et quatre suites navigateur locales réussis;
+continuous-browser vérifie le toucher sur le texte. Non vérifié : écoute réelle
+sur la tablette.
+
 # Voix douce et naturelle, sans curseur de vitesse — 18 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du

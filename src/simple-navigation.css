@@ -316,3 +316,13 @@ body.kid-simple .oral-choice:nth-child(4n+3)>[data-choice]:not([disabled]){backg
 body.kid-simple .oral-choice:nth-child(4n+4)>[data-choice]:not([disabled]){background:#fff0c2}
 body.kid-simple .oral-choice>[data-choice]{text-align:center!important;justify-content:center!important}
 body.kid-simple .oral-choice>[data-choice-audio]{background:#fff!important}
+
+/* Écoute par le toucher : le texte et la question se touchent pour être lus; plus de ligne de boutons d'écoute. */
+body.kid-simple .lesson-work>.reading-options,body.kid-simple .lesson-heading>.question-audio{display:none!important}
+body.kid-simple .lesson-heading h1::after{content:' 🔊';font-size:.7em}
+body.kid-simple .lesson-heading,body.kid-simple .lesson-text{cursor:pointer;-webkit-tap-highlight-color:#ffc93c55}
+body.kid-simple .lesson-text::before{content:'🔊 Touche ici pour écouter';display:block;font-size:14px;font-weight:700;color:#6b5a85;margin:0 0 4px}
+body.kid-simple .reader-story{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px}
+body.kid-simple .reader-story>span{font-size:34px;line-height:1}
+body.kid-simple .reader-story>h2{font-size:22px;margin:0}
+body.kid-simple .reader-story>.guided-reading{flex:1 1 100%}
