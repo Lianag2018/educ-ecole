@@ -1,6 +1,6 @@
 import {travelPoints} from './voyage.js';
 // Récompenses de la famille : un parcours d'étapes (McDo, cinéma, sushi…) que les étoiles font avancer.
-// Les étoiles sont celles du voyage (5 par bonne réponse, une fois par jour et par question) : rien n'est ajouté ni inventé.
+// Les étoiles sont celles du voyage : un exercice ne rapporte qu'une fois, et plus il est avancé plus il rapporte (5, 10 ou 15).
 // Une étape atteinte reste « à remettre » jusqu'à ce qu'un parent confirme l'avoir donnée : l'application ne promet rien seule.
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const DEFAULT_REWARDS=Object.freeze([
@@ -54,7 +54,7 @@ export function rewardsKid(p){
 export function rewardsParent(p){
  const st=rewardStatus(p),rows=rewardList(p);
  return `<section class="panel rewards-parent" data-parent-group="week"><h2>Récompenses de la famille</h2>
- <p>Les étoiles du voyage font avancer le parcours : 5 étoiles par bonne réponse, une fois par jour et par question. ${esc(p.name)} a <strong>${st.points}</strong> étoiles. Choisis tes récompenses et leurs coûts; confirme chaque fois que tu en remets une.</p>
+ <p>Les étoiles du voyage font avancer le parcours : un exercice ne rapporte qu’une seule fois (5 étoiles, 10 ou 15 pour les exercices plus avancés). ${esc(p.name)} a <strong>${st.points}</strong> étoiles. Choisis tes récompenses et leurs coûts; confirme chaque fois que tu en remets une.</p>
  ${st.items.filter(r=>r.reached&&!r.claimed).map(r=>`<p class="rewards-waiting"><strong>${esc(r.icon)} ${esc(r.title)}</strong> est gagné. <button type="button" data-reward-claim="${esc(r.id)}">Remis à ${esc(p.name)} ✓</button></p>`).join('')}
  <form id="rewards-form">${rows.map((r,i)=>`<p class="rewards-row"><input type="hidden" name="id${i}" value="${esc(r.id)}"><label>Icône<input name="icon${i}" maxlength="4" value="${esc(r.icon)}" size="3"></label><label>Récompense<input name="title${i}" maxlength="40" value="${esc(r.title)}"></label><label>Étoiles<input name="cost${i}" type="number" min="5" max="100000" step="5" value="${r.cost}"></label></p>`).join('')}
  ${rows.length<MAX_REWARDS?`<p class="rewards-row"><label>Icône<input name="icon${rows.length}" maxlength="4" size="3" placeholder="🎁"></label><label>Nouvelle récompense<input name="title${rows.length}" maxlength="40"></label><label>Étoiles<input name="cost${rows.length}" type="number" min="5" max="100000" step="5"></label></p>`:''}

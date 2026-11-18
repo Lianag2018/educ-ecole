@@ -1,3 +1,17 @@
+# Étoiles : un exercice ne paie qu'une fois, avec évolution — 18 novembre 2026 (America/Toronto)
+
+Branche claude/etoiles-une-fois (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : une fois qu'un exercice est fait, ne pas payer deux fois le même, mais
+avec évolution pour les deux enfants. Livré : travelPoints (src/voyage.js) compte chaque
+exercice (matière + identifiant) une seule fois, même refait un autre jour; la valeur suit
+le niveau de la carte : 5 étoiles au niveau 1, 10 au niveau 2, 15 au niveau 3 (plafonné).
+S'applique aux deux profils; les étoiles du coffre et des récompenses utilisent la même règle.
+Effet à signaler : les totaux déjà gagnés peuvent baisser (les répétitions passées ne comptent
+plus). Preuves : 586 tests unitaires OK (test de points mis à jour pour la nouvelle règle,
+test d'évolution ajouté); 4 suites navigateur OK. Pas d'appareil réel.
+En attente : l'évolution du contenu lui-même reste celle du moteur adaptatif existant
+(niveaux 1 à 3 selon les réussites). Prochaine action : relire, fusionner, vérifier le déploiement.
+
 # Parcours de récompenses — 18 novembre 2026 (America/Toronto)
 
 Branche claude/recompenses (cut de main), PR à ouvrir; non fusionnée, non déployée.

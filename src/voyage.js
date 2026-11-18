@@ -10,7 +10,10 @@ export const destinations=[
 ];
 export function travelState(p){return p.voyage??={destination:'mexique',reviews:{},rewards:{},quiet:false};}
 // One successful card per day and subject; never infer mastery from points.
-export function travelPoints(p){const seen=new Set();for(const h of p.history||[])if(h.result==='correct'&&h.id&&h.day)seen.add(JSON.stringify([h.day,h.subject||'Français',h.id]));return seen.size*5;}
+// Étoiles : chaque exercice (matière + identifiant) ne rapporte qu'une seule fois, même s'il est refait un autre jour.
+// Ça évolue avec la difficulté : 5 étoiles au niveau 1, 10 au niveau 2, 15 au niveau 3 (niveau de la carte, jamais deviné).
+export const STARS_PER_LEVEL=5;
+export function travelPoints(p){const best=new Map();for(const h of p.history||[]){if(h.result!=='correct'||!h.id||!h.day)continue;const key=JSON.stringify([h.subject||'Français',h.id]),level=Math.max(1,Math.min(3,Math.round(Number(h.activityLevel))||1));best.set(key,Math.max(best.get(key)||0,level));}let total=0;for(const level of best.values())total+=level*STARS_PER_LEVEL;return total;}
 export function travelTasks(p,week){const plan=(p.schoolPlans||[]).find(x=>weekKey(new Date(x.week+'T17:00:00Z'))===week);const tasks=(plan?.tasks||[]).map((t,i)=>({id:JSON.stringify(['plan',plan.week,i,t]),text:t.instruction||t.topic}));for(const [i,t]of(p.garden?.tasks||[]).entries())if(t.due&&weekKey(new Date(t.due+'T17:00:00Z'))===week)tasks.push({id:JSON.stringify(['task',i,t.text,t.subject,t.due]),text:t.text});return tasks;}
 export function reviewTask(p,week,id,done){if(!travelTasks(p,week).some(t=>t.id===id))return false;const v=travelState(p);v.reviews[week]??={};v.reviews[week][id]=!!done;return true;}
 export function weeklyTravel(p,week=weekKey(),now=new Date()){const v=travelState(p),tasks=travelTasks(p,week),done=tasks.filter(t=>v.reviews[week]?.[t.id]).length;const end=week<weekKey(now)||(week===weekKey(now)&&new Date(torontoDay(now)+'T12:00:00Z').getUTCDay()===0);return {tasks,done,complete:tasks.length>0&&done===tasks.length,eligible:end&&tasks.length>0&&done===tasks.length,reward:v.rewards[week]};}
