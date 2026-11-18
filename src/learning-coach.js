@@ -3,7 +3,7 @@
 const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[char]));
 const formatNumber = value => String(value).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
 const count = (value, singular, plural = `${singular}s`) => `${value} ${value > 1 ? plural : singular}`;
-const validNumber = value => typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 && value <= 1999;
+const validNumber = value => typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 && value <= 9999;
 
 function numberChallenge(value, places) {
   const [thousands, hundreds, tens, units] = places;

@@ -33,7 +33,9 @@ test('shared targets admit eight authored whole words and explicit grade number 
  for(const value of [0,99])assert.equal(resolveOralTarget({kind:'number',value},'1re année').value,value);
  assert.equal(resolveOralTarget({kind:'number',value:100},'1re année'),null);
  assert.equal(resolveOralTarget({kind:'number',value:1999},'3e année').text,numberWords(1999));
- for(const target of [{kind:'number',value:2000},{kind:'number',value:-1},{kind:'number',value:1.5},{kind:'number',value:'56'},{kind:'number',value:56,text:'faux'},{kind:'word',activityId:'co1'},{kind:'word',activityId:'sy1',text:'faux'}])assert.equal(resolveOralTarget(target,'3e année'),null);
+ assert.equal(resolveOralTarget({kind:'number',value:9999},'3e année').text,numberWords(9999));
+ assert.equal(resolveOralTarget({kind:'number',value:2345},'1re année'),null);
+ for(const target of [{kind:'number',value:10000},{kind:'number',value:-1},{kind:'number',value:1.5},{kind:'number',value:'56'},{kind:'number',value:56,text:'faux'},{kind:'word',activityId:'co1'},{kind:'word',activityId:'sy1',text:'faux'}])assert.equal(resolveOralTarget(target,'3e année'),null);
  assert.equal(resolveOralTarget({kind:'number',value:1},'2e année'),null);
 });
 

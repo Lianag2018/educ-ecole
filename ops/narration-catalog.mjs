@@ -38,6 +38,8 @@ export function narrationCatalog(){
  const operatorTexts=new Set(['plus','moins','fois','divisé par','égale','est plus petit que','est plus grand que']);
  for(const text of operatorTexts)texts.add(text);
  for(const n of [307,1000,1999,1001,1010,1024,1100,1208,1370,1500,1809])texts.add(numberWords(n));
+ // Nombres de 2 000 à 9 999 : un bloc par millier, puis les centaines et les unités déjà enregistrées.
+ for(let t=2;t<=9;t++)texts.add(numberWords(t*1000));
  for(const q of cards){
   // Built-in teaching content only. No profiles, uploads, questions or child audio.
   const text=spokenActivity(q);if(!/Liana|Mely-Ann/i.test(text))texts.add(text);

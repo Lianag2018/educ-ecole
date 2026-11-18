@@ -32,7 +32,7 @@ function exactKeys(value,keys){return Object.keys(value).length===keys.length&&O
 export function resolveOralTarget(target,stage){
  if(!['1re année','3e année'].includes(stage)||!record(target))return null;
  if(target.kind==='number'){
-  if(!exactKeys(target,['kind','value'])||!Number.isSafeInteger(target.value)||target.value<0||target.value>(stage==='1re année'?99:1999))return null;
+  if(!exactKeys(target,['kind','value'])||!Number.isSafeInteger(target.value)||target.value<0||target.value>(stage==='1re année'?99:9999))return null;
   return {kind:'number',value:target.value,text:numberWords(target.value)};
  }
  if(target.kind==='word'){

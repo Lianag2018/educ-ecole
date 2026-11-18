@@ -39,7 +39,7 @@ export function createGrokEndpoints({auth,apiKey,relaySecret,loadRelaySecret,con
    const p=await profiles.ownedBy(parent.id,b.profileId);if(!p)return {status:403,body:{code:'profile_forbidden'}};
    let context={mode:b.mode,stage:p.stage};
    if(b.mode==='number'){
-    if(!Number.isInteger(b.number)||b.number<0||b.number>(p.stage==='3e année'?1999:99))throw Error();context.number=b.number;
+    if(!Number.isInteger(b.number)||b.number<0||b.number>(p.stage==='3e année'?9999:99))throw Error();context.number=b.number;
    }else if(b.mode==='reading'){
     if(typeof b.activityId!=='string'||b.activityId.length>160)throw Error();
     const schoolProfile={id:b.profileId,schoolContext:{stage:p.stage}};

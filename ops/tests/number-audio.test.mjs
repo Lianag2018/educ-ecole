@@ -57,8 +57,8 @@ test('the forty originals retain their exact page-to-file mapping and canonical 
  assert.ok(Object.isFrozen(PEDAGOFA_NUMBER_CLIPS));
 });
 
-test('every integer 0–1999 has an exact complete plan in both modes and both written spellings',()=>{
- for(let n=0;n<=1999;n++){
+test('every integer 0–9999 has an exact complete plan in both modes and both written spellings',()=>{
+ for(let n=0;n<=9999;n++){
   const text=numberWords(n);
   for(const preferOriginal of [true,false]){
    const plan=planNumberAudio(n,clips,{preferOriginal});
@@ -69,6 +69,24 @@ test('every integer 0–1999 has an exact complete plan in both modes and both w
    assert.deepEqual(planNumberAudio(text.replaceAll(' ','-'),clips,{preferOriginal}),plan);
   }
  }
+});
+
+test('2 000–9 999 need one narrated block per thousand and never repeat « mille »',()=>{
+ const thousands=[2,3,4,5,6,7,8,9].map(t=>numberWords(t*1000));
+ const minimal=Object.freeze(Object.fromEntries([...neededNarrations.map(n=>numberWords(n)),...thousands].map(text=>[text,clips[text]])));
+ for(let n=2000;n<=9999;n++){
+  const plan=planNumberAudio(n,minimal),texts=plan.segments.map(segment=>segment.text);
+  assertPlan(plan,numberWords(n));
+  assert.equal(texts[0],numberWords(Math.floor(n/1000)*1000));
+  assert.equal(texts.filter(text=>/mille/u.test(text)).length,1,numberWords(n));
+ }
+ for(const text of thousands){
+  const incomplete={...minimal};delete incomplete[text];
+  assert.equal(planNumberAudio(text,incomplete,{preferOriginal:true}),null,`must not guess a missing block: ${text}`);
+ }
+ assert.deepEqual(planNumberAudio(2345,clips).segments.map(s=>s.text),['deux mille','trois cent','quarante','cinq']);
+ assert.deepEqual(planNumberAudio(2345,clips,{preferOriginal:false}).segments.map(s=>s.text),['deux mille','trois cent','quarante-cinq']);
+ assert.equal(planNumberAudio(10000,clips),null);assert.equal(planNumberAudio('dix mille',clips),null);
 });
 
 test('the entire original-first range requires only sixteen existing narrated blocks',()=>{
@@ -219,13 +237,13 @@ test('case, Unicode composition, rectified hyphens and whitespace normalize to c
 
 test('free text, malformed number names, complete dates, telephone numbers and out-of-range values are rejected',()=>{
  const invalid=[
-  '',null,undefined,true,{},[],NaN,Infinity,-1,2000,1.5,'2000','-1','+1','1,5','1.5','1/2','1e3',
+  '',null,undefined,true,{},[],NaN,Infinity,-1,10000,1.5,'10000','-1','+1','1,5','1.5','1/2','1e3',
   '2026-10-22','22/10/2026','22.10.2026','514-555-0123','514 555 0123','+1 (514) 555-0123',
   'un chat','J’ai vingt et un ans.','Lis le nombre 56','la + pin','56 pommes','un million',
   'mille et un','cent et un','un mille','vingt un','soixante-onze','quatre-vingts-un',
   'quatre-vingt-et-un','quatre-vingt-et-onze','deux cents trois','quatre vingts',
-  'un.','un.. deux','bonjour. un','1 + 2000','2000 + 1','un plus deux mille',
-  'un plus deux plus trois','1+2+3','un plus deux égale deux mille','<script>1</script>',
+  'un.','un.. deux','bonjour. un','1 + 10000','10000 + 1','un plus dix mille',
+  'un plus deux plus trois','1+2+3','un plus deux égale dix mille','<script>1</script>',
  ];
  for(const raw of invalid){
   assert.equal(planNumberAudio(raw,clips),null,String(raw));

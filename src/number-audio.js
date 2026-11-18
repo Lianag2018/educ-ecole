@@ -5,7 +5,7 @@ import {PEDAGOFA_NUMBER_CLIPS} from './number-audio-data.js';
 const HASH_FILE=/^[a-f0-9]{64}\.mp3$/;
 const OPERATORS=/ (est plus petit que|est plus grand que|divisé par|plus|moins|fois|égale) /u;
 const WRITTEN_NUMBERS=new Map();
-for(let n=0;n<=1999;n++){
+for(let n=0;n<=9999;n++){
  const words=numberWords(n);
  WRITTEN_NUMBERS.set(words,n);
  // Both traditional and rectified spelling describe the same complete number.
@@ -20,7 +20,7 @@ function normalize(text){
 function recognizedNumber(text){
  if(/^\d{1,4}$/u.test(text)){
   const number=Number(text);
-  return number<=1999?number:null;
+  return number<=9999?number:null;
  }
  return WRITTEN_NUMBERS.get(text)??null;
 }
@@ -80,6 +80,12 @@ function beforeRemainder(segments){
 function originalNumber(number,clips){
  const complete=original(number);
  if(complete)return [complete];
+ if(number>=2000){
+  // « deux mille » à « neuf mille » : un bloc narré complet, puis le reste. Sans bloc, pas de plan (voix de repli).
+  const block=narrated(numberWords(Math.floor(number/1000)*1000),clips),remainder=number%1000;
+  if(!block)return null;
+  return remainder?concatenate([block],originalNumber(remainder,clips)):[block];
+ }
  if(number>=1000){
   return concatenate([original(1000)],originalNumber(number-1000,clips));
  }
@@ -122,7 +128,7 @@ function narratedNumber(number,clips){
 }
 
 /**
- * Plan numbers 0–1999, number lists separated by ". ", and simple calculations.
+ * Plan numbers 0–9999, number lists separated by ". ", and simple calculations.
  * Return null for unrecognized text or a missing/invalid required narration.
  * No fetch, playback, speech generation, or mutation of the supplied clip bank.
  * Remote original failures are handled by the caller by replanning once with

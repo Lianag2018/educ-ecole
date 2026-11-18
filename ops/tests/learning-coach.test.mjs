@@ -5,8 +5,8 @@ import {numberCoachMarkup, wordCoachMarkup, parentCoachingPanel} from '../../src
 const plainNumber = text => Number(text.replace(/[\s\u00a0\u202f]/g, ''));
 const places = html => [...html.matchAll(/<td>(\d)<\/td>/g)].map(match => Number(match[1]));
 
-test('all 0–1999 place tables and explicit-zero decompositions represent the exact requested number', () => {
-  for (let value = 0; value <= 1999; value++) {
+test('all 0–9999 place tables and explicit-zero decompositions represent the exact requested number', () => {
+  for (let value = 0; value <= 9999; value++) {
     const html = numberCoachMarkup(value), digits = places(html);
     const weights = value < 100 ? [10, 1] : value < 1000 ? [100, 10, 1] : [1000, 100, 10, 1];
     assert.equal(digits.length, weights.length);
@@ -24,7 +24,7 @@ test('all 0–1999 place tables and explicit-zero decompositions represent the e
 });
 
 test('invalid numbers have no panel and are never rounded, coerced or replaced by another target', () => {
-  for (const value of [undefined, null, '', '20', '1 999', NaN, Infinity, -1, 2000, 5.6, {}, [], true]) assert.equal(numberCoachMarkup(value), '');
+  for (const value of [undefined, null, '', '20', '1 999', NaN, Infinity, -1, 10000, 5.6, {}, [], true]) assert.equal(numberCoachMarkup(value), '');
   assert.deepEqual(places(numberCoachMarkup(-0)), [0, 0]);
 });
 
@@ -45,10 +45,10 @@ test('base-ten exchanges are exact and additional questions remain within the su
   assert.match(numberCoachMarkup(10), /10 unités = 1 dizaine\./);
   assert.match(numberCoachMarkup(100), /10 dizaines = 1 centaine\./);
   assert.match(numberCoachMarkup(1000), /10 centaines = 1 millier\./);
-  for (const value of [0, 1, 9, 10, 56, 99, 100, 1000, 1999]) {
+  for (const value of [0, 1, 9, 10, 56, 99, 100, 1000, 1999, 2000, 9999]) {
     const html = numberCoachMarkup(value), compared = html.match(/regarde ([\d\s\u00a0]+) et ([\d\s\u00a0]+)\./);
     assert.equal(plainNumber(compared[1]), value); const other = plainNumber(compared[2]);
-    assert.ok(other >= 0 && other <= 1999 && other !== value); if (value < 100) assert.ok(other < 100);
+    assert.ok(other >= 0 && other <= 9999 && other !== value); if (value < 100) assert.ok(other < 100);
     for (const prompt of ['Reformuler', 'Montrer', 'Écrire', 'Comparer', 'Une question au choix']) assert.ok(html.includes(prompt));
   }
 });

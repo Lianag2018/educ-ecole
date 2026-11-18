@@ -327,6 +327,31 @@ body.kid-simple .reader-story>span{font-size:34px;line-height:1}
 body.kid-simple .reader-story>h2{font-size:22px;margin:0}
 body.kid-simple .reader-story>.guided-reading{flex:1 1 100%}
 
+/* Nombres de la 3e année (jusqu'à 9 999) : le grand nombre, écouter, avant et après côte à côte, mes fiches. */
+body.kid-simple .number-adventure:not(.has-hundred){display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start;padding:8px 16px}
+body.kid-simple .number-adventure:not(.has-hundred)>*{grid-column:1/-1}
+body.kid-simple .number-adventure:not(.has-hundred)>[data-action=number-prev]{grid-column:1}
+body.kid-simple .number-adventure:not(.has-hundred)>[data-action=number-next]{grid-column:2}
+body.kid-simple .number-adventure:not(.has-hundred) [data-number-display]{font-size:clamp(56px,14svh,120px);padding:4px;word-break:keep-all}
+body.kid-simple .number-adventure:not(.has-hundred) button{min-height:54px}
+body.kid-simple .number-adventure:not(.has-hundred) [data-action=number-audio]{min-height:62px}
+body.kid-simple .number-adventure>[data-action=home]{display:none!important}
+
+/* 3e année : elle dit le nombre à voix haute, l'adulte touche « Bien dit » ou « À revoir ». */
+body:not(.kid-simple) .read-aloud{display:none}
+.read-aloud{display:flex;flex-direction:column;align-items:center;gap:8px}
+.read-ask{margin:0;font-family:var(--display,inherit);font-weight:800;font-size:clamp(20px,3svh,28px);color:#24163f;text-align:center}
+.read-dots{display:flex;gap:7px}
+.read-dots>i{width:16px;height:16px;border-radius:50%;border:3px solid #24163f;background:#fff}
+.read-dots>i.done{background:#2ccba4}.read-dots>i.now{background:#ffc93c;transform:scale(1.25)}
+.read-buttons{display:flex;gap:12px;width:100%}
+.read-buttons>button{flex:1;min-height:64px;border:3px solid #24163f;border-radius:999px;font-family:var(--display,inherit);font-weight:800;font-size:clamp(20px,3svh,26px);color:#24163f;box-shadow:0 5px 0 #24163f}
+.read-ok{background:#2ccba4}.read-again{background:#fff}
+.read-buttons>button:active{transform:translateY(4px);box-shadow:0 1px 0 #24163f}
+.read-msg{margin:0;min-height:1.4em;font-size:16px;font-weight:700;color:#5f5578;text-align:center}
+body.kid-simple .number-adventure:not(.has-hundred) [data-action=number-audio],body.kid-simple .number-adventure:not(.has-hundred) [data-action=number-prev],
+body.kid-simple .number-adventure:not(.has-hundred) [data-action=number-next]{display:none!important}
+
 /* Compréhension orale : on écoute, on ne lit pas. La phrase reste cachée jusqu'à la réponse. */
 .listen-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;min-height:150px;padding:14px;border:3px solid #24163f;border-radius:26px;background:#ffc93c;color:#24163f;box-shadow:0 6px 0 #24163f;font-size:20px;transition:transform .12s,box-shadow .12s}
 .listen-card>span{font-size:64px;line-height:1}
