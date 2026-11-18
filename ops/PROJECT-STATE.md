@@ -1,3 +1,20 @@
+# Grille de 80 nombres pour Liana — 18 novembre 2026 (America/Toronto)
+
+Branche claude/grille-nombres (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : une grille de 10 par 8 avec des nombres mélangés au hasard de
+1000 à 9999 (et non des lignes logiques). Livré : en mode enfant, l'écran des
+nombres de Liana montre 80 nombres différents (10 colonnes × 8 rangées, tirés au
+hasard à chaque ouverture); un nombre est éclairé en jaune, elle le dit à voix haute,
+l'adulte touche « ✔ Bien dit » (il devient vert, le suivant s'éclaire) ou « ↻ À revoir »
+(l'app le dit). Elle peut aussi toucher un nombre pour le choisir. Fin de grille :
+« Bravo ! » et nouvelle grille. Aucune note automatique. Le mode adulte garde les
+lignes logiques J/L/M/N/P et les contrôles parent.
+Preuves : 578 tests unitaires OK; 4 suites navigateur OK; écran sans défilement à
+1366×768, 1024×700, 800×1000, 390×740 (Chromium, pas d'appareil réel).
+En attente : « Bien dit » ne crédite pas de progression enregistrée (seul le parent
+confirme une ligne en mode adulte). Prochaine action : relire le diff, fusionner,
+vérifier la version déployée.
+
 # Liana : nombres jusqu'à 9 999 et lecture à voix haute — 18 novembre 2026 (America/Toronto)
 
 Branche claude/liana-9999 (cut de main), PR à ouvrir; non fusionnée, non déployée.

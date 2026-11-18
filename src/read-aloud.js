@@ -1,17 +1,32 @@
-// Lecture à voix haute : l'enfant lit le nombre affiché et le dit à un adulte; l'adulte touche « Bien dit »
-// ou « À revoir ». L'application ne dit le nombre qu'à la demande (« À revoir »), pas avant.
-// Ordre des lignes de la 3e année : de 1 000 à 9 999, du plus simple au plus grand.
+// Grille de lecture à voix haute (3e année) : 80 nombres de 1 000 à 9 999 mélangés au hasard,
+// dix par rangée, huit rangées. Un nombre est éclairé; l'enfant le dit à voix haute et l'adulte touche « Bien dit ».
 export const ADVANCED_ORDER=Object.freeze(['J','L','M','N','P']);
-export const createReadAloud=()=>({done:new Map(),message:''});
-export const doneIn=(s,row)=>s.done.get(row)??new Set();
-export function markRead(s,row,index){const set=new Set(doneIn(s,row));set.add(index);s.done.set(row,set);return set.size;}
-export const rowComplete=(s,row,length=10)=>doneIn(s,row).size>=length;
-// Prochain nombre à lire : d'abord ceux de la ligne qui ne sont pas encore dits (en avançant), puis la ligne suivante.
-export function nextPosition(s,order,row,index,length=10){
- const set=doneIn(s,row);
- for(let k=1;k<=length;k++){const i=(index+k)%length;if(!set.has(i))return {row,index:i,rowDone:false,finished:false};}
- const at=order.indexOf(row),finished=at===order.length-1,next=order[(at+1)%order.length],seen=doneIn(s,next);
- let first=0;while(first<length-1&&seen.has(first))first++;
- return {row:next,index:first,rowDone:true,finished};
+export const GRID_COLUMNS=10,GRID_ROWS=8,GRID_SIZE=GRID_COLUMNS*GRID_ROWS,GRID_MIN=1000,GRID_MAX=9999;
+// 80 nombres différents, tirés sans boucle infinie : on tire dans un ensemble qu'on rétrécit.
+export function drawNumbers(random=Math.random,count=GRID_SIZE){
+ const seen=new Set();
+ while(seen.size<count)seen.add(GRID_MIN+Math.floor(random()*(GRID_MAX-GRID_MIN+1)));
+ return [...seen];
 }
-export const dotsMarkup=(s,row,index,length=10)=>Array.from({length},(_,i)=>`<i class="${doneIn(s,row).has(i)?'done':i===index?'now':''}"></i>`).join('');
+export const createGrid=(random=Math.random)=>({random,numbers:drawNumbers(random),done:new Set(),current:0,message:''});
+export const isFinished=g=>g.done.size>=g.numbers.length;
+export function select(g,index){if(Number.isInteger(index)&&index>=0&&index<g.numbers.length&&!g.done.has(index))g.current=index;return g.current;}
+export function markDone(g,index=g.current){g.done.add(index);return g.done.size;}
+// Prochain nombre pas encore lu, en avançant dans la grille; -1 quand tout est lu.
+export function nextIndex(g,from=g.current){
+ const n=g.numbers.length;
+ for(let k=1;k<=n;k++){const i=(from+k)%n;if(!g.done.has(i))return i;}
+ return -1;
+}
+export function cellClass(g,i){return ['read-cell',g.done.has(i)?'done':'',i===g.current?'now':''].filter(Boolean).join(' ');}
+export function gridMarkup(g){
+ return `<div class="read-aloud"><div class="read-grid" role="group" aria-label="Choisis un nombre et dis-le à voix haute">${g.numbers.map((n,i)=>`<button type="button" class="${cellClass(g,i)}" data-read-cell="${i}">${n}</button>`).join('')}</div>
+ <p class="read-ask">Dis à voix haute le nombre <b>jaune</b></p>
+ <div class="read-buttons"><button type="button" class="read-ok" data-read-ok>✔ Bien dit</button><button type="button" class="read-again" data-read-again>↻ À revoir</button></div>
+ <p class="read-msg" role="status" data-read-msg>${g.message||`${g.done.size} / ${g.numbers.length}`}</p></div>`;
+}
+// Met à jour l'écran sans le reconstruire.
+export function paintGrid(root,g){
+ root.querySelectorAll('[data-read-cell]').forEach(b=>{b.className=cellClass(g,Number(b.dataset.readCell));});
+ const m=root.querySelector('[data-read-msg]');if(m)m.textContent=g.message||`${g.done.size} / ${g.numbers.length}`;
+}
