@@ -1,3 +1,22 @@
+# Parcours de récompenses — 18 novembre 2026 (America/Toronto)
+
+Branche claude/recompenses (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : récompenses (McDo, cinéma, resto sushi, parc d'amusement, fin de
+semaine à l'hôtel, trampolines…). Livré : écran enfant « Mon coffre aux récompenses »
+(ouvert par « Mon coffre » en haut de l'accueil → « 🎁 Mes récompenses ») : étoiles du
+voyage (5 par bonne réponse, une fois par jour et par question — rien d'ajouté),
+barre vers la prochaine étape, 6 étapes par défaut (McDo 100, trampolines 250, cinéma 400,
+sushi 600, parc 1000, hôtel 2000; coûts à ajuster). Espace parent : modifier/ajouter des
+récompenses (8 max), confirmer « Remis » (une étape atteinte reste « à remettre » tant
+qu'un parent ne confirme pas), « Nouveau parcours » (repart à 0 sans effacer l'historique).
+Stockage : localStorage de l'appareil (profil de l'enfant, p.rewards), comme le reste.
+Preuves : 585 tests unitaires OK; 4 suites navigateur OK; écran sans défilement à
+1180×820, 800×1000, 390×740 (Chromium, pas d'appareil réel).
+En attente : une valeur à confirmer avec le parent (« must isaut trampoline » interprété
+comme « Parc de trampolines »); pas de sauvegarde serveur des récompenses; « Bien dit » de la
+grille de nombres ne donne toujours pas d'étoiles. Prochaine action : relire, fusionner,
+vérifier la version déployée.
+
 # Grille de 80 nombres pour Liana — 18 novembre 2026 (America/Toronto)
 
 Branche claude/grille-nombres (cut de main), PR à ouvrir; non fusionnée, non déployée.
