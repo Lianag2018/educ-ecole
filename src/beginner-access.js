@@ -36,6 +36,10 @@ export function beginnerCard(q,p,subject='Français'){
  if(q.skill==='comprehension'&&!['Maths','Mathématiques'].includes(subject))out={...out,learningMode:'listening',travelSubject:'Compréhension orale'};
  return out;
 }
+// Écoute sans texte : pendant une compréhension orale, la phrase n'est pas affichée (elle donnerait la
+// réponse). Elle apparaît après la réponse, pour relier ce qu'on a entendu à ce qui est écrit.
+export const hidesListeningText=(q,answered)=>q?.learningMode==='listening'&&!answered;
+export const listenCardMarkup=()=>'<button type="button" class="listen-card" data-action="listen" aria-label="Écouter la phrase"><span aria-hidden="true">👂</span><strong>Écoute</strong><small>Touche pour réécouter</small></button>';
 export function beginnerPages(text){return String(text||'').match(/[^.!?]+[.!?]*/gu)?.map(s=>s.trim()).filter(Boolean)||[''];}
 export function activityPages(q,p){
  const text=q.spokenText||q.text||'';

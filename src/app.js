@@ -25,7 +25,7 @@ import {scheduleSuccess} from './success-step.js';
 import {mountWelcomeVideo} from './welcome-video.js';
 import {openPopit} from './popit.js';
 import {createChart,tapNumber,nextTarget,paintChart,chartMarkup} from './hundred-chart.js';
-import {beginnerCard,beginnerProfile,activityPages,choicePicture,beginnerMathVisual} from './beginner-access.js';
+import {beginnerCard,beginnerProfile,activityPages,choicePicture,beginnerMathVisual,hidesListeningText,listenCardMarkup} from './beginner-access.js';
 import {islandCards,islandVisual,islandChapters,islandScene} from './dominican-adventure.js';
 import {travelHome,travelParent,travelPoints,travelState,travelCards,travelVisual,travelTasks,reviewTask,claimTravel} from './voyage.js';
 let travelWeek;
@@ -136,6 +136,7 @@ function lessonText(q,p){
  if(sceneFor(q)){session.scene??={};return `<div data-play-scene>${sceneMarkup(q,session.scene)}</div>`;}
  if(q.beginnerMath)return beginnerMathVisual(q);
  if(q.earlyReader)return `<div class="reader-story"><span aria-hidden="true" style="font-size:3rem">${esc(q.art)}</span><h2>${esc(q.title)}</h2><p class="reading-coach">Lis à ton rythme. Tu peux demander un coup de pouce.</p>${guidedMarkup(activityPages(q,p)[session.page||0],false)}${readingNavigation(activityPages(q,p))}<details data-reader-help><summary>Un coup de pouce pour les mots</summary>${q.wordHelp.map(([word,parts])=>`<button data-word-audio="${esc(word)}">🔊 ${esc(word)} <small>${esc(parts)}</small></button>`).join('')}</details></div>`;
+ if(hidesListeningText(q,feedback))return listenCardMarkup();
  if((beginnerProfile(p)||q.skill==='comprehension')&&!q.soundTarget&&!q.miniZone&&!q.islandObjects&&!q.islandMath&&!q.travelCount&&q.skill!=='syllabes'){const pages=activityPages(q,p),i=session.page||0;return `${q.learningMode==='listening'?'<p class="reading-coach">Écoute l’histoire. Tu peux répondre sans tout lire.</p>':''}${guidedMarkup(pages[i]||pages[0],advanced(p))}${readingNavigation(pages)}`;}
  if(q.islandObjects||q.islandMath)return islandVisual(q);
 
