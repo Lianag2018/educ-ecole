@@ -1,3 +1,25 @@
+# Tableau de 100 pour Mely-Ann — 18 novembre 2026 (America/Toronto)
+
+Base : main acfb645. Branche claude/tableau-cent, non fusionnée. Demande du
+parent : sur l'écran des nombres, un quadrillage en dizaines jusqu'à 100; on
+donne le nombre écrit en lettres, l'enfant le touche, et sa prononciation est
+entendue. Ajout (1re année seulement, écran « Mon jardin des nombres ») : tableau
+de 10 lignes de 10 (1 à 100), fins de dizaines en jaune; un nombre à trouver
+écrit en lettres avec bouton Écouter; chaque nombre touché est prononcé (voix et
+extraits existants de « Écouter le nombre ») et affiché en grand; bonne réponse =
+case verte et une étoile (non conservée), mauvaise = phrase explicative et, après
+deux essais, la ligne du nombre cherché éclairée. Mode enfant : le tableau
+remplace l'ancien « un nombre à la fois » (précédent, suivant); l'ancien contrôle
+reste derrière la clé Adulte. Le titre n'indique plus « de 0 à 99 » (le tableau
+va de 1 à 100). Profil de 3e année inchangé.
+
+Logique dans src/hundred-chart.js (tirage sans boucle qui exclut le nombre
+précédent). Validation : 5 nouveaux tests Node (567 réussis), 20 000 tirages
+valides, quatre suites navigateur locales réussies, parcours Chromium à 1024×768,
+1600×960, 768×1024 et 390×844 sans défilement. Non vérifié : écoute réelle de
+chaque nombre sur la tablette (les 100 prononciations passent par la narration
+et les extraits existants).
+
 # Toucher le texte pour écouter — 18 novembre 2026 (America/Toronto)
 
 Même branche claude/accueil-monde-un-ecran (PR100), non fusionnée. Demande du

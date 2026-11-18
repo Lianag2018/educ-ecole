@@ -326,3 +326,51 @@ body.kid-simple .reader-story{display:flex;flex-wrap:wrap;align-items:center;gap
 body.kid-simple .reader-story>span{font-size:34px;line-height:1}
 body.kid-simple .reader-story>h2{font-size:22px;margin:0}
 body.kid-simple .reader-story>.guided-reading{flex:1 1 100%}
+
+/* ===== Tableau de 100 (1re année) : dix lignes de dix, un nombre écrit en lettres à trouver ===== */
+.hundred-chart{display:grid;grid-template-columns:auto minmax(230px,1fr);gap:18px;align-items:start;margin:6px 0}
+.hundred-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;width:min(62vw,calc(100svh - 235px));aspect-ratio:1;min-width:260px}
+.hundred-cell{min-width:0;min-height:0;padding:0;border:2px solid #24163f;border-radius:10px;background:#fff;color:#24163f;box-shadow:0 3px 0 #24163f;font-family:var(--display,inherit);font-weight:800;font-size:clamp(13px,2.7svh,26px);line-height:1;font-variant-numeric:tabular-nums;transition:transform .1s,box-shadow .1s,background .2s}
+.hundred-cell.row-b{background:#efe8ff}
+.hundred-cell.ten-end{background:#ffe9a8}
+.hundred-cell.found{background:#c9f0dd}
+.hundred-cell.right{background:#2ccba4;animation:hundred-pop .5s cubic-bezier(.2,.9,.3,1.4)}
+.hundred-cell.wrong{background:#ffc9d6;animation:hundred-shake .35s}
+.hundred-cell.hint{outline:4px solid #ffc93c;outline-offset:-2px;z-index:1}
+.hundred-cell:active{transform:translateY(3px);box-shadow:0 0 0 #24163f}
+@keyframes hundred-pop{40%{transform:scale(1.25)}}
+@keyframes hundred-shake{25%,75%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
+.hundred-side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.hundred-ask{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px;border:3px solid #24163f;border-radius:22px;background:#ffc93c;color:#24163f;box-shadow:0 5px 0 #24163f;text-align:center}
+.hundred-ask>span{font-size:15px;font-weight:700}
+.hundred-ask>strong{font-family:var(--display,inherit);font-size:clamp(26px,4svh,44px);line-height:1.1;overflow-wrap:anywhere}
+.hundred-hear{min-height:52px;padding:6px 20px;border:3px solid #24163f;border-radius:999px;background:#fff;color:#24163f;font-size:18px;font-weight:800;box-shadow:0 4px 0 #24163f}
+.hundred-last{text-align:center;padding:8px;border-radius:20px;background:#f4f0f9}
+.hundred-last>b{display:block;font-family:var(--display,inherit);font-size:clamp(56px,13svh,110px);line-height:1;color:#24163f}
+.hundred-last>small{display:block;font-size:clamp(16px,2.4svh,22px);font-weight:700;color:#5f5578;min-height:1.3em}
+.hundred-msg{margin:0;min-height:2.6em;font-size:clamp(16px,2.4svh,22px);font-weight:700;text-align:center;color:#24163f}
+.hundred-score{margin:0;text-align:center;font-size:24px;font-weight:800}
+/* Mode enfant : le tableau remplace l'ancien petit nombre à la fois. */
+body.kid-simple .number-adventure.has-hundred [data-number-display],body.kid-simple .number-adventure.has-hundred [data-action=number-audio],
+body.kid-simple .number-adventure.has-hundred [data-action=number-prev],body.kid-simple .number-adventure.has-hundred [data-action=number-next],
+body.kid-simple .number-adventure.has-hundred [data-action=home]{display:none!important}
+body.kid-simple .number-adventure.has-hundred{gap:6px;padding:6px 14px}
+body.kid-simple .number-adventure.has-hundred h1{font-size:clamp(20px,2.6vw,28px)}
+body.kid-simple .number-adventure.has-hundred [data-action=library-numbers]{min-height:50px;font-size:17px}
+@media (max-aspect-ratio:1/1){
+ .hundred-chart{grid-template-columns:1fr}
+ .hundred-grid{width:min(100%,calc(100svh - 470px));margin:0 auto}
+ .hundred-side{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
+ .hundred-msg,.hundred-score{grid-column:1/-1;min-height:0}
+}
+@media (prefers-reduced-motion:reduce){.hundred-cell.right,.hundred-cell.wrong{animation:none}}
+
+/* Les cases du tableau gardent leur forme malgré le style des autres boutons de l'écran. */
+body .number-adventure .hundred-cell{min-height:0!important;min-width:0!important;padding:0!important;border-width:2px!important;border-radius:10px!important;box-shadow:0 3px 0 #24163f!important;font-size:clamp(13px,2.7svh,26px)!important;display:block!important}
+body .number-adventure .hundred-cell.row-b{background:#efe8ff!important}
+body .number-adventure .hundred-cell.ten-end{background:#ffe9a8!important}
+body .number-adventure .hundred-cell.found{background:#c9f0dd!important}
+body .number-adventure .hundred-cell.right{background:#2ccba4!important}
+body .number-adventure .hundred-cell.wrong{background:#ffc9d6!important}
+body .number-adventure .hundred-cell:active{box-shadow:0 0 0 #24163f!important}
+body .number-adventure .hundred-hear{min-height:52px!important}
