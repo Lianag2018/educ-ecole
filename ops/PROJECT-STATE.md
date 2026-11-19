@@ -1,3 +1,11 @@
+# Fête selon le niveau + choix « je garde mes étoiles » — 19 novembre 2026 (America/Toronto)
+
+Branche claude/fete-niveaux (cut de main après #129). Demande du parent : animer la photo qui vole avec une ambiance qui grandit selon les points obtenus, et demander à la fille si elle veut garder ses étoiles pour le prochain niveau.
+Livré : (1) Photo qui vole en continu (dérive, balancement, légère rotation) + traînée d'étincelles. (2) Ambiance par niveau de récompense (rang dans la liste : niveaux 1, 2, 3) : plus de confettis, feux d'artifice dès le niveau 2, rayons dorés et lueur pulsante au niveau 3, titre « Super récompense! ». (3) Compteur d'étoiles qui monte de 0 au total gagné. (4) Choix de la fille : « 🎁 Je la veux maintenant » (va au coffre, marquée « Demandée ») ou « 💎 Je garde mes étoiles » (pour la récompense suivante, nommée avec les étoiles qui manquent). Les étoiles ne sont jamais dépensées; le choix est mémorisé (p.rewards.choice) et visible au coffre et dans l'espace parent (« la veut maintenant » / « garde ses étoiles pour la prochaine »). Le parent confirme toujours « Remis ». (5) Si plusieurs paliers sont franchis d'un coup, seule la plus haute est célébrée, une seule fois.
+Interprétation à confirmer par le parent : « garder pour le prochain niveau » = ne pas demander cette récompense maintenant et viser la suivante; rien n'est retiré.
+Preuves : 643 tests unitaires + 4 suites navigateur OK (learning relancée après un délai réseau sans rapport); vérifié dans Chromium : niveaux 1, 2, 3 (classes rp-t1/t2/t3), compteur, deux choix, 0 erreur JS. Non essayé sur iPad réel.
+Pas fait : fanfare sonore; photo différente par niveau; « Repartir à 0 » ne réinitialise pas encore fêtes ni choix.
+
 # Fête de la récompense — 19 novembre 2026 (America/Toronto)
 
 Branche claude/fete-recompense (cut de main après #128). Demande du parent : quand l'enfant atteint une récompense, une grande ouverture « Récompense obtenue! » avec la photo des deux filles qui volent dans le ciel, animée.

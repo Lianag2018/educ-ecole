@@ -680,3 +680,31 @@ body.kid-simple .simple-world .daily-copy .kid-label{padding:4px 30px;border:3px
 @media(min-width:701px) and (orientation:portrait){.rp-photo{object-fit:cover;object-position:52% 30%;height:60%;inset:0 0 auto 0;animation:rpFlySoft 14s ease-in-out infinite alternate}.rp-glow{background:linear-gradient(transparent 40%,#2a165099)}}
 @keyframes rpFlySoft{from{transform:scale(1)}to{transform:scale(1.06)}}
 @media(max-width:700px){.rp-photo{animation:rpFlySoft 14s ease-in-out infinite alternate}}
+
+/* Fête selon le niveau : la photo vole, traînée d'étincelles, feux d'artifice et rayons dorés aux grands niveaux */
+.rp-photo{animation:rpFlyBy 9s ease-in-out infinite alternate!important}
+@keyframes rpFlyBy{0%{transform:scale(1.08) translate(-2%,1.5%) rotate(-.6deg)}50%{transform:scale(1.11) translate(0,-1.5%) rotate(.3deg)}100%{transform:scale(1.14) translate(2%,1%) rotate(.8deg)}}
+.rp-trail{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.75;background-image:radial-gradient(circle,#fff 0 2px,transparent 3px),radial-gradient(circle,#ffe58a 0 1.5px,transparent 2.5px);background-size:90px 70px,140px 110px;animation:rpTrail 6s linear infinite}
+@keyframes rpTrail{from{background-position:0 0,0 0}to{background-position:-180px 140px,-280px 220px}}
+.rp-rays{position:absolute;inset:-30%;pointer-events:none;opacity:0;background:repeating-conic-gradient(from 0deg,#ffe58a55 0 6deg,transparent 6deg 18deg);animation:rpSpin 24s linear infinite;mix-blend-mode:screen}
+.rp-t3 .rp-rays{opacity:.7}.rp-t2 .rp-rays{opacity:.35}
+.rp-t2 .rp-glow{background:radial-gradient(ellipse at 50% 45%,#ffe58a66,transparent 62%),linear-gradient(transparent 45%,#2a165099)}
+.rp-t3 .rp-glow{background:radial-gradient(ellipse at 50% 40%,#fff3a8aa,transparent 66%),linear-gradient(transparent 40%,#2a1650aa);animation:rpPulse 1.6s ease-in-out infinite alternate}
+.rp-t3 .rp-photo{filter:saturate(1.15) brightness(1.06)}
+@keyframes rpSpin{to{transform:rotate(360deg)}}
+.rp-fw{position:absolute;font-size:clamp(46px,10vw,96px);opacity:0;animation:rpBoom 2.4s ease-out infinite}
+.rp-fw1{left:8%;top:12%;animation-delay:.2s}.rp-fw2{right:8%;top:8%;animation-delay:1.1s}.rp-fw3{left:30%;top:4%;animation-delay:1.8s}.rp-fw4{right:26%;top:18%;animation-delay:.7s}
+@keyframes rpBoom{0%{opacity:0;transform:scale(.2)}20%{opacity:1}100%{opacity:0;transform:scale(1.6) rotate(25deg)}}
+.rp-t3 .rp-c{animation-duration:4.5s}.rp-t2 .rp-c{animation-duration:5.2s}
+.rp-c13,.rp-c14,.rp-c15,.rp-c16,.rp-c17,.rp-c18,.rp-c19,.rp-c20{left:calc(var(--i)*4.7%);animation-delay:calc(var(--i)*.15s)}
+.rp-stars{font-family:var(--display,inherit);font-weight:900;font-size:clamp(22px,4.2vw,36px);color:#b86e00;line-height:1.1}.rp-stars b{font-size:1.3em;color:#24163f}
+.rp-t3 .rp-card{border-color:#b86e00;background:#fff8e1f2;box-shadow:0 8px 0 #b86e00,0 0 40px #ffd34f}
+.rp-ask{font-size:clamp(15px,2.4svh,20px)!important;line-height:1.25}.rp-ask b{color:#7452a8}
+.rp-actions button{font-size:clamp(15px,2.4svh,20px)}
+.reward.kept{background:#e8f0ff}
+@media (prefers-reduced-motion:reduce){.rp-photo,.rp-trail,.rp-rays,.rp-fw,.rp-t3 .rp-glow{animation:none!important}.rp-fw{display:none}}
+
+.reward-party .rp-icon{font-size:clamp(40px,8svh,72px);line-height:1.15;margin:2px 0 0}
+.reward-party .rp-card{padding-top:clamp(10px,2svh,20px);padding-bottom:clamp(12px,2.4svh,22px)}
+.reward-party .rp-card h2{margin:0 0 4px;font-size:clamp(20px,3.8vw,30px)}
+.reward-party .rp-stars{margin:2px 0}
