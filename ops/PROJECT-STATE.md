@@ -1,3 +1,11 @@
+# Import privé des mots du livre — 19 novembre 2026 (America/Toronto)
+
+Branche claude/import-mots-livre (cut de main après #122). Demande du parent : dépôt privé et tout dans l'app.
+Blocage exact : changer la visibilité du dépôt est refusé à la session (HTTP 403 « Repository settings writes are not permitted through this proxy », vérifié avec gh repo edit). Le dépôt reste PUBLIC; je ne contourne pas ce contrôle. Action du parent : GitHub > Settings > Danger Zone > Change repository visibility > Make private.
+Livré : le même bouton « Ajouter des histoires ou des mots » (Français > Les histoires de l'école) accepte maintenant aussi le fichier de mots du livre (« ## graphie | id-du-son »); les mots s'ajoutent aux mots de chaque son (syllabes calculées) et alimentent « Écrire des mots du son » (10 mots par tour, qui avance). Fichiers privés remis au parent hors dépôt : histoires-ecole.md (21 histoires), mots-du-livre.md (1303 mots, annexe pages 116 à 127, 33 sons; h, x et w du livre sans leçon correspondante).
+Après passage en privé : copier ces deux fichiers dans family/ pour qu'ils se chargent seuls au démarrage (déjà prévu, src/family-content.js).
+Preuves : 630 tests unitaires + 4 suites navigateur OK. Pas d'appareil réel.
+
 # Le prof des sons et contenu de famille — 19 novembre 2026 (America/Toronto)
 
 Branche claude/prof-des-sons (cut de main après #121). Demande du parent : dépôt privé, tout fonctionnel sur les tablettes, un « prof » qui donne des trucs et conseils.

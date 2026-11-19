@@ -44,6 +44,7 @@ import {squishyStages,squishyMap,stageOpen,blob} from './squishy.js';
 import {PhonemePlayer} from './phoneme-player.js';
 import {gestureText,tipFor,wordsFor} from './sound-lessons.js';
 import {seedFamilyContent} from './family-content.js';
+import {parseBookWords,saveBookWords,loadBookWords} from './book-words.js';
 import {privateStoriesMarkup,parseStories,savePrivate,clearPrivate} from './private-stories.js';
 import {loversCards} from './sound-games.js';
 import {trickBookMarkup,trickEntries,trickPages,firstPageToShow} from './trick-book.js';
@@ -314,7 +315,7 @@ document.addEventListener('click',e=>{const t=e.target instanceof Element?e.targ
  if(t.closest('[data-reward-restart]')&&confirm('Repartir à 0 étoile pour '+profile().name+' ? Les récompenses déjà remises seront effacées du parcours.')){restartRewards(profile());persist();render();}});
 // Mon parcours : un seul bouton, la prochaine étape s'ouvre toute seule (histoire d'un son ou mystère d'orthographe).
 function learnedWords(p){const done=p.journey?.done||{};return SOUND_ORDER.filter(id=>done['story:'+id]).flatMap(id=>wordsFor(id).map(w=>w.plain));}
-function openSoundWriting(id){cleanup();dictList=wordsFor(id).map(w=>w.plain);dictStory=id;return navigate('dictation');}
+function openSoundWriting(id){cleanup();const p=profile(),all=wordsFor(id).map(w=>w.plain),n=all.length,sw=p.soundWriting??={},at=(sw[id]||0)%n,size=Math.min(10,n);dictList=Array.from({length:size},(_,i)=>all[(at+i)%n]);sw[id]=(at+size)%n;persist();dictStory=id;return navigate('dictation');}
 function openDictation(batch){cleanup();dictList=null;dictBatch=Math.max(0,batch|0);return navigate('dictation');}
 function openJourney(){const step=journeyNext(profile());persist();if(!step)return;cleanup();
  if(step.kind==='dict')return openDictation(Number(step.target));
@@ -384,7 +385,7 @@ function bindSoundGarden(){
   document.querySelector('[data-lab-play]')?.addEventListener('click',()=>{if(rule){cleanup();begin(labCards(rule),'Français',{fill:false});}});
   document.querySelectorAll('[data-lab-word]').forEach(b=>b.onclick=()=>{const w=b.dataset.labWord;cleanup();b.classList.add('say');setTimeout(()=>b.classList.remove('say'),1600);speakText(w);});
  }
- if(view==='private-stories'){document.querySelectorAll('[data-private-open]').forEach(b=>b.onclick=()=>{cleanup();storyId=b.dataset.privateOpen;storyStep=1;storyNarrate=true;navigate('sound-story');});document.querySelector('[data-private-file]')?.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;const list=parseStories(await f.text());if(list.length){savePrivate(list);render();}else window.alert('Je n’ai trouvé aucune histoire dans ce fichier.');});document.querySelector('[data-private-clear]')?.addEventListener('click',()=>{if(window.confirm('Effacer les histoires de l’école de cet appareil?')){clearPrivate();render();}});}
+ if(view==='private-stories'){document.querySelectorAll('[data-private-open]').forEach(b=>b.onclick=()=>{cleanup();storyId=b.dataset.privateOpen;storyStep=1;storyNarrate=true;navigate('sound-story');});document.querySelector('[data-private-file]')?.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;const txt=await f.text();if(/^#{1,3}\s+.+\|\s*[a-z-]+\s*$/im.test(txt)){const m=parseBookWords(txt),cur=loadBookWords();for(const [k,v] of Object.entries(m))cur[k]=[...new Set([...(cur[k]||[]),...v])];if(Object.keys(m).length){saveBookWords(cur);window.alert('Mots du livre ajoutés : '+Object.values(m).reduce((n,x)=>n+x.length,0)+' mots.');render();}else window.alert('Je n’ai trouvé aucun mot dans ce fichier.');return;}const list=parseStories(txt);if(list.length){savePrivate(list);render();}else window.alert('Je n’ai trouvé aucune histoire dans ce fichier.');});document.querySelector('[data-private-clear]')?.addEventListener('click',()=>{if(window.confirm('Effacer les histoires de l’école de cet appareil?')){clearPrivate();render();}});}
  if(view==='trick-book'){const pages=trickPages(trickEntries(profile(),advanced(profile())));document.querySelector('[data-trick-prev]')?.addEventListener('click',()=>{trickPage=Math.max(0,trickPage-1);render();});document.querySelector('[data-trick-next]')?.addEventListener('click',()=>{trickPage=Math.min(pages-1,trickPage+1);render();});document.querySelectorAll('[data-trick-read]').forEach(b=>b.onclick=()=>speakText(b.dataset.trickRead));}
  const story=view==='sound-story'?storyFor(storyId):null;
  if(story){
