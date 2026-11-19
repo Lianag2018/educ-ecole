@@ -1,3 +1,18 @@
+# Jardin des sons modernisé — 19 novembre 2026 (America/Toronto)
+
+Branche claude/jardin-sons-moderne (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent (capture iPhone) : moderniser; Mely-Ann est plus avancée que le « a ».
+Livré : en mode enfant, le jardin des sons tient sur une page (plus de défilement) avec les
+36 sons visibles d'un coup (6 colonnes), une carte compacte du son choisi (dessin, lettre,
+« comme dans loup »), ▶ Écouter le son en grand, 🔊 Explique-moi et 🌸 J'ai essayé en icônes,
+et « Jouer à reconnaître les sons » en bouton principal. Au lieu de toujours ouvrir sur le « a »,
+l'écran ouvre sur un son pas encore essayé, du plus avancé au plus simple (ou, on, ch, in, an…).
+Rien retiré : « Un autre son », les textes adultes et les liens Laval restent en mode adulte.
+Preuves : 586 tests unitaires OK; 4 suites navigateur OK; écran sans défilement à 390×664,
+390×740, 820×1000, 1180×820 (Chromium, pas d'appareil réel Safari/iPad).
+En attente : les images de cartes de sons du livre de l'école ne sont pas dans l'app (pas de
+fichiers fournis); les dessins restent des émojis. Prochaine action : relire, fusionner, vérifier.
+
 # Étoiles : un exercice ne paie qu'une fois, avec évolution — 18 novembre 2026 (America/Toronto)
 
 Branche claude/etoiles-une-fois (cut de main), PR à ouvrir; non fusionnée, non déployée.

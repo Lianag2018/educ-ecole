@@ -440,3 +440,45 @@ body .number-adventure .hundred-hear{min-height:52px!important}
 .rewards-row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
 .rewards-row label{display:flex;flex-direction:column;font-size:14px}
 .rewards-waiting{padding:8px 12px;background:#fff6d6;border-radius:12px}
+
+/* Le jardin des sons, version enfant : une seule page, tous les sons visibles, on touche pour écouter. */
+body.kid-simple .sound-garden{padding:8px;border-radius:24px;display:flex;flex-direction:column;gap:6px;min-height:0}
+body.kid-simple .sound-garden .sg-top>span,body.kid-simple .sound-garden .sg-title p,body.kid-simple .sound-garden .sg-title>span,
+body.kid-simple .sound-garden .sg-companion,body.kid-simple .sound-garden .sg-step,body.kid-simple .sound-garden .sg-feedback,
+body.kid-simple .sound-garden .sg-next,body.kid-simple .sound-garden .sg-picker>h2,body.kid-simple .sound-garden .sg-more,
+body.kid-simple .sound-garden .sg-footer details,body.kid-simple .sound-garden .sg-cloud{display:none!important}
+body.kid-simple .sound-garden .sg-top{display:flex;justify-content:space-between;gap:6px}
+body.kid-simple .sound-garden .sg-top button{min-height:38px;padding:4px 12px;font-size:14px}
+body.kid-simple .sound-garden .sg-title{margin:0;padding:4px 14px;background:#fffcf1d9;border-radius:16px;align-self:center}
+body.kid-simple .sound-garden .sg-title h1{margin:0;font-size:clamp(18px,2.6svh,26px)}
+body.kid-simple .sound-garden .sg-layout{display:flex;flex-direction:column;gap:6px}
+body.kid-simple .sound-garden .sg-card{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"pic letter" "pic word" "ctl ctl";align-items:center;column-gap:14px;padding:8px 12px;border-radius:20px}
+body.kid-simple .sound-garden .sg-picture{grid-area:pic;font-size:clamp(44px,8svh,72px);line-height:1;margin:0}
+body.kid-simple .sound-garden .sg-picture i{display:none}
+body.kid-simple .sound-garden .sg-letter{grid-area:letter;font-size:clamp(40px,7svh,64px);line-height:1;margin:0}
+body.kid-simple .sound-garden .sg-word{grid-area:word;margin:0;font-size:clamp(15px,2.3svh,20px)}
+body.kid-simple .sound-garden .sg-controls{grid-area:ctl;display:flex;gap:8px;align-items:stretch;margin-top:6px}
+body.kid-simple .sound-garden .sg-controls .sg-audio-status{display:none}
+body.kid-simple .sound-garden .sg-controls button{min-height:48px;padding:6px 12px;font-size:16px;margin:0}
+body.kid-simple .sound-garden .sg-listen{flex:2}
+body.kid-simple .sound-garden .sg-explain,body.kid-simple .sound-garden .sg-try{flex:1}
+body.kid-simple .sound-garden .sg-picker{padding:6px;border-radius:18px}
+body.kid-simple .sound-garden .sg-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+body.kid-simple .sound-garden .sg-grid button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;height:clamp(40px,6svh,58px);padding:0;border-radius:12px;position:relative}
+body.kid-simple .sound-garden .sg-grid button span{font-size:clamp(14px,2.4svh,22px);line-height:1}
+body.kid-simple .sound-garden .sg-grid button strong{font-size:clamp(11px,1.9svh,16px);line-height:1}
+body.kid-simple .sound-garden .sg-grid button i{position:absolute;top:1px;right:3px;font-size:10px}
+body.kid-simple .sound-garden .sg-footer{display:flex;gap:8px;margin:0}
+body.kid-simple .sound-garden .sg-footer button{min-height:48px;font-size:16px;border-radius:999px}
+body.kid-simple .sound-garden [data-garden-exercises]{flex:3;background:#7452a8;color:#fff;border:3px solid #24163f;box-shadow:0 4px 0 #24163f;font-weight:800}
+body.kid-simple .sound-garden [data-action=silence]{flex:1}
+body.kid-simple .sound-garden .sg-controls .sg-label{display:none}
+body.kid-simple .sound-garden .sg-controls button{min-height:44px;font-size:18px}
+body.kid-simple .sound-garden .sg-listen{flex:3;white-space:nowrap}
+body.kid-simple .sound-garden .sg-explain,body.kid-simple .sound-garden .sg-try{flex:1;min-width:0;padding:4px}
+body.kid-simple .sound-garden .sg-grid button{height:clamp(34px,5.4svh,56px)}
+body.kid-simple .sound-garden .sg-footer button{min-height:44px}
+@media (max-height:700px){body.kid-simple .sound-garden .sg-title{display:none}body.kid-simple .sound-garden .sg-picture{font-size:40px}body.kid-simple .sound-garden .sg-letter{font-size:36px}}
+body.kid-simple .sound-garden .sg-layout,body.kid-simple .sound-garden .sg-card,body.kid-simple .sound-garden .sg-picker,body.kid-simple .sound-garden .sg-grid{flex:none;overflow:visible}
+body.kid-simple .sound-garden .sg-grid button strong{white-space:nowrap;max-width:100%;font-size:clamp(10px,1.8svh,15px)}
+body.kid-simple .sound-garden .sg-grid{grid-auto-rows:clamp(34px,5.4svh,56px)}
