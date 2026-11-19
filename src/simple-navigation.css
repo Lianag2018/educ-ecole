@@ -652,3 +652,8 @@ body.kid-simple .simple-world .daily-copy .kid-label{padding:4px 30px;border:3px
 .story-door{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:8px 16px;border:3px solid #24163f;border-radius:22px;background:#d7f2e3;box-shadow:0 5px 0 #24163f;color:#24163f;font-family:var(--display,inherit);font-size:clamp(20px,3.4svh,28px);font-weight:900;text-align:left}
 .story-door small{display:block;font-family:inherit;font-size:clamp(12px,2svh,16px);font-weight:700;color:#3d5a4a}.story-door .sd-go{margin-left:auto;font-size:1.2em}
 .ps-more{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ps-more button{min-height:64px;padding:8px 12px;border:3px solid #24163f;border-radius:20px;background:#fff;box-shadow:0 4px 0 #24163f;font-weight:800;color:#24163f}
+
+.sound-lab-page{display:flex;flex-direction:column;gap:10px;padding:8px;max-width:760px;margin:auto}.sl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.sl-row{display:grid;grid-template-columns:70px 52px 1fr 52px 52px;align-items:center;gap:8px;padding:8px 10px;border:3px solid #24163f;border-radius:18px;background:#fffaf0;box-shadow:0 3px 0 #24163f}
+.sl-row button{min-height:44px;min-width:44px;border:3px solid #24163f;border-radius:14px;background:#fff;font-size:20px;font-weight:900;color:#24163f}.sl-row button.rec{background:#ff6b6b;color:#fff;animation:dmHint .7s infinite alternate}
+.sl-snd{font-size:clamp(20px,3.4svh,28px);color:#7452a8;font-weight:900}.sl-ms{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;color:#24163f}.sl-ms em{color:#7a6f92;font-weight:700}.sl-msg{margin:0;min-height:1.2em;color:#b3263e;font-weight:700}

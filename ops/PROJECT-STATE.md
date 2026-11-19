@@ -1,3 +1,11 @@
+# Sons étirés et laboratoire des sons — 19 novembre 2026 (America/Toronto)
+
+Branche claude/sons-etires (cut de main après #126). Retour du parent : le son « ch » est trop court et sec, pas reconnaissable; il faut l'étirer sur environ 1 seconde (« chhhh ») et pouvoir changer / enregistrer les sons.
+Livré : (1) src/sound-stretch.js : les sons continus (tout sauf p b t d k g) sont étirés à ~1 s en gardant l'attaque et la fin et en répétant le milieu avec fondu enchaîné (pas de changement de hauteur); mesuré dans Chromium : ch 0,99 s, s 0,99 s, a 1,0 s, ou 1,0 s; p reste court (0,47 s). (2) PhonemePlayer joue en Web Audio (repli sur l'ancien lecteur si absent). (3) Laboratoire des sons (Espace adulte > « Ouvrir le laboratoire »; src/sound-lab.js, src/sound-bank.js) : ▶ écouter, − / + durée par son (0,3 à 2 s, pas de 0,2 s), 🎙️ remplacer par sa propre voix (4 s max, silence rogné, volume normalisé), ↩ rétablir. Enregistrements dans IndexedDB de l'appareil, réglages dans localStorage : jamais envoyés ni ajoutés au dépôt.
+Les fichiers d'origine (icons/phonemes) sont inchangés.
+Preuves : 635 tests unitaires + 4 suites navigateur OK; enregistrement avec micro factice vérifié (sauvegarde, relecture, 1 s), 0 erreur JS. Non écouté par un humain, non essayé sur iPad / Safari réels (MediaRecorder Safari à confirmer).
+En attente : le parent écoute les sons et indique lesquels corriger.
+
 # Histoires et mots du livre dans l'app — 19 novembre 2026 (America/Toronto)
 
 Branche claude/contenu-famille (cut de main après #125). Le parent a passé le dépôt en PRIVÉ (vérifié : gh api private=true) et demandé de tout mettre dans l'app.
