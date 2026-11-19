@@ -1,19 +1,10 @@
-# Code oublié et blocage Vercel — 19 novembre 2026 (America/Toronto)
+# Code secret retiré, blocage Vercel — 19 novembre 2026 (America/Toronto)
 
-Branche claude/code-oublie. Demande du parent : « mot de passe oublié » pour renouveler le code.
-Livré : bouton « Code oublié ? » dans la fenêtre du code; question d'adulte (multiplication aléatoire), nouveau code de 4 chiffres saisi deux fois, enregistré sur l'appareil (setPin), puis la fille entre. L'ancien code est refusé ensuite. Limite : verrou familial; une grande sœur peut résoudre la question. Le code oublié ne se réinitialise que sur l'appareil où il a été changé (le code est local à chaque appareil).
-Blocage exact : Vercel refuse les déploiements depuis la PR du code secret (statut « Deployment rate limited — retry in 24 hours », projets educ-ecole et educ-iles-aventure). La dernière version réellement déployée connue est l'accueil animé (PR 136, statut success). Le code secret (PR 137) et ce « code oublié » ne sont donc pas en ligne tant que la limite n'est pas levée.
-Dépôt : GitHub signalait encore private=false à la dernière vérification (updated_at 12:59 UTC) malgré le message du parent disant qu'il est privé.
-Preuves : essai Chromium : mauvaise réponse refusée, codes différents refusés, ancien code refusé puis nouveau accepté, 0 erreur JS; tests unitaires et suites navigateur (voir PR). Non essayé sur iPad réel.
-Prochaine action : regrouper les prochains changements en une seule PR (chaque push déclenche deux déploiements Vercel), vérifier le déploiement après la levée de la limite.
-
-# Code secret pour entrer dans le monde de chaque fille — 19 novembre 2026 (America/Toronto)
-
-Branche claude/code-secret-filles. Demande du parent : un mot de passe pour entrer dans l'application, un code par fille par défaut.
-Livré : src/pin-gate.js; en touchant « C'est parti », une tuile d'activité ou « Mon monde » d'une fille, un clavier à 4 chiffres s'affiche; bon code = on entre, mauvais code = secousse et on recommence, ✕ ou Échap = annuler. Le déverrouillage dure jusqu'au rechargement de la page. Le code n'est pas écrit en clair dans le dépôt (empreinte SHA-256); un code changé (setPin) est gardé sur l'appareil, sans écran de changement pour l'instant.
-Limites : c'est un verrou familial, pas une sécurité forte (4 chiffres, contrôle côté navigateur; les entrées autres que l'accueil, comme l'Espace parent, ne sont pas verrouillées).
-Preuves : tests unitaires (codes par défaut, code changé) + essai Chromium : bon code ouvre, mauvais refuse, bonne fille activée. Non essayé sur iPad réel.
-En attente : écran de changement de code dans l'Espace parent si le parent le veut.
+Branche claude/retire-code-secret. Demande du parent : enlever le code d'accès (mot de passe) des filles. Les PR du code secret et du « code oublié » sont annulées (src/pin-gate.js, styles, tests et clics de test retirés). L'entrée dans le monde de chaque fille est de nouveau directe. Comme ces deux versions n'ont jamais été déployées, la version en ligne ne change pas.
+Blocage exact : Vercel refuse les déploiements (« Resource is limited - try again in 1 day », api-deployments-free-per-day, plus de 100 par jour; projets educ-ecole et educ-iles-aventure). Dernière version réellement déployée connue : l'accueil animé (PR 136). Chaque push déclenche deux déploiements : regrouper les changements.
+Dépôt : GitHub signalait encore private=false à la dernière vérification (updated_at 12:59 UTC).
+Preuves : tests unitaires et suites navigateur (voir PR). Non essayé sur iPad réel.
+Prochaine action : vérifier le déploiement après la levée de la limite; confirmer que le dépôt est privé avant d'y mettre le livre complet.
 
 # Accueil plus vivant — 19 novembre 2026 (America/Toronto)
 

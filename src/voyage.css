@@ -130,15 +130,3 @@ html[data-voyage-paused] .popit-advanced .full-pop-bubble{transition:none}
 @keyframes wl-shine{0%,55%{left:-40%}100%{left:130%}}
 @keyframes wl-breathe{0%,100%{box-shadow:0 0 0 0 #fff0;transform:scale(1)}50%{box-shadow:0 0 18px 4px #fff8;transform:scale(1.045)}}
 @media(prefers-reduced-motion:reduce){.welcome-life{display:none}}
-
-.pin-gate{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#2a1d4acc;backdrop-filter:blur(4px)}
-.pin-box{width:min(92vw,340px);padding:22px;border-radius:28px;background:#fff8e8;text-align:center;box-shadow:0 14px 60px #0006;border:3px solid #d8b864}
-.pin-box h2{margin:0 0 4px;color:#4b2f78;font-size:1.5rem}.pin-box p{margin:0 0 12px;color:#6b5a80}
-.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}.pin-dots i{width:22px;height:22px;border-radius:50%;border:3px solid #8358a8;background:#fff}.pin-dots i.on{background:#8358a8}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.pin-pad button{min-height:64px;font-size:1.8rem;font-weight:800;border:0;border-radius:20px;background:#fff;color:#4b2f78;box-shadow:0 3px 0 #cdbbe6;cursor:pointer}.pin-pad button:active{transform:translateY(2px);box-shadow:none}
-.pin-box.bad{animation:pin-shake .5s}.pin-box.bad .pin-dots i{border-color:#d9435c;background:#ffd3da}
-@keyframes pin-shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
-
-.pin-forgot{margin-top:14px;min-height:44px;border:0;background:none;color:#6b4a9a;text-decoration:underline;font-size:1rem;cursor:pointer}
-.pin-reset{display:grid;gap:10px;text-align:left}.pin-reset label{display:grid;gap:4px;color:#4b2f78;font-weight:700}.pin-reset input{min-height:48px;font-size:1.4rem;text-align:center;border:2px solid #8358a8;border-radius:14px;letter-spacing:.3em}
-.pin-reset .pin-msg{min-height:1.2em;margin:0;color:#c0334f;font-weight:700;text-align:center}.pin-save,.pin-cancel{min-height:52px;border:0;border-radius:18px;font-size:1.1rem;font-weight:800;cursor:pointer}.pin-save{background:#8358a8;color:#fff}.pin-cancel{background:#fff;color:#4b2f78;box-shadow:0 3px 0 #cdbbe6}
