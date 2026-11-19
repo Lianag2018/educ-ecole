@@ -10,6 +10,7 @@ import {squishyStages} from '../src/squishy.js';
 import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
 import {soundCards} from '../src/sound-cards.js';
 import {soundStoryNarrationTexts} from '../src/sound-stories.js';
+import {ruleNarrationTexts,allWords as labWordList} from '../src/spelling-lab.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading,mathsFor,socialFor,storyCards} from '../src/learning.js';
@@ -59,6 +60,9 @@ export function narrationCatalog(){
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
  const storyTexts=new Set(soundStoryNarrationTexts);for(const text of storyTexts)texts.add(text);
+ for(const text of ruleNarrationTexts)texts.add(text);
+ // Mots décortiqués (laboratoire d'orthographe) : modèles de mots entiers, voix naturelle.
+ const labWords=new Set(labWordList());for(const text of labWords)texts.add(text);
 
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
@@ -90,7 +94,7 @@ export function narrationCatalog(){
  const socialTexts=new Set([spokenActivity(socialModel),oralQuestion(socialModel),socialModel.explanation]);
  const phonics=new Set(bank.filter(q=>['sons','syllabes'].includes(q.skill)).flatMap(q=>[spokenActivity(q),oralQuestion(q),...q.choices.map(choiceSpeech),...['correct','incorrect','help'].map(r=>oralFeedback(q,r))]));
  return [...texts].map(text=>{
- const natural=phonics.has(text)||isFrenchWordModel(text)||wordModels.has(text)||blends.has(text)||socialTexts.has(text);
+ const natural=labWords.has(text)||phonics.has(text)||isFrenchWordModel(text)||wordModels.has(text)||blends.has(text)||socialTexts.has(text);
  let instructions=natural?'Lis exclusivement en français, avec une prononciation française du Québec claire et usuelle, une voix féminine douce et un débit naturel. Garde chaque mot entier et ses sons liés. Ne chante pas, ne scande pas et n’étire aucune voyelle. Ne rajoute pas de e final ni de nom de lettre. Fais seulement une courte pause entre les phrases. Lis uniquement le texte fourni.':(naturalTexts.has(text)?NATURAL_INSTRUCTIONS:INSTRUCTIONS);
  if(storyTexts.has(text))instructions=STORY_INSTRUCTIONS;
  if(natural)instructions+=' Ne bascule jamais en anglais, même pour un mot court. Le u de lune et de lecture est différent du ou de loup. Pain, main et pin ont une voyelle nasale française. Dans choisis, le s entre voyelles se prononce comme z. Dans rapporte, les deux p écrits ne donnent qu’un seul son p. Dans bibliothèque, th se prononce t et que se prononce k. Dans après, le s final est muet et è est une voyelle ouverte.';
