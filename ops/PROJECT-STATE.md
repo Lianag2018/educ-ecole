@@ -1,3 +1,11 @@
+# Code secret pour entrer dans le monde de chaque fille — 19 novembre 2026 (America/Toronto)
+
+Branche claude/code-secret-filles. Demande du parent : un mot de passe pour entrer dans l'application, un code par fille par défaut.
+Livré : src/pin-gate.js; en touchant « C'est parti », une tuile d'activité ou « Mon monde » d'une fille, un clavier à 4 chiffres s'affiche; bon code = on entre, mauvais code = secousse et on recommence, ✕ ou Échap = annuler. Le déverrouillage dure jusqu'au rechargement de la page. Le code n'est pas écrit en clair dans le dépôt (empreinte SHA-256); un code changé (setPin) est gardé sur l'appareil, sans écran de changement pour l'instant.
+Limites : c'est un verrou familial, pas une sécurité forte (4 chiffres, contrôle côté navigateur; les entrées autres que l'accueil, comme l'Espace parent, ne sont pas verrouillées).
+Preuves : tests unitaires (codes par défaut, code changé) + essai Chromium : bon code ouvre, mauvais refuse, bonne fille activée. Non essayé sur iPad réel.
+En attente : écran de changement de code dans l'Espace parent si le parent le veut.
+
 # Accueil plus vivant — 19 novembre 2026 (America/Toronto)
 
 Branche claude/accueil-vivant. Demande du parent : l'accueil de https://educ-ecole.vercel.app/ doit être plus vivant et animé.

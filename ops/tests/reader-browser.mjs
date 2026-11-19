@@ -30,7 +30,8 @@ try{
  await cdp('Emulation.setDeviceMetricsOverride',{width:820,height:1180,deviceScaleFactor:1,mobile:true});
  await cdp('Page.navigate',{url:'http://127.0.0.1:5173'});
 
- const click=async s=>{for(let i=0;i<50;i++){if(await run(`!!document.querySelector(${JSON.stringify(s)})`))break;await sleep(100);}assert.equal(await run(`!!document.querySelector(${JSON.stringify(s)})`),true,s+' missing; '+JSON.stringify(errors));await run(`document.querySelector(${JSON.stringify(s)}).click()`);assert.deepEqual(errors,[]);};
+ const pin=async s=>{const m=String(s).match(/data-(?:game|welcome)-child="(\d)"/);if(!m)return;await sleep(150);if(await run('!!document.querySelector(".pin-gate")'))for(const d of ['1302','1111'][m[1]])await run(`document.querySelector('.pin-pad [data-d="${d}"]').click()`);await sleep(250);};
+ const click=async s=>{for(let i=0;i<50;i++){if(await run(`!!document.querySelector(${JSON.stringify(s)})`))break;await sleep(100);}assert.equal(await run(`!!document.querySelector(${JSON.stringify(s)})`),true,s+' missing; '+JSON.stringify(errors));await run(`document.querySelector(${JSON.stringify(s)}).click()`);await pin(s);assert.deepEqual(errors,[]);};
  for(const child of [0,1]){
   await run('localStorage.clear()');await cdp('Page.reload');
   for(let i=0;i<60;i++){if(await run("!!document.querySelector('[data-game-child]')"))break;await sleep(100);}
