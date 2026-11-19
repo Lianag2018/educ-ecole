@@ -21,7 +21,6 @@ let parentSection='week';
 import {schoolPhotosPanel,mountSchoolPhotos} from './school-photos.js';
 import {automaticPhotosPanel,mountAutomaticPhotos} from './school-photo-auto.js';
 import {mountWelcomeMagic} from './welcome-magic.js';
-import {mountPinGate} from './pin-gate.js';
 import {sceneFor,sceneMarkup,mountScene,updateAudioSurface,illustratedCards} from './illustrated-games.js';
 import {scheduleSuccess} from './success-step.js';
 import {mountWelcomeVideo} from './welcome-video.js';
@@ -467,5 +466,4 @@ function bindSoundGarden(){
 
 window.addEventListener('pagehide',()=>grokLive.stop());document.addEventListener('visibilitychange',()=>{if(document.hidden)grokLive.stop();});
 
-mountPinGate();
 seedFamilyContent().then(changed=>{if(changed&&['private-stories','home'].includes(view))render();}).catch(()=>{});
