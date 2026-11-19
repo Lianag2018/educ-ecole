@@ -17,7 +17,7 @@ export const rewardPoints=p=>Math.max(0,travelPoints(p)-(rewardState(p).base||0)
 export const rewardList=p=>[...(rewardState(p).list??DEFAULT_REWARDS)].sort((a,b)=>a.cost-b.cost);
 export function rewardStatus(p){
  const s=rewardState(p),points=rewardPoints(p);
- const items=rewardList(p).map(r=>({...r,reached:points>=r.cost,claimed:Boolean(s.claimed[r.id]),missing:Math.max(0,r.cost-points)}));
+ const items=rewardList(p).map(r=>({...r,reached:points>=r.cost,claimed:Boolean(s.claimed[r.id]),choice:s.choice?.[r.id]||'',missing:Math.max(0,r.cost-points)}));
  const next=items.find(r=>!r.reached)??null;
  const previous=next?items.filter(r=>r.reached).at(-1)?.cost??0:next?.cost??0;
  const percent=next?Math.round(100*(points-previous)/Math.max(1,next.cost-previous)):100;
@@ -49,13 +49,13 @@ export function rewardsKid(p){
  return `<section class="rewards-page" aria-labelledby="rewards-title"><h1 id="rewards-title">Mon coffre aux récompenses</h1>
  <div class="rewards-top"><div class="rewards-stars" aria-label="${st.points} étoiles"><span aria-hidden="true">⭐</span><b>${st.points}</b></div>
  <div class="rewards-bar"><div class="rewards-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${st.percent}"><i style="width:${st.percent}%"></i></div><p>${line}</p></div></div>
- <ul class="rewards-grid">${st.items.map(r=>`<li class="reward ${r.claimed?'got':r.reached?'ready':'locked'}"><span class="reward-icon" aria-hidden="true">${esc(r.icon)}</span><b>${esc(r.title)}</b><small>${r.claimed?'Reçu ✓':r.reached?'Gagné ! Montre à un adulte':`🔒 ${r.cost} ⭐`}</small></li>`).join('')}</ul></section>`;
+ <ul class="rewards-grid">${st.items.map(r=>`<li class="reward ${r.claimed?'got':r.reached?(r.choice==='save'?'kept':'ready'):'locked'}"><span class="reward-icon" aria-hidden="true">${esc(r.icon)}</span><b>${esc(r.title)}</b><small>${r.claimed?'Reçu ✓':r.reached?(r.choice==='save'?'Gagné ! Je garde mes étoiles 💎':r.choice==='now'?'Demandée ✓ Montre à un adulte':'Gagné ! Montre à un adulte'):`🔒 ${r.cost} ⭐`}</small></li>`).join('')}</ul></section>`;
 }
 export function rewardsParent(p){
  const st=rewardStatus(p),rows=rewardList(p);
  return `<section class="panel rewards-parent" data-parent-group="week"><h2>Récompenses de la famille</h2>
  <p>Les étoiles du voyage font avancer le parcours : un exercice ne rapporte qu’une seule fois (5 étoiles, 10 ou 15 pour les exercices plus avancés). ${esc(p.name)} a <strong>${st.points}</strong> étoiles. Choisis tes récompenses et leurs coûts; confirme chaque fois que tu en remets une.</p>
- ${st.items.filter(r=>r.reached&&!r.claimed).map(r=>`<p class="rewards-waiting"><strong>${esc(r.icon)} ${esc(r.title)}</strong> est gagné. <button type="button" data-reward-claim="${esc(r.id)}">Remis à ${esc(p.name)} ✓</button></p>`).join('')}
+ ${st.items.filter(r=>r.reached&&!r.claimed).map(r=>`<p class="rewards-waiting"><strong>${esc(r.icon)} ${esc(r.title)}</strong> est gagné ${r.choice==='now'?'— ' +esc(p.name)+' la veut maintenant 🙋':r.choice==='save'?'— '+esc(p.name)+' garde ses étoiles pour la prochaine 💎':''}. <button type="button" data-reward-claim="${esc(r.id)}">Remis à ${esc(p.name)} ✓</button></p>`).join('')}
  <form id="rewards-form">${rows.map((r,i)=>`<p class="rewards-row"><input type="hidden" name="id${i}" value="${esc(r.id)}"><label>Icône<input name="icon${i}" maxlength="4" value="${esc(r.icon)}" size="3"></label><label>Récompense<input name="title${i}" maxlength="40" value="${esc(r.title)}"></label><label>Étoiles<input name="cost${i}" type="number" min="5" max="100000" step="5" value="${r.cost}"></label></p>`).join('')}
  ${rows.length<MAX_REWARDS?`<p class="rewards-row"><label>Icône<input name="icon${rows.length}" maxlength="4" size="3" placeholder="🎁"></label><label>Nouvelle récompense<input name="title${rows.length}" maxlength="40"></label><label>Étoiles<input name="cost${rows.length}" type="number" min="5" max="100000" step="5"></label></p>`:''}
  <button>Enregistrer les récompenses</button></form>
@@ -68,9 +68,19 @@ export function rowsFromForm(form){
 }
 
 // Fête de la récompense : quand une étape est atteinte pour la première fois, une grande ouverture s'affiche une seule fois.
-export const pendingCelebration=p=>{const s=rewardState(p),c=s.celebrated??{};return rewardStatus(p).items.find(r=>r.reached&&!r.claimed&&!c[r.id])??null;};
-export function markCelebrated(p,id){const s=rewardState(p);(s.celebrated??={})[id]=true;}
-export function celebrationMarkup(reward,name='toi'){
- const confetti=['🎉','⭐','✨','🎈','💖','🌟','🎊','🦄','🌈','🎀','⭐','✨'].map((c,i)=>`<span class="rp-c rp-c${i+1}">${c}</span>`).join('');
- return `<div class="reward-party" role="dialog" aria-modal="true" aria-label="Récompense obtenue"><img class="rp-photo" src="/icons/voyage-soeurs.webp" alt="" width="1672" height="941"><div class="rp-glow" aria-hidden="true"></div><div class="rp-confetti" aria-hidden="true">${confetti}</div><div class="rp-card"><h1>🎉 Récompense obtenue! 🎉</h1><div class="rp-icon" aria-hidden="true">${esc(reward.icon)}</div><h2>${esc(reward.title)}</h2><p>Bravo ${esc(name)}! Montre-le à un adulte.</p><div class="rp-actions"><button type="button" class="rp-go" data-party-close>Super!</button><button type="button" class="rp-chest" data-party-chest>⭐ Voir mon coffre</button></div></div></div>`;
+// L'ambiance grandit avec le niveau de la récompense (1 à 3) et avec les étoiles gagnées; la fille choisit de la prendre ou de garder ses étoiles.
+export const pendingCelebration=p=>{const s=rewardState(p),c=s.celebrated??{};return rewardStatus(p).items.filter(r=>r.reached&&!r.claimed&&!c[r.id]).at(-1)??null;};
+export function markCelebrated(p,id){const s=rewardState(p),c=(s.celebrated??={});c[id]=true;for(const r of rewardStatus(p).items)if(r.cost<=(rewardStatus(p).items.find(x=>x.id===id)?.cost??0))c[r.id]=true;}
+export function tierFor(p,id){const list=rewardList(p),i=list.findIndex(r=>r.id===id);return i<0?1:Math.min(3,1+Math.floor(i*3/Math.max(1,list.length)));}
+export function nextReward(p,id){const st=rewardStatus(p),i=st.items.findIndex(r=>r.id===id);return i>=0&&st.items[i+1]?st.items[i+1]:null;}
+// Choix de la fille : « now » = je la veux maintenant (le parent le voit); « save » = je garde mes étoiles pour la prochaine. Les étoiles ne sont jamais dépensées.
+export function chooseReward(p,id,choice){if(!['now','save'].includes(choice)||!rewardStatus(p).items.some(r=>r.id===id))return false;(rewardState(p).choice??={})[id]=choice;return true;}
+const CONFETTI={1:['🎉','⭐','✨','🎈','💖','🌟','🎊','🦄','🌈','🎀','⭐','✨'],2:['🎉','⭐','✨','🎈','💖','🌟','🎊','🦄','🌈','🎀','⭐','✨','🏆','💛','🎁','🪙'],3:['🎉','⭐','✨','🎈','💖','🌟','🎊','🦄','🌈','🎀','⭐','✨','🏆','💛','🎁','👑','💎','🎆','🎇','🥳']};
+export function celebrationMarkup(reward,name='toi',{points=0,next=null,tier=1}={}){
+ const t=Math.max(1,Math.min(3,tier|0||1)),conf=CONFETTI[t].map((c,i)=>`<span class="rp-c rp-c${(i%12)+1}" style="--i:${i}">${c}</span>`).join('');
+ const fire=t>=2?['🎆','🎇','🎆','🎇'].slice(0,t===2?2:4).map((c,i)=>`<span class="rp-fw rp-fw${i+1}">${c}</span>`).join(''):'';
+ const title=t===3?'🏆 Super récompense! 🏆':t===2?'🎊 Récompense obtenue! 🎊':'🎉 Récompense obtenue! 🎉';
+ const question=next?`<p class="rp-ask">Veux-tu ta récompense maintenant, ou garder tes étoiles pour <b>${esc(next.icon)} ${esc(next.title)}</b> (encore ${next.missing} ⭐)?</p><div class="rp-actions"><button type="button" class="rp-go" data-party-now>🎁 Je la veux maintenant</button><button type="button" class="rp-chest" data-party-save>💎 Je garde mes étoiles</button></div>`
+  :`<p>Bravo ${esc(name)}! Montre-le à un adulte.</p><div class="rp-actions"><button type="button" class="rp-go" data-party-close>Super!</button><button type="button" class="rp-chest" data-party-chest>⭐ Voir mon coffre</button></div>`;
+ return `<div class="reward-party rp-t${t}" role="dialog" aria-modal="true" aria-label="Récompense obtenue"><img class="rp-photo" src="/icons/voyage-soeurs.webp" alt="" width="1672" height="941"><div class="rp-glow" aria-hidden="true"></div><div class="rp-rays" aria-hidden="true"></div><div class="rp-trail" aria-hidden="true"></div><div class="rp-confetti" aria-hidden="true">${conf}${fire}</div><div class="rp-card"><h1>${title}</h1><div class="rp-stars" aria-label="${points} étoiles">⭐ <b data-party-count="${points}">${points}</b> étoiles</div><div class="rp-icon" aria-hidden="true">${esc(reward.icon)}</div><h2>${esc(reward.title)}</h2>${next?'':''}${question}</div></div>`;
 }
