@@ -2,14 +2,16 @@
 // Au démarrage, on le charge une fois par version; sans fichier, rien ne change.
 import {parseStories,savePrivate} from './private-stories.js';
 import {parseBookWords,saveBookWords} from './book-words.js';
+import {parseGestures,saveBookGestures} from './book-gestures.js';
 const VKEY='atelier-mots-family-content-v1';
 async function grab(url){try{const r=await fetch(url,{cache:'no-cache'});if(!r.ok||!/text|markdown|octet/i.test(r.headers.get('content-type')||'text'))return '';const t=await r.text();return /^\s*<(!doctype|html)/i.test(t)?'':t;}catch{return '';}}
 export async function seedFamilyContent(){
- const [stories,words]=await Promise.all([grab('/family/histoires-ecole.md'),grab('/family/mots-du-livre.md')]);
- const stamp=`${stories.length}:${words.length}`;
- if(stamp==='0:0'||globalThis.localStorage?.getItem(VKEY)===stamp)return false;
+ const [stories,words,gestes]=await Promise.all([grab('/family/histoires-ecole.md'),grab('/family/mots-du-livre.md'),grab('/family/gestes-livre.md')]);
+ const stamp=`${stories.length}:${words.length}:${gestes.length}`;
+ if(stamp==='0:0:0'||globalThis.localStorage?.getItem(VKEY)===stamp)return false;
  if(stories){const l=parseStories(stories);if(l.length)savePrivate(l);}
  if(words){const m=parseBookWords(words);if(Object.keys(m).length)saveBookWords(m);}
+ if(gestes){const g=parseGestures(gestes);if(Object.keys(g).length)saveBookGestures(g);}
  try{globalThis.localStorage?.setItem(VKEY,stamp);}catch{}
  return true;
 }

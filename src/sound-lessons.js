@@ -4,6 +4,7 @@
 import {lessonWords} from './lesson-words-data.js';
 import {syllabify} from './syllables.js';
 import {bookWordsFor} from './book-words.js';
+import {bookGestureFor} from './book-gestures.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const LESSON_STEPS=2;
 export const gestures=Object.freeze({
@@ -52,7 +53,7 @@ export const readingTips=Object.freeze([
  'Découpe le mot en syllabes en tapant dans tes mains : ba-na-ne. Une tape, une syllabe.',
  'Deux lettres pareilles, comme nn ou mm, sont des jumeaux : ils restent ensemble et ne changent pas le son d’avant.',
  'Cherche d’abord les lettres qui vont ensemble, comme ou, on ou ch, avant de lire lettre par lettre.']);
-export const gestureFor=id=>gestures[id]||['🖐️','Invente un geste pour ce son et dis-le bien fort.'];
+export const gestureFor=id=>{const mine=gestures[id]||['🖐️','Invente un geste pour ce son et dis-le bien fort.'],book=bookGestureFor(id);return [mine[0],book||mine[1]];};
 export const wordsFor=id=>{const own=(lessonWords[id]||'').split(' ').filter(Boolean).map(w=>({syllables:w.split('-'),plain:w.replace(/-/g,'')}));const seen=new Set(own.map(w=>w.plain));const extra=bookWordsFor(id).filter(w=>!seen.has(w)&&seen.add(w)).map(w=>({syllables:syllabify(w),plain:w}));return [...own,...extra];};
 export const tipFor=idx=>readingTips[Math.abs(idx)%readingTips.length];
 export const gestureText=id=>gestureFor(id)[1];

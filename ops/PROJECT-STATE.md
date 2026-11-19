@@ -1,3 +1,12 @@
+# Livre complet : gestes, import privé et dépôt redevenu public — 19 novembre 2026 (America/Toronto)
+
+Branche claude/livre-complet. Demande du parent : utiliser toutes les pages du livre (histoires, gestes, listes de mots) dans l'app, pour usage familial.
+Livré (code seulement, aucun texte du livre dans le dépôt) : (a) src/book-gestures.js : lit un fichier de gestes (un son par entrée) et affiche le geste du livre dans la leçon du son (gestureFor); (b) import adulte « Ajouter histoires, mots ou gestes » : un fichier dont le nom contient « geste » est lu comme gestes; (c) pagination des histoires privées à 8 par page; (d) family-content et ops/server.mjs acceptent /family/gestes-livre.md si un jour le dépôt est privé.
+Incident : à 12:59 UTC le dépôt Lianag2018/educ-ecole est redevenu public (api : private=false), sans action de ma part. Le dossier family/ de main contient déjà 21 histoires et 1303 mots du livre. Je n'ai rien ajouté de plus au dépôt : les 63 histoires, 64 gestes et 1303 mots complets restent hors dépôt et se chargent par l'import adulte sur chaque tablette. Les modifications de visibilité ne passent pas par mon accès (403).
+Preuves : tests unitaires + 4 suites navigateur (voir PR); test Chromium de l'import adulte : 63 histoires, 64 gestes, 1303 mots chargés, 0 erreur JS. Non essayé sur iPad réel.
+En attente : le parent remet le dépôt en privé (ou décide du retrait de family/ de main; l'historique garderait le texte); histoires manquantes dans le livre reçu : i, y, o, u, é, « En camping » 1 à 4 + qu, « Muet de peur ».
+Prochaine action : après dépôt privé confirmé, seulement alors, placer les fichiers complets dans family/.
+
 # Récompenses répétables, choix de la fille et sons de fête — 19 novembre 2026 (America/Toronto)
 
 Branche claude/recompenses-repetables (cut de main après #133). Demandes du parent : (1) McDo (et toute récompense) doit pouvoir se reprendre plusieurs fois, et ce sont les filles qui décident leur récompense; (2) « pourquoi pas l'esprit festif » : sons de fête.
