@@ -6,14 +6,16 @@ import {spellingRules,ruleFor} from './spelling-lab.js';
 const ORDER=['ou','on','ch','in','an','eacute','egrave','a','i','o','u','f','v','m','l','s','p','b','t','d','k','g','n','z','j','r','eu','oe','e','a-back','oopen','un','gn','y','w','ui'];
 const OLDER_START=['lab:e-ouvert','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','story:z','story:ui'];
 const step=id=>{const [kind,target]=id.split(':');return {id,kind,target};};
+// Une dictée magique (5 mots) s'ajoute après chaque groupe d'étapes : 6 pour Mely-Ann, 4 pour Liana.
+const withDictations=(ids,every)=>{const out=[];let n=0;ids.forEach((id,i)=>{out.push(id);if((i+1)%every===0)out.push('dict:'+n++);});return out;};
 export function journeySteps(p,older){
  const isOlder=older??(p.schoolContext?.stage==='3e année'||p.id==='p2');
  const stories=ORDER.filter(id=>storyFor(id)).map(id=>'story:'+id);
- if(!isOlder)return stories.map(step);
+ if(!isOlder)return withDictations(stories,6).map(step);
  const ids=[...OLDER_START.filter(id=>id.startsWith('lab:')?ruleFor(id.slice(4)):storyFor(id.slice(6)))];
  for(const id of stories)if(!ids.includes(id))ids.push(id);
  for(const r of spellingRules)if(!ids.includes('lab:'+r.id))ids.push('lab:'+r.id);
- return ids.map(step);
+ return withDictations(ids,4).map(step);
 }
 export const journeyState=p=>p.journey??={done:{},laps:0};
 export function markJourney(p,id,day){const s=journeyState(p);if(s.done[id])return false;s.done[id]=day||true;return true;}
@@ -28,6 +30,7 @@ export function journeyNext(p,older){
 export function stepLabel(st){
  if(!st)return '';
  if(st.kind==='story'){const s=storyFor(st.target);return s?`L’histoire du son « ${s.label||s.sound} »`:'Une histoire';}
+ if(st.kind==='dict')return 'Écrire mes mots avec la dictée magique';
  const r=ruleFor(st.target);return r?`Mystère : ${r.title}`:'Un mystère';
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

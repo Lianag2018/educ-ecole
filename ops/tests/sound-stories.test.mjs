@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {soundStories,storyFor,highlight,activityCards,soundStoryMarkup,lastStep,soundStoryNarrationTexts,soundWordCount,soundWordTexts,STORY_TRY_AGAIN} from '../../src/sound-stories.js';
 import {hasStory} from '../../src/sound-stories.js';
 import {gardenSounds} from '../../src/sound-garden.js';
-import {narrationCatalog,STORY_INSTRUCTIONS} from '../../ops/narration-catalog.mjs';
+import {narrationCatalog,STORY_INSTRUCTIONS,storyCue} from '../../ops/narration-catalog.mjs';
 test('chaque histoire est liée à un son du jardin et ses mots colorés sont dans la page',()=>{
  assert.ok(soundStories.length>=3);
  for(const s of soundStories){
@@ -38,7 +38,7 @@ test('le nombre de mots à trouver suit le texte; le catalogue reste sous la lim
 });
 test('toutes les pages des histoires sont dans le catalogue de narration avec la voix de narratrice',()=>{
  const catalog=narrationCatalog(),byText=new Map(catalog.map(x=>[x.text,x]));
- for(const t of soundStoryNarrationTexts){const e=byText.get(t);assert.ok(e,t);assert.equal(e.instructions,STORY_INSTRUCTIONS);assert.equal(e.speed,.92);}
+ for(const t of soundStoryNarrationTexts){const e=byText.get(t);assert.ok(e,t);assert.equal(e.instructions,STORY_INSTRUCTIONS+storyCue(t));assert.equal(e.speed,.92);}
 });
 
 test('chacun des sons du jardin a son histoire, avec au moins 3 activités et 4 pages',()=>{
@@ -47,4 +47,10 @@ test('chacun des sons du jardin a son histoire, avec au moins 3 activités et 4 
 });
 test('les mauvais choix ne répètent pas la bonne réponse et chaque page a une scène',()=>{
  for(const st of soundStories){for(const p of st.pages)assert.ok(p.scene&&p.text.length>10,st.id);for(const a of st.activity)assert.ok(!a.others.includes(a.right),st.id);}
+});
+
+test('l\'intonation de la conteuse suit le contenu de la page (dialogue, question, exclamation, bruitage)',()=>{
+ assert.match(storyCue('Il dit : « Dis donc ! »'),/guillemets/);assert.match(storyCue('Où vas-tu?'),/curiosité/);assert.match(storyCue('Bravo !'),/enthousiasme/);assert.match(storyCue('Plouf ! Il saute.'),/bruits/);
+ assert.equal(storyCue('Anna va à la plage.'),'');
+ assert.match(STORY_INSTRUCTIONS,/conteuse/);assert.match(STORY_INSTRUCTIONS,/voix différente/);
 });

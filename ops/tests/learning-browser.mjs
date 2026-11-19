@@ -66,11 +66,12 @@ try{
    authenticated=false;
    await click('[data-action=home]');
    await run(`document.querySelector('#profile').value='${profileId}';document.querySelector('#profile').dispatchEvent(new Event('change'));`);
-   await cdp('Page.reload');await until('!!document.querySelector("[data-welcome-voice=owl]")');
-   for(const selector of ['.picture-owl','.picture-number-task','.picture-number-listen','.picture-number-mic']){
+   await cdp('Page.reload');await until('!!document.querySelector(".picture-number-task")');
+   assert.equal(await run('!document.querySelector("[data-welcome-voice=owl]")&&!!document.querySelector(".picture-cover-owl")'),true);// la chouette qui parle est retirée
+   for(const selector of ['.picture-number-task','.picture-number-listen','.picture-number-mic']){
     assert.equal(await run(`(()=>{const el=document.querySelector('${selector}');el.scrollIntoView();const r=el.getBoundingClientRect();return r.width>=44&&r.height>=44&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})()`),true);
    }
-   await click('[data-welcome-voice=owl]');
+   await click('.picture-number-task');
    await until('document.querySelector("[data-grok-state]")?.textContent.includes("Un parent doit autoriser cette tablette")');
    // The button is never dead: without authorization the tap explains and shows the parent login.
    assert.equal(await run('document.querySelector("[data-grok-start]").disabled'),false);
@@ -80,11 +81,11 @@ try{
    await click('[data-grok-parent]');
    assert.equal(await run('!document.querySelector("#parent-settings").hidden && !!document.querySelector("#parent-settings input[type=password]")'),true);
    authenticated=true;
-   await cdp('Page.reload');await until('!!document.querySelector("[data-welcome-voice=owl]")');
-   await click('[data-welcome-voice=owl]');await until('document.querySelector("[data-grok-start]")?.disabled===false');
+   await cdp('Page.reload');await until('!!document.querySelector(".picture-number-task")');
+   await click('.picture-number-task');await until('document.querySelector("[data-grok-start]")?.disabled===false');
    assert.equal(await run('document.querySelector("[data-grok-parent]").hidden'),true);
    for(const selector of ['.picture-number-task','.picture-number-mic']){
-    await cdp('Page.reload');await until('!!document.querySelector("[data-welcome-voice=owl]")');
+    await cdp('Page.reload');await until('!!document.querySelector(".picture-number-task")');
     await click(selector);await until('!!document.querySelector("[data-grok-mode=number]")');
     assert.equal(await run('Number(document.querySelector("#chosen-number").value)'),profileId==='p1'?7:307);
     await until('document.querySelector("[data-grok-start]")?.disabled===false');

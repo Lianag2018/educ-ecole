@@ -8,3 +8,15 @@ test('replaying or changing a phoneme interrupts prior audio and ignores stale e
 test('failed playback reports an error without synthesizing the phoneme',async()=>{
  const states=[];const player=new PhonemePlayer({onState:s=>states.push(s),createAudio:()=>({play:()=>Promise.reject(new Error('blocked')),pause(){},removeAttribute(){},load(){}})});await player.play('f');assert.equal(states.at(-1),'error');
 });
+test('les consonnes se jouent seules (« chhhh »), sans voyelles autour; les voyelles restent telles quelles',async()=>{
+ const {phonemeSrc,SOLO_PHONEMES}=await import('../../src/phoneme-player.js');
+ const {readFile}=await import('node:fs/promises'),{createHash}=await import('node:crypto');
+ assert.equal(phonemeSrc('ch'),'/icons/phonemes/ch-solo.mp3');assert.equal(phonemeSrc('a'),'/icons/phonemes/a.mp3');assert.equal(phonemeSrc('on'),'/icons/phonemes/on.mp3');
+ const meta=JSON.parse(await readFile(new URL('../../icons/phonemes/solo-sources.json',import.meta.url),'utf8')).recordings;
+ for(const id of SOLO_PHONEMES){
+  const solo=await readFile(new URL(`../../icons/phonemes/${id}-solo.mp3`,import.meta.url)),orig=await readFile(new URL(`../../icons/phonemes/${id}.mp3`,import.meta.url));
+  assert.ok(solo.length>2000&&solo.length<orig.length,id);
+  const m=meta.find(x=>x.id===id);assert.ok(m&&m.derivedFromSha256===createHash('sha256').update(orig).digest('hex'),id+' : original modifié ou non documenté');
+  assert.ok(m.endSec-m.startSec>=0.1,id);
+ }
+});

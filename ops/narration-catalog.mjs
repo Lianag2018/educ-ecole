@@ -23,7 +23,14 @@ import {spokenActivity} from '../src/speech.js';
 export const MODEL='gpt-4o-mini-tts-2025-12-15',VOICE='coral';
 export const INSTRUCTIONS='Parle en français québécois naturel, avec une voix féminine douce, chaleureuse et rassurante. Lis lentement et articule clairement, sans exagérer l’accent. Respecte les pauses et l’intonation du texte. Lis seulement le texte fourni, sans introduction. Reste exclusivement en français du Québec du début à la fin, y compris pour les mots isolés et les nombres. Ne prononce aucun mot comme un mot anglais. Ne rajoute ni syllabe ni mot. Garde les voyelles françaises distinctes et les voyelles nasales naturelles.';
 // Histoires des sons : narratrice de livre audio pour enfants (voix expressive, pauses, dialogues distincts).
-export const STORY_INSTRUCTIONS='Tu es une narratrice de livres audio pour enfants, haut de gamme. Parle en français québécois naturel, avec une voix féminine chaude, chaleureuse et vivante. Raconte avec expression : ralentis légèrement aux moments doux, fais de petites pauses aux virgules et aux points, donne une voix distincte et expressive aux dialogues entre guillemets, mets de la joie dans les points d’exclamation et prononce les onomatopées avec amusement. Reste claire et naturelle, sans exagérer ni chanter. Lis uniquement le texte donné, sans rien ajouter.';
+export const STORY_INSTRUCTIONS='Tu es une conteuse de livres audio pour enfants de 6 à 8 ans : une vraie voix de conteuse, chaleureuse, vivante et pleine d’intonation. Parle en français québécois naturel. Varie beaucoup le ton et le rythme, comme quand on raconte à voix haute au coucher : ralentis et baisse la voix aux moments doux, accélère un peu quand il y a de l’action, fais une petite pause avant une surprise, chuchote légèrement pour un secret, monte la voix pour une question ou une exclamation, et mets de la joie et de l’émerveillement dans les mots. Donne une voix différente, plus vive et plus personnelle, à chaque personnage qui parle entre guillemets, puis reviens à ta voix de conteuse. Fais sonner les bruits avec amusement. Laisse respirer la fin de la phrase, comme si l’enfant se penchait pour écouter la suite. Reste claire, sans exagérer ni chanter. Lis uniquement le texte donné, sans rien ajouter.';
+// Précisions selon le contenu de la page (dialogue, question, exclamation, bruitage) : l'intonation suit l'histoire.
+export const storyCue=text=>[
+ /[«»]/.test(text)?' Ici, le personnage entre guillemets parle avec sa propre voix, vive et expressive.':'',
+ /\?/.test(text)?' Pose la question avec curiosité : la voix monte à la fin.':'',
+ /!/.test(text)?' Les exclamations sont pleines d’enthousiasme.':'',
+ /\b(plouf|gloups|tic|tac|zou|chut|miam|hou|rrr|ah|oh)\b/i.test(text)?' Joue les bruits et les petits cris avec beaucoup d’amusement.':''
+].join('');
 export const NATURAL_INSTRUCTIONS=INSTRUCTIONS.replace('Lis lentement et articule clairement', 'Lis à un rythme naturel et fluide, avec une articulation claire, sans étirer les syllabes');
 export function narrationCatalog(){
  // Alignment uses the activity's source collection, not number/operator words
@@ -99,7 +106,7 @@ export function narrationCatalog(){
  return [...texts].map(text=>{
  const natural=phonics.has(text)||isFrenchWordModel(text)||wordModels.has(text)||blends.has(text)||socialTexts.has(text);
  let instructions=natural?'Lis exclusivement en français, avec une prononciation française du Québec claire et usuelle, une voix féminine douce et un débit naturel. Garde chaque mot entier et ses sons liés. Ne chante pas, ne scande pas et n’étire aucune voyelle. Ne rajoute pas de e final ni de nom de lettre. Fais seulement une courte pause entre les phrases. Lis uniquement le texte fourni.':(naturalTexts.has(text)?NATURAL_INSTRUCTIONS:INSTRUCTIONS);
- if(storyTexts.has(text))instructions=STORY_INSTRUCTIONS;
+ if(storyTexts.has(text))instructions=STORY_INSTRUCTIONS+storyCue(text);
  if(natural)instructions+=' Ne bascule jamais en anglais, même pour un mot court. Le u de lune et de lecture est différent du ou de loup. Pain, main et pin ont une voyelle nasale française. Dans choisis, le s entre voyelles se prononce comme z. Dans rapporte, les deux p écrits ne donnent qu’un seul son p. Dans bibliothèque, th se prononce t et que se prononce k. Dans après, le s final est muet et è est une voyelle ouverte.';
  if(text==='Un bateau.')instructions+=' Prononce les deux mots complets : le déterminant « un » puis « bateau ». Fais entendre clairement le déterminant dès le début, sans ajouter de commentaire ni répéter la phrase.';
  if(numericTexts.has(text))instructions+=numericInstructions;
