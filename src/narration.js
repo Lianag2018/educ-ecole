@@ -187,7 +187,7 @@ export class NarrationSpeaker {
      if(index+1<plan.segments.length)playSegment(index+1);else finish();
     };
     try{
-     audio.src=segment.src;audio.playbackRate=this.speed;audio.preservesPitch=true;audio.volume=1;audio.muted=false;
+     audio.src=segment.src;audio.playbackRate=this.speed;audio.preservesPitch=true;audio.volume=.9;audio.muted=false;
      if(segment.excerpt){
       audio.currentTime=segment.excerpt.start;
       audio.onloadedmetadata=()=>{if(current())audio.currentTime=segment.excerpt.start;};

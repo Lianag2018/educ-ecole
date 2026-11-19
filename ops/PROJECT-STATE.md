@@ -1,3 +1,15 @@
+# Voix plus douce — 19 novembre 2026 (America/Toronto)
+
+Branche claude/voix-plus-douce (cut de main après #113), PR à ouvrir, non fusionnée. Demande du parent : « mets une voix plus douce ».
+Livré : voix du système (celle de l'appareil, utilisée quand un enregistrement manque, par exemple les mots touchés un à un) plus
+douce : débit .92 → .88, hauteur .94, volume .9 (src/speech.js); lecture des enregistrements à .9 de volume (src/narration.js);
+consignes de la conteuse (histoires) : « très douce, apaisante, volume doux, voix un peu grave et veloutée, jamais aiguë ni criarde,
+même dans les exclamations » (les enregistrements des histoires se régénèrent au build de production seulement). Les consignes de
+base des autres clips ne changent pas, pour ne pas régénérer tous les enregistrements (coût). Non écouté : certaines voix de
+l'appareil ignorent la hauteur; le choix de la voix reste dans les réglages de l'appareil.
+Preuves : 611 tests unitaires OK; 4 suites navigateur OK. Pas d'appareil réel.
+En attente : retour du parent sur la douceur; si trop de clips existants sont jugés durs, décider de régénérer les consignes de base.
+
 # Dictée magique, sons isolés, narratrice conteuse, chouette retirée — 19 novembre 2026 (America/Toronto)
 
 Branche claude/dictee-et-narratrice (cut de main après la fusion de #112 : parcours + histoires + laboratoire; #110/#111 fermées),
