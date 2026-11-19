@@ -568,3 +568,15 @@ body.kid-simple .sound-garden .sg-footer [data-garden-exercises]{font-size:15px;
  .sl-tricks{gap:5px}.sl-tricks li{padding:5px 8px;gap:8px}.sl-tricks li>span{font-size:26px}.sl-tricks b{font-size:14px}.sl-tricks p{font-size:12.5px;line-height:1.25}.sl-nav button{min-height:44px;font-size:15px}}
 @media (prefers-reduced-motion:reduce){.sl-word.say .sl-syl{animation:none}}
 .sl-read{cursor:pointer;border-radius:16px;padding:2px 4px}.sl-read:active,.sl-tricks li:active{background:#ffd95a55}.sl-tricks li{cursor:pointer}
+
+/* Mon parcours : un seul grand bouton qui ouvre la prochaine étape. */
+.journey-door{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:10px 16px;border:3px solid #24163f;border-radius:24px;background:linear-gradient(135deg,#7452a8,#a06ad6);color:#fff;text-align:left;box-shadow:0 5px 0 #24163f}
+.journey-door:active{transform:translateY(4px);box-shadow:0 1px 0 #24163f}
+.jd-icon{font-size:clamp(34px,6svh,48px);line-height:1}
+.jd-copy{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.jd-copy b{font-family:var(--display,inherit);font-size:clamp(20px,3.2svh,28px);line-height:1.1}
+.jd-copy small{font-size:clamp(13px,2.1svh,16px);font-weight:700;opacity:.95;line-height:1.2}
+.jd-go{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#ffc93c;color:#24163f;font-size:20px;border:3px solid #24163f;flex:none}
+body .simple-world .journey-door{background:linear-gradient(135deg,#7452a8,#a06ad6)!important;color:#fff!important;border:3px solid #24163f!important;border-radius:24px!important;box-shadow:0 5px 0 #24163f!important;min-height:72px!important}
+body .simple-world .journey-door .jd-copy b,body .simple-world .journey-door .jd-copy small{color:#fff!important}
+body .simple-world .journey-door .jd-go{background:#ffc93c!important;color:#24163f!important}

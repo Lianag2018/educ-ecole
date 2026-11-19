@@ -1,3 +1,4 @@
+import {journeyDoorMarkup} from './journey.js';
 import {advanced,gradeFor,mathsFor,readingBank,storyCards} from './learning.js';
 import {select} from './engine.js';
 import {adaptiveCards} from './progress.js';
@@ -54,6 +55,7 @@ export function childHome(p,day){
  return `<section class="simple-world" aria-label="Mon monde">
  <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
+ ${journeyDoorMarkup(p,advanced(p))}
  <div class="simple-doors" aria-label="Mes activités">
  <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Continuer mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
  ${tile('Français',advanced(p)?'Mes mots et mes histoires':'Les sons et les mots','<span class="book-art">Aa</span>','data-action="french"')}

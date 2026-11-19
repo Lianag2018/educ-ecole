@@ -5,7 +5,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 // word = tableau de syllabes; le mot entier se lit en retirant les crochets.
 const rules=[
  {id:'e-ouvert',icon:'🥖',title:'Le son « è »',question:'Pourquoi « baigné » s’écrit avec ai, et pas avec è ou es?',
-  idea:'Dans baigné, on entend le son è, mais on l’écrit ai. Le son è s’écrit de plusieurs façons. Chaque façon a ses mots.',
+  idea:'Dans baigné, on entend le son è, mais on l’écrit ai. Quand les lettres ai sont suivies d’autres lettres, elles font souvent le son è. Le son è s’écrit aussi d’autres façons.',
   spellings:[
    {g:'ai',words:[['b[ai]','gné'],['m[ai]','son']]},
    {g:'è',words:[['p[è]','re'],['ch[è]','vre']]},
@@ -108,6 +108,6 @@ export function labRuleMarkup(rule,step=0){
  let body;
  if(step<=0)body=`<div class="sl-read" role="button" tabindex="0" data-lab-read aria-label="Toucher pour écouter"><h1>${rule.icon} ${esc(rule.question)}</h1><p class="sl-idea">${esc(rule.idea)}</p></div><div class="sl-rows">${rule.spellings.map(s=>`<div class="sl-row"><b class="sl-badge">${esc(s.g)}</b><div class="sl-words">${s.words.map(wordMarkup).join('')}</div></div>`).join('')}</div><p class="sl-hint">Touche le texte ou un mot : tu l’entends, syllabe par syllabe.</p><div class="sl-nav"><button class="sl-next" data-lab-next>Les astuces ›</button></div>`;
  else if(step===1)body=`<h1>${rule.icon} Mes astuces</h1><ol class="sl-tricks">${rule.tricks.map(t=>`<li role="button" tabindex="0" data-lab-say="${esc(trickText(t))}"><span aria-hidden="true">${t[0]}</span><div><b>${esc(t[1])}</b><p>${esc(t[2])}</p></div></li>`).join('')}</ol><div class="sl-nav"><button data-lab-prev>‹ Observer</button><button class="sl-next" data-lab-next>À toi de jouer ›</button></div>`;
- else body=`<h1>🎯 À toi de jouer!</h1><p class="sl-idea">3 petites questions pour essayer tes astuces.</p><div class="sl-nav"><button data-lab-prev>‹ Astuces</button><button class="sl-next" data-lab-play>▶ Jouer</button></div>`;
+ else body=`<h1>🎯 À toi de jouer!</h1><p class="sl-idea">3 petites questions pour essayer tes astuces.</p><div class="sl-nav"><button data-lab-prev>‹ Astuces</button><button class="sl-next" data-lab-play>▶ Jouer</button><button data-journey-next>➡ Étape suivante</button></div>`;
  return `<section class="spelling-lab" aria-label="${esc(rule.title)}"><div class="sl-top"><button data-action="spelling-lab">‹ Les mystères</button><span>${esc(rule.title)}</span></div>${nav}<div class="sl-page">${body}</div></section>`;
 }

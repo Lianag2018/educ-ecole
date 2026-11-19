@@ -1,3 +1,22 @@
+# Mon parcours : un accès simple pour les deux filles — 19 novembre 2026 (America/Toronto)
+
+Branche claude/mon-parcours (cut de claude/histoires-tous-les-sons + fusion de claude/pourquoi-ca-s-ecrit); PR à ouvrir,
+non fusionnée, non déployée. Cette branche CONTIENT les PR #110 (laboratoire d'orthographe) et #111 (36 histoires en jeu).
+Demande du parent (photo de la page 85, « ai » = è) : « tu as tout pour leur éducation, mets ça dans un accès simple aux deux
+filles ». Interprétation retenue (le parent a refusé de répondre à la question) : UN seul grand bouton « 🧭 Mon parcours »
+au haut de l'accueil de chaque fille, qui ouvre toujours la prochaine étape non terminée, sans rien à choisir.
+Mely-Ann : les 36 histoires de sons (du plus avancé, ou/on/ch…, au plus simple). Liana : 5 mystères d'orthographe mêlés aux
+histoires (41 étapes), en commençant par « baigné » (le son è). Une étape est terminée à la fin de l'histoire ou à la page
+« À toi » du mystère; « ➡ Étape suivante » enchaîne; à la fin d'un tour, un nouveau tour recommence. Aucune note, aucun diagnostic;
+l'état est local (p.journey), par enfant. Rien n'est retiré de l'accueil (aventure du jour, Français, Maths, chansons, coffre).
+Catalogue de narration : fusion #110 + #111 = 2346 clips (> limite révisée 2300); ramené à 2282 en retirant les introductions
+d'histoires (inutilisées) et les clips des mots du laboratoire (voix du système pour les mots touchés un à un).
+Photo de la page 85 : utilisée seulement pour confirmer la règle « ai suivi d'autres lettres = è »; aucun texte ni image du livre
+copié. À intégrer dans le mystère è : formulation « suivi d'autres lettres » (à faire).
+Preuves : 603 tests unitaires OK; 4 suites navigateur OK; accueil + première étape + « étape suivante » vérifiés pour les deux
+filles à 390×664, 820×1000, 1180×820 sans défilement (Chromium, pas d'appareil réel, pas d'audio).
+En attente : pages du livre pour aligner les étapes; décision sur la limite de narration si des clips de mots sont souhaités.
+
 # Histoires des sons en jeu — 19 novembre 2026 (America/Toronto)
 
 Branche claude/histoires-tous-les-sons (PR #111), non fusionnée, non déployée. Demande du parent : tout en jeu,
