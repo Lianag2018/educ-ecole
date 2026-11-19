@@ -10,6 +10,7 @@ import {squishyStages} from '../src/squishy.js';
 import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
 import {soundCards} from '../src/sound-cards.js';
 import {soundStoryNarrationTexts,STORY_TRY_AGAIN} from '../src/sound-stories.js';
+import {ruleNarrationTexts} from '../src/spelling-lab.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading,mathsFor,socialFor,storyCards} from '../src/learning.js';
@@ -62,6 +63,9 @@ export function narrationCatalog(){
  // Jeu des histoires : une courte phrase d'encouragement. Les mots du son touchés un à un utilisent la voix douce de l'appareil
  // (la limite de génération révisée du catalogue ne permet pas ~290 clips de plus sans décision du parent).
  texts.add(STORY_TRY_AGAIN);
+ for(const text of ruleNarrationTexts)texts.add(text);
+ // Les mots touchés un à un (histoires, laboratoire) utilisent la voix douce de l'appareil : la limite de génération révisée
+ // (2300 clips) ne laisse pas de place pour ~330 clips de plus sans décision du parent.
 
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.

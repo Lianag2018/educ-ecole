@@ -56,7 +56,8 @@ export const hasStory=id=>Boolean(storyFor(id));
 // Mots du son touchables dans le jeu : ils sont dits un à un, tels qu'écrits dans la page.
 export const soundWordTexts=Object.freeze([...new Set(soundStories.flatMap(st=>st.pages.flatMap(p=>{const set=new Set(p.words.map(w=>w.toLowerCase()));return (p.text.match(/\p{L}+/gu)||[]).filter(w=>set.has(w.toLowerCase()));})))]);
 export const STORY_TRY_AGAIN='Cherche encore.';
-export const soundStoryNarrationTexts=Object.freeze([...new Set(soundStories.flatMap(s=>[s.intro,...s.pages.map(p=>p.text)]))]);
+// Seules les pages sont racontées (la couverture et son introduction n'existent plus).
+export const soundStoryNarrationTexts=Object.freeze([...new Set(soundStories.flatMap(s=>s.pages.map(p=>p.text)))]);
 // Étapes : 0 = couverture, 1..n = pages, n+1 = fin (jouer avec le son).
 export const lastStep=story=>story.pages.length+1;
 // Colore les mots du son : on découpe en mots, on échappe tout, et on n'ajoute que notre balise.

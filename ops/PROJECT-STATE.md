@@ -33,6 +33,32 @@ En attente : alignement sur les pages du livre (non reçues); relecture par le p
 distracteurs; choix d'un service de voix de narration plus haut de gamme si la voix actuelle ne convient pas.
 Prochaine action : valider avec le parent, écouter la narration après le build de production.
 
+# Laboratoire d'orthographe : toucher plutôt qu'« Écouter » — 19 novembre 2026 (America/Toronto)
+
+Même branche claude/pourquoi-ca-s-ecrit (PR #110), non fusionnée. Demande du parent : toucher le texte, pas un bouton Écouter.
+Les boutons « 🔊 Écouter » sont retirés : toucher le titre et l'idée lit l'énigme, toucher une astuce la lit, toucher un mot
+le dit (déjà le cas). Catalogue : une astuce = un texte (4 textes par mystère). Preuves : 596 tests unitaires OK; 4 suites
+navigateur OK; écrans sans défilement (390×664, 820×1000, 1180×820). Voir l'avertissement sur la limite de narration dans la
+PR #111 (2300 clips) : #110 + #111 ensemble la dépassent.
+
+# Pourquoi ça s'écrit comme ça? (Liana) — 19 novembre 2026 (America/Toronto)
+
+Branche claude/pourquoi-ca-s-ecrit (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : pour Liana, comprendre les sons et où ils vont (pourquoi « baigné » s'écrit avec ai et pas è
+ou es), décortiquer les mots par syllabes, comprendre le c doux / c dur, avec des techniques d'apprentissage et
+des exemples. Livré : nouvelle tuile « Pourquoi ça s'écrit comme ça? » dans Français (3e année), 5 mystères
+originaux — le son è (ai, è, ê, ei), le c doux et le c dur (+ ç), le g doux et le g dur (+ gu, mangeons), le son o
+(o, au, eau), un s ou deux s — chacun en 3 étapes (Observer: mots en syllabes avec la graphie repérée en couleur,
+toucher un mot = l'écouter, les syllabes sautent; Astuces: 3 techniques nommées, dont « le détective du c »,
+« cherche la famille du mot », « choisis ton mot-clé »; À toi: 3 questions avec le moteur d'exercices existant,
+sans cartes de remplissage). Les tuiles de Français (3e année) passent sur 3 pages pour garder « Vidéos », « Chansons »,
+« Squishy », « Voyage » et « Découvrir le monde » (rien retiré). Narration : textes des mystères + 40 mots ajoutés au catalogue
+(voix douce, mots entiers naturels); MP3 seulement au build de production, sinon voix système.
+Preuves : 596 tests unitaires OK; 4 suites navigateur OK; écrans sans défilement à 390×664, 820×1000, 1180×820.
+En attente : les pages 5 et suivantes du livre (non reçues) pour aligner les règles sur le programme et ajouter d'autres
+mystères (an/en, é/er/ez, ph, etc.); la qualité de la voix de narration n'est pas écoutée. Aucun diagnostic de prononciation.
+Prochaine action : valider avec le parent, puis ajouter d'autres règles.
+
 # Histoires des sons (échantillon) — 19 novembre 2026 (America/Toronto)
 
 Branche claude/histoires-des-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.
