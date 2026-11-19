@@ -1,3 +1,11 @@
+# Fête : avion « Félicitations », feux d'artifice, choix d'une récompense plus petite, étoiles dépensées — 19 novembre 2026 (America/Toronto)
+
+Branche claude/recompenses-depenser (cut de main après #130). Demandes du parent : (1) garder ses étoiles pour la meilleure récompense, mais pouvoir choisir une récompense de niveau inférieur; les points sont ajustés quand le parent confirme « Remis »; (2) voir les deux filles voler sous des feux d'artifice, avec un avion qui passe en tirant une banderole « Félicitations » et le prénom de la gagnante.
+Livré : (a) Remettre une récompense retire ses étoiles du total (st.base += coût, st.spent cumulé); le bouton parent indique « (−N ⭐) » et demande confirmation. (b) La fête propose : prendre la récompense la plus haute, en choisir une plus petite déjà gagnée (chaque bouton affiche son coût), garder ses étoiles pour la suivante, ou « Plus tard ». Rien n'est retiré avant la confirmation du parent. (c) Avion SVG qui traverse l'écran en tirant la banderole « Félicitations [prénom]! » (prénom échappé), vrais feux d'artifice en CSS (3, 5 ou 8 éclats selon le niveau 1/2/3), photo des deux filles qui vole, confettis, compteur d'étoiles, voix « Félicitations [prénom]! ». (d) « Nouveau parcours » efface aussi fêtes, choix et total dépensé. Avec « reduced motion », l'avion et la banderole restent fixes en haut au centre.
+Règle conservée : chaque récompense ne se remet qu'une fois par parcours. Les étoiles dépensées peuvent faire redescendre une récompense plus haute au statut « pas encore atteinte ».
+Preuves : 648 tests unitaires + 4 suites navigateur OK; captures Chromium téléphone (390) et paysage (1180) à trois moments : avion qui traverse, feux, banderole. Non essayé sur iPad réel. Ces animations sont en CSS/SVG dans l'app : aucun service externe ni image envoyée dehors.
+En attente : fanfare sonore (aucun son de fête dans le dépôt); photo différente par niveau; confirmation du parent sur la règle des étoiles dépensées.
+
 # Fête selon le niveau + choix « je garde mes étoiles » — 19 novembre 2026 (America/Toronto)
 
 Branche claude/fete-niveaux (cut de main après #129). Demande du parent : animer la photo qui vole avec une ambiance qui grandit selon les points obtenus, et demander à la fille si elle veut garder ses étoiles pour le prochain niveau.
