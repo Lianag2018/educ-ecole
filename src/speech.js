@@ -21,7 +21,9 @@ export function chooseReadingVoice(voices, preferredURI='') {
 
 export const playbackSpeed = value => value==='very-slow' ? .8 : Number.isFinite(Number(value)) && Number(value)>0 ? Math.max(.6,Math.min(1.5,Number(value))) : 1;
 // A system voice reads a little slower than its native rate: soft and clear for a child. No speed control is shown.
-export const GENTLE_SYSTEM_SPEED = .92;
+export const GENTLE_SYSTEM_SPEED = .88;
+// Voix du système plus douce : un peu plus grave et un peu moins forte (certaines voix ignorent la hauteur; le débit reste respecté).
+export const GENTLE_SYSTEM_PITCH = .94, GENTLE_SYSTEM_VOLUME = .9;
 // Keep explicit legacy phonics pacing; ordinary narration starts at the native rate.
 export const readingRate = mode => mode==='very-slow' ? .45 : playbackSpeed(mode);
 
@@ -48,7 +50,7 @@ export class ReadingSpeaker {
   if(!voice&&this.synth.getVoices().length){onState('error','Aucune voix française disponible. Un adulte peut ajouter une voix française dans les réglages de l’appareil, puis réessayer.');return;}
   const u=new this.Utterance(String(text));this.current=u;this.started=false;
   u.lang=voice?.lang||'fr-CA';if(voice)u.voice=voice;
-  const pace=speed===undefined?GENTLE_SYSTEM_SPEED:speed;u.rate=natural?playbackSpeed(pace):readingRate(pace);u.pitch=1;u.volume=1;
+  const pace=speed===undefined?GENTLE_SYSTEM_SPEED:speed;u.rate=natural?playbackSpeed(pace):readingRate(pace);u.pitch=GENTLE_SYSTEM_PITCH;u.volume=GENTLE_SYSTEM_VOLUME;
   const label=voice?`${voice.name} · ${voice.lang}`:'Voix système · français canadien demandé';
   const active=()=>this.epoch===epoch&&this.current===u;
   const fail=message=>{if(!active())return;this.stop();onState('error',message);};

@@ -47,3 +47,7 @@ test('without a speed control, a system voice reads gently and the recorded voic
  await Promise.all([p.ready,p.alignmentReady]);p.speak('Pas enregistré',{});
  assert.equal(p.speed,1);assert.equal(spoken.at(-1),undefined);
 });
+test('la voix du système est douce : débit lent, un peu grave, un peu moins forte',async()=>{
+ const {GENTLE_SYSTEM_PITCH,GENTLE_SYSTEM_VOLUME,GENTLE_SYSTEM_SPEED}=await import('../../src/speech.js');
+ assert.ok(GENTLE_SYSTEM_SPEED>=.85&&GENTLE_SYSTEM_SPEED<=.9);assert.ok(GENTLE_SYSTEM_PITCH<1&&GENTLE_SYSTEM_PITCH>=.85);assert.ok(GENTLE_SYSTEM_VOLUME<1&&GENTLE_SYSTEM_VOLUME>=.8);
+});
