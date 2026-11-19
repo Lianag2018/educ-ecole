@@ -1,3 +1,11 @@
+# Accueil : image complète et accès aux histoires — 19 novembre 2026 (America/Toronto)
+
+Branche claude/accueil-image-histoires (cut de main après #123). Retour du parent (captures sur téléphone) : image incomplète sur l'accueil des deux filles et impossible de voir où sont les histoires.
+Cause de l'image : en mode enfant, la photo de « Mon aventure du jour » était limitée à 50 % de la largeur et le bouton « Jouer ! » tombait sous la carte, caché. Corrigé : la photo remplit toute la carte et « Jouer ! » est posé dessus en bas (téléphone 390 px et iPad 820 px vérifiés par capture).
+Histoires : nouveau grand bouton « 📚 Mes histoires » sur l'accueil des deux filles, sous « Mon parcours ». Il ouvre la page des histoires de l'école et offre aussi « Histoires des sons » et « Lire de petites histoires ». Tout tient sur un seul écran de téléphone sans défiler.
+Preuves : 630 tests unitaires + 4 suites navigateur OK. Non essayé sur un vrai iPad / Safari.
+Non corrigé / à regarder : le bandeau ovale du haut (étoiles · Adulte) paraît déformé sur certaines captures.
+
 # Import privé des mots du livre — 19 novembre 2026 (America/Toronto)
 
 Branche claude/import-mots-livre (cut de main après #122). Demande du parent : dépôt privé et tout dans l'app.
