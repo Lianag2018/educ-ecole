@@ -2,6 +2,7 @@
 // sur une ligne de cahier (avec l'Apple Pencil : l'iPad convertit l'écriture en lettres grâce à Scribble; le clavier marche aussi).
 // Bien écrit : bravo et on passe tout de suite au mot suivant. Sinon : on aide (lettres à revoir en couleur), on le redit et on recommence.
 // Aucune note, aucun diagnostic : l'application compare seulement les lettres écrites au mot proposé.
+import {syllabify} from './syllables.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const DEFAULTS=Object.freeze({
  young:['chat','lapin','pomme','ballon','soleil','chapeau','papa','maman','lune','vélo','moto','fleur','poule','souris','nuage','bateau','gâteau','cheval','canard','tortue','livre','école','jardin','maison','rose','étoile','mer','chien','arbre','fée'],
@@ -45,7 +46,12 @@ export function checkWord(target,attempt){
  const ok=!wrong.length&&a.length===t.length;
  return {ok,wrong,accentOnly:!ok&&strip(normalizeWord(target))===strip(normalizeWord(attempt)),tooShort:a.length<t.length,tooLong:a.length>t.length};
 }
-export const wordMarkup=(word,wrong=[])=>[...word].map((c,i)=>`<span class="dm-l${wrong.includes(i)?' bad':''}">${esc(c)}</span>`).join('');
+export function wordMarkup(word,wrong=[],syl=null){
+ const letters=[...word];let k=0;
+ const one=i=>`<span class="dm-l${wrong.includes(i)?' bad':''}">${esc(letters[i])}</span>`;
+ if(!syl||syl.length<2||syl.join('')!==word)return letters.map((_,i)=>one(i)).join('');
+ return syl.map((part,n)=>`<span class="dm-syl s${n%2}">${[...part].map(()=>one(k++)).join('')}</span>`).join('');
+}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 // speak(text) renvoie une promesse qui finit quand la voix a fini (ou après un délai maximum, si la voix n'est pas disponible).
 export function mountDictation(root,{words,speak,stop=()=>{},onWordDone=()=>{},onFinish=()=>{},nextLabel=''}){
@@ -57,7 +63,7 @@ export function mountDictation(root,{words,speak,stop=()=>{},onWordDone=()=>{},o
  const stage=root.querySelector('[data-dm-stage]'),msg=root.querySelector('[data-dm-msg]'),dots=root.querySelector('[data-dm-dots]');
  const setDots=(i)=>{dots.innerHTML=words.map((_,k)=>`<i class="${results[k]==='ok'?'done':results[k]==='review'?'review':k===i?'now':''}"></i>`).join('');};
  const write=(i,target,tries)=>new Promise(resolve=>{
-  stage.innerHTML=`<div class="dm-paper"><label class="dm-ask" for="dm-input">Écris le mot que tu as vu</label><input id="dm-input" class="dm-line" data-dm-input type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Écris le mot" placeholder="✏️"><button class="dm-ok" data-dm-ok type="button">✔ J’ai fini</button></div>`;
+  stage.innerHTML=`<div class="dm-paper"><label class="dm-ask" for="dm-input">Écris le mot que tu as vu${syllabify(target).length>1?` (${syllabify(target).length} syllabes)`:''}</label><input id="dm-input" class="dm-line" data-dm-input type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Écris le mot" placeholder="✏️"><button class="dm-ok" data-dm-ok type="button">✔ J’ai fini</button></div>`;
   const input=stage.querySelector('[data-dm-input]');let done=false,idle=null;
   const submit=()=>{if(done||!alive)return;const v=input.value;if(!normalizeWord(v))return;done=true;clearTimeout(idle);resolve(v);};
   input.addEventListener('input',()=>{clearTimeout(idle);if([...normalizeWord(input.value)].length>=[...target].length)idle=setTimeout(submit,1400);});
@@ -80,16 +86,32 @@ export function mountDictation(root,{words,speak,stop=()=>{},onWordDone=()=>{},o
     await new Promise(r=>{const btn=stage.querySelector('[data-dm-read]');btn.addEventListener('click',()=>{btn.remove();r();},{once:true});timers.push(setTimeout(()=>{btn.isConnected&&(btn.remove(),r());},60000));});if(!alive)return;
     await say('Bravo!');if(!alive)return;await wait(250);
    }
-   // 3. J'épelle avec la voix : les lettres s'allument une à une
+   // 3. Je découpe en syllabes : l'app les tape une à une, puis l'enfant les touche dans l'ordre en les disant
+   const syls=syllabify(target);
+   if(syls.length>1&&syls.join('')===target){
+    msg.textContent='Découpons le mot en syllabes : '+syls.length+' syllabes.';
+    stage.innerHTML=`<div class="dm-syls" data-dm-syls>${syls.map((x,k)=>`<span class="dm-chip" data-dm-chip="${k}">${esc(x)}</span>`).join('<i aria-hidden="true">·</i>')}</div>`;
+    const chipsS=[...stage.querySelectorAll('[data-dm-chip]')];
+    for(const [k,c] of chipsS.entries()){if(!alive)return;c.classList.add('lit');await say(syls[k]);await wait(250);}
+    if(!alive)return;await wait(250);
+    msg.textContent='À toi ! Touche chaque syllabe en la disant.';
+    chipsS.forEach(c=>c.classList.remove('lit'));
+    await new Promise(done=>{let at=0;chipsS.forEach((c,k)=>{c.setAttribute('role','button');c.tabIndex=0;const tap=()=>{if(!alive||k!==at)return;c.classList.add('lit');at++;speak(syls[k]);if(at>=syls.length)timers.push(setTimeout(done,600));};c.addEventListener('click',tap);c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tap();}});});});
+    if(!alive)return;await say('Bravo!');if(!alive)return;await wait(200);
+    stage.innerHTML=`<button class="dm-word" data-dm-word type="button" aria-label="Réécouter le mot">${wordMarkup(target,[],syls)}</button>`;
+    stage.querySelector('[data-dm-word]').addEventListener('click',()=>speak(target));
+   }
+   // 4. J'épelle avec la voix : les lettres s'allument une à une
    msg.textContent='Écoute les lettres.';
    const names=spellOut(target);
    const chips=[...stage.querySelectorAll('.dm-l')];
    const lit=(async()=>{for(const c of chips){if(!alive)return;c.classList.add('lit');await wait(650);}})();
    await Promise.all([say(names.join(', ')),lit]);if(!alive)return;await wait(300);
-   // 4. À son tour, l'enfant épelle : elle touche chaque lettre, dans l'ordre, en disant son nom
+   // 5. À son tour, l'enfant épelle : elle touche chaque lettre, dans l'ordre, en disant son nom
    msg.textContent='À toi ! Épelle le mot : touche chaque lettre en la disant.';
    const letters=[...target];
-   stage.innerHTML=`<div class="dm-spell" data-dm-spell>${letters.map((c,k)=>`<button type="button" class="dm-key" data-dm-key="${k}">${esc(c)}</button>`).join('')}</div>`;
+   const groupsK=syls.length>1&&syls.join('')===target?syls:[target];let kk=0;
+   stage.innerHTML=`<div class="dm-spell" data-dm-spell>${groupsK.map(g=>`<span class="dm-sg">${[...g].map(c=>`<button type="button" class="dm-key" data-dm-key="${kk++}">${esc(c)}</button>`).join('')}</span>`).join('')}</div>`;
    await new Promise(done=>{
     let at=0,miss=0;const keys=[...stage.querySelectorAll('[data-dm-key]')];
     keys.forEach((btn,k)=>btn.addEventListener('click',()=>{
@@ -98,7 +120,7 @@ export function mountDictation(root,{words,speak,stop=()=>{},onWordDone=()=>{},o
      else{btn.classList.add('shake');timers.push(setTimeout(()=>btn.classList.remove('shake'),400));if(++miss>=2&&keys[at])keys[at].classList.add('hint');}
     }));
    });if(!alive)return;
-   stage.innerHTML=`<button class="dm-word" data-dm-word type="button" aria-label="Réécouter le mot">${wordMarkup(target)}</button>`;
+   stage.innerHTML=`<button class="dm-word" data-dm-word type="button" aria-label="Réécouter le mot">${wordMarkup(target,[],syls)}</button>`;
    chips.length&&stage.querySelectorAll('.dm-l').forEach(c=>c.classList.add('lit'));
    await say('Bien épelé!');if(!alive)return;await wait(300);
    // 3. Le mot disparaît par magie

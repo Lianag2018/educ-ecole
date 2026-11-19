@@ -55,7 +55,7 @@ export const lessonWords=Object.freeze({
  l:'lu-ne lit la-pin li-vre lac lait loup lu-net-te sa-lon pel-le bal-le ai-le',
  s:'sac sa-pin sou-pe sa-la-de sel sou su-cre sa-lon so-leil sou-ris sa-von sor-ciè-re',
  in:'la-pin sa-pin ma-tin dau-phin pin fin lin vin pain main jar-din bien',
- eacute:'bé-bé clé fée é-co-le blé dé thé pré é-to-i-le lé-gu-me é-lé-phant é-lè-ve',
+ eacute:'bé-bé clé fée é-co-le blé dé thé pré é-toi-le lé-gu-me é-lé-phant é-lè-ve',
  egrave:'mè-re frè-re rè-gle lu-miè-re pè-re lè-vre piè-ge bar-riè-re fou-gè-re che-vreuil',
  o:'mo-to dos ra-di-o ro-bot mot nom pot zé-ro ro-se cho-co-lat po-ta-ge au-to',
  oopen:'pom-me por-te col-le ro-be sol col bon-ne no-te golf cor-de co-que',

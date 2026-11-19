@@ -637,3 +637,9 @@ body .simple-world .journey-door .jd-go{background:#ffc93c!important;color:#2416
 .dm-key{min-width:clamp(48px,13vw,78px);min-height:clamp(60px,10svh,92px);border:3px solid #24163f;border-radius:18px;background:#fff;box-shadow:0 4px 0 #24163f;font-size:clamp(30px,6svh,52px);font-weight:900;color:#24163f}
 .dm-key.lit{background:#ffd95a;transform:translateY(-6px)}.dm-key.hint{animation:dmHint .7s infinite alternate}.dm-key.shake{animation:dmShake .35s}
 @keyframes dmHint{to{background:#fff3c4;transform:scale(1.08)}}@keyframes dmShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.dm-syls{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;font-size:clamp(30px,6svh,54px);font-weight:900;color:#24163f}.dm-syls i{font-style:normal;color:#a99bc7}
+.dm-chip{padding:8px 16px;border:3px solid #24163f;border-radius:18px;background:#fff;box-shadow:0 4px 0 #24163f;cursor:pointer}.dm-chip.lit{background:#ffd95a;transform:translateY(-6px)}
+.dm-syl.s0{color:#24163f}.dm-syl.s1{color:#7452a8}.dm-gap{display:inline-block;width:clamp(10px,3vw,24px)}
+
+.dm-sg{display:inline-flex;flex-wrap:nowrap;gap:clamp(4px,1vw,8px);margin:0 clamp(6px,2vw,16px)}.dm-key{min-width:clamp(40px,10vw,70px)!important}
