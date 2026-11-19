@@ -12,6 +12,9 @@ test('une récompense atteinte reste à remettre jusqu\'à la confirmation du pa
  assert.equal(claimReward(p,'r0'),true);assert.equal(claimReward(p,'r0'),false);// une seule fois
  assert.equal(rewardStatus(p).items[0].claimed,true);assert.equal(rewardStatus(p).waiting,0);
 });
+test('remettre une récompense retire ses étoiles du total',()=>{
+ const p=child(30);assert.equal(rewardPoints(p),150);claimReward(p,'r0');assert.equal(rewardPoints(p),50);
+});
 test('le parent modifie la liste; les lignes invalides sont ignorées',()=>{
  const p=child(0);
  assert.equal(saveRewards(p,[{title:'  ',cost:50},{title:'Glace',cost:2},{title:'Glace',cost:50,icon:'🍦'},{title:'Zoo',cost:'300'}]),true);
