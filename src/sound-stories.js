@@ -81,13 +81,13 @@ export function gameTextMarkup(page){
 }
 export const soundWordCount=page=>{const set=new Set(page.words.map(w=>w.toLowerCase()));return (page.text.match(/\p{L}+/gu)||[]).filter(w=>set.has(w.toLowerCase())).length;};
 const navMarkup=(at,n,dots)=>`<div class="ss-nav"><button data-story-prev aria-label="Page précédente" ${at<=1?'disabled':''}>◀</button><div class="ss-dots" aria-label="Page ${at} sur ${n}">${dots}</div><button data-story-next aria-label="Page suivante">▶</button></div>`;
-export function soundStoryMarkup(story,{step=1}={}){
+export function soundStoryMarkup(story,{step=1,round=0}={}){
  const n=story.pages.length,last=lastStep(story),at=Math.max(1,Math.min(step,last));
  const dots=Array.from({length:n+LESSON_STEPS},(_,i)=>`<i class="${i+1<at?'done':i+1===at?'now':''}"></i>`).join('');
  let body;
  if(at>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as trouvé tous les mots du son « ${esc(story.label||story.sound)} ». Un nouveau truc secret t’attend dans ton carnet 🎁. Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-journey-next>➡ Étape suivante</button><button class="ss-again" data-story-restart>↺ Recommencer l’histoire</button></div>`;
  else if(at===n+1)body=gestureStepMarkup(story)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
- else if(at===n+2)body=wordsStepMarkup(story,story.id.charCodeAt(0)+story.id.length)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
+ else if(at===n+2)body=wordsStepMarkup(story,story.id.charCodeAt(0)+story.id.length,round)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
  else{const page=story.pages[at-1],total=soundWordCount(page);
   body=`<div class="ss-page" style="--ss:${story.color}"><button type="button" class="ss-scene" data-story-read aria-label="Relire la phrase">${page.scene}<i class="ss-ear" aria-hidden="true">🔊</i></button><p class="ss-text" data-story-text>${gameTextMarkup(page)}</p><p class="ss-goal">Touche les mots qui font le son <button type="button" class="ss-label" data-story-sound aria-label="Entendre le son">« ${esc(story.label||story.sound)} »</button> <span class="ss-count" data-story-count>⭐ 0 / ${total}</span></p><div class="ss-nav"><button data-story-prev aria-label="Page précédente" ${at<=1?'disabled':''}>◀</button><div class="ss-dots" aria-label="Page ${at} sur ${n}">${dots}</div><button data-story-next aria-label="Page suivante">▶</button></div></div>`;}
  return `<section class="sound-story" aria-label="Histoire : ${esc(story.title)}"><div class="ss-top"><button data-action="sound-garden">‹ Jardin des sons</button><span>📖 ${esc(story.title)}</span></div>${body}</section>`;

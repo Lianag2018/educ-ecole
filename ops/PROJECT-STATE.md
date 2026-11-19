@@ -1,3 +1,10 @@
+# Listes de mots élargies — 19 novembre 2026 (America/Toronto)
+
+Branche claude/plus-de-mots (cut de main après #117). Demande du parent : « tous ces mots » (listes du livre).
+Livré : 391 mots courants découpés en syllabes (de 8 à 15 par son, 36 sons), affichés 6 par page dans la leçon avec le bouton « Autres mots ». Les mots sont choisis par nous (mots courants, y compris plusieurs présents dans le livre); les listes complètes de l'annexe du livre ne sont pas recopiées dans le dépôt public.
+Limite connue : ce n'est pas la liste intégrale du livre; la copier mot à mot appartient à un stockage privé de la famille (décision du parent à confirmer).
+Preuves : 618 tests unitaires + 4 suites navigateur OK. Pas d'appareil réel.
+
 # Mon carnet de trucs — 19 novembre 2026 (America/Toronto)
 
 Branche claude/carnet-de-trucs (cut de main après #116). Demande du parent : un système éducatif qui explique aux deux filles qu'on leur donne des trucs à découvrir, en s'amusant.
