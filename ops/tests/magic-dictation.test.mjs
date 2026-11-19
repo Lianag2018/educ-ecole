@@ -28,3 +28,7 @@ test('les listes par défaut sont de vrais mots sans doublon; le balisage échap
  assert.ok(!/<script/.test(wordMarkup('<script>')));assert.match(wordMarkup('chat',[1]),/dm-l bad">h</);
  assert.match(dictationParent({name:'Liana',dictation:{words:['baigné'],review:['forêt']}}),/baigné[\s\S]*À revoir[^<]*forêt/);
 });
+import {dictationWords as dw,batchWords as bw,spellOut as so} from '../../src/magic-dictation.js';
+test('les mots des sons appris passent avant les mots par défaut',()=>{
+ const p={id:'p1'};const l=dw(p,false,['sapin','soupe']);assert.deepEqual(l.slice(0,2),['sapin','soupe']);assert.equal(bw(p,0,false,['sapin','soupe','lune','lac','lit'])[0],'sapin');
+});

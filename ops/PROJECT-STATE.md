@@ -1,3 +1,11 @@
+# Écrire les mots : lire, relire, épeler, magie, écrire — 19 novembre 2026 (America/Toronto)
+
+Branche claude/ecrire-les-mots (cut de main après #119). Demande du parent : tous les mots en jeu d'écriture; je lis le mot, elle le relit, elle l'épelle, il disparaît par magie, elle l'écrit avec l'Apple Pencil.
+Livré : la dictée magique suit maintenant 5 temps par mot : (1) l'app lit le mot, (2) l'enfant le relit à voix haute (bouton « Je l'ai lu », premier essai seulement), (3) l'app épelle (lettres allumées), (4) l'enfant épelle en touchant chaque lettre dans l'ordre en entendant son nom (mauvaise lettre : secousse, aide après 2 erreurs), (5) le mot disparaît par magie, (6) elle l'écrit (champ Scribble de l'Apple Pencil ou clavier), aide en rouge et 3 essais au besoin.
+Nouveau bouton « ✍️ Écrire tous les mots du son » dans chaque leçon (tous les mots du son, 8 à 15), avec retour à l'histoire. Les dictées du parcours piochent maintenant d'abord dans les mots des sons déjà appris.
+Preuves : 622 tests unitaires + 4 suites navigateur OK; parcours complet vérifié dans Chromium (lire, épeler, écrire, bravo pour 2 mots, aucune erreur JS). Non essayé sur iPad / Apple Pencil réels.
+Note de confidentialité : le dépôt GitHub est PUBLIC (le parent pensait qu'il était privé); aucun texte du livre n'y est. À décider : passer le dépôt en privé.
+
 # Histoires de l'école privées — 19 novembre 2026 (America/Toronto)
 
 Branche claude/histoires-ecole-privees (cut de main après #118). Demande du parent : les mêmes histoires que le livre de l'école, pour usage personnel.
