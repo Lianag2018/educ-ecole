@@ -16,3 +16,8 @@ test('les histoires importées restent dans l\'appareil et se jouent sans leçon
 test('le code de l\'app ne contient aucune histoire du livre',async()=>{
  const fs=await import('node:fs');const src=fs.readFileSync(new URL('../../src/private-stories.js',import.meta.url),'utf8');assert.doesNotMatch(src,/village des sons|Piquera|bicyclette/i);
 });
+test('la liste des histoires est paginée (6 par page)',async()=>{
+ const {privateStoriesMarkup,psPages,savePrivate,clearPrivate,parseStories}=await import('../../src/private-stories.js');
+ clearPrivate();const txt=Array.from({length:14},(_,i)=>`## g${i} — Titre ${i}\n\nUne page ${i}.`).join('\n\n');savePrivate(parseStories(txt));
+ assert.equal(psPages(),3);assert.equal((privateStoriesMarkup(0).match(/data-private-open/g)||[]).length,6);assert.equal((privateStoriesMarkup(2).match(/data-private-open/g)||[]).length,2);clearPrivate();
+});
