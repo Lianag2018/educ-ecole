@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {pendingCelebration,markCelebrated,celebrationMarkup,rewardState,claimReward,tierFor,nextReward,chooseReward,rewardStatus,rewardsKid,rewardsParent,restartRewards} from '../../src/rewards.js';
+import {pendingCelebration,markCelebrated,celebrationMarkup,rewardState,claimReward,tierFor,nextReward,chooseReward,rewardStatus,rewardsKid,rewardsParent,restartRewards,syncGifts,ownerOf,giveReward} from '../../src/rewards.js';
 const kid=()=>({id:'p1',name:'Mely-Ann',history:[]});
 test('la fête n\'apparaît qu\'une fois, quand une récompense est atteinte',()=>{
  const p=kid();assert.equal(pendingCelebration(p),null);
@@ -44,7 +44,7 @@ test('elle peut choisir une récompense de niveau inférieur déjà gagnée, et 
  const html=celebrationMarkup(top,'Liana',{points:600,next:nextReward(p,top.id),tier:2,lower});
  assert.match(html,/data-party-pick="r0"/);assert.match(html,/data-party-pick="r2"/);assert.match(html,/plus petite/);assert.match(html,/data-party-later/);assert.match(html,/−100 ⭐/);
  // elle choisit le cinéma (400) : rien n'est retiré avant la confirmation
- assert.equal(chooseReward(p,'r2','now'),true);assert.equal(rewardStatus(p).points,600);assert.match(rewardsParent(p),/Remis à Liana ✓ \(−400 ⭐\)/);
+ assert.equal(chooseReward(p,'r2','now'),true);assert.equal(rewardStatus(p).points,600);assert.match(rewardsParent(p),/Remis aux deux filles ✓ \(−400 ⭐\)/);
  assert.equal(claimReward(p,'r2'),true);assert.equal(rewardStatus(p).points,200);
  const st=rewardStatus(p);assert.equal(st.items.find(x=>x.id==='r2').claimed,true);assert.equal(st.items.find(x=>x.id==='r3').reached,false);// le sushi n'est plus atteint
  assert.equal(st.items.find(x=>x.id==='r0').reached,true);assert.equal(claimReward(p,'r3'),false);// plus assez d'étoiles
@@ -62,4 +62,33 @@ test('un avion tire une banderole « Félicitations » avec le prénom de la fil
  const html=celebrationMarkup({icon:'🍟',title:'McDo'},'Mely-Ann',{points:100,tier:1});
  assert.match(html,/class="rp-plane"/);assert.match(html,/Félicitations Mely-Ann!/);assert.match(html,/class="rp-fireworks"/);assert.match(html,/voyage-soeurs\.webp/);
  assert.doesNotMatch(celebrationMarkup({icon:'x',title:'y'},'<script>alert(1)</script>',{}),/<script>/);
+});
+
+const duo=()=>{const a={id:'p1',name:'Mely-Ann',history:[]},b={id:'p2',name:'Liana',history:[]};return [a,b];};
+test('une récompense gagnée par une fille est donnée aux deux filles (cadeau pour la sœur, sans dépenser ses étoiles)',()=>{
+ const [a,b]=duo();rewardState(a).base=-100;
+ assert.equal(syncGifts([a,b]),true);assert.equal(syncGifts([a,b]),false);
+ const sb=rewardStatus(b).items.find(x=>x.id==='r0');assert.equal(sb.reached,true);assert.equal(sb.own,false);assert.equal(sb.gift,'Mely-Ann');assert.equal(rewardStatus(b).points,0);
+ assert.equal(pendingCelebration(b).id,'r0');assert.match(rewardsKid(b),/Cadeau de Mely-Ann/);assert.match(rewardsParent(b),/cadeau de Mely-Ann/);
+ assert.equal(ownerOf([a,b],b,'r0'),a);assert.equal(ownerOf([a,b],a,'r0'),a);
+});
+test('« Remis » donne la récompense aux deux, retire les étoiles seulement à celle qui l\'a gagnée, même depuis la fiche de la sœur',()=>{
+ const [a,b]=duo();rewardState(a).base=-300;syncGifts([a,b]);
+ assert.equal(giveReward([a,b],b,'r0')?.name,'Mely-Ann');
+ assert.equal(rewardStatus(a).points,200);assert.equal(rewardStatus(b).points,0);
+ assert.equal(rewardStatus(a).items.find(x=>x.id==='r0').claimed,true);assert.equal(rewardStatus(b).items.find(x=>x.id==='r0').claimed,true);
+ assert.equal(giveReward([a,b],a,'r0'),null);syncGifts([a,b]);assert.equal(rewardState(b).gifts.r0,undefined);
+ // le trampolines (250) est encore gagné par a (200 < 250 : non) -> pas de cadeau
+ assert.equal(rewardStatus(b).items.find(x=>x.id==='r1').reached,false);
+});
+test('un cadeau disparaît si la fille qui l\'avait gagné dépense ses étoiles autrement',()=>{
+ const [a,b]=duo();rewardState(a).base=-600;syncGifts([a,b]);assert.equal(rewardStatus(b).items.find(x=>x.id==='r3').reached,true);
+ assert.equal(giveReward([a,b],a,'r2'),a);syncGifts([a,b]); // a a dépensé 400 : il lui reste 200
+ assert.equal(rewardStatus(b).items.find(x=>x.id==='r3').reached,false);assert.equal(rewardStatus(b).items.find(x=>x.id==='r0').reached,true);
+});
+test('la fête nomme les deux filles sur la banderole; la sœur voit un cadeau sans choix',()=>{
+ const mine=celebrationMarkup({icon:'🍟',title:'McDo',cost:100},'Mely-Ann',{points:100,tier:1,names:['Mely-Ann','Liana'],next:{icon:'x',title:'y',missing:5}});
+ assert.match(mine,/Félicitations Mely-Ann et Liana!/);assert.match(mine,/pour vous deux/);assert.match(mine,/data-party-now/);
+ const gift=celebrationMarkup({icon:'🍟',title:'McDo',cost:100},'Liana',{points:0,tier:1,names:['Mely-Ann','Liana'],gift:'Mely-Ann',next:{icon:'x',title:'y',missing:5}});
+ assert.match(gift,/Mely-Ann a gagné cette récompense pour vous deux/);assert.match(gift,/data-party-close/);assert.doesNotMatch(gift,/data-party-now|data-party-save|data-party-pick/);
 });
