@@ -1,3 +1,23 @@
+# Histoires des sons (échantillon) — 19 novembre 2026 (America/Toronto)
+
+Branche claude/histoires-des-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : adapter les pages du livre à l'éducation de Mely-Ann, sons + histoires, racontés
+par une narratrice de livre audio haut de gamme, amusant et éducatif, une activité par son;
+« montre-moi ce que tu peux créer ». Livré = ÉCHANTILLON de 3 sons (ou, on, ch) : conte original
+de 5-6 pages (« Loulou le loup », « Le ballon de Léon », « Charlot cherche son chapeau »), une page
+par écran avec scène en émojis, mots du son colorés (suivent les mots, pas la prononciation),
+bouton Écouter, « la narratrice tourne les pages » (lecture automatique), puis 4 activités par son
+(reconnaître le son, rime, compréhension) via le moteur d'exercices existant. Accès : Jardin des sons →
+« 📖 L'histoire du son ». Narration : 19 textes ajoutés au catalogue avec une voix de narratrice de livre
+audio (voix coral, débit .92, dialogues expressifs); les MP3 ne sont générés qu'au build de production avec
+la clé de narration, sinon voix système douce — l'effet « haut de gamme » n'est pas vérifié ici.
+Contenu 100 % original; aucune page, image ni texte du livre de l'école n'est utilisé ni copié.
+Preuves : 591 tests unitaires OK; 4 suites navigateur OK; écrans sans défilement à 390×664, 820×1000,
+1180×820 (Chromium, pas d'appareil réel ni écoute des MP3).
+En attente : les pages du livre (non fournies) pour aligner les ~33 autres sons sur le programme;
+décision du parent sur la suite (écrire les autres histoires, illustrations, durée des séries).
+Prochaine action : valider l'échantillon avec le parent, puis généraliser.
+
 # Jardin des sons modernisé — 19 novembre 2026 (America/Toronto)
 
 Branche claude/jardin-sons-moderne (cut de main), PR à ouvrir; non fusionnée, non déployée.
