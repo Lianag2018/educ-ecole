@@ -1,3 +1,13 @@
+# Leçon en 5 temps et jeu des amoureux — 19 novembre 2026 (America/Toronto)
+
+Branche claude/systeme-lecon-jeux (cut de main après #115). Demande du parent : un vrai système d'éducation sous forme de jeu, en se servant des premières pages du livre (démarche, gestes, difficultés, jeux).
+Livré : chaque histoire de son enchaîne maintenant (1) l'histoire, (2) le GESTE + bruit du son (36 gestes reformulés, bouton « Je l'ai fait! »), (3) quatre MOTS à lire syllabe par syllabe avec un conseil de lecture
+(« si le mot ne sonne pas comme un mot connu… », frapper les syllabes, les jumeaux…), (4) l'activité du son, (5) la dictée magique. L'étape du parcours se termine après les pages geste et mots.
+Nouveau jeu « Les amoureux » (consonne + voyelle = syllabe, puis trouver le mot qui la contient), inséré après chaque dictée dans « Mon parcours » (49 étapes pour Mely-Ann). Textes en voix de l'appareil (hors catalogue : 2298 clips inchangé).
+Source : démarche des pages 11 à 29 du livre de l'école, reformulée; aucun texte du livre dans le dépôt.
+Preuves : 615 tests unitaires + 4 suites navigateur OK; captures du rendu téléphone des pages geste et mots. Pas d'appareil réel.
+En attente : jeux « Syllabe secrète », « Disparition », « Cachottier » (à deux ou avec un parent), listes de mots par graphie plus riches, retour du parent sur les gestes.
+
 # Parcours dans l’ordre du livre de l’école — 19 novembre 2026 (America/Toronto)
 
 Branche claude/parcours-ordre-du-livre (cut de main après #114), PR à ouvrir, non fusionnée. Demande du parent : adapter l’app à l’ordre du livre de l’école.

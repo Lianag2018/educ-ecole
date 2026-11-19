@@ -7,7 +7,7 @@ const ORDER=['eacute','egrave','s','j','f','ch','r','z','v','m','l','n','on','ou
 const OLDER_START=['lab:e-ouvert','lab:bdpq','lab:fin-e','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','lab:m-bp','lab:muets','story:z','story:ui'];
 const step=id=>{const [kind,target]=id.split(':');return {id,kind,target};};
 // Une dictée magique (5 mots) s'ajoute après chaque groupe d'étapes : 6 pour Mely-Ann, 4 pour Liana.
-const withDictations=(ids,every)=>{const out=[];let n=0;ids.forEach((id,i)=>{out.push(id);if((i+1)%every===0)out.push('dict:'+n++);});return out;};
+const withDictations=(ids,every)=>{const out=[];let n=0;ids.forEach((id,i)=>{out.push(id);if((i+1)%every===0){out.push('dict:'+n);out.push('game:'+n);n++;}});return out;};
 export function journeySteps(p,older){
  const isOlder=older??(p.schoolContext?.stage==='3e année'||p.id==='p2');
  const stories=ORDER.filter(id=>storyFor(id)).map(id=>'story:'+id);
@@ -31,6 +31,7 @@ export function stepLabel(st){
  if(!st)return '';
  if(st.kind==='story'){const s=storyFor(st.target);return s?`L’histoire du son « ${s.label||s.sound} »`:'Une histoire';}
  if(st.kind==='dict')return 'Écrire mes mots avec la dictée magique';
+ if(st.kind==='game')return 'Jeu des amoureux : lire des syllabes';
  const r=ruleFor(st.target);return r?`Mystère : ${r.title}`:'Un mystère';
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

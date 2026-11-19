@@ -42,6 +42,8 @@ import {mountMinuteMath as mountSpeedMath} from './minute-math.js';
 import {planPanel,planMap,planFor,planMissions,missionOpen,mountPlanImport} from './school-plan.js';
 import {squishyStages,squishyMap,stageOpen,blob} from './squishy.js';
 import {PhonemePlayer} from './phoneme-player.js';
+import {gestureText,tipFor} from './sound-lessons.js';
+import {loversCards} from './sound-games.js';
 import {storyFor,hasStory,soundStoryMarkup,lastStep,activityCards,STORY_TRY_AGAIN} from './sound-stories.js';
 import {journeyNext,markJourney} from './journey.js';
 import {mountDictation,batchWords,parseWords,dictationParent} from './magic-dictation.js';
@@ -311,6 +313,7 @@ document.addEventListener('click',e=>{const t=e.target instanceof Element?e.targ
 function openDictation(batch){cleanup();dictBatch=Math.max(0,batch|0);return navigate('dictation');}
 function openJourney(){const step=journeyNext(profile());persist();if(!step)return;cleanup();
  if(step.kind==='dict')return openDictation(Number(step.target));
+ if(step.kind==='game'){markJourney(profile(),step.id,today());persist();return begin(loversCards(Number(step.target)),'Français',{fill:false});}
  if(step.kind==='story'){storyId=step.target;storyStep=1;storyNarrate=true;return navigate('sound-story');}
  labRuleId=step.target;labStep=0;return navigate('spelling-lab');}
 function numbers(p){const available=numberRows(p);if(!available[numberRow])numberRow=firstNumberRow(p);const values=available[numberRow],value=chosenNumber??values[numberIndex];const chart=!advanced(p)?chartMarkup(hundredState()):'';return `<section class="lesson number-adventure${chart?' has-hundred':''}${advanced(p)?' has-read-grid':''}">${landscape()}<div class="adventure-top"><span class="world-badge">${gradeFor(p)}${gradeFor(p)===1?'re':'e'} année · ${esc(childName(p))}</span></div><h1>${advanced(p)?'Nombres de 0 à 9 999':'Mon jardin des nombres'}</h1>${chart}<label>Ligne<select id="number-row">${Object.keys(available).map(k=>`<option ${k===numberRow?'selected':''}>${k}</option>`).join('')}</select></label><label>Choisis un nombre de 0 à ${advanced(p)?9999:99}<input id="chosen-number" type="number" inputmode="numeric" min="0" max="${advanced(p)?9999:99}" value="${value}"></label><button data-action="row-mode">${wholeRow?'Un nombre à la fois':'Toute la ligne'}</button><div class="reading" data-number-display>${wholeRow?values.join(' · '):value}</div>${advanced(p)?readAloudMarkup():''}<p data-number-decomposition>${value} = ${decompose(value)||'0'}</p><details><summary>Voir le nombre en mots</summary><p data-number-words>${numberWords(value)}</p></details>${speedControl()}<button data-action="number-audio">Écouter le nombre</button><button data-action="silence">Arrêter l’écoute</button><p class="audio-status number-audio-status" role="status">${esc(voiceMessage||'Écoute le nombre, puis essaie de le redire.')}</p><details class="number-audio-source"><summary>Les voix des nombres</summary><p>Les extraits de <a href="https://pedagofa.cssdm.gouv.qc.ca/1o/1o-13/" target="_blank" rel="noopener noreferrer">PédagoFA · CSSDM</a> sont associés aux nombres. La narratrice complète les morceaux manquants.</p></details>${grokMarkup('number')}${oralPractice(wholeRow)}<div id="number-coach-mount" ${wholeRow?'hidden':''}>${numberCoachMarkup(value)}</div><details data-number-recorder><summary>Mon studio · réécouter ma voix</summary><p>Enregistre-toi pour réécouter avec un adulte. Ta voix reste sur cet appareil et s’efface en quittant l’activité.</p><button data-action="record" ${recording||micPending?'disabled':''}>Enregistrer ma voix</button><button data-action="stop-record" ${!recording?'disabled':''}>Terminer</button><p role="status">${esc(mediaMessage)}</p>${recordURL?`<audio controls src="${recordURL}"></audio>`:''}</details><button data-action="number-prev" ${numberIndex===0?'disabled':''}>Précédent</button><button data-action="number-next" ${numberIndex===9?'disabled':''}>Suivant</button><p><span data-number-position>${chosenNumber!==null?'Nombre choisi pour s’entraîner.':'Nombre '+(numberIndex+1)+'/10.'}</span> Le parent écoute toute la ligne avant de confirmer. Le retour vocal sur un nombre ne valide pas toute la ligne.</p><button data-action="row-confirm" ${chosenNumber!==null?'disabled':''}>Parent : ligne lue sans hésitation</button><button data-action="row-retry">Réessayer un autre soir</button><p role="status">${esc(settings(p).rowStatus?.[numberRow]||'Lecture à vérifier ensemble.')}</p><button data-action="library-numbers">📚 Mes fiches de nombres à mon niveau</button><button data-action="home">Retour au jardin</button></section>`;}
@@ -380,7 +383,9 @@ function bindSoundGarden(){
  if(story){
   if(storyStep>=lastStep(story)&&markJourney(profile(),'story:'+story.id,today()))persist();
   const go=(step,narrate)=>{cleanup();storyStep=Math.max(1,Math.min(lastStep(story),step));storyNarrate=narrate;render();};
-  const narrate=()=>{const page=story.pages[storyStep-1];if(page)speakText(page.text);};
+  const narrate=()=>{const page=story.pages[storyStep-1];if(page)speakText(page.text);else if(storyStep===story.pages.length+1)speakText(gestureText(story.id));else if(storyStep===story.pages.length+2)speakText('Touche chaque mot pour l’entendre. '+tipFor(story.id.charCodeAt(0)+story.id.length));};
+  document.querySelector('[data-story-gesture]')?.addEventListener('click',()=>{cleanup();speakText('Bravo! Tu as bien fait le geste.',false,()=>{if(view==='sound-story'&&storyStep===story.pages.length+1)go(storyStep+1,true);});});
+  document.querySelectorAll('[data-lesson-word]').forEach(b=>b.onclick=()=>{b.classList.add('on');speakText(b.dataset.lessonWord);});
   document.querySelector('[data-story-read]')?.addEventListener('click',narrate);
   document.querySelector('[data-story-sound]')?.addEventListener('click',()=>{cleanup();phonemePlayer.play(story.sound);});
   document.querySelector('[data-story-next]')?.addEventListener('click',()=>go(storyStep+1,true));
@@ -398,7 +403,7 @@ function bindSoundGarden(){
    speakText(word,false,()=>{if(view!=='sound-story'||storyStep!==at)return;speakText('Bravo! Tu as bien travaillé.',false,()=>{if(view==='sound-story'&&storyStep===at)setTimeout(()=>{if(view==='sound-story'&&storyStep===at)go(at+1,true);},500);});});
   });
   document.querySelector('[data-story-play]')?.addEventListener('click',()=>{cleanup();begin(activityCards(story),'Français',{fill:false});});
-  if(storyNarrate){storyNarrate=false;if(storyStep>=1&&storyStep<=story.pages.length)narrate();}
+  if(storyNarrate){storyNarrate=false;if(storyStep>=1&&storyStep<=story.pages.length+2)narrate();}
  }
  document.querySelectorAll('[data-journey-next]').forEach(b=>b.onclick=openJourney);
  document.querySelector('[data-garden-exercises]')?.addEventListener('click',()=>{cleanup();begin(skillCards(profile(),'sons'),'sons');});
