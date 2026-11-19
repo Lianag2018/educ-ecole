@@ -85,7 +85,7 @@ export function soundStoryMarkup(story,{step=1}={}){
  const n=story.pages.length,last=lastStep(story),at=Math.max(1,Math.min(step,last));
  const dots=Array.from({length:n+LESSON_STEPS},(_,i)=>`<i class="${i+1<at?'done':i+1===at?'now':''}"></i>`).join('');
  let body;
- if(at>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as trouvé tous les mots du son « ${esc(story.label||story.sound)} ». Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-journey-next>➡ Étape suivante</button><button class="ss-again" data-story-restart>↺ Recommencer l’histoire</button></div>`;
+ if(at>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as trouvé tous les mots du son « ${esc(story.label||story.sound)} ». Un nouveau truc secret t’attend dans ton carnet 🎁. Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-journey-next>➡ Étape suivante</button><button class="ss-again" data-story-restart>↺ Recommencer l’histoire</button></div>`;
  else if(at===n+1)body=gestureStepMarkup(story)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
  else if(at===n+2)body=wordsStepMarkup(story,story.id.charCodeAt(0)+story.id.length)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
  else{const page=story.pages[at-1],total=soundWordCount(page);
