@@ -1,3 +1,12 @@
+# Code oublié et blocage Vercel — 19 novembre 2026 (America/Toronto)
+
+Branche claude/code-oublie. Demande du parent : « mot de passe oublié » pour renouveler le code.
+Livré : bouton « Code oublié ? » dans la fenêtre du code; question d'adulte (multiplication aléatoire), nouveau code de 4 chiffres saisi deux fois, enregistré sur l'appareil (setPin), puis la fille entre. L'ancien code est refusé ensuite. Limite : verrou familial; une grande sœur peut résoudre la question. Le code oublié ne se réinitialise que sur l'appareil où il a été changé (le code est local à chaque appareil).
+Blocage exact : Vercel refuse les déploiements depuis la PR du code secret (statut « Deployment rate limited — retry in 24 hours », projets educ-ecole et educ-iles-aventure). La dernière version réellement déployée connue est l'accueil animé (PR 136, statut success). Le code secret (PR 137) et ce « code oublié » ne sont donc pas en ligne tant que la limite n'est pas levée.
+Dépôt : GitHub signalait encore private=false à la dernière vérification (updated_at 12:59 UTC) malgré le message du parent disant qu'il est privé.
+Preuves : essai Chromium : mauvaise réponse refusée, codes différents refusés, ancien code refusé puis nouveau accepté, 0 erreur JS; tests unitaires et suites navigateur (voir PR). Non essayé sur iPad réel.
+Prochaine action : regrouper les prochains changements en une seule PR (chaque push déclenche deux déploiements Vercel), vérifier le déploiement après la levée de la limite.
+
 # Code secret pour entrer dans le monde de chaque fille — 19 novembre 2026 (America/Toronto)
 
 Branche claude/code-secret-filles. Demande du parent : un mot de passe pour entrer dans l'application, un code par fille par défaut.
