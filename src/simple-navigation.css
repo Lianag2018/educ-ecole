@@ -610,3 +610,9 @@ body .simple-world .journey-door .jd-go{background:#ffc93c!important;color:#2416
 .dm-end{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}.dm-end span{font-size:clamp(60px,13svh,110px)}.dm-end h2{margin:0}.dm-end p{margin:0;font-weight:700;font-size:clamp(16px,2.6svh,22px)}
 @media (max-height:700px){.dm{min-height:0;padding:10px;gap:6px}.dm-word,.dm-help b,.dm-bravo b{font-size:44px;padding:6px 14px}.dm-line{min-height:96px;font-size:44px}}
 @media (prefers-reduced-motion:reduce){.dm-word.vanish{transition:none}.dm-sparkles{animation:none}}
+
+.ss-step{margin:0;font-family:var(--display,inherit);font-size:clamp(20px,3.4svh,30px);color:#24163f;line-height:1.15}
+.ss-wordlist{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:520px}
+.ss-word{min-height:64px;padding:8px 12px;border:3px solid #24163f;border-radius:20px;background:#fff;box-shadow:0 4px 0 #24163f;font-family:var(--display,inherit);font-size:clamp(20px,3.4svh,30px);font-weight:800;color:#24163f}
+.ss-word span:nth-child(odd){color:var(--ss,#7452a8)}.ss-word i{color:#a99bc7;font-style:normal;padding:0 2px}.ss-word.on{background:color-mix(in srgb,var(--ss,#7452a8) 16%,#fff)}
+.ss-tip{margin:0;padding:10px 14px;border-radius:18px;background:#fff3c4;color:#4b4263;font-weight:700;font-size:clamp(15px,2.4svh,19px)}
