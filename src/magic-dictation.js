@@ -10,6 +10,7 @@ export const DEFAULTS=Object.freeze({
 export const BATCH_SIZE=5,MAX_TRIES=3,MAX_PARENT_WORDS=200;
 export const LETTER_NAMES=Object.freeze({a:'a',b:'bé',c:'cé',d:'dé',e:'e',f:'effe',g:'gé',h:'ache',i:'i',j:'ji',k:'ka',l:'elle',m:'emme',n:'enne',o:'o',p:'pé',q:'ku',r:'erre',s:'esse',t:'té',u:'u',v:'vé',w:'double vé',x:'ixe',y:'i grec',z:'zède',
  'é':'é accent aigu','è':'e accent grave','ê':'e accent circonflexe','à':'a accent grave','â':'a accent circonflexe','î':'i accent circonflexe','ô':'o accent circonflexe','û':'u accent circonflexe','ù':'u accent grave','ë':'e tréma','ï':'i tréma','ç':'cé cédille','œ':'o e collés','-':'trait d’union','’':'apostrophe',"'":'apostrophe'});
+const EXTRA_NAMES={"'":'apostrophe','’':'apostrophe','-':'trait d’union'};
 export const normalizeWord=s=>String(s??'').normalize('NFC').trim().toLowerCase().replace(/\s+/g,'');
 const strip=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'');
 // Mots donnés par le parent : un par ligne (ou séparés par des virgules); lettres, trait d'union et apostrophe seulement.
@@ -22,16 +23,16 @@ export function parseWords(text){
  }
  return out;
 }
-export const dictationWords=(p,older)=>{
+export const dictationWords=(p,older,extra=[])=>{
  const isOlder=older??(p.schoolContext?.stage==='3e année'||p.id==='p2');
- return [...new Set([...(p.dictation?.words||[]),...(isOlder?DEFAULTS.older:DEFAULTS.young)])];
+ return [...new Set([...(p.dictation?.words||[]),...extra,...(isOlder?DEFAULTS.older:DEFAULTS.young)])];
 };
 // Le groupe numéro n : 5 mots, en recommençant au début quand la liste est finie.
-export function batchWords(p,index,older){
- const all=dictationWords(p,older),n=all.length;
+export function batchWords(p,index,older,extra=[]){
+ const all=dictationWords(p,older,extra),n=all.length;
  return Array.from({length:Math.min(BATCH_SIZE,n)},(_,i)=>all[(index*BATCH_SIZE+i)%n]);
 }
-export const spellOut=word=>[...normalizeWord(word)].map(c=>LETTER_NAMES[c]||c);
+export const spellOut=word=>[...normalizeWord(word)].map(c=>LETTER_NAMES[c]||EXTRA_NAMES[c]||c);
 // Les lettres à revoir : celles du mot proposé qui ne se retrouvent pas, dans l'ordre, dans ce que l'enfant a écrit
 // (avec la plus longue suite commune : une lettre oubliée ne décale pas tout le reste).
 export function checkWord(target,attempt){
@@ -67,17 +68,39 @@ export function mountDictation(root,{words,speak,stop=()=>{},onWordDone=()=>{},o
  async function oneWord(i){
   const target=normalizeWord(words[i]);setDots(i);
   for(let tries=1;alive&&tries<=MAX_TRIES;tries++){
-   // 1. Je regarde et j'écoute
+   // 1. Je lis le mot : il s'affiche et je le dis
    msg.textContent='Regarde bien, écoute le mot.';
    stage.innerHTML=`<button class="dm-word" data-dm-word type="button" aria-label="Réécouter le mot">${wordMarkup(target)}</button>`;
    stage.querySelector('[data-dm-word]').addEventListener('click',()=>speak(target));
-   await say(target);if(!alive)return;await wait(500);
-   // 2. J'épelle : les lettres s'allument une à une
-   msg.textContent='Voici les lettres.';
-   const letters=[...target],names=spellOut(target);
+   await say(target);if(!alive)return;await wait(400);
+   // 2. À son tour, l'enfant relit le mot à voix haute (au premier essai seulement)
+   if(tries===1){
+    msg.textContent='À toi ! Lis le mot à voix haute.';
+    stage.insertAdjacentHTML('beforeend','<button class="dm-step" data-dm-read type="button">🗣️ Je l’ai lu</button>');
+    await new Promise(r=>{const btn=stage.querySelector('[data-dm-read]');btn.addEventListener('click',()=>{btn.remove();r();},{once:true});timers.push(setTimeout(()=>{btn.isConnected&&(btn.remove(),r());},60000));});if(!alive)return;
+    await say('Bravo!');if(!alive)return;await wait(250);
+   }
+   // 3. J'épelle avec la voix : les lettres s'allument une à une
+   msg.textContent='Écoute les lettres.';
+   const names=spellOut(target);
    const chips=[...stage.querySelectorAll('.dm-l')];
    const lit=(async()=>{for(const c of chips){if(!alive)return;c.classList.add('lit');await wait(650);}})();
-   await Promise.all([say(names.join(', ')),lit]);if(!alive)return;await wait(500);
+   await Promise.all([say(names.join(', ')),lit]);if(!alive)return;await wait(300);
+   // 4. À son tour, l'enfant épelle : elle touche chaque lettre, dans l'ordre, en disant son nom
+   msg.textContent='À toi ! Épelle le mot : touche chaque lettre en la disant.';
+   const letters=[...target];
+   stage.innerHTML=`<div class="dm-spell" data-dm-spell>${letters.map((c,k)=>`<button type="button" class="dm-key" data-dm-key="${k}">${esc(c)}</button>`).join('')}</div>`;
+   await new Promise(done=>{
+    let at=0,miss=0;const keys=[...stage.querySelectorAll('[data-dm-key]')];
+    keys.forEach((btn,k)=>btn.addEventListener('click',()=>{
+     if(!alive||btn.classList.contains('lit'))return;
+     if(k===at){btn.classList.add('lit');at++;miss=0;speak(names[k]);if(at>=letters.length)timers.push(setTimeout(done,700));else keys[at].classList.remove('hint');}
+     else{btn.classList.add('shake');timers.push(setTimeout(()=>btn.classList.remove('shake'),400));if(++miss>=2&&keys[at])keys[at].classList.add('hint');}
+    }));
+   });if(!alive)return;
+   stage.innerHTML=`<button class="dm-word" data-dm-word type="button" aria-label="Réécouter le mot">${wordMarkup(target)}</button>`;
+   chips.length&&stage.querySelectorAll('.dm-l').forEach(c=>c.classList.add('lit'));
+   await say('Bien épelé!');if(!alive)return;await wait(300);
    // 3. Le mot disparaît par magie
    msg.textContent='Abracadabra… le mot disparaît !';
    stage.querySelector('[data-dm-word]')?.classList.add('vanish');

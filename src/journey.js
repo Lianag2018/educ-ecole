@@ -4,6 +4,7 @@ import {spellingRules,ruleFor} from './spelling-lab.js';
 // Mely-Ann (1re année) : les 36 sons dans l’ordre du livre de l’école (é, è, puis les consonnes, les sons composés, et les voyelles simples en révision). Liana (3e année) : les mystères d'orthographe mêlés aux histoires des sons.
 // Une étape est terminée quand l'enfant arrive à la fin de l'histoire (ou à la page « À toi » du mystère). Rien n'est noté ni diagnostiqué.
 const ORDER=['eacute','egrave','s','j','f','ch','r','z','v','m','l','n','on','ou','t','eu','p','an','d','k','b','w','g','in','un','gn','y','oe','a-back','oopen','ui','a','e','i','o','u'];
+export const SOUND_ORDER=ORDER;
 const OLDER_START=['lab:e-ouvert','lab:bdpq','lab:fin-e','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','lab:m-bp','lab:muets','story:z','story:ui'];
 const step=id=>{const [kind,target]=id.split(':');return {id,kind,target};};
 // Une dictée magique (5 mots) s'ajoute après chaque groupe d'étapes : 6 pour Mely-Ann, 4 pour Liana.

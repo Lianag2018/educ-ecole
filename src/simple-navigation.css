@@ -631,3 +631,9 @@ body .simple-world .journey-door .jd-go{background:#ffc93c!important;color:#2416
 .ps-import{display:inline-flex;align-items:center;cursor:pointer}.ps-clear{border:0;background:none;color:#7a6f92;text-decoration:underline;font-weight:700}
 
 .is-private .ss-text{font-size:clamp(17px,2.9svh,25px)!important;line-height:1.35}.is-private .ss-scene{font-size:clamp(40px,8svh,70px)}
+
+.dm-step{margin-top:14px;min-height:56px;padding:8px 28px;border:3px solid #24163f;border-radius:999px;background:#ffd95a;box-shadow:0 4px 0 #24163f;font-family:var(--display,inherit);font-size:clamp(18px,2.8svh,24px);font-weight:800;color:#24163f}
+.dm-spell{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(6px,1.6vw,12px)}
+.dm-key{min-width:clamp(48px,13vw,78px);min-height:clamp(60px,10svh,92px);border:3px solid #24163f;border-radius:18px;background:#fff;box-shadow:0 4px 0 #24163f;font-size:clamp(30px,6svh,52px);font-weight:900;color:#24163f}
+.dm-key.lit{background:#ffd95a;transform:translateY(-6px)}.dm-key.hint{animation:dmHint .7s infinite alternate}.dm-key.shake{animation:dmShake .35s}
+@keyframes dmHint{to{background:#fff3c4;transform:scale(1.08)}}@keyframes dmShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}

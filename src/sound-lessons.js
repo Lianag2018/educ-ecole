@@ -100,5 +100,5 @@ export const wordPages=id=>Math.max(1,Math.ceil(wordsFor(id).length/WORDS_PER_PA
 export function wordsStepMarkup(story,idx=0,round=0){
  const all=wordsFor(story.id),pages=wordPages(story.id),at=round%pages,list=all.slice(at*WORDS_PER_PAGE,(at+1)*WORDS_PER_PAGE);
  const items=list.map(w=>`<button type="button" class="ss-word" data-lesson-word="${esc(w.plain)}" aria-label="${esc(w.plain)}">${w.syllables.map(s=>`<span>${esc(s)}</span>`).join('<i aria-hidden="true">·</i>')}</button>`).join('');
- return `<div class="ss-page ss-words" style="--ss:${story.color}"><h2 class="ss-step">👀 Lis les mots, syllabe par syllabe</h2><div class="ss-wordlist">${items}</div><p class="ss-tip" data-story-read>💡 ${esc(tipFor(idx+at))}</p>${pages>1?`<button type="button" class="ss-again" data-lesson-more>🔄 Autres mots (${at+1} / ${pages})</button>`:''}`;
+ return `<div class="ss-page ss-words" style="--ss:${story.color}"><h2 class="ss-step">👀 Lis les mots, syllabe par syllabe</h2><div class="ss-wordlist">${items}</div><p class="ss-tip" data-story-read>💡 ${esc(tipFor(idx+at))}</p><button type="button" class="ss-go" data-lesson-write>✍️ Écrire tous les mots du son</button>${pages>1?`<button type="button" class="ss-again" data-lesson-more>🔄 Autres mots (${at+1} / ${pages})</button>`:''}`;
 }
