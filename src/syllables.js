@@ -1,6 +1,6 @@
 // Découper un mot en syllabes à l'écrit (méthode d'école) : « bi-bli-o-thè-que ». Règles simples du français, sans prétendre à la perfection :
 // on garde d'abord le découpage connu (mots des leçons), sinon on applique les règles ci-dessous.
-import {lessonWords} from './sound-lessons.js';
+import {lessonWords} from './lesson-words-data.js';
 const V='aeiouyàâäéèêëîïôöûùüœæ';
 const known=new Map(Object.values(lessonWords).flatMap(s=>s.split(' ')).map(w=>[w.replace(/-/g,''),w.split('-')]));
 const NUC=new RegExp(`^(?:eau|œu|ain|ein|aim|oin|ien|oi|ou|ai|ei|au|eu|ui|[${V}](?:[nm](?![${V}h]))?)`,'i');

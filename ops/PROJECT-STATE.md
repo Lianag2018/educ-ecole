@@ -1,3 +1,11 @@
+# Le prof des sons et contenu de famille — 19 novembre 2026 (America/Toronto)
+
+Branche claude/prof-des-sons (cut de main après #121). Demande du parent : dépôt privé, tout fonctionnel sur les tablettes, un « prof » qui donne des trucs et conseils.
+Livré : src/coach.js — à chaque erreur d'écriture, le prof donne le conseil de la règle en cause (accents, jumeaux, m devant b/p, cédille, ph, gu, tion, ill, eau, œu, oi, ch, h muet, x, é final, è, c et g doux, s entre voyelles) puis la méthode des syllabes (« bi-bli-o-thè-que »), affiché et dit après le mot. Intégré à la dictée magique.
+Prêt pour le contenu de famille : le dossier optionnel family/ (copié dans dist s'il existe) peut contenir histoires-ecole.md et mots-du-livre.md (« ## graphie | id-du-son » puis les mots); l'app les charge une fois par version dans l'appareil (src/family-content.js, src/book-words.js); les mots du livre s'ajoutent aux mots de chaque son (syllabes calculées).
+BLOCAGE EXACT : la session ne peut pas changer la visibilité du dépôt (GitHub : « Repository settings writes are not permitted through this proxy »). Le dépôt Lianag2018/educ-ecole est donc toujours PUBLIC. Le dossier family/ ne doit pas être ajouté tant que le parent n'a pas passé le dépôt en privé (GitHub > Settings > Danger Zone > Change visibility). Prochaine action : après passage en privé, ajouter family/histoires-ecole.md (21 histoires déjà préparées) et family/mots-du-livre.md (annexe pages 116 à 127 à recopier).
+Preuves : 630 tests unitaires + 4 suites navigateur OK. Pas d'appareil réel.
+
 # Méthode des syllabes dans la dictée — 19 novembre 2026 (America/Toronto)
 
 Branche claude/methode-syllabes (cut de main après #120). Demande du parent : pour les longs mots (ex. bibliothèque), apprendre à découper en syllabes pour pouvoir l'écrire.

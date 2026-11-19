@@ -1,6 +1,9 @@
 // Leçon d'un son en cinq temps, adaptée de la démarche pédagogique de l'école : (1) voir et entendre l'histoire, (2) faire le GESTE avec le bruit,
 // (3) lire quelques MOTS en les découpant en syllabes, (4) jouer l'activité, (5) réinvestir par la dictée magique.
 // Tous les gestes et textes sont reformulés avec nos mots (le livre de l'école reste privé à la famille).
+import {lessonWords} from './lesson-words-data.js';
+import {syllabify} from './syllables.js';
+import {bookWordsFor} from './book-words.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const LESSON_STEPS=2;
 export const gestures=Object.freeze({
@@ -42,44 +45,7 @@ export const gestures=Object.freeze({
  ui:['💧','Touche ton nez comme si une goutte tombait et dis : « ui, ui! ».']
 });
 // Quatre mots par son, découpés en syllabes avec des tirets. Mots courants.
-export const lessonWords=Object.freeze({
- ou:'bou-ton sou-pe pou-le mou-che chou cou fou loup ours roue bou-le dou-che tou-pie fou-lard jou-et',
- on:'bon-bon mai-son pont pan-ta-lon bon son non pom-pon bal-lon ci-tron sa-von dra-gon rond pois-son lion mon-tre',
- ch:'chat cha-peau mou-che chan-son chien chou che-val chai-se ro-che ni-che va-che',
- a:'a-mi ba-na-ne pa-pa ca-rot-te sac lac chat bras ta-ble a-vi-on ar-bre bal-le',
- i:'sou-ris li-vre ti-gre mi-di ski riz vie vi-de lit ti-mi-de mi-nu-te',
- u:'lu-ne mur plu-me tu-li-pe dur rue jus ju-pe ru-ban fu-sée cu-be mu-si-que',
- f:'fée fro-ma-ge fleur fa-ri-ne fil feu fou fa-ci-le fe-nê-tre fraise four fi-ni',
- v:'va-che vé-lo ver-re vo-leur vie vol vent vase vert vi-de vi-an-de ves-te',
- m:'ma-man me-lon mou-ton mi-roir mur mer ma-da-me mu-si-que mon-tre moi pom-me ci-né-ma',
- l:'lu-ne lit la-pin li-vre lac lait loup lu-net-te sa-lon pel-le bal-le ai-le',
- s:'sac sa-pin sou-pe sa-la-de sel sou su-cre sa-lon so-leil sou-ris sa-von sor-ciè-re',
- in:'la-pin sa-pin ma-tin dau-phin pin fin lin vin pain main jar-din bien',
- eacute:'bé-bé clé fée é-co-le blé dé thé pré é-toi-le lé-gu-me é-lé-phant é-lè-ve',
- egrave:'mè-re frè-re rè-gle lu-miè-re pè-re lè-vre piè-ge bar-riè-re fou-gè-re che-vreuil',
- o:'mo-to dos ra-di-o ro-bot mot nom pot zé-ro ro-se cho-co-lat po-ta-ge au-to',
- oopen:'pom-me por-te col-le ro-be sol col bon-ne no-te golf cor-de co-que',
- eu:'feu deux bleu jeu yeux peu heu-re peur cou-leur',
- oe:'œuf bœuf cœur sœur chœur é-cu-reuil fleur vœu nœud',
- e:'le pe-tit re-nard se-mai-ne me de ce que je re-pas ce-ri-se',
- 'a-back':'pâ-te châ-teau gâ-teau bâ-ton mât tâ-che râ-teau pâ-que',
- an:'o-ran-ge dent vent en-fant banc blanc grand ten-te an-ge lam-pe chan-te gant',
- un:'un lun-di brun cha-cun com-mun au-cun jun-gle quel-qu’un',
- p:'pa-pa pom-me pou-le pi-ra-te pi-pe pa-pil-lon pat-te ta-pis plu-me pei-ne',
- b:'bal-lon ba-teau bé-bé bou-che bol bus bou-ton bou-gie ro-be',
- t:'ta-ble tor-tue ten-te to-ma-te tour toit ti-ge tas tu-que tou-pie té-lé-pho-ne',
- d:'dé do-do dou-che di-van dos doux dur dent di-no-sau-re dra-gon do-mi-no des-sin',
- k:'ca-deau col-le ki-wi qua-tre cou cuir car-te ca-ge ko-a-la ka-ra-té ka-yak',
- g:'gom-me gui-ta-re gar-de-rie go-ril-le gaz gant ga-zon gla-ce gâ-teau ma-ga-sin grand',
- n:'nei-ge nua-ge nid noix noir nez ni-che nou-veau na-ge-ur ba-na-ne ca-ne',
- gn:'mon-ta-gne li-gne a-rai-gnée cam-pa-gne si-gne pei-gne ros-si-gnol cham-pi-gnon',
- z:'zè-bre zé-ro zoo piz-za gaz zig-zag zo-ne zin-zin zé-bu',
- j:'jam-be jour ju-pe jau-ne jeu jus joue jar-din jo-li ju-meau',
- r:'ra-di-o ro-be ri-deau ru-ban riz rat roi ru-che ra-ci-ne',
- y:'a-beil-le fil-le ba-tail-le gre-nouil-le fa-mil-le pa-pil-lon bou-teil-le so-leil ail',
- w:'oi-seau boi-re poi-re voir roi moi toi voi-le toi-le',
- ui:'nuit huit fruit cui-si-ne bruit cuir pluie lui puis ap-pui'
-});
+export {lessonWords};
 // Conseils de lecture (reformulés) : on en montre un différent selon le son.
 export const readingTips=Object.freeze([
  'Si le mot ne sonne pas comme un mot que tu connais, des lettres ont peut-être mal parlé. Regarde-le autrement!',
@@ -87,7 +53,7 @@ export const readingTips=Object.freeze([
  'Deux lettres pareilles, comme nn ou mm, sont des jumeaux : ils restent ensemble et ne changent pas le son d’avant.',
  'Cherche d’abord les lettres qui vont ensemble, comme ou, on ou ch, avant de lire lettre par lettre.']);
 export const gestureFor=id=>gestures[id]||['🖐️','Invente un geste pour ce son et dis-le bien fort.'];
-export const wordsFor=id=>(lessonWords[id]||'').split(' ').filter(Boolean).map(w=>({syllables:w.split('-'),plain:w.replace(/-/g,'')}));
+export const wordsFor=id=>{const own=(lessonWords[id]||'').split(' ').filter(Boolean).map(w=>({syllables:w.split('-'),plain:w.replace(/-/g,'')}));const seen=new Set(own.map(w=>w.plain));const extra=bookWordsFor(id).filter(w=>!seen.has(w)&&seen.add(w)).map(w=>({syllables:syllabify(w),plain:w}));return [...own,...extra];};
 export const tipFor=idx=>readingTips[Math.abs(idx)%readingTips.length];
 export const gestureText=id=>gestureFor(id)[1];
 export const lessonNarrationLines=id=>[gestureText(id)];
