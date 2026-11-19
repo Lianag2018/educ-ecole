@@ -1,3 +1,11 @@
+# 25 mystères d'orthographe — 19 novembre 2026 (America/Toronto)
+
+Branche claude/plus-de-mysteres (cut de main après #124). Retour du parent : seulement 9 mystères dans « Pourquoi ça s'écrit comme ça? », pas assez d'aide.
+Livré : 16 nouveaux mystères (tion, ph, ill/il, ch/k, oi, o-au-eau, an-en, in-ain-ein-im, un-um, ien, eu-œu, gn, k-c-qu, x, y, jumeaux), chacun avec 3 astuces, des mots décortiqués en syllabes et 3 activités (total 25). Le hub est paginé (6 par page, 5 pages) pour tenir sans défiler. Tous apparaissent dans le parcours de Liana.
+Voix : les 16 nouveaux textes sont lus par la voix de l'appareil (hors catalogue premium : 2298 / 2300 clips inchangé, coût de génération inchangé).
+Preuves : 630 tests unitaires + 4 suites navigateur OK; capture rendu téléphone. Non essayé sur iPad réel.
+Non fait : mystères pour Mely-Ann dans son parcours (elle y a seulement b d p q), lettres h muet/ç/s-z en mystères propres (couverts dans d'autres).
+
 # Accueil : image complète et accès aux histoires — 19 novembre 2026 (America/Toronto)
 
 Branche claude/accueil-image-histoires (cut de main après #123). Retour du parent (captures sur téléphone) : image incomplète sur l'accueil des deux filles et impossible de voir où sont les histoires.

@@ -5,7 +5,7 @@ import {spellingRules,ruleFor} from './spelling-lab.js';
 // Une étape est terminée quand l'enfant arrive à la fin de l'histoire (ou à la page « À toi » du mystère). Rien n'est noté ni diagnostiqué.
 const ORDER=['eacute','egrave','s','j','f','ch','r','z','v','m','l','n','on','ou','t','eu','p','an','d','k','b','w','g','in','un','gn','y','oe','a-back','oopen','ui','a','e','i','o','u'];
 export const SOUND_ORDER=ORDER;
-const OLDER_START=['lab:e-ouvert','lab:bdpq','lab:fin-e','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','lab:m-bp','lab:muets','story:z','story:ui'];
+const OLDER_START=['lab:e-ouvert','lab:bdpq','lab:fin-e','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','lab:m-bp','lab:muets','lab:jumeaux','lab:o-au','lab:k-q','lab:an-en','lab:in-ain','lab:ch-k','lab:tion','lab:ph','lab:ill','lab:oi','lab:gn','lab:eu-oeu','lab:un-um','lab:ien','lab:x','lab:y','story:z','story:ui'];
 const step=id=>{const [kind,target]=id.split(':');return {id,kind,target};};
 // Une dictée magique (5 mots) s'ajoute après chaque groupe d'étapes : 6 pour Mely-Ann, 4 pour Liana.
 const withDictations=(ids,every)=>{const out=[];let n=0;ids.forEach((id,i)=>{out.push(id);if((i+1)%every===0){out.push('dict:'+n);out.push('game:'+n);n++;}});return out;};

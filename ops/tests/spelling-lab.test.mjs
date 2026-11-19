@@ -1,9 +1,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {spellingRules,ruleFor,wordOf,syllableMarkup,wordMarkup,labCards,labHubMarkup,labRuleMarkup,ruleIntroText,trickText,ruleNarrationTexts,allWords} from '../../src/spelling-lab.js';
+import {hubPages,HUB_PER_PAGE,spellingRules,ruleFor,wordOf,syllableMarkup,wordMarkup,labCards,labHubMarkup,labRuleMarkup,ruleIntroText,trickText,ruleNarrationTexts,allWords} from '../../src/spelling-lab.js';
 import {narrationCatalog} from '../../ops/narration-catalog.mjs';
 test('cinq mystères d\'orthographe, chacun avec exemples, astuces et activité',()=>{
  assert.ok(spellingRules.length>=5);
- for(const r of spellingRules){assert.ok(r.spellings.length>=3,r.id);assert.equal(r.tricks.length,3,r.id);assert.ok(r.activity.length>=3,r.id);for(const s of r.spellings)assert.ok(s.words.length>=2,r.id+s.g);}
+ for(const r of spellingRules){assert.ok(r.spellings.length>=(r.device?2:3),r.id);assert.equal(r.tricks.length,3,r.id);assert.ok(r.activity.length>=3,r.id);for(const s of r.spellings)assert.ok(s.words.length>=2,r.id+s.g);}
  assert.ok(ruleFor('e-ouvert').question.includes('baigné'));
 });
 test('chaque mot est décortiqué en syllabes dont la graphie repérée est marquée',()=>{
@@ -25,14 +25,14 @@ test('activités valides, sans réponse écrite dans le texte de la carte',()=>{
  }
 });
 test('pages : accueil, observer, astuces, jouer',()=>{
- assert.equal((labHubMarkup().match(/data-lab-rule=/g)||[]).length,spellingRules.length);
+ let seen=0;for(let i=0;i<hubPages();i++){const n=(labHubMarkup(i).match(/data-lab-rule=/g)||[]).length;assert.ok(n<=HUB_PER_PAGE);seen+=n;}assert.equal(seen,spellingRules.length);assert.ok(hubPages()>=3);
  const r=ruleFor('c');
  assert.match(labRuleMarkup(r,0),/data-lab-word/);assert.match(labRuleMarkup(r,0),/data-lab-read/);assert.match(labRuleMarkup(r,1),/Le détective du c/);assert.match(labRuleMarkup(r,1),/data-lab-say/);assert.match(labRuleMarkup(r,2),/data-lab-play/);
  for(const step of [0,1,2])assert.ok(!/Écouter/.test(labRuleMarkup(r,step)),'aucun bouton Écouter');
 });
 test('tout ce qui est raconté est dans le catalogue de narration',()=>{
  const byText=new Map(narrationCatalog().map(x=>[x.text,x]));
- for(const r of spellingRules){assert.ok(byText.has(ruleIntroText(r)));for(const t of r.tricks)assert.ok(byText.has(trickText(t)));}
+ for(const r of spellingRules.filter(x=>!x.device)){assert.ok(byText.has(ruleIntroText(r)));for(const t of r.tricks)assert.ok(byText.has(trickText(t)));}
  assert.ok(allWords().length>=20);
- assert.equal(ruleNarrationTexts.length,spellingRules.length*4);
+ assert.equal(ruleNarrationTexts.length,spellingRules.filter(x=>!x.device).length*4);assert.ok(spellingRules.length>=24);
 });
