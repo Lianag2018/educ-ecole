@@ -138,3 +138,7 @@ html[data-voyage-paused] .popit-advanced .full-pop-bubble{transition:none}
 .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.pin-pad button{min-height:64px;font-size:1.8rem;font-weight:800;border:0;border-radius:20px;background:#fff;color:#4b2f78;box-shadow:0 3px 0 #cdbbe6;cursor:pointer}.pin-pad button:active{transform:translateY(2px);box-shadow:none}
 .pin-box.bad{animation:pin-shake .5s}.pin-box.bad .pin-dots i{border-color:#d9435c;background:#ffd3da}
 @keyframes pin-shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+
+.pin-forgot{margin-top:14px;min-height:44px;border:0;background:none;color:#6b4a9a;text-decoration:underline;font-size:1rem;cursor:pointer}
+.pin-reset{display:grid;gap:10px;text-align:left}.pin-reset label{display:grid;gap:4px;color:#4b2f78;font-weight:700}.pin-reset input{min-height:48px;font-size:1.4rem;text-align:center;border:2px solid #8358a8;border-radius:14px;letter-spacing:.3em}
+.pin-reset .pin-msg{min-height:1.2em;margin:0;color:#c0334f;font-weight:700;text-align:center}.pin-save,.pin-cancel{min-height:52px;border:0;border-radius:18px;font-size:1.1rem;font-weight:800;cursor:pointer}.pin-save{background:#8358a8;color:#fff}.pin-cancel{background:#fff;color:#4b2f78;box-shadow:0 3px 0 #cdbbe6}
