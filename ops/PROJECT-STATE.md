@@ -1,3 +1,83 @@
+# Mon parcours : un accès simple pour les deux filles — 19 novembre 2026 (America/Toronto)
+
+Branche claude/mon-parcours (cut de claude/histoires-tous-les-sons + fusion de claude/pourquoi-ca-s-ecrit); PR à ouvrir,
+non fusionnée, non déployée. Cette branche CONTIENT les PR #110 (laboratoire d'orthographe) et #111 (36 histoires en jeu).
+Demande du parent (photo de la page 85, « ai » = è) : « tu as tout pour leur éducation, mets ça dans un accès simple aux deux
+filles ». Interprétation retenue (le parent a refusé de répondre à la question) : UN seul grand bouton « 🧭 Mon parcours »
+au haut de l'accueil de chaque fille, qui ouvre toujours la prochaine étape non terminée, sans rien à choisir.
+Mely-Ann : les 36 histoires de sons (du plus avancé, ou/on/ch…, au plus simple). Liana : 5 mystères d'orthographe mêlés aux
+histoires (41 étapes), en commençant par « baigné » (le son è). Une étape est terminée à la fin de l'histoire ou à la page
+« À toi » du mystère; « ➡ Étape suivante » enchaîne; à la fin d'un tour, un nouveau tour recommence. Aucune note, aucun diagnostic;
+l'état est local (p.journey), par enfant. Rien n'est retiré de l'accueil (aventure du jour, Français, Maths, chansons, coffre).
+Catalogue de narration : fusion #110 + #111 = 2346 clips (> limite révisée 2300); ramené à 2282 en retirant les introductions
+d'histoires (inutilisées) et les clips des mots du laboratoire (voix du système pour les mots touchés un à un).
+Photo de la page 85 : utilisée seulement pour confirmer la règle « ai suivi d'autres lettres = è »; aucun texte ni image du livre
+copié. À intégrer dans le mystère è : formulation « suivi d'autres lettres » (à faire).
+Preuves : 603 tests unitaires OK; 4 suites navigateur OK; accueil + première étape + « étape suivante » vérifiés pour les deux
+filles à 390×664, 820×1000, 1180×820 sans défilement (Chromium, pas d'appareil réel, pas d'audio).
+En attente : pages du livre pour aligner les étapes; décision sur la limite de narration si des clips de mots sont souhaités.
+
+# Histoires des sons en jeu — 19 novembre 2026 (America/Toronto)
+
+Branche claude/histoires-tous-les-sons (PR #111), non fusionnée, non déployée. Demande du parent : tout en jeu,
+un seul toucher (pas deux étapes), toucher le texte plutôt qu'un bouton « Écouter ». Livré : toucher un son du jardin
+ouvre directement la page 1 et la narratrice lit la phrase toute seule; plus de couverture ni de bouton « Écouter ».
+Jeu des mots : chaque mot du texte se touche; les mots qui font le son s'allument en doré (compteur ⭐ n / total,
+l'étiquette « ou » touchable entend le son), les autres secouent doucement (« Cherche encore. »); quand tous sont
+trouvés, « Bravo! » puis la page se tourne seule. Toucher l'image relit la phrase. Un indice discret pulse après 9 s.
+Fin : « Jouer avec le son » (3-4 questions, sans cartes de remplissage). Narration : seule « Cherche encore. » s'ajoute
+au catalogue; les mots touchés un à un utilisent la voix du système, car le catalogue est à 2297 clips sur 2300 permis
+(limite révisée de ops/generate-narration.mjs : 2300 clips / 150 000 caractères).
+ATTENTION : la PR #110 (laboratoire d'orthographe) ajoute ~50 textes; fusionner #110 et #111 ensemble dépasse la limite
+(le test de catalogue échouera) — il faudra décider d'augmenter la limite de génération (coût de voix OpenAI, faible).
+Preuves : 594 tests unitaires OK; 4 suites navigateur OK; 151 pages des 36 histoires jouées (tous les mots du son
+trouvés, page terminée) sans défilement à 820×1000 et à 390×664 après ajustement (pire dépassement 0 sur 5 histoires
+longues revérifiées). Pas d'appareil réel; avance automatique et voix non vérifiées (pas d'audio ici).
+Prochaine action : écouter/essayer sur tablette, puis décider de la limite de narration.
+
+# Une histoire pour chacun des 36 sons — 19 novembre 2026 (America/Toronto)
+
+Branche claude/histoires-tous-les-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : une histoire à chaque son; en touchant un son, la faire (sans passer par l'écoute du son seul).
+Livré : 33 nouveaux contes originaux (src/sound-stories-more.js) s'ajoutent à ou, on, ch : chacun des 36 sons du
+jardin a maintenant son histoire (4-5 pages, mots du son en couleur) et 3 à 4 activités (reconnaître le son, rime,
+compréhension). En mode enfant, toucher un son du jardin ouvre directement l'histoire; la couverture garde un bouton
+« 🔊 Écouter le son » et « Écouter l'histoire »; « Jardin des sons » ramène à la grille. Narration : 186 textes
+d'histoire au catalogue (voix de narratrice de livre audio, débit .92); MP3 au build de production seulement.
+Contenu 100 % original, aucun texte ni image du livre. Mots et sons relus un à un (tests : mots colorés présents dans
+la page, réponses jamais écrites dans le texte, un conte par son du jardin). Pas de diagnostic de prononciation.
+Preuves : 593 tests unitaires OK; 4 suites navigateur OK; les 36 histoires ouvertes et page 1 vérifiées sans
+défilement à 390×664 et 820×1000 (Chromium, pas d'appareil réel ni écoute des MP3).
+En attente : alignement sur les pages du livre (non reçues); relecture par le parent du vocabulaire et des
+distracteurs; choix d'un service de voix de narration plus haut de gamme si la voix actuelle ne convient pas.
+Prochaine action : valider avec le parent, écouter la narration après le build de production.
+
+# Laboratoire d'orthographe : toucher plutôt qu'« Écouter » — 19 novembre 2026 (America/Toronto)
+
+Même branche claude/pourquoi-ca-s-ecrit (PR #110), non fusionnée. Demande du parent : toucher le texte, pas un bouton Écouter.
+Les boutons « 🔊 Écouter » sont retirés : toucher le titre et l'idée lit l'énigme, toucher une astuce la lit, toucher un mot
+le dit (déjà le cas). Catalogue : une astuce = un texte (4 textes par mystère). Preuves : 596 tests unitaires OK; 4 suites
+navigateur OK; écrans sans défilement (390×664, 820×1000, 1180×820). Voir l'avertissement sur la limite de narration dans la
+PR #111 (2300 clips) : #110 + #111 ensemble la dépassent.
+
+# Pourquoi ça s'écrit comme ça? (Liana) — 19 novembre 2026 (America/Toronto)
+
+Branche claude/pourquoi-ca-s-ecrit (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : pour Liana, comprendre les sons et où ils vont (pourquoi « baigné » s'écrit avec ai et pas è
+ou es), décortiquer les mots par syllabes, comprendre le c doux / c dur, avec des techniques d'apprentissage et
+des exemples. Livré : nouvelle tuile « Pourquoi ça s'écrit comme ça? » dans Français (3e année), 5 mystères
+originaux — le son è (ai, è, ê, ei), le c doux et le c dur (+ ç), le g doux et le g dur (+ gu, mangeons), le son o
+(o, au, eau), un s ou deux s — chacun en 3 étapes (Observer: mots en syllabes avec la graphie repérée en couleur,
+toucher un mot = l'écouter, les syllabes sautent; Astuces: 3 techniques nommées, dont « le détective du c »,
+« cherche la famille du mot », « choisis ton mot-clé »; À toi: 3 questions avec le moteur d'exercices existant,
+sans cartes de remplissage). Les tuiles de Français (3e année) passent sur 3 pages pour garder « Vidéos », « Chansons »,
+« Squishy », « Voyage » et « Découvrir le monde » (rien retiré). Narration : textes des mystères + 40 mots ajoutés au catalogue
+(voix douce, mots entiers naturels); MP3 seulement au build de production, sinon voix système.
+Preuves : 596 tests unitaires OK; 4 suites navigateur OK; écrans sans défilement à 390×664, 820×1000, 1180×820.
+En attente : les pages 5 et suivantes du livre (non reçues) pour aligner les règles sur le programme et ajouter d'autres
+mystères (an/en, é/er/ez, ph, etc.); la qualité de la voix de narration n'est pas écoutée. Aucun diagnostic de prononciation.
+Prochaine action : valider avec le parent, puis ajouter d'autres règles.
+
 # Histoires des sons (échantillon) — 19 novembre 2026 (America/Toronto)
 
 Branche claude/histoires-des-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.

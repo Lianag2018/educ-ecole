@@ -1,3 +1,4 @@
+import {journeyDoorMarkup} from './journey.js';
 import {advanced,gradeFor,mathsFor,readingBank,storyCards} from './learning.js';
 import {select} from './engine.js';
 import {adaptiveCards} from './progress.js';
@@ -54,6 +55,7 @@ export function childHome(p,day){
  return `<section class="simple-world" aria-label="Mon monde">
  <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
+ ${journeyDoorMarkup(p,advanced(p))}
  <div class="simple-doors" aria-label="Mes activités">
  <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Continuer mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
  ${tile('Français',advanced(p)?'Mes mots et mes histoires':'Les sons et les mots','<span class="book-art">Aa</span>','data-action="french"')}
@@ -65,15 +67,15 @@ export function subjectHome(p,subject,page=0){
  const older=advanced(p),french=subject==='french';
  // Pages de quatre grandes tuiles pour l'enfant : rien n'est retiré, tout reste atteignable avec « Encore ».
  // L'adulte voit toutes les pages d'un coup.
- const groups=french?[
-  [...(!older?[tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"'),tile('Les syllabes','Des mots de deux ou trois syllabes','🦋','data-scene="syllables"'),tile('Je lis de petites histoires','Lire et comprendre','📖','data-scene="reading"')]
-          :[tile('Mes mots','Vocabulaire et orthographe','🦋','data-action="words"'),tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"'),tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"')]),
-   tile('Vidéos et petits défis','Maître Lucas · Prof à la guitare','🎬','data-action="videos-french"')],
-  [tile('Le français en chansons','Écouter, jouer et comprendre','🎵','data-action="songs-french"'),
-   older?tile('Mon archipel Squishy','12 compagnons · 3 chemins','🫧','data-action="squishy"'):tile('Toutes mes cartes de sons','Écouter et découvrir','🔤','data-action="sound-garden"'),
-   tile('Nos histoires de voyage','La carte de notre voyage','🏝️','data-action="adventure"'),
-   tile('Découvrir le monde','Mon école et mon quartier','🌍','data-subject="3"')]
+ const vid=tile('Vidéos et petits défis','Maître Lucas · Prof à la guitare','🎬','data-action="videos-french"'),songs=tile('Le français en chansons','Écouter, jouer et comprendre','🎵','data-action="songs-french"'),trip=tile('Nos histoires de voyage','La carte de notre voyage','🏝️','data-action="adventure"'),world=tile('Découvrir le monde','Mon école et mon quartier','🌍','data-subject="3"');
+ const groups=french?(older?[
+  [tile('Mes mots','Vocabulaire et orthographe','🦋','data-action="words"'),tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"'),tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"'),tile('Pourquoi ça s’écrit comme ça?','Les sons, les lettres et les astuces','🔎','data-action="spelling-lab"')],
+  [vid,songs,tile('Mon archipel Squishy','12 compagnons · 3 chemins','🫧','data-action="squishy"'),trip],
+  [world]
  ]:[
+  [tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"'),tile('Les syllabes','Des mots de deux ou trois syllabes','🦋','data-scene="syllables"'),tile('Je lis de petites histoires','Lire et comprendre','📖','data-scene="reading"'),vid],
+  [songs,tile('Toutes mes cartes de sons','Écouter et découvrir','🔤','data-action="sound-garden"'),trip,world]
+ ]):[
   [tile('Les nombres',older?'Compter jusqu’à 9 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
    tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),
    tile('Défi vitesse','Cartes et tableaux · chrono adapté','🚀','data-action="speed-math"'),

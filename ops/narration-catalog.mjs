@@ -9,7 +9,8 @@ import {ORAL_FEEDBACK,ORAL_WORD_TEXTS} from '../src/oral-check-targets.js';
 import {squishyStages} from '../src/squishy.js';
 import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
 import {soundCards} from '../src/sound-cards.js';
-import {soundStoryNarrationTexts} from '../src/sound-stories.js';
+import {soundStoryNarrationTexts,STORY_TRY_AGAIN} from '../src/sound-stories.js';
+import {ruleNarrationTexts} from '../src/spelling-lab.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading,mathsFor,socialFor,storyCards} from '../src/learning.js';
@@ -59,6 +60,12 @@ export function narrationCatalog(){
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
  const storyTexts=new Set(soundStoryNarrationTexts);for(const text of storyTexts)texts.add(text);
+ // Jeu des histoires : une courte phrase d'encouragement. Les mots du son touchés un à un utilisent la voix douce de l'appareil
+ // (la limite de génération révisée du catalogue ne permet pas ~290 clips de plus sans décision du parent).
+ texts.add(STORY_TRY_AGAIN);
+ for(const text of ruleNarrationTexts)texts.add(text);
+ // Les mots touchés un à un (histoires, laboratoire) utilisent la voix douce de l'appareil : la limite de génération révisée
+ // (2300 clips) ne laisse pas de place pour ~330 clips de plus sans décision du parent.
 
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
