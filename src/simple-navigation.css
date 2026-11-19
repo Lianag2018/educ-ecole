@@ -580,3 +580,33 @@ body.kid-simple .sound-garden .sg-footer [data-garden-exercises]{font-size:15px;
 body .simple-world .journey-door{background:linear-gradient(135deg,#7452a8,#a06ad6)!important;color:#fff!important;border:3px solid #24163f!important;border-radius:24px!important;box-shadow:0 5px 0 #24163f!important;min-height:72px!important}
 body .simple-world .journey-door .jd-copy b,body .simple-world .journey-door .jd-copy small{color:#fff!important}
 body .simple-world .journey-door .jd-go{background:#ffc93c!important;color:#24163f!important}
+
+/* Dictée magique : un mot à la fois, puis une ligne de cahier pour écrire (Apple Pencil avec Scribble ou clavier). */
+.dictation{display:flex;flex-direction:column;gap:8px;max-width:860px;margin:0 auto;padding:8px 12px}
+.dict-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dict-top button{min-height:40px;padding:4px 14px;border:3px solid #24163f;border-radius:999px;background:#fff;color:#24163f;font-size:15px;font-weight:700;box-shadow:0 3px 0 #24163f}
+.dict-top span{font-weight:800;color:#24163f;font-size:clamp(14px,2.3svh,18px)}
+.dm{display:flex;flex-direction:column;gap:10px;padding:clamp(12px,2.4svh,22px);border:3px solid #24163f;border-radius:28px;background:linear-gradient(180deg,#fffaf0,#f1ecfb);box-shadow:0 6px 0 #24163f;color:#24163f;min-height:min(64svh,520px)}
+.dm-dots{display:flex;gap:8px;justify-content:center}.dm-dots i{width:14px;height:14px;border-radius:50%;border:2px solid #24163f;background:#fff}
+.dm-dots i.done{background:#2ccba4}.dm-dots i.review{background:#ffb36b}.dm-dots i.now{background:#ffc93c;transform:scale(1.3)}
+.dm-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;position:relative;min-height:0}
+.dm-word,.dm-help b,.dm-bravo b{display:inline-flex;gap:clamp(2px,.8vw,8px);padding:10px 22px;border:3px solid #24163f;border-radius:24px;background:#fff;box-shadow:0 5px 0 #24163f;font-family:var(--display,inherit);font-size:clamp(40px,10vw,92px);line-height:1.1;color:#24163f;transition:opacity 1s,filter 1s,transform 1s}
+.dm-word{cursor:pointer}
+.dm-l{display:inline-block;transition:transform .3s,background .3s,color .3s;border-radius:.2em;padding:0 .02em}
+.dm-l.lit{background:#ffd95a;transform:translateY(-8px) scale(1.12)}
+.dm-l.bad{color:#d1365a;background:#ffe1e8;text-decoration:underline}
+.dm-word.vanish{opacity:0;filter:blur(10px);transform:scale(.6) rotate(-4deg)}
+.dm-sparkles{position:absolute;font-size:clamp(28px,6vw,56px);animation:dm-spark 1.1s ease both;pointer-events:none}
+@keyframes dm-spark{0%{opacity:0;transform:scale(.4)}40%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5) translateY(-20px)}}
+.dm-msg{margin:0;text-align:center;font-weight:700;font-size:clamp(15px,2.5svh,21px);color:#4b4263;min-height:1.4em}
+.dm-paper{width:100%;display:flex;flex-direction:column;gap:12px;align-items:center}
+.dm-ask{font-weight:800;font-size:clamp(16px,2.6svh,22px)}
+.dm-line{width:100%;min-height:clamp(110px,22svh,190px);padding:0 22px 0 40px;border:3px solid #24163f;border-radius:18px;font-family:'Comic Sans MS','Chalkboard SE','Bradley Hand',cursive,sans-serif;font-size:clamp(44px,9vw,84px);color:#24163f;letter-spacing:.04em;
+ background:linear-gradient(90deg,transparent 0 30px,#f4a6a6 30px 32px,transparent 32px),repeating-linear-gradient(#fff 0 calc(clamp(110px,22svh,190px)*.66),#9ec5ff calc(clamp(110px,22svh,190px)*.66) calc(clamp(110px,22svh,190px)*.66 + 3px),#fff calc(clamp(110px,22svh,190px)*.66 + 3px) clamp(110px,22svh,190px));text-transform:none}
+.dm-line::placeholder{color:#b8c4e0}
+.dm-ok,.dm-next,.dm-again{min-height:52px;padding:6px 26px;border:3px solid #24163f;border-radius:999px;background:#2ccba4;color:#24163f;font-size:clamp(17px,2.8svh,22px);font-weight:800;box-shadow:0 4px 0 #24163f}
+.dm-again{background:#fff}.dm-next{background:#7452a8;color:#fff}
+.dm-bravo{display:flex;flex-direction:column;align-items:center;gap:10px}.dm-bravo span{font-size:clamp(56px,12svh,100px)}
+.dm-end{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}.dm-end span{font-size:clamp(60px,13svh,110px)}.dm-end h2{margin:0}.dm-end p{margin:0;font-weight:700;font-size:clamp(16px,2.6svh,22px)}
+@media (max-height:700px){.dm{min-height:0;padding:10px;gap:6px}.dm-word,.dm-help b,.dm-bravo b{font-size:44px;padding:6px 14px}.dm-line{min-height:96px;font-size:44px}}
+@media (prefers-reduced-motion:reduce){.dm-word.vanish{transition:none}.dm-sparkles{animation:none}}

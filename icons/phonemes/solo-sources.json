@@ -1,0 +1,95 @@
+{
+ "purpose": "Sons de consonnes isolés (sans la voyelle avant ni après) tirés des enregistrements de l'Université Laval pour usage familial. Les originaux restent inchangés; auditoryReview: false (non écouté).",
+ "recordings": [
+  {
+   "id": "ch",
+   "file": "/icons/phonemes/ch-solo.mp3",
+   "derivedFrom": "/icons/phonemes/ch.mp3",
+   "derivedFromSha256": "d1acf254d2788c91d752b776adbd639191e5a6344ce73b281b79c692187b3300",
+   "startSec": 0.22,
+   "endSec": 0.52,
+   "gainDb": 11.8,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "s",
+   "file": "/icons/phonemes/s-solo.mp3",
+   "derivedFrom": "/icons/phonemes/s.mp3",
+   "derivedFromSha256": "e5c9f2d020ffdbd6be8a2dfe2c85a0958a60f8e2c01b5db9bbdcb12b7cee4a6e",
+   "startSec": 0.18,
+   "endSec": 0.46,
+   "gainDb": 12.0,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "z",
+   "file": "/icons/phonemes/z-solo.mp3",
+   "derivedFrom": "/icons/phonemes/z.mp3",
+   "derivedFromSha256": "b812bb068775c925ae1528906e46d779b329f2884346ae04a56d4f5d9d2edac7",
+   "startSec": 0.24,
+   "endSec": 0.48,
+   "gainDb": 14.0,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "j",
+   "file": "/icons/phonemes/j-solo.mp3",
+   "derivedFrom": "/icons/phonemes/j.mp3",
+   "derivedFromSha256": "49ea7105bcfca3cefc2b538bd734ca3bf28354d45f3808877780511b7d60bc27",
+   "startSec": 0.26,
+   "endSec": 0.44,
+   "gainDb": 8.0,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "f",
+   "file": "/icons/phonemes/f-solo.mp3",
+   "derivedFrom": "/icons/phonemes/f.mp3",
+   "derivedFromSha256": "19a2e17d6951f282ec457408c256c3a279b794f4a0758a54eca38b57f85ff19e",
+   "startSec": 0.16,
+   "endSec": 0.44,
+   "gainDb": 10.6,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "v",
+   "file": "/icons/phonemes/v-solo.mp3",
+   "derivedFrom": "/icons/phonemes/v.mp3",
+   "derivedFromSha256": "64e1b21945b5e4dd4d0c395131038a5313ce38a30b4d563ea8fa7209ee66b577",
+   "startSec": 0.2,
+   "endSec": 0.42,
+   "gainDb": 8.8,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "m",
+   "file": "/icons/phonemes/m-solo.mp3",
+   "derivedFrom": "/icons/phonemes/m.mp3",
+   "derivedFromSha256": "b90c803885123e334bdc25e357a1c85c5ccf36e45a68517f9a0bd9a4f17f26bd",
+   "startSec": 0.2,
+   "endSec": 0.4,
+   "gainDb": 17.6,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "n",
+   "file": "/icons/phonemes/n-solo.mp3",
+   "derivedFrom": "/icons/phonemes/n.mp3",
+   "derivedFromSha256": "dae0b8aad0d6b8b9dcfb5211c754eae202b05bf17d365de679ef17afcda42b22",
+   "startSec": 0.18,
+   "endSec": 0.42,
+   "gainDb": 15.5,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  },
+  {
+   "id": "r",
+   "file": "/icons/phonemes/r-solo.mp3",
+   "derivedFrom": "/icons/phonemes/r.mp3",
+   "derivedFromSha256": "aab6c0449e83175e9f00bacd80bd9a20e0b9c7f0e0f77dce5d2f87df43778bf7",
+   "startSec": 0.26,
+   "endSec": 0.42,
+   "gainDb": 9.6,
+   "method": "segment central entre deux voyelles, fondu entrant 20 ms et sortant 50 ms"
+  }
+ ]
+}

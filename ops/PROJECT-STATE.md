@@ -1,3 +1,26 @@
+# Dictée magique, sons isolés, narratrice conteuse, chouette retirée — 19 novembre 2026 (America/Toronto)
+
+Branche claude/dictee-et-narratrice (cut de main après la fusion de #112 : parcours + histoires + laboratoire; #110/#111 fermées),
+PR à ouvrir, non fusionnée, non déployée. Demandes du parent :
+1) Dictée magique : montrer le mot, le faire entendre, l'épeler, le faire disparaître « par magie », puis une ligne de cahier pour
+l'écrire (Apple Pencil); bien écrit = bravo et mot suivant sans arrêt; sinon aide (lettres à revoir en rouge, mot redit) et on recommence.
+Livré : src/magic-dictation.js (5 mots par groupe, 3 essais, puis « on le reverra »), tuile « Dictée magique » (Français, p. 3), étapes
+de dictée dans « Mon parcours » (après 6 étapes pour Mely-Ann, 4 pour Liana), mots du parent dans l'Espace parent (« Mots à écrire »),
+mots par défaut par niveau, mots à revoir mémorisés (p.dictation). Écriture : ligne de cahier = champ texte; avec l'Apple Pencil, c'est
+Scribble d'iPadOS qui convertit l'écriture en lettres (Réglages > Apple Pencil > Scribble). Aucune reconnaissance d'écriture dessinée
+n'est faite ici (ni envoyée) : non testé avec un vrai Apple Pencil/iPad. Mots dits avec la voix du système (limite de narration 2300).
+2) Son « ch » : les enregistrements de consonnes de l'Université Laval sont « a-consonne-a » (« acha »); versions isolées (« chhhh »)
+extraites pour ch, s, z, j, f, v, m, n, r (icons/phonemes/*-solo.mp3, solo-sources.json, originaux inchangés). Coupes décidées par
+l'énergie du signal, NON ÉCOUTÉES; les occlusives (p b t d k g) et « l » gardent la forme originale.
+3) Narratrice : consignes de conteuse de livres audio (intonation, voix de personnages, suspense, bruitages) + précisions selon la page
+(dialogue, question, exclamation, bruitage). MP3 régénérés au build de production seulement; voix non écoutée.
+4) Chouette qui parle retirée : bouton et panneau d'accueil supprimés; le bouton dessiné dans l'illustration est masqué par un nuage
+décoratif « Bonne lecture ! ». Le panneau « Lis ce nombre à voix haute » de l'illustration (fonction vocale des nombres) reste.
+5) Pages du livre : non reçues (aucun dossier partagé); « fusionne » = PR #112 fusionnée.
+Preuves : tests unitaires et 4 suites navigateur OK (learning-browser adapté : plus de chouette); dictée jouée dans Chromium
+(mot → lettres → disparition → écriture fausse avec 2 lettres rouges → recommence → bravo) sans défilement.
+Prochaine action : essai sur iPad avec Apple Pencil; écouter « chhhh »; recevoir les pages du livre.
+
 # Mon parcours : un accès simple pour les deux filles — 19 novembre 2026 (America/Toronto)
 
 Branche claude/mon-parcours (cut de claude/histoires-tous-les-sons + fusion de claude/pourquoi-ca-s-ecrit); PR à ouvrir,
