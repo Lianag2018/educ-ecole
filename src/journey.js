@@ -4,14 +4,14 @@ import {spellingRules,ruleFor} from './spelling-lab.js';
 // Mely-Ann (1re année) : les 36 sons dans l’ordre du livre de l’école (é, è, puis les consonnes, les sons composés, et les voyelles simples en révision). Liana (3e année) : les mystères d'orthographe mêlés aux histoires des sons.
 // Une étape est terminée quand l'enfant arrive à la fin de l'histoire (ou à la page « À toi » du mystère). Rien n'est noté ni diagnostiqué.
 const ORDER=['eacute','egrave','s','j','f','ch','r','z','v','m','l','n','on','ou','t','eu','p','an','d','k','b','w','g','in','un','gn','y','oe','a-back','oopen','ui','a','e','i','o','u'];
-const OLDER_START=['lab:e-ouvert','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','story:z','story:ui'];
+const OLDER_START=['lab:e-ouvert','lab:bdpq','lab:fin-e','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','lab:m-bp','lab:muets','story:z','story:ui'];
 const step=id=>{const [kind,target]=id.split(':');return {id,kind,target};};
 // Une dictée magique (5 mots) s'ajoute après chaque groupe d'étapes : 6 pour Mely-Ann, 4 pour Liana.
 const withDictations=(ids,every)=>{const out=[];let n=0;ids.forEach((id,i)=>{out.push(id);if((i+1)%every===0)out.push('dict:'+n++);});return out;};
 export function journeySteps(p,older){
  const isOlder=older??(p.schoolContext?.stage==='3e année'||p.id==='p2');
  const stories=ORDER.filter(id=>storyFor(id)).map(id=>'story:'+id);
- if(!isOlder)return withDictations(stories,6).map(step);
+ if(!isOlder){const young=[...stories];young.splice(young.indexOf('story:b')+1,0,'lab:bdpq');return withDictations(young,6).map(step);}
  const ids=[...OLDER_START.filter(id=>id.startsWith('lab:')?ruleFor(id.slice(4)):storyFor(id.slice(6)))];
  for(const id of stories)if(!ids.includes(id))ids.push(id);
  for(const r of spellingRules)if(!ids.includes('lab:'+r.id))ids.push('lab:'+r.id);
