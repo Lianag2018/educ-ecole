@@ -42,7 +42,7 @@ import {mountMinuteMath as mountSpeedMath} from './minute-math.js';
 import {planPanel,planMap,planFor,planMissions,missionOpen,mountPlanImport} from './school-plan.js';
 import {squishyStages,squishyMap,stageOpen,blob} from './squishy.js';
 import {PhonemePlayer} from './phoneme-player.js';
-import {storyFor,soundStoryMarkup,lastStep,activityCards} from './sound-stories.js';
+import {storyFor,hasStory,soundStoryMarkup,lastStep,activityCards} from './sound-stories.js';
 import {gardenSounds,gardenSelection,gardenPractice,soundGardenMarkup,gardenWelcome,gardenEncouragement} from './sound-garden.js';
 import {soundCards,soundCardMarkup} from './sound-cards.js';
 import {syllables,choiceSpeech,oralQuestion,oralFeedback,wordLesson,isFrenchWordModel,decodingWords} from './oral-learning.js';
@@ -337,7 +337,10 @@ function weeklyPlan(){return `<section class="weekly-plan" aria-label="Plan de t
 
 function bindSoundGarden(){
  document.querySelector('[data-garden-listen]')?.addEventListener('click',()=>{cleanup();phonemePlayer.play(gardenSoundId);});
- document.querySelectorAll('[data-garden-sound]').forEach(b=>b.onclick=()=>{cleanup();gardenSoundId=b.dataset.gardenSound;render();});
+ document.querySelectorAll('[data-garden-sound]').forEach(b=>b.onclick=()=>{cleanup();gardenSoundId=b.dataset.gardenSound;
+  // Mode enfant : toucher un son ouvre directement son histoire (sans passer par l'écoute du son seul).
+  if(document.body.classList.contains('kid-simple')&&hasStory(gardenSoundId)){storyId=gardenSoundId;storyStep=0;storyNarrate=false;return navigate('sound-story');}
+  render();});
  document.querySelector('[data-garden-welcome]')?.addEventListener('click',()=>speakText(gardenWelcome));
  document.querySelector('[data-garden-explain]')?.addEventListener('click',()=>speakText(gardenSelection(gardenSoundId).instruction));
  document.querySelector('[data-garden-reference]')?.addEventListener('click',()=>{cleanup();});
@@ -350,6 +353,7 @@ function bindSoundGarden(){
   const go=(step,narrate)=>{cleanup();storyStep=Math.max(0,Math.min(lastStep(story),step));storyNarrate=narrate;render();};
   const narrate=()=>{const at=storyStep,page=story.pages[at-1];if(!page)return;speakText(page.text,false,()=>{if(view==='sound-story'&&storyId===story.id&&storyStep===at&&storyAuto)setTimeout(()=>{if(view==='sound-story'&&storyStep===at&&storyAuto)go(at+1,true);},900);});};
   document.querySelectorAll('[data-story-start]').forEach(b=>b.onclick=()=>go(1,true));
+  document.querySelector('[data-story-sound]')?.addEventListener('click',()=>{cleanup();phonemePlayer.play(story.sound);});
   document.querySelector('[data-story-next]')?.addEventListener('click',()=>go(storyStep+1,true));
   document.querySelector('[data-story-prev]')?.addEventListener('click',()=>go(storyStep-1,true));
   document.querySelector('[data-story-listen]')?.addEventListener('click',narrate);

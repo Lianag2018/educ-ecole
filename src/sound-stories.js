@@ -1,6 +1,7 @@
 // Histoires des sons : de courts contes originaux, racontés page par page par la narratrice, puis une activité par son.
 // Contenu 100 % original (aucun texte ni dessin d'éditeur). Les mots qui contiennent le son sont mis en couleur.
 // La mise en couleur suit les mots, pas les syllabes : on ne prétend pas montrer la prononciation exacte.
+import {moreStories} from './sound-stories-more.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // page = [texte raconté, scène en émojis, mots du son à colorer]
 const stories=[
@@ -45,7 +46,11 @@ const stories=[
    {skill:'comprehension',prompt:'Où trouve-t-il enfin son chapeau?',text:'Charlot cherche sur une chaise. Voilà son chapeau !',right:'sur une chaise',others:['dans la cheminée','sous le lit'],explanation:'Dans l’histoire : le chapeau est sur une chaise.'},
    {skill:'sons',prompt:'Quel mot contient le son « ch »?',text:'Pense au son que fait un chat qui chuchote : chhh.',right:'chaise',others:['table','lampe'],explanation:'Dans chaise, on entend « ch » au début.'}]}
 ];
-export const soundStories=Object.freeze(stories.map(s=>Object.freeze({...s,pages:s.pages.map(([text,scene,words])=>Object.freeze({text,scene,words}))})));
+const labels={ou:'ou',on:'on',ch:'ch'};
+const converted=moreStories.map(([sound,label,title,cover,color,pages,activity])=>({id:sound,sound,label,title,cover,color,intro:`Une histoire pour entendre le son « ${label} ».`,
+ pages,
+ activity:activity.map(([skill,prompt,text,right,others,explanation])=>({skill,prompt,text,right,others,explanation}))}));
+export const soundStories=Object.freeze([...stories.map(s=>({...s,label:labels[s.id]})),...converted].map(s=>Object.freeze({...s,pages:s.pages.map(([text,scene,words])=>Object.freeze({text,scene,words}))})));
 export const storyFor=id=>soundStories.find(s=>s.id===id)||null;
 export const hasStory=id=>Boolean(storyFor(id));
 export const soundStoryNarrationTexts=Object.freeze([...new Set(soundStories.flatMap(s=>[s.intro,...s.pages.map(p=>p.text)]))]);
@@ -66,7 +71,7 @@ export function activityCards(story){
 export function soundStoryMarkup(story,{step=0,auto=true}={}){
  const n=story.pages.length,last=lastStep(story),dots=Array.from({length:n},(_,i)=>`<i class="${i+1<step?'done':i+1===step?'now':''}"></i>`).join('');
  let body;
- if(step<=0)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">${story.cover}</span><h1>${esc(story.title)}</h1><p>${esc(story.intro)}</p><button class="ss-go" data-story-start>▶ Écouter l’histoire</button></div>`;
+ if(step<=0)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">${story.cover}</span><h1>${esc(story.title)}</h1><p>${esc(story.intro)}</p><button class="ss-go" data-story-start>▶ Écouter l’histoire</button><button class="ss-again" data-story-sound>🔊 Écouter le son</button></div>`;
  else if(step>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as écouté toute l’histoire. Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-story-start>↺ Réécouter l’histoire</button></div>`;
  else{const page=story.pages[step-1];body=`<div class="ss-page" style="--ss:${story.color}"><div class="ss-scene" aria-hidden="true">${page.scene}</div><p class="ss-text" data-story-text>${highlight(page.text,page.words)}</p><div class="ss-dots" aria-label="Page ${step} sur ${n}">${dots}</div><div class="ss-controls"><button data-story-prev aria-label="Page précédente">◀</button><button class="ss-listen" data-story-listen>🔊 Écouter</button><button data-story-next aria-label="Page suivante">▶</button></div><label class="ss-auto"><input type="checkbox" data-story-auto ${auto?'checked':''}> La narratrice tourne les pages</label></div>`;}
  return `<section class="sound-story" aria-label="Histoire : ${esc(story.title)}"><div class="ss-top"><button data-action="sound-garden">‹ Jardin des sons</button><span>📖 ${esc(story.title)}</span></div>${body}</section>`;

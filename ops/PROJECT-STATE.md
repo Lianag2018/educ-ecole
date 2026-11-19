@@ -1,3 +1,20 @@
+# Une histoire pour chacun des 36 sons — 19 novembre 2026 (America/Toronto)
+
+Branche claude/histoires-tous-les-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.
+Demande du parent : une histoire à chaque son; en touchant un son, la faire (sans passer par l'écoute du son seul).
+Livré : 33 nouveaux contes originaux (src/sound-stories-more.js) s'ajoutent à ou, on, ch : chacun des 36 sons du
+jardin a maintenant son histoire (4-5 pages, mots du son en couleur) et 3 à 4 activités (reconnaître le son, rime,
+compréhension). En mode enfant, toucher un son du jardin ouvre directement l'histoire; la couverture garde un bouton
+« 🔊 Écouter le son » et « Écouter l'histoire »; « Jardin des sons » ramène à la grille. Narration : 186 textes
+d'histoire au catalogue (voix de narratrice de livre audio, débit .92); MP3 au build de production seulement.
+Contenu 100 % original, aucun texte ni image du livre. Mots et sons relus un à un (tests : mots colorés présents dans
+la page, réponses jamais écrites dans le texte, un conte par son du jardin). Pas de diagnostic de prononciation.
+Preuves : 593 tests unitaires OK; 4 suites navigateur OK; les 36 histoires ouvertes et page 1 vérifiées sans
+défilement à 390×664 et 820×1000 (Chromium, pas d'appareil réel ni écoute des MP3).
+En attente : alignement sur les pages du livre (non reçues); relecture par le parent du vocabulaire et des
+distracteurs; choix d'un service de voix de narration plus haut de gamme si la voix actuelle ne convient pas.
+Prochaine action : valider avec le parent, écouter la narration après le build de production.
+
 # Histoires des sons (échantillon) — 19 novembre 2026 (America/Toronto)
 
 Branche claude/histoires-des-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.
