@@ -14,7 +14,7 @@ import {mountFamilyDevice,refreshFamilyDevice} from './family-device.js';
 import {LearningSync,learningPanel} from './learning-sync.js';
 import {schoolAccessBar,schoolAccessSettings,mountSchoolAccess} from './school-access.js';
 import {popitExercise,openPopitAid} from './popit-aid.js';
-import {rewardsKid,rewardsParent,claimReward,saveRewards,restartRewards,rowsFromForm,pendingCelebration,markCelebrated,celebrationMarkup,tierFor,nextReward,chooseReward,rewardStatus,syncGifts,ownerOf,giveReward} from './rewards.js';
+import {rewardsKid,rewardsParent,claimReward,saveRewards,restartRewards,rowsFromForm,pendingCelebration,resetCelebrations,toggleAsk,markCelebrated,celebrationMarkup,burstDelays,tierFor,nextReward,chooseReward,rewardStatus,syncGifts,ownerOf,giveReward} from './rewards.js';
 import {childHome,subjectHome,dailyAdventure,nextDailyAdventure,advanceDaily} from './child-navigation.js';
 import {parentNavigation,mountParentNavigation} from './parent-navigation.js';
 let parentSection='week';
@@ -47,6 +47,7 @@ import {seedFamilyContent} from './family-content.js';
 import {parseBookWords,saveBookWords,loadBookWords} from './book-words.js';
 import {soundLabParent,soundLabMarkup,nextMs} from './sound-lab.js';
 import {getRecording,saveRecording,deleteRecording,listRecorded,loadStretchSettings,saveStretchMs} from './sound-bank.js';
+import {startPartySound,partyMuted,setPartyMuted} from './party-sound.js';
 import {psPages,privateStoriesMarkup,parseStories,savePrivate,clearPrivate} from './private-stories.js';
 import {loversCards} from './sound-games.js';
 import {trickBookMarkup,trickEntries,trickPages,firstPageToShow} from './trick-book.js';
@@ -151,14 +152,18 @@ function speedControl(){return '';const speed=playbackSpeed(state.readingSpeed);
 function audio(){return `${grokMarkup('reading')}<button type="button" data-reading-focus>📖 Lire en grand</button><div class="reading-options"><div class="reading-dock"><div class="audio"><button data-action="listen">▶ Écouter</button><button data-action="reading-pause" ${!speaking&&!readingPaused?'disabled':''}>${readingPaused?'▶ Reprendre':'Ⅱ Pause'}</button><button data-action="listen">↻ Réécouter</button></div>${speedControl()}</div><p class="audio-status" role="status">${esc(voiceMessage||'Écoute la narratrice, puis essaie à ton tour.')}</p><details class="reading-settings"><summary>🎙 Mon studio et ma voix</summary>${voicePicker()}<p>Enregistre ta lecture pour la réécouter avec un adulte. Elle reste sur cet appareil et s’efface en quittant l’activité.</p><button data-action="record" ${recording||micPending?'disabled':''}>Enregistrer ma voix</button><button data-action="stop-record" ${!recording?'disabled':''}>Terminer</button><p role="status">${esc(mediaMessage)}</p>${recordURL?`<audio controls src="${recordURL}"></audio>`:''}</details></div>`;}
 function maybeCelebrate(){
  if(view==='parent'||document.querySelector('.reward-party'))return;
- if(syncGifts(state.profiles))persist();
+ let ch=syncGifts(state.profiles);for(const q of state.profiles)ch=resetCelebrations(q)||ch;if(ch)persist();
  const p=profile(),r=p&&pendingCelebration(p);if(!r)return;
  markCelebrated(p,r.id);persist();cleanup(false);
- const st=rewardStatus(p),points=st.points,next=nextReward(p,r.id),tier=tierFor(p,r.id),lower=st.items.filter(x=>x.reached&&!x.claimed&&x.id!==r.id&&x.cost<r.cost),gifted=Boolean(r.gift&&!r.own);
+ const st=rewardStatus(p),points=st.points,next=nextReward(p,r.id),tier=tierFor(p,r.id),lower=st.items.filter(x=>x.reached&&x.id!==r.id&&x.cost<r.cost),gifted=Boolean(r.gift&&!r.own);
  const box=document.createElement('div');box.innerHTML=celebrationMarkup(r,p.name,{points,next,tier,lower:gifted?[]:lower,names:gifted?[r.gift,p.name]:[p.name,...state.profiles.filter(x=>x!==p).map(x=>x.name)],gift:gifted?r.gift:''});const party=box.firstElementChild;document.body.appendChild(party);
  const count=party.querySelector('[data-party-count]');
  if(count&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){let t0=performance.now();const dur=1600;const step=now=>{if(!party.isConnected)return;const k=Math.min(1,(now-t0)/dur);count.textContent=Math.round(points*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);};count.textContent='0';setTimeout(()=>{if(party.isConnected)requestAnimationFrame(t=>{t0=t;step(t);});},2400);}
- const done=to=>{party.remove();speaking=false;reader.stop();if(to==='rewards')act('rewards');else render();};
+ let snd=startPartySound({tier,delays:burstDelays(tier),gift:gifted});
+ const muteBtn=party.querySelector('[data-party-mute]');if(muteBtn&&partyMuted())muteBtn.textContent='🔇';
+ party.addEventListener('pointerdown',()=>snd.resume(),{once:true});
+ muteBtn?.addEventListener('click',e=>{e.stopPropagation();const off=!partyMuted();setPartyMuted(off);muteBtn.textContent=off?'🔇':'🔊';if(off)snd.stop();else snd=startPartySound({tier,delays:burstDelays(tier),gift:gifted,muted:false});});
+ const done=to=>{snd.stop();party.remove();speaking=false;reader.stop();if(to==='rewards')act('rewards');else render();};
  party.querySelector('[data-party-now]')?.addEventListener('click',()=>{chooseReward(p,r.id,'now');persist();done('rewards');});
  party.querySelectorAll('[data-party-pick]').forEach(b=>b.addEventListener('click',()=>{chooseReward(p,b.dataset.partyPick,'now');persist();done('rewards');}));
  party.querySelector('[data-party-later]')?.addEventListener('click',()=>done('home'));
@@ -406,6 +411,7 @@ function bindSoundGarden(){
   document.querySelector('[data-lab-play]')?.addEventListener('click',()=>{if(rule){cleanup();begin(labCards(rule),'Français',{fill:false});}});
   document.querySelectorAll('[data-lab-word]').forEach(b=>b.onclick=()=>{const w=b.dataset.labWord;cleanup();b.classList.add('say');setTimeout(()=>b.classList.remove('say'),1600);speakText(w);});
  }
+ if(view==='rewards'){document.querySelectorAll('[data-reward-ask]').forEach(b=>b.onclick=()=>{const q=profile(),on=toggleAsk(q,b.dataset.rewardAsk);persist();render();if(on)speakText('Super ! Montre-le à un adulte.');});}
  if(view==='sound-lab'){
   const say=t=>{const m=document.querySelector('[data-lab-msg]');if(m)m.textContent=t;};
   document.querySelectorAll('[data-lab-play]').forEach(b=>b.onclick=()=>phonemePlayer.play(b.dataset.labPlay));
