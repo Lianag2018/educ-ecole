@@ -1,3 +1,21 @@
+# Histoires des sons en jeu — 19 novembre 2026 (America/Toronto)
+
+Branche claude/histoires-tous-les-sons (PR #111), non fusionnée, non déployée. Demande du parent : tout en jeu,
+un seul toucher (pas deux étapes), toucher le texte plutôt qu'un bouton « Écouter ». Livré : toucher un son du jardin
+ouvre directement la page 1 et la narratrice lit la phrase toute seule; plus de couverture ni de bouton « Écouter ».
+Jeu des mots : chaque mot du texte se touche; les mots qui font le son s'allument en doré (compteur ⭐ n / total,
+l'étiquette « ou » touchable entend le son), les autres secouent doucement (« Cherche encore. »); quand tous sont
+trouvés, « Bravo! » puis la page se tourne seule. Toucher l'image relit la phrase. Un indice discret pulse après 9 s.
+Fin : « Jouer avec le son » (3-4 questions, sans cartes de remplissage). Narration : seule « Cherche encore. » s'ajoute
+au catalogue; les mots touchés un à un utilisent la voix du système, car le catalogue est à 2297 clips sur 2300 permis
+(limite révisée de ops/generate-narration.mjs : 2300 clips / 150 000 caractères).
+ATTENTION : la PR #110 (laboratoire d'orthographe) ajoute ~50 textes; fusionner #110 et #111 ensemble dépasse la limite
+(le test de catalogue échouera) — il faudra décider d'augmenter la limite de génération (coût de voix OpenAI, faible).
+Preuves : 594 tests unitaires OK; 4 suites navigateur OK; 151 pages des 36 histoires jouées (tous les mots du son
+trouvés, page terminée) sans défilement à 820×1000 et à 390×664 après ajustement (pire dépassement 0 sur 5 histoires
+longues revérifiées). Pas d'appareil réel; avance automatique et voix non vérifiées (pas d'audio ici).
+Prochaine action : écouter/essayer sur tablette, puis décider de la limite de narration.
+
 # Une histoire pour chacun des 36 sons — 19 novembre 2026 (America/Toronto)
 
 Branche claude/histoires-tous-les-sons (cut de main), PR à ouvrir; non fusionnée, non déployée.

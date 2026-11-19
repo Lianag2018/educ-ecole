@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {soundStories,storyFor,highlight,activityCards,soundStoryMarkup,lastStep,soundStoryNarrationTexts} from '../../src/sound-stories.js';
+import {soundStories,storyFor,highlight,activityCards,soundStoryMarkup,lastStep,soundStoryNarrationTexts,soundWordCount,soundWordTexts,STORY_TRY_AGAIN} from '../../src/sound-stories.js';
 import {hasStory} from '../../src/sound-stories.js';
 import {gardenSounds} from '../../src/sound-garden.js';
 import {narrationCatalog,STORY_INSTRUCTIONS} from '../../ops/narration-catalog.mjs';
@@ -22,11 +22,19 @@ test('les activités sont valides et la réponse n\'est pas écrite telle quelle
  }
  assert.ok(new Set(soundStories.flatMap(s=>activityCards(s).map(c=>c.answer))).size>1);
 });
-test('couverture, pages et fin affichent les bons boutons',()=>{
+test('page-jeu : mots touchables, pas de bouton Écouter, fin avec « Jouer avec le son »',()=>{
  const s=storyFor('ou');
- assert.match(soundStoryMarkup(s,{step:0}),/data-story-start/);
- const page=soundStoryMarkup(s,{step:1});assert.match(page,/data-story-listen/);assert.match(page,/ss-sound/);assert.match(page,/Loulou/);
+ const page=soundStoryMarkup(s,{step:1});
+ assert.match(page,/data-story-word="Loulou"[^>]*data-sound="1"/);assert.match(page,/data-story-word="habite"[^>]*data-sound="0"/);
+ assert.match(page,/data-story-read/);assert.match(page,/data-story-sound/);assert.match(page,/⭐ 0 \/ 5/);
+ assert.ok(!/Écouter/.test(page),'aucun bouton Écouter');assert.ok(!/data-story-start|data-story-listen|data-story-auto/.test(page));
  assert.match(soundStoryMarkup(s,{step:lastStep(s)}),/data-story-play/);
+});
+test('le nombre de mots à trouver suit le texte; le catalogue reste sous la limite de génération révisée',()=>{
+ const s=storyFor('ou');assert.equal(soundWordCount(s.pages[0]),5);
+ const byText=new Map(narrationCatalog().map(x=>[x.text,x]));
+ assert.ok(byText.has(STORY_TRY_AGAIN));assert.ok(soundWordTexts.length>100);
+ const all=narrationCatalog();assert.ok(all.length<=2300);assert.ok(all.reduce((n,x)=>n+x.text.length,0)<=150000);
 });
 test('toutes les pages des histoires sont dans le catalogue de narration avec la voix de narratrice',()=>{
  const catalog=narrationCatalog(),byText=new Map(catalog.map(x=>[x.text,x]));

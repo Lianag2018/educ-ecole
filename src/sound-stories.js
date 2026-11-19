@@ -53,6 +53,9 @@ const converted=moreStories.map(([sound,label,title,cover,color,pages,activity])
 export const soundStories=Object.freeze([...stories.map(s=>({...s,label:labels[s.id]})),...converted].map(s=>Object.freeze({...s,pages:s.pages.map(([text,scene,words])=>Object.freeze({text,scene,words}))})));
 export const storyFor=id=>soundStories.find(s=>s.id===id)||null;
 export const hasStory=id=>Boolean(storyFor(id));
+// Mots du son touchables dans le jeu : ils sont dits un à un, tels qu'écrits dans la page.
+export const soundWordTexts=Object.freeze([...new Set(soundStories.flatMap(st=>st.pages.flatMap(p=>{const set=new Set(p.words.map(w=>w.toLowerCase()));return (p.text.match(/\p{L}+/gu)||[]).filter(w=>set.has(w.toLowerCase()));})))]);
+export const STORY_TRY_AGAIN='Cherche encore.';
 export const soundStoryNarrationTexts=Object.freeze([...new Set(soundStories.flatMap(s=>[s.intro,...s.pages.map(p=>p.text)]))]);
 // Étapes : 0 = couverture, 1..n = pages, n+1 = fin (jouer avec le son).
 export const lastStep=story=>story.pages.length+1;
@@ -68,11 +71,19 @@ export function activityCards(story){
   return {id:`sstory-${story.id}-${i}`,skill:a.skill,level:1,prompt:a.prompt,text:a.text,choices,answer:choices.indexOf(a.right),explanation:a.explanation,grade:1,storyActivity:true};
  });
 }
-export function soundStoryMarkup(story,{step=0,auto=true}={}){
- const n=story.pages.length,last=lastStep(story),dots=Array.from({length:n},(_,i)=>`<i class="${i+1<step?'done':i+1===step?'now':''}"></i>`).join('');
+// Jeu : chaque mot du texte est touchable. Les mots qui font le son se « trouvent » (ils s'allument et la page se tourne seule);
+// les autres secouent doucement. Toucher l'image relit la phrase. Aucun bouton « Écouter ».
+export function gameTextMarkup(page){
+ const set=new Set(page.words.map(w=>w.toLowerCase()));
+ return page.text.split(/(\p{L}+)/gu).map(part=>/^\p{L}+$/u.test(part)?`<button type="button" class="ss-w" data-story-word="${esc(part)}" data-sound="${set.has(part.toLowerCase())?1:0}">${esc(part)}</button>`:esc(part)).join('');
+}
+export const soundWordCount=page=>{const set=new Set(page.words.map(w=>w.toLowerCase()));return (page.text.match(/\p{L}+/gu)||[]).filter(w=>set.has(w.toLowerCase())).length;};
+export function soundStoryMarkup(story,{step=1}={}){
+ const n=story.pages.length,last=lastStep(story),at=Math.max(1,Math.min(step,last));
+ const dots=Array.from({length:n},(_,i)=>`<i class="${i+1<at?'done':i+1===at?'now':''}"></i>`).join('');
  let body;
- if(step<=0)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">${story.cover}</span><h1>${esc(story.title)}</h1><p>${esc(story.intro)}</p><button class="ss-go" data-story-start>▶ Écouter l’histoire</button><button class="ss-again" data-story-sound>🔊 Écouter le son</button></div>`;
- else if(step>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as écouté toute l’histoire. Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-story-start>↺ Réécouter l’histoire</button></div>`;
- else{const page=story.pages[step-1];body=`<div class="ss-page" style="--ss:${story.color}"><div class="ss-scene" aria-hidden="true">${page.scene}</div><p class="ss-text" data-story-text>${highlight(page.text,page.words)}</p><div class="ss-dots" aria-label="Page ${step} sur ${n}">${dots}</div><div class="ss-controls"><button data-story-prev aria-label="Page précédente">◀</button><button class="ss-listen" data-story-listen>🔊 Écouter</button><button data-story-next aria-label="Page suivante">▶</button></div><label class="ss-auto"><input type="checkbox" data-story-auto ${auto?'checked':''}> La narratrice tourne les pages</label></div>`;}
+ if(at>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as trouvé tous les mots du son « ${esc(story.label||story.sound)} ». Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-story-restart>↺ Recommencer l’histoire</button></div>`;
+ else{const page=story.pages[at-1],total=soundWordCount(page);
+  body=`<div class="ss-page" style="--ss:${story.color}"><button type="button" class="ss-scene" data-story-read aria-label="Relire la phrase">${page.scene}<i class="ss-ear" aria-hidden="true">🔊</i></button><p class="ss-text" data-story-text>${gameTextMarkup(page)}</p><p class="ss-goal">Touche les mots qui font le son <button type="button" class="ss-label" data-story-sound aria-label="Entendre le son">« ${esc(story.label||story.sound)} »</button> <span class="ss-count" data-story-count>⭐ 0 / ${total}</span></p><div class="ss-nav"><button data-story-prev aria-label="Page précédente" ${at<=1?'disabled':''}>◀</button><div class="ss-dots" aria-label="Page ${at} sur ${n}">${dots}</div><button data-story-next aria-label="Page suivante">▶</button></div></div>`;}
  return `<section class="sound-story" aria-label="Histoire : ${esc(story.title)}"><div class="ss-top"><button data-action="sound-garden">‹ Jardin des sons</button><span>📖 ${esc(story.title)}</span></div>${body}</section>`;
 }
