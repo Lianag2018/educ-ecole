@@ -21,3 +21,9 @@ test('la liste des histoires est paginée (6 par page)',async()=>{
  clearPrivate();const txt=Array.from({length:14},(_,i)=>`## g${i} — Titre ${i}\n\nUne page ${i}.`).join('\n\n');savePrivate(parseStories(txt));
  assert.equal(psPages(),3);assert.equal((privateStoriesMarkup(0).match(/data-private-open/g)||[]).length,6);assert.equal((privateStoriesMarkup(2).match(/data-private-open/g)||[]).length,2);clearPrivate();
 });
+test('les outils d\'ajout et d\'effacement ne sont visibles que pour un adulte, et effacer ne bloque pas le rechargement',async()=>{
+ const {privateStoriesMarkup,savePrivate,clearPrivate,parseStories}=await import('../../src/private-stories.js');
+ savePrivate(parseStories('## a — T\n\nUne page.'));
+ assert.doesNotMatch(privateStoriesMarkup(0),/data-private-clear|data-private-file/);assert.match(privateStoriesMarkup(0,{adult:true}),/data-private-clear/);
+ localStorage.setItem('atelier-mots-family-content-v1','1:1');clearPrivate();assert.equal(localStorage.getItem('atelier-mots-family-content-v1'),null);
+});
