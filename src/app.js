@@ -14,7 +14,7 @@ import {mountFamilyDevice,refreshFamilyDevice} from './family-device.js';
 import {LearningSync,learningPanel} from './learning-sync.js';
 import {schoolAccessBar,schoolAccessSettings,mountSchoolAccess} from './school-access.js';
 import {popitExercise,openPopitAid} from './popit-aid.js';
-import {rewardsKid,rewardsParent,claimReward,saveRewards,restartRewards,rowsFromForm,pendingCelebration,markCelebrated,celebrationMarkup,tierFor,nextReward,chooseReward,rewardStatus} from './rewards.js';
+import {rewardsKid,rewardsParent,claimReward,saveRewards,restartRewards,rowsFromForm,pendingCelebration,markCelebrated,celebrationMarkup,tierFor,nextReward,chooseReward,rewardStatus,syncGifts,ownerOf,giveReward} from './rewards.js';
 import {childHome,subjectHome,dailyAdventure,nextDailyAdventure,advanceDaily} from './child-navigation.js';
 import {parentNavigation,mountParentNavigation} from './parent-navigation.js';
 let parentSection='week';
@@ -151,10 +151,11 @@ function speedControl(){return '';const speed=playbackSpeed(state.readingSpeed);
 function audio(){return `${grokMarkup('reading')}<button type="button" data-reading-focus>📖 Lire en grand</button><div class="reading-options"><div class="reading-dock"><div class="audio"><button data-action="listen">▶ Écouter</button><button data-action="reading-pause" ${!speaking&&!readingPaused?'disabled':''}>${readingPaused?'▶ Reprendre':'Ⅱ Pause'}</button><button data-action="listen">↻ Réécouter</button></div>${speedControl()}</div><p class="audio-status" role="status">${esc(voiceMessage||'Écoute la narratrice, puis essaie à ton tour.')}</p><details class="reading-settings"><summary>🎙 Mon studio et ma voix</summary>${voicePicker()}<p>Enregistre ta lecture pour la réécouter avec un adulte. Elle reste sur cet appareil et s’efface en quittant l’activité.</p><button data-action="record" ${recording||micPending?'disabled':''}>Enregistrer ma voix</button><button data-action="stop-record" ${!recording?'disabled':''}>Terminer</button><p role="status">${esc(mediaMessage)}</p>${recordURL?`<audio controls src="${recordURL}"></audio>`:''}</details></div>`;}
 function maybeCelebrate(){
  if(view==='parent'||document.querySelector('.reward-party'))return;
+ if(syncGifts(state.profiles))persist();
  const p=profile(),r=p&&pendingCelebration(p);if(!r)return;
  markCelebrated(p,r.id);persist();cleanup(false);
- const st=rewardStatus(p),points=st.points,next=nextReward(p,r.id),tier=tierFor(p,r.id),lower=st.items.filter(x=>x.reached&&!x.claimed&&x.id!==r.id&&x.cost<r.cost);
- const box=document.createElement('div');box.innerHTML=celebrationMarkup(r,p.name,{points,next,tier,lower});const party=box.firstElementChild;document.body.appendChild(party);
+ const st=rewardStatus(p),points=st.points,next=nextReward(p,r.id),tier=tierFor(p,r.id),lower=st.items.filter(x=>x.reached&&!x.claimed&&x.id!==r.id&&x.cost<r.cost),gifted=Boolean(r.gift&&!r.own);
+ const box=document.createElement('div');box.innerHTML=celebrationMarkup(r,p.name,{points,next,tier,lower:gifted?[]:lower,names:gifted?[r.gift,p.name]:[p.name,...state.profiles.filter(x=>x!==p).map(x=>x.name)],gift:gifted?r.gift:''});const party=box.firstElementChild;document.body.appendChild(party);
  const count=party.querySelector('[data-party-count]');
  if(count&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){const t0=performance.now(),dur=1600;const step=now=>{if(!party.isConnected)return;const k=Math.min(1,(now-t0)/dur);count.textContent=Math.round(points*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);};count.textContent='0';requestAnimationFrame(step);}
  const done=to=>{party.remove();speaking=false;reader.stop();if(to==='rewards')act('rewards');else render();};
@@ -330,7 +331,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('submit',e=>{if(e.target?.id==='dictation-form'){e.preventDefault();const d=profile().dictation??={words:[],review:[],cursor:0};d.words=parseWords(new FormData(e.target).get('words'));persist();render();const m=document.querySelector('[data-dictation-status]');if(m)m.textContent=d.words.length?d.words.length+' mot(s) enregistré(s) pour '+profile().name+'.':'Liste vide : les mots proposés par l’application seront utilisés.';return;}
  if(e.target?.id!=='rewards-form')return;e.preventDefault();const ok=saveRewards(profile(),rowsFromForm(new FormData(e.target)));persist();render();const m=document.querySelector('[data-rewards-status]');if(m)m.textContent=ok?'Récompenses enregistrées.':'Ajoute au moins une récompense avec un nom et un nombre d’étoiles (5 ou plus).';});
 document.addEventListener('click',e=>{const t=e.target instanceof Element?e.target:null;if(!t||view!=='parent')return;
- const claim=t.closest('[data-reward-claim]');if(claim){if(!confirm('Remettre « '+claim.dataset.title+' » à '+profile().name+' ? '+claim.dataset.cost+' étoiles seront retirées de son total.'))return;if(claimReward(profile(),claim.dataset.rewardClaim)){persist();render();}return;}
+ const claim=t.closest('[data-reward-claim]');if(claim){const id=claim.dataset.rewardClaim,owner=ownerOf(state.profiles,profile(),id);if(!owner)return;if(!confirm('Donner « '+claim.dataset.title+' » aux deux filles ? '+claim.dataset.cost+' étoiles seront retirées de '+owner.name+'.'))return;if(giveReward(state.profiles,profile(),id)){persist();render();}return;}
  if(t.closest('[data-reward-restart]')&&confirm('Repartir à 0 étoile pour '+profile().name+' ? Les récompenses déjà remises seront effacées du parcours.')){restartRewards(profile());persist();render();}});
 // Mon parcours : un seul bouton, la prochaine étape s'ouvre toute seule (histoire d'un son ou mystère d'orthographe).
 function learnedWords(p){const done=p.journey?.done||{};return SOUND_ORDER.filter(id=>done['story:'+id]).flatMap(id=>wordsFor(id).map(w=>w.plain));}
