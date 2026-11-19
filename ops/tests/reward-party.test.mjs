@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {pendingCelebration,markCelebrated,celebrationMarkup,rewardState,claimReward,tierFor,nextReward,chooseReward,rewardStatus,rewardsKid,rewardsParent,restartRewards,syncGifts,ownerOf,giveReward} from '../../src/rewards.js';
+import {pendingCelebration,markCelebrated,celebrationMarkup,rewardState,claimReward,tierFor,nextReward,chooseReward,rewardStatus,rewardsKid,rewardsParent,restartRewards,syncGifts,ownerOf,giveReward,toggleAsk,resetCelebrations} from '../../src/rewards.js';
 const kid=()=>({id:'p1',name:'Mely-Ann',history:[]});
 test('la fête n\'apparaît qu\'une fois, quand une récompense est atteinte',()=>{
  const p=kid();assert.equal(pendingCelebration(p),null);
@@ -31,7 +31,7 @@ test('garder ses étoiles ou la prendre : le choix est mémorisé, visible au co
  assert.match(rewardsKid(p),/Je garde mes étoiles/);assert.match(rewardsParent(p),/garde ses étoiles pour la prochaine/);
  assert.equal(chooseReward(p,'r0','now'),true);assert.match(rewardsKid(p),/Demandée/);assert.match(rewardsParent(p),/la veut maintenant/);
  assert.equal(chooseReward(p,'r0','autre'),false);assert.equal(chooseReward(p,'inconnu','now'),false);
- assert.ok(claimReward(p,'r0'));assert.doesNotMatch(rewardsParent(p),/data-reward-claim="r0"/);
+ assert.ok(claimReward(p,'r0'));assert.equal(rewardStatus(p).points,0);assert.doesNotMatch(rewardsParent(p),/data-reward-claim="r0"/);
 });
 test('si plusieurs récompenses sont atteintes d\'un coup, la fête célèbre la plus haute une seule fois',()=>{
  const p=kid();rewardState(p).base=-600;const r=pendingCelebration(p);assert.equal(r.id,'r3');markCelebrated(p,r.id);assert.equal(pendingCelebration(p),null);
@@ -46,7 +46,7 @@ test('elle peut choisir une récompense de niveau inférieur déjà gagnée, et 
  // elle choisit le cinéma (400) : rien n'est retiré avant la confirmation
  assert.equal(chooseReward(p,'r2','now'),true);assert.equal(rewardStatus(p).points,600);assert.match(rewardsParent(p),/Remis aux deux filles ✓ \(−400 ⭐\)/);
  assert.equal(claimReward(p,'r2'),true);assert.equal(rewardStatus(p).points,200);
- const st=rewardStatus(p);assert.equal(st.items.find(x=>x.id==='r2').claimed,true);assert.equal(st.items.find(x=>x.id==='r3').reached,false);// le sushi n'est plus atteint
+ const st=rewardStatus(p);assert.equal(st.items.find(x=>x.id==='r2').times,1);assert.equal(st.items.find(x=>x.id==='r3').reached,false);// le sushi n'est plus atteint
  assert.equal(st.items.find(x=>x.id==='r0').reached,true);assert.equal(claimReward(p,'r3'),false);// plus assez d'étoiles
 });
 test('remettre deux récompenses d\'affilée retire les deux coûts; un nouveau parcours efface les choix',()=>{
@@ -76,8 +76,10 @@ test('« Remis » donne la récompense aux deux, retire les étoiles seulement �
  const [a,b]=duo();rewardState(a).base=-300;syncGifts([a,b]);
  assert.equal(giveReward([a,b],b,'r0')?.name,'Mely-Ann');
  assert.equal(rewardStatus(a).points,200);assert.equal(rewardStatus(b).points,0);
- assert.equal(rewardStatus(a).items.find(x=>x.id==='r0').claimed,true);assert.equal(rewardStatus(b).items.find(x=>x.id==='r0').claimed,true);
- assert.equal(giveReward([a,b],a,'r0'),null);syncGifts([a,b]);assert.equal(rewardState(b).gifts.r0,undefined);
+ assert.equal(rewardStatus(a).items.find(x=>x.id==='r0').times,1);assert.equal(rewardStatus(b).items.find(x=>x.id==='r0').times,1);
+ syncGifts([a,b]);assert.equal(rewardState(b).gifts?.r0,undefined);// pas de nouveau cadeau tout de suite
+ assert.equal(giveReward([a,b],a,'r0')?.name,'Mely-Ann');assert.equal(rewardStatus(a).points,100);// McDo une deuxième fois, payée par la gagnante
+ assert.equal(rewardStatus(b).items.find(x=>x.id==='r0').times,2);
  // le trampolines (250) est encore gagné par a (200 < 250 : non) -> pas de cadeau
  assert.equal(rewardStatus(b).items.find(x=>x.id==='r1').reached,false);
 });
@@ -96,4 +98,17 @@ test('l\'ouverture commence par un cadeau qui éclate dans un flash avant de ré
  const html=celebrationMarkup({icon:'🍟',title:'McDo'},'Liana',{points:100,tier:1});
  assert.match(html,/class="rp-intro"/);assert.match(html,/class="rp-box"/);assert.match(html,/class="rp-flash"/);
  assert.ok(html.indexOf('rp-photo')<html.indexOf('rp-intro'));
+});
+
+test('c\'est la fille qui décide : elle touche une récompense gagnée pour la demander, et touche encore pour annuler',()=>{
+ const p=kid();p.name='Liana';rewardState(p).base=-300;
+ assert.match(rewardsKid(p),/data-reward-ask="r0"/);assert.match(rewardsKid(p),/data-reward-ask="r1"/);assert.doesNotMatch(rewardsKid(p),/data-reward-ask="r2"/);assert.match(rewardsKid(p),/c’est toi qui décides/);
+ assert.equal(toggleAsk(p,'r1'),'now');assert.equal(rewardStatus(p).waiting,1);assert.match(rewardsKid(p),/Demandée/);assert.match(rewardsParent(p),/la veut maintenant/);
+ assert.equal(toggleAsk(p,'r1'),'');assert.equal(rewardStatus(p).waiting,0);assert.equal(toggleAsk(p,'r4'),'');// pas gagnée : rien
+ toggleAsk(p,'r0');claimReward(p,'r0');assert.equal(rewardState(p).choice.r0,undefined);// la demande disparaît à la remise
+});
+test('une récompense peut refaire la fête après avoir été dépensée puis regagnée',()=>{
+ const p=kid();rewardState(p).base=-100;const r=pendingCelebration(p);markCelebrated(p,r.id);assert.equal(pendingCelebration(p),null);
+ claimReward(p,'r0');assert.equal(resetCelebrations(p),true);// plus atteinte : on oublie la fête
+ rewardState(p).base=-100+0;assert.equal(rewardStatus(p).items[0].reached,true);assert.equal(pendingCelebration(p).id,'r0');// regagnée : la fête rejoue
 });
