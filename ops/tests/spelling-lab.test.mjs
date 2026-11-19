@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {spellingRules,ruleFor,wordOf,syllableMarkup,wordMarkup,labCards,labHubMarkup,labRuleMarkup,ruleIntroText,ruleTricksText,ruleNarrationTexts,allWords} from '../../src/spelling-lab.js';
+import {spellingRules,ruleFor,wordOf,syllableMarkup,wordMarkup,labCards,labHubMarkup,labRuleMarkup,ruleIntroText,trickText,ruleNarrationTexts,allWords} from '../../src/spelling-lab.js';
 import {narrationCatalog} from '../../ops/narration-catalog.mjs';
 test('cinq mystères d\'orthographe, chacun avec exemples, astuces et activité',()=>{
  assert.ok(spellingRules.length>=5);
@@ -27,11 +27,12 @@ test('activités valides, sans réponse écrite dans le texte de la carte',()=>{
 test('pages : accueil, observer, astuces, jouer',()=>{
  assert.equal((labHubMarkup().match(/data-lab-rule=/g)||[]).length,spellingRules.length);
  const r=ruleFor('c');
- assert.match(labRuleMarkup(r,0),/data-lab-word/);assert.match(labRuleMarkup(r,1),/Le détective du c/);assert.match(labRuleMarkup(r,2),/data-lab-play/);
+ assert.match(labRuleMarkup(r,0),/data-lab-word/);assert.match(labRuleMarkup(r,0),/data-lab-read/);assert.match(labRuleMarkup(r,1),/Le détective du c/);assert.match(labRuleMarkup(r,1),/data-lab-say/);assert.match(labRuleMarkup(r,2),/data-lab-play/);
+ for(const step of [0,1,2])assert.ok(!/Écouter/.test(labRuleMarkup(r,step)),'aucun bouton Écouter');
 });
 test('tout ce qui est raconté est dans le catalogue de narration',()=>{
  const byText=new Map(narrationCatalog().map(x=>[x.text,x]));
- for(const r of spellingRules){assert.ok(byText.has(ruleIntroText(r)));assert.ok(byText.has(ruleTricksText(r)));}
+ for(const r of spellingRules){assert.ok(byText.has(ruleIntroText(r)));for(const t of r.tricks)assert.ok(byText.has(trickText(t)));}
  for(const w of allWords())assert.ok(byText.has(w),w);
- assert.ok(ruleNarrationTexts.length===spellingRules.length*2);
+ assert.equal(ruleNarrationTexts.length,spellingRules.length*4);
 });

@@ -1,3 +1,11 @@
+# Laboratoire d'orthographe : toucher plutôt qu'« Écouter » — 19 novembre 2026 (America/Toronto)
+
+Même branche claude/pourquoi-ca-s-ecrit (PR #110), non fusionnée. Demande du parent : toucher le texte, pas un bouton Écouter.
+Les boutons « 🔊 Écouter » sont retirés : toucher le titre et l'idée lit l'énigme, toucher une astuce la lit, toucher un mot
+le dit (déjà le cas). Catalogue : une astuce = un texte (4 textes par mystère). Preuves : 596 tests unitaires OK; 4 suites
+navigateur OK; écrans sans défilement (390×664, 820×1000, 1180×820). Voir l'avertissement sur la limite de narration dans la
+PR #111 (2300 clips) : #110 + #111 ensemble la dépassent.
+
 # Pourquoi ça s'écrit comme ça? (Liana) — 19 novembre 2026 (America/Toronto)
 
 Branche claude/pourquoi-ca-s-ecrit (cut de main), PR à ouvrir; non fusionnée, non déployée.

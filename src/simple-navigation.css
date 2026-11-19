@@ -545,3 +545,4 @@ body.kid-simple .sound-garden .sg-footer [data-garden-exercises]{font-size:15px;
  .sl-words{gap:5px}.sl-word{min-height:36px;padding:2px 8px;font-size:16px;border-width:2px}.sl-idea{font-size:14px;line-height:1.3}.sl-page h1{font-size:18px}.sl-hint{display:none}
  .sl-tricks{gap:5px}.sl-tricks li{padding:5px 8px;gap:8px}.sl-tricks li>span{font-size:26px}.sl-tricks b{font-size:14px}.sl-tricks p{font-size:12.5px;line-height:1.25}.sl-nav button{min-height:44px;font-size:15px}}
 @media (prefers-reduced-motion:reduce){.sl-word.say .sl-syl{animation:none}}
+.sl-read{cursor:pointer;border-radius:16px;padding:2px 4px}.sl-read:active,.sl-tricks li:active{background:#ffd95a55}.sl-tricks li{cursor:pointer}

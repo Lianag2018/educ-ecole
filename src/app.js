@@ -42,7 +42,7 @@ import {mountMinuteMath as mountSpeedMath} from './minute-math.js';
 import {planPanel,planMap,planFor,planMissions,missionOpen,mountPlanImport} from './school-plan.js';
 import {squishyStages,squishyMap,stageOpen,blob} from './squishy.js';
 import {PhonemePlayer} from './phoneme-player.js';
-import {ruleFor,labHubMarkup,labRuleMarkup,labCards,ruleIntroText,ruleTricksText} from './spelling-lab.js';
+import {ruleFor,labHubMarkup,labRuleMarkup,labCards,ruleIntroText} from './spelling-lab.js';
 import {storyFor,soundStoryMarkup,lastStep,activityCards} from './sound-stories.js';
 import {gardenSounds,gardenSelection,gardenPractice,soundGardenMarkup,gardenWelcome,gardenEncouragement} from './sound-garden.js';
 import {soundCards,soundCardMarkup} from './sound-cards.js';
@@ -352,7 +352,8 @@ function bindSoundGarden(){
   document.querySelectorAll('[data-lab-rule]').forEach(b=>b.onclick=()=>again(b.dataset.labRule,0));
   document.querySelector('[data-lab-next]')?.addEventListener('click',()=>again(labRuleId,labStep+1));
   document.querySelector('[data-lab-prev]')?.addEventListener('click',()=>again(labRuleId,Math.max(0,labStep-1)));
-  document.querySelector('[data-lab-listen]')?.addEventListener('click',()=>{if(rule)speakText(labStep===1?ruleTricksText(rule):ruleIntroText(rule));});
+  document.querySelector('[data-lab-read]')?.addEventListener('click',()=>{if(rule)speakText(ruleIntroText(rule));});
+  document.querySelectorAll('[data-lab-say]').forEach(el=>el.onclick=()=>speakText(el.dataset.labSay));
   document.querySelector('[data-lab-play]')?.addEventListener('click',()=>{if(rule){cleanup();begin(labCards(rule),'Français',{fill:false});}});
   document.querySelectorAll('[data-lab-word]').forEach(b=>b.onclick=()=>{const w=b.dataset.labWord;cleanup();b.classList.add('say');setTimeout(()=>b.classList.remove('say'),1600);speakText(w);});
  }

@@ -83,14 +83,15 @@ export const wordOf=syllables=>syllables.map(plain).join('');
 export const allWords=()=>[...new Set(spellingRules.flatMap(r=>r.spellings.flatMap(s=>s.words.map(wordOf))))];
 // Textes racontés : l'énigme avec son idée, puis les astuces. Les mots sont dits un à un quand on les touche.
 export const ruleIntroText=r=>`${r.question} ${r.idea}`;
-export const ruleTricksText=r=>r.tricks.map(t=>`${t[1]}. ${t[2]}`).join(' ');
-export const ruleNarrationTexts=Object.freeze(spellingRules.flatMap(r=>[ruleIntroText(r),ruleTricksText(r)]));
+export const trickText=t=>`${t[1]}. ${t[2]}`;
+export const ruleTricksText=r=>r.tricks.map(trickText).join(' ');
+export const ruleNarrationTexts=Object.freeze(spellingRules.flatMap(r=>[ruleIntroText(r),...r.tricks.map(trickText)]));
 // Une syllabe avec sa graphie repérée en couleur.
 export function syllableMarkup(syl){
  return syl.split(/(\[[^\]]+\])/).filter(Boolean).map(part=>part.startsWith('[')?`<mark class="sl-g">${esc(part.slice(1,-1))}</mark>`:esc(part)).join('');
 }
 export function wordMarkup(syllables){
- return `<button type="button" class="sl-word" data-lab-word="${esc(wordOf(syllables))}" aria-label="Écouter ${esc(wordOf(syllables))}">${syllables.map(s=>`<span class="sl-syl">${syllableMarkup(s)}</span>`).join('<i aria-hidden="true">·</i>')}</button>`;
+ return `<button type="button" class="sl-word" data-lab-word="${esc(wordOf(syllables))}" aria-label="Entendre ${esc(wordOf(syllables))}">${syllables.map(s=>`<span class="sl-syl">${syllableMarkup(s)}</span>`).join('<i aria-hidden="true">·</i>')}</button>`;
 }
 export function labCards(rule){
  return rule.activity.map((a,i)=>{
@@ -105,8 +106,8 @@ export function labHubMarkup(){
 export function labRuleMarkup(rule,step=0){
  const nav=`<div class="sl-steps" aria-label="Étape ${step+1} sur 3">${['Observe','Astuces','À toi'].map((t,i)=>`<i class="${i<step?'done':i===step?'now':''}">${t}</i>`).join('')}</div>`;
  let body;
- if(step<=0)body=`<h1>${rule.icon} ${esc(rule.question)}</h1><p class="sl-idea">${esc(rule.idea)}</p><div class="sl-rows">${rule.spellings.map(s=>`<div class="sl-row"><b class="sl-badge">${esc(s.g)}</b><div class="sl-words">${s.words.map(wordMarkup).join('')}</div></div>`).join('')}</div><p class="sl-hint">Touche un mot pour l’écouter, syllabe par syllabe.</p><div class="sl-nav"><button class="sl-listen" data-lab-listen>🔊 Écouter</button><button class="sl-next" data-lab-next>Les astuces ›</button></div>`;
- else if(step===1)body=`<h1>${rule.icon} Mes astuces</h1><ol class="sl-tricks">${rule.tricks.map(t=>`<li><span aria-hidden="true">${t[0]}</span><div><b>${esc(t[1])}</b><p>${esc(t[2])}</p></div></li>`).join('')}</ol><div class="sl-nav"><button data-lab-prev>‹ Observer</button><button class="sl-listen" data-lab-listen>🔊 Écouter</button><button class="sl-next" data-lab-next>À toi de jouer ›</button></div>`;
+ if(step<=0)body=`<div class="sl-read" role="button" tabindex="0" data-lab-read aria-label="Toucher pour écouter"><h1>${rule.icon} ${esc(rule.question)}</h1><p class="sl-idea">${esc(rule.idea)}</p></div><div class="sl-rows">${rule.spellings.map(s=>`<div class="sl-row"><b class="sl-badge">${esc(s.g)}</b><div class="sl-words">${s.words.map(wordMarkup).join('')}</div></div>`).join('')}</div><p class="sl-hint">Touche le texte ou un mot : tu l’entends, syllabe par syllabe.</p><div class="sl-nav"><button class="sl-next" data-lab-next>Les astuces ›</button></div>`;
+ else if(step===1)body=`<h1>${rule.icon} Mes astuces</h1><ol class="sl-tricks">${rule.tricks.map(t=>`<li role="button" tabindex="0" data-lab-say="${esc(trickText(t))}"><span aria-hidden="true">${t[0]}</span><div><b>${esc(t[1])}</b><p>${esc(t[2])}</p></div></li>`).join('')}</ol><div class="sl-nav"><button data-lab-prev>‹ Observer</button><button class="sl-next" data-lab-next>À toi de jouer ›</button></div>`;
  else body=`<h1>🎯 À toi de jouer!</h1><p class="sl-idea">3 petites questions pour essayer tes astuces.</p><div class="sl-nav"><button data-lab-prev>‹ Astuces</button><button class="sl-next" data-lab-play>▶ Jouer</button></div>`;
  return `<section class="spelling-lab" aria-label="${esc(rule.title)}"><div class="sl-top"><button data-action="spelling-lab">‹ Les mystères</button><span>${esc(rule.title)}</span></div>${nav}<div class="sl-page">${body}</div></section>`;
 }
