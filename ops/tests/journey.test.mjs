@@ -4,7 +4,7 @@ import {soundStories} from '../../src/sound-stories.js';import {spellingRules} f
 const mely={id:'p1',schoolContext:{stage:'1re année'}},liana={id:'p2',schoolContext:{stage:'3e année'}};
 test('Mely-Ann : les 36 sons une fois chacun, en commençant plus avancé que le « a »',()=>{
  const steps=journeySteps(mely),stories=steps.filter(s=>s.kind==='story');assert.equal(stories.length,soundStories.length);assert.equal(new Set(steps.map(s=>s.id)).size,steps.length);
- assert.ok(steps.every(s=>['story','dict'].includes(s.kind)));assert.equal(steps[0].target,'ou');assert.equal(steps.filter(s=>s.kind==='dict').length,6);assert.equal(steps[6].id,'dict:0');
+ assert.ok(steps.every(s=>['story','dict','lab'].includes(s.kind)));assert.equal(steps[0].target,'eacute');assert.equal(steps.filter(s=>s.kind==='dict').length,6);assert.equal(steps[6].id,'dict:0');
 });
 test('Liana : mystères d\'orthographe mêlés aux histoires, sans doublon',()=>{
  const steps=journeySteps(liana),core=steps.filter(s=>s.kind!=='dict');assert.equal(core.length,soundStories.length+spellingRules.length);assert.equal(new Set(steps.map(s=>s.id)).size,steps.length);assert.ok(steps.filter(s=>s.kind==='dict').length>=10);
@@ -20,7 +20,7 @@ test('la prochaine étape avance quand l\'étape est terminée, par enfant, puis
  const again=journeyNext(m);assert.equal(again.id,journeySteps(m)[0].id);assert.equal(m.journey.laps,1);assert.equal(journeyProgress(m).done,0);
 });
 test('le bouton affiche l\'étape et reste simple',()=>{
- const html=journeyDoorMarkup({...mely});assert.match(html,/data-action="journey"/);assert.match(html,/Étape 1 sur 42/);assert.match(html,/L’histoire du son « ou »/);
+ const html=journeyDoorMarkup({...mely});assert.match(html,/data-action="journey"/);assert.match(html,/Étape 1 sur 43/);assert.match(html,/L’histoire du son « é »/);
  assert.match(journeyDoorMarkup({...liana}),/Mystère : Le son « è »/);
  assert.equal(stepLabel({kind:'story',target:'ch'}),'L’histoire du son « ch »');
 });

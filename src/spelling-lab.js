@@ -74,7 +74,67 @@ const rules=[
   activity:[
    {prompt:'Dans « maison », que fait le s entre deux voyelles?',text:'mai-son',right:'le son z',others:['le son s','il est muet'],explanation:'Un seul s entre deux voyelles fait le son z.'},
    {prompt:'Quel mot s’écrit avec deux s pour le son s?',text:'Cherche le double s.',right:'poisson',others:['maison','rose'],explanation:'Dans poisson, ss fait le son s.'},
-   {prompt:'Dans « rose », le s fait le son…',text:'ro-se',right:'z',others:['s','k'],explanation:'Dans rose, le s entre deux voyelles fait z.'}]}
+   {prompt:'Dans « rose », le s fait le son…',text:'ro-se',right:'z',others:['s','k'],explanation:'Dans rose, le s entre deux voyelles fait z.'}]},
+ {id:'bdpq',icon:'🔄',title:'b, d, p, q : les lettres jumelles',question:'Comment ne jamais mélanger b, d, p et q?',
+  idea:'Ces quatre lettres sont faites d’un bâton et d’un ventre. Tout change selon la place du ventre et du bâton. Avec les bons trucs, plus de mélange.',
+  spellings:[
+   {g:'b (bâton en haut, ventre à droite)',words:[['[b]a','teau'],['[b]a','na','ne']]},
+   {g:'d (bâton en haut, ventre à gauche)',words:[['[d]o','mi','no'],['[d]ou','che']]},
+   {g:'p (bâton en bas, ventre à droite)',words:[['[p]a','pa'],['[p]i','pe']]},
+   {g:'q (bâton en bas, ventre à gauche)',words:[['[q]ua','tre'],['[q]ues','tion']]}],
+  tricks:[
+   ['✋','Le truc des deux poings','Ferme tes deux poings, pouces en l’air. Les pouces sont les bâtons. Le poing gauche fait un b, le poing droit fait un d. Entre les deux, le mot « bed » : b, lit, d.'],
+   ['🚲','Le ventre et le bâton','b et p ont le ventre à droite, comme on écrit : bâton d’abord, ventre ensuite. d et q ont le ventre à gauche. Le bâton qui monte, c’est b ou d. Le bâton qui descend, c’est p ou q.'],
+   ['🪄','Le q a besoin du u','Presque toujours, le q est suivi de u : quatre, question. Si tu vois un q tout seul à la fin, comme dans coq ou cinq, c’est un cas rare à retenir.']],
+  activity:[
+   {prompt:'Quelle lettre a le bâton en bas et le ventre à droite?',text:'Pense à papa.',right:'p',others:['b','d'],explanation:'Le p a son bâton qui descend et son ventre à droite.'},
+   {prompt:'Quel mot commence par la lettre d?',text:'Le ventre est à gauche, le bâton monte.',right:'douche',others:['bateau','papa'],explanation:'Dans douche, la première lettre est d.'},
+   {prompt:'Après le q, on met presque toujours…',text:'qua-tre',right:'la lettre u',others:['la lettre a','la lettre s'],explanation:'Le q aime avoir un u derrière lui : quatre, question.'}]},
+ {id:'fin-e',icon:'⛰️',title:'Le son « é » à la fin',question:'Pourquoi « manger », « mangez » et « j’ai » finissent par le même son?',
+  idea:'Le son é à la fin d’un mot s’écrit de plusieurs façons : é, er, ez, ai. Le petit mot qui est devant t’aide à choisir.',
+  spellings:[
+   {g:'é',words:[['man','g[é]'],['bé','b[é]']]},
+   {g:'er',words:[['man','g[er]'],['jou','[er]']]},
+   {g:'ez',words:[['man','g[ez]'],['sa','v[ez]']]},
+   {g:'ai',words:[['man','ge','r[ai]'],['se','r[ai]']]}],
+  tricks:[
+   ['🔁','Le truc du remplacement','Remplace le mot par vendre. Si « vendre » va, c’est er : manger, vendre. Si « vendu » va, c’est é : mangé, vendu.'],
+   ['🗣️','Vous, tu l’entends?','Si le mot suit « vous », c’est souvent ez : vous mangez, vous jouez.'],
+   ['👤','Moi, je…','Quand c’est moi qui le fera plus tard : je mangerai, je verrai. Avec ai à la fin.']],
+  activity:[
+   {prompt:'Comment finit « il veut manger »?',text:'Remplace par vendre.',right:'er',others:['é','ez'],explanation:'On peut dire « il veut vendre » : donc er.'},
+   {prompt:'Comment finit « vous mangez »?',text:'Vous… mange?',right:'ez',others:['er','é'],explanation:'Après vous, on écrit souvent ez.'},
+   {prompt:'Comment finit « j’ai mangé »?',text:'Remplace par vendu.',right:'é',others:['er','ez'],explanation:'On peut dire « j’ai vendu » : donc é.'}]},
+ {id:'m-bp',icon:'🧓',title:'m devant b et p',question:'Pourquoi on écrit « jambe » et « lampe » avec un m, mais « banane » avec un n?',
+  idea:'Devant b ou p, le n se change en m. Le son ne change pas : an, on et in deviennent am, om, im.',
+  spellings:[
+   {g:'am',words:[['ja[m]','be'],['la[m]','pe']]},
+   {g:'om',words:[['po[m]','pe'],['no[m]','bre']]},
+   {g:'im',words:[['si[m]','ple'],['ti[m]','bre']]},
+   {g:'em',words:[['se[m]','blable'],['te[m]','pête']]}],
+  tricks:[
+   ['🧍','Grand-papa et sa marchette','Pour retenir, imagine un grand-père avec sa marchette : le m ressemble à une marchette. Il apparaît quand b et p sont assis tout près.'],
+   ['⚠️','Une seule exception','Le mot « bonbon » garde son n, même devant b : c’est l’exception à retenir.'],
+   ['👂','Écoute : le son est le même','am dit an, om dit on, im dit in. Tu écris m, mais tu entends le même son.']],
+  activity:[
+   {prompt:'Quel mot s’écrit avec un m devant le p?',text:'Écoute lam-pe.',right:'lampe',others:['banane','lune'],explanation:'Devant p, on écrit m : lampe.'},
+   {prompt:'Dans « jambe », que dit « am »?',text:'jam-be',right:'an',others:['on','in'],explanation:'am dit le même son que an.'},
+   {prompt:'Quel mot est l’exception qui garde son n devant b?',text:'bon-bon',right:'bonbon',others:['jambe','tambour'],explanation:'Bonbon s’écrit avec n, c’est l’exception.'}]},
+ {id:'muets',icon:'🤫',title:'Les lettres spectatrices',question:'Pourquoi « eau », « œuf » et « hôtel » ont des lettres qu’on n’entend pas?',
+  idea:'Dans certains groupes, une lettre parle et les autres regardent en silence. Dans eau, c’est le o qu’on entend. Dans œu, c’est le son e. Et h ne dit presque jamais rien.',
+  spellings:[
+   {g:'eau',words:[['ba','t[eau]'],['cha','p[eau]']]},
+   {g:'œu',words:[['b[œu]','f'],['c[œu]','r']]},
+   {g:'h muet',words:[['[h]ô','tel'],['[h]i','ver']]},
+   {g:'e muet',words:[['pom','m[e]'],['ro','s[e]']]}],
+  tricks:[
+   ['👀','Les spectateurs','Dans eau, e et a regardent sans parler. Dans œu, o et u regardent. Un seul de la bande parle.'],
+   ['🤐','Mademoiselle h','Le h est timide et se cache. Ne la fais pas parler. Seule exception : ch, qui fait ch ou k.'],
+   ['🐢','Le petit e de la fin','À la fin de pomme ou de rose, le e se tait. Il aide seulement la lettre d’avant : pomme, rose.']],
+  activity:[
+   {prompt:'Dans « bateau », quelle lettre parle?',text:'ba-teau',right:'le o',others:['le e','le a'],explanation:'Dans eau, on entend o. e et a sont des spectateurs.'},
+   {prompt:'Le h de « hôtel » dit…',text:'hô-tel',right:'rien du tout',others:['h','ch'],explanation:'Le h est muet dans hôtel.'},
+   {prompt:'Dans « rose », le e de la fin…',text:'ro-se',right:'se tait',others:['dit è','dit é'],explanation:'Le e de la fin se tait.'}]},
 ];
 const plain=syl=>syl.replace(/[\[\]]/g,'');
 export const spellingRules=Object.freeze(rules.map(r=>Object.freeze(r)));
