@@ -2,6 +2,7 @@
 // Contenu 100 % original (aucun texte ni dessin d'éditeur). Les mots qui contiennent le son sont mis en couleur.
 // La mise en couleur suit les mots, pas les syllabes : on ne prétend pas montrer la prononciation exacte.
 import {moreStories} from './sound-stories-more.js';
+import {privateStoryFor} from './private-stories.js';
 import {LESSON_STEPS,gestureStepMarkup,wordsStepMarkup} from './sound-lessons.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // page = [texte raconté, scène en émojis, mots du son à colorer]
@@ -52,7 +53,7 @@ const converted=moreStories.map(([sound,label,title,cover,color,pages,activity])
  pages,
  activity:activity.map(([skill,prompt,text,right,others,explanation])=>({skill,prompt,text,right,others,explanation}))}));
 export const soundStories=Object.freeze([...stories.map(s=>({...s,label:labels[s.id]})),...converted].map(s=>Object.freeze({...s,pages:s.pages.map(([text,scene,words])=>Object.freeze({text,scene,words}))})));
-export const storyFor=id=>soundStories.find(s=>s.id===id)||null;
+export const storyFor=id=>soundStories.find(s=>s.id===id)||privateStoryFor(id)||null;
 export const hasStory=id=>Boolean(storyFor(id));
 // Mots du son touchables dans le jeu : ils sont dits un à un, tels qu'écrits dans la page.
 export const soundWordTexts=Object.freeze([...new Set(soundStories.flatMap(st=>st.pages.flatMap(p=>{const set=new Set(p.words.map(w=>w.toLowerCase()));return (p.text.match(/\p{L}+/gu)||[]).filter(w=>set.has(w.toLowerCase()));})))]);
@@ -60,7 +61,7 @@ export const STORY_TRY_AGAIN='Cherche encore.';
 // Seules les pages sont racontées (la couverture et son introduction n'existent plus).
 export const soundStoryNarrationTexts=Object.freeze([...new Set(soundStories.flatMap(s=>s.pages.map(p=>p.text)))]);
 // Étapes : 0 = couverture, 1..n = pages, n+1 = fin (jouer avec le son).
-export const lastStep=story=>story.pages.length+1+LESSON_STEPS;
+export const lastStep=story=>story.pages.length+1+(story.private?0:LESSON_STEPS);
 // Colore les mots du son : on découpe en mots, on échappe tout, et on n'ajoute que notre balise.
 export function highlight(text,words=[]){
  const set=new Set(words.map(w=>w.toLowerCase()));
@@ -83,12 +84,12 @@ export const soundWordCount=page=>{const set=new Set(page.words.map(w=>w.toLower
 const navMarkup=(at,n,dots)=>`<div class="ss-nav"><button data-story-prev aria-label="Page précédente" ${at<=1?'disabled':''}>◀</button><div class="ss-dots" aria-label="Page ${at} sur ${n}">${dots}</div><button data-story-next aria-label="Page suivante">▶</button></div>`;
 export function soundStoryMarkup(story,{step=1,round=0}={}){
  const n=story.pages.length,last=lastStep(story),at=Math.max(1,Math.min(step,last));
- const dots=Array.from({length:n+LESSON_STEPS},(_,i)=>`<i class="${i+1<at?'done':i+1===at?'now':''}"></i>`).join('');
+ const dots=Array.from({length:n+(story.private?0:LESSON_STEPS)},(_,i)=>`<i class="${i+1<at?'done':i+1===at?'now':''}"></i>`).join('');
  let body;
- if(at>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as trouvé tous les mots du son « ${esc(story.label||story.sound)} ». Un nouveau truc secret t’attend dans ton carnet 🎁. Maintenant, joue avec le son !</p><button class="ss-go" data-story-play>🎯 Jouer avec le son</button><button class="ss-again" data-journey-next>➡ Étape suivante</button><button class="ss-again" data-story-restart>↺ Recommencer l’histoire</button></div>`;
- else if(at===n+1)body=gestureStepMarkup(story)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
- else if(at===n+2)body=wordsStepMarkup(story,story.id.charCodeAt(0)+story.id.length,round)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
+ if(at>=last)body=`<div class="ss-cover" style="--ss:${story.color}"><span class="ss-big" aria-hidden="true">🌟</span><h1>Bravo !</h1><p>Tu as trouvé tous les mots du son « ${esc(story.label||story.sound)} ». ${story.private?'':'Un nouveau truc secret t’attend dans ton carnet 🎁. Maintenant, joue avec le son !'}</p>${story.private?'':'<button class="ss-go" data-story-play>🎯 Jouer avec le son</button>'}<button class="ss-again" data-journey-next>➡ Étape suivante</button><button class="ss-again" data-story-restart>↺ Recommencer l’histoire</button></div>`;
+ else if(!story.private&&at===n+1)body=gestureStepMarkup(story)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
+ else if(!story.private&&at===n+2)body=wordsStepMarkup(story,story.id.charCodeAt(0)+story.id.length,round)+navMarkup(at,n+LESSON_STEPS,dots)+'</div>';
  else{const page=story.pages[at-1],total=soundWordCount(page);
-  body=`<div class="ss-page" style="--ss:${story.color}"><button type="button" class="ss-scene" data-story-read aria-label="Relire la phrase">${page.scene}<i class="ss-ear" aria-hidden="true">🔊</i></button><p class="ss-text" data-story-text>${gameTextMarkup(page)}</p><p class="ss-goal">Touche les mots qui font le son <button type="button" class="ss-label" data-story-sound aria-label="Entendre le son">« ${esc(story.label||story.sound)} »</button> <span class="ss-count" data-story-count>⭐ 0 / ${total}</span></p><div class="ss-nav"><button data-story-prev aria-label="Page précédente" ${at<=1?'disabled':''}>◀</button><div class="ss-dots" aria-label="Page ${at} sur ${n}">${dots}</div><button data-story-next aria-label="Page suivante">▶</button></div></div>`;}
- return `<section class="sound-story" aria-label="Histoire : ${esc(story.title)}"><div class="ss-top"><button data-action="sound-garden">‹ Jardin des sons</button><span>📖 ${esc(story.title)}</span></div>${body}</section>`;
+  body=`<div class="ss-page" style="--ss:${story.color}"><button type="button" class="ss-scene" data-story-read aria-label="Relire la phrase">${page.scene}<i class="ss-ear" aria-hidden="true">🔊</i></button><p class="ss-text" data-story-text>${gameTextMarkup(page)}</p><p class="ss-goal">${total?'':'Écoute la page, puis tourne-la ▶'}${total?`Touche les mots qui font le son <button type="button" class="ss-label" data-story-sound aria-label="Entendre le son">« ${esc(story.label||story.sound)} »</button> <span class="ss-count" data-story-count>⭐ 0 / ${total}</span>`:''}</p><div class="ss-nav"><button data-story-prev aria-label="Page précédente" ${at<=1?'disabled':''}>◀</button><div class="ss-dots" aria-label="Page ${at} sur ${n}">${dots}</div><button data-story-next aria-label="Page suivante">▶</button></div></div>`;}
+ return `<section class="sound-story${story.private?' is-private':''}" aria-label="Histoire : ${esc(story.title)}"><div class="ss-top"><button data-action="${story.private?'private-stories':'sound-garden'}">‹ ${story.private?'Histoires de l’école':'Jardin des sons'}</button><span>📖 ${esc(story.title)}</span></div>${body}</section>`;
 }

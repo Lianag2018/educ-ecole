@@ -1,3 +1,11 @@
+# Histoires de l'école privées — 19 novembre 2026 (America/Toronto)
+
+Branche claude/histoires-ecole-privees (cut de main après #118). Demande du parent : les mêmes histoires que le livre de l'école, pour usage personnel.
+Livré : tuile « Les histoires de l'école » (Français, page 3). Le parent charge un fichier texte (## graphie — Titre, un paragraphe par page, *mot* = mot du son); les histoires sont gardées SEULEMENT dans le localStorage de l'appareil (clé atelier-mots-private-stories-v1), jamais dans le dépôt, le site ou la sauvegarde. Elles se jouent comme les autres histoires (touche les mots, lecture à voix haute), sans leçon ni activité. Gros paragraphes découpés en pages courtes.
+Décision : le dépôt GitHub est public; le texte du livre n'y entre pas. Un fichier de 21 histoires (pages vues par l'équipe) a été préparé hors dépôt et remis au parent.
+Preuves : 621 tests unitaires + 4 suites navigateur OK; capture rendu téléphone. Pas d'appareil réel (chargement du fichier non essayé sur iPad).
+En attente : les autres histoires (a, i, o, u, y, b, c, d, f…) dont les pages n'ont pas été fournies; retour du parent.
+
 # Listes de mots élargies — 19 novembre 2026 (America/Toronto)
 
 Branche claude/plus-de-mots (cut de main après #117). Demande du parent : « tous ces mots » (listes du livre).
