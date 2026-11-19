@@ -1,9 +1,9 @@
 import {soundStories,storyFor} from './sound-stories.js';
 import {spellingRules,ruleFor} from './spelling-lab.js';
 // « Mon parcours » : un seul bouton par fille. Il ouvre toujours la prochaine étape non terminée, sans rien à choisir.
-// Mely-Ann (1re année) : les 36 sons, du plus avancé au plus simple. Liana (3e année) : les mystères d'orthographe mêlés aux histoires des sons.
+// Mely-Ann (1re année) : les 36 sons dans l’ordre du livre de l’école (é, è, puis les consonnes, les sons composés, et les voyelles simples en révision). Liana (3e année) : les mystères d'orthographe mêlés aux histoires des sons.
 // Une étape est terminée quand l'enfant arrive à la fin de l'histoire (ou à la page « À toi » du mystère). Rien n'est noté ni diagnostiqué.
-const ORDER=['ou','on','ch','in','an','eacute','egrave','a','i','o','u','f','v','m','l','s','p','b','t','d','k','g','n','z','j','r','eu','oe','e','a-back','oopen','un','gn','y','w','ui'];
+const ORDER=['eacute','egrave','s','j','f','ch','r','z','v','m','l','n','on','ou','t','eu','p','an','d','k','b','w','g','in','un','gn','y','oe','a-back','oopen','ui','a','e','i','o','u'];
 const OLDER_START=['lab:e-ouvert','story:egrave','lab:c','story:k','story:s','lab:g','story:g','story:j','lab:o','story:o','story:oopen','lab:s','story:z','story:ui'];
 const step=id=>{const [kind,target]=id.split(':');return {id,kind,target};};
 // Une dictée magique (5 mots) s'ajoute après chaque groupe d'étapes : 6 pour Mely-Ann, 4 pour Liana.
