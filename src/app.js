@@ -43,6 +43,7 @@ import {planPanel,planMap,planFor,planMissions,missionOpen,mountPlanImport} from
 import {squishyStages,squishyMap,stageOpen,blob} from './squishy.js';
 import {PhonemePlayer} from './phoneme-player.js';
 import {gestureText,tipFor,wordsFor} from './sound-lessons.js';
+import {seedFamilyContent} from './family-content.js';
 import {privateStoriesMarkup,parseStories,savePrivate,clearPrivate} from './private-stories.js';
 import {loversCards} from './sound-games.js';
 import {trickBookMarkup,trickEntries,trickPages,firstPageToShow} from './trick-book.js';
@@ -419,3 +420,4 @@ function bindSoundGarden(){
 
 window.addEventListener('pagehide',()=>grokLive.stop());document.addEventListener('visibilitychange',()=>{if(document.hidden)grokLive.stop();});
 
+seedFamilyContent().then(changed=>{if(changed&&['private-stories','home'].includes(view))render();}).catch(()=>{});

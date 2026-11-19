@@ -3,6 +3,7 @@
 // Bien écrit : bravo et on passe tout de suite au mot suivant. Sinon : on aide (lettres à revoir en couleur), on le redit et on recommence.
 // Aucune note, aucun diagnostic : l'application compare seulement les lettres écrites au mot proposé.
 import {syllabify} from './syllables.js';
+import {coachTip} from './coach.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const DEFAULTS=Object.freeze({
  young:['chat','lapin','pomme','ballon','soleil','chapeau','papa','maman','lune','vélo','moto','fleur','poule','souris','nuage','bateau','gâteau','cheval','canard','tortue','livre','école','jardin','maison','rose','étoile','mer','chien','arbre','fée'],
@@ -139,12 +140,12 @@ export function mountDictation(root,{words,speak,stop=()=>{},onWordDone=()=>{},o
    }
    // Pas tout à fait : on aide, on le redit, puis on recommence.
    if(tries>=MAX_TRIES){
-    stage.innerHTML=`<div class="dm-help"><b>${wordMarkup(target)}</b></div>`;msg.textContent='On le reverra bientôt. Regarde le mot.';results[i]='review';setDots(i);onWordDone(target,false,tries);
+    stage.innerHTML=`<div class="dm-help"><b>${wordMarkup(target)}</b></div>`;msg.textContent='On le reverra bientôt. '+coachTip(target,attempt,res.wrong);results[i]='review';setDots(i);onWordDone(target,false,tries);
     await say(target);if(!alive)return;await wait(900);return;
    }
-   msg.textContent=res.accentOnly?'Presque ! Regarde les accents.':'Presque ! Regarde les lettres en rouge.';
+   const tip=coachTip(target,attempt,res.wrong);msg.textContent='Presque ! '+tip;
    stage.innerHTML=`<div class="dm-help"><b>${wordMarkup(target,res.accentOnly?[...target].map((c,k)=>strip(c)!==c?k:-1).filter(k=>k>=0):res.wrong)}</b></div>`;
-   await say(target);if(!alive)return;await wait(1800);if(!alive)return;
+   await say(target);if(!alive)return;await say('Presque! '+tip);if(!alive)return;await wait(1200);if(!alive)return;
    msg.textContent='On recommence ensemble.';await wait(700);
   }
  }
