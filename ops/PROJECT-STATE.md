@@ -1,3 +1,11 @@
+# Fête de la récompense — 19 novembre 2026 (America/Toronto)
+
+Branche claude/fete-recompense (cut de main après #128). Demande du parent : quand l'enfant atteint une récompense, une grande ouverture « Récompense obtenue! » avec la photo des deux filles qui volent dans le ciel, animée.
+Livré : src/rewards.js (pendingCelebration, markCelebrated, celebrationMarkup) + maybeCelebrate() dans src/app.js : dès qu'une étape du coffre est atteinte et pas encore remise, un plein écran s'ouvre une seule fois par récompense avec la photo icons/voyage-soeurs.webp (zoom doux animé, lueur, confettis qui tombent), l'icône et le nom de la récompense, la voix dit « Bravo [prénom]! Tu as gagné : … », boutons « Super! » et « ⭐ Voir mon coffre ». Respecte la préférence « réduire les animations ». Un parent seul confirme toujours « Remis » : la fête ne promet rien de plus que « Montre-le à un adulte ».
+Mémorisation : p.rewards.celebrated[id] (par fille); « Repartir à 0 » ne la réinitialise pas encore.
+Preuves : 639 tests unitaires + 4 suites navigateur OK; vérifié dans Chromium (390, 820 portrait, 1180 paysage) : s'ouvre, se ferme, ne revient pas après rechargement, 0 erreur JS. Non essayé sur iPad réel.
+Pas encore fait : fanfare sonore (aucun fichier audio de fête dans le dépôt), fête au 100e/250e… avec photos différentes.
+
 # Effacer réservé à l'adulte — 19 novembre 2026 (America/Toronto)
 
 Branche claude/effacer-adulte (cut de main après #127). Question du parent : « c'est quoi Effacer de cet appareil? ».

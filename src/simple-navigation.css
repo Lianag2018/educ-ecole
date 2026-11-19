@@ -657,3 +657,26 @@ body.kid-simple .simple-world .daily-copy .kid-label{padding:4px 30px;border:3px
 .sl-row{display:grid;grid-template-columns:70px 52px 1fr 52px 52px;align-items:center;gap:8px;padding:8px 10px;border:3px solid #24163f;border-radius:18px;background:#fffaf0;box-shadow:0 3px 0 #24163f}
 .sl-row button{min-height:44px;min-width:44px;border:3px solid #24163f;border-radius:14px;background:#fff;font-size:20px;font-weight:900;color:#24163f}.sl-row button.rec{background:#ff6b6b;color:#fff;animation:dmHint .7s infinite alternate}
 .sl-snd{font-size:clamp(20px,3.4svh,28px);color:#7452a8;font-weight:900}.sl-ms{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;color:#24163f}.sl-ms em{color:#7a6f92;font-weight:700}.sl-msg{margin:0;min-height:1.2em;color:#b3263e;font-weight:700}
+
+/* Fête de la récompense : grande ouverture avec la photo des deux filles qui volent */
+.reward-party{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;background:#2a1650;animation:rpIn .6s ease-out}
+.rp-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:55% 40%;animation:rpFly 14s ease-in-out infinite alternate}
+.rp-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#ffffff40,transparent 60%),linear-gradient(transparent 45%,#2a165099);animation:rpPulse 3s ease-in-out infinite alternate}
+.rp-confetti{position:absolute;inset:0;pointer-events:none}.rp-c{position:absolute;top:-60px;font-size:clamp(26px,5vw,52px);animation:rpFall 6s linear infinite}
+.rp-c1{left:4%;animation-delay:0s}.rp-c2{left:12%;animation-delay:1.4s}.rp-c3{left:20%;animation-delay:.6s}.rp-c4{left:30%;animation-delay:2.2s}.rp-c5{left:40%;animation-delay:.2s}.rp-c6{left:50%;animation-delay:1.8s}
+.rp-c7{left:58%;animation-delay:.9s}.rp-c8{left:66%;animation-delay:2.6s}.rp-c9{left:74%;animation-delay:.4s}.rp-c10{left:82%;animation-delay:1.6s}.rp-c11{left:90%;animation-delay:.8s}.rp-c12{left:96%;animation-delay:2.9s}
+.rp-card{position:relative;z-index:2;margin:0 12px clamp(14px,5svh,48px);padding:clamp(14px,3svh,28px) clamp(16px,4vw,40px);max-width:560px;width:100%;border:4px solid #24163f;border-radius:30px;background:#fffaf0ee;box-shadow:0 8px 0 #24163f;text-align:center;color:#24163f;animation:rpPop .7s .3s cubic-bezier(.2,1.4,.4,1) both}
+.rp-card h1{margin:0;font-family:var(--display,inherit);font-size:clamp(24px,5.4vw,44px);line-height:1.1}.rp-card h2{margin:4px 0;font-size:clamp(22px,4.4vw,36px);color:#7452a8}.rp-card p{margin:0 0 10px;font-weight:700;font-size:clamp(16px,2.6svh,22px)}
+.rp-icon{font-size:clamp(56px,12svh,110px);line-height:1;animation:rpBounce 1.2s ease-in-out infinite}
+.rp-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.rp-actions button{min-height:56px;padding:8px 26px;border:3px solid #24163f;border-radius:999px;font-family:var(--display,inherit);font-size:clamp(18px,2.8svh,24px);font-weight:800;box-shadow:0 4px 0 #24163f;color:#24163f;background:#fff}.rp-actions .rp-go{background:#ffc93c}
+@keyframes rpIn{from{opacity:0}to{opacity:1}}@keyframes rpFly{from{transform:scale(1.04) translate(0,0)}to{transform:scale(1.2) translate(-3%,-3%)}}
+@keyframes rpPulse{from{opacity:.6}to{opacity:1}}@keyframes rpFall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(112svh) rotate(360deg)}}
+@keyframes rpPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}@keyframes rpBounce{50%{transform:translateY(-10px) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.rp-photo,.rp-glow,.rp-c,.rp-icon,.rp-card{animation:none}.rp-c{display:none}}
+
+.rp-photo{object-position:50% 30%}@media(max-width:700px){.rp-photo{object-fit:cover;object-position:55% 20%;height:62%;inset:0 0 auto 0}.rp-glow{background:linear-gradient(transparent 40%,#2a165099)}}
+.reward-party .rp-card h1,.reward-party .rp-card h2{font-family:var(--display,'Inter',system-ui,sans-serif)}
+
+@media(min-width:701px) and (orientation:portrait){.rp-photo{object-fit:cover;object-position:52% 30%;height:60%;inset:0 0 auto 0;animation:rpFlySoft 14s ease-in-out infinite alternate}.rp-glow{background:linear-gradient(transparent 40%,#2a165099)}}
+@keyframes rpFlySoft{from{transform:scale(1)}to{transform:scale(1.06)}}
+@media(max-width:700px){.rp-photo{animation:rpFlySoft 14s ease-in-out infinite alternate}}

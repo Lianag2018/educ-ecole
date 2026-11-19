@@ -66,3 +66,11 @@ export function rowsFromForm(form){
  const rows=[];for(let i=0;i<=MAX_REWARDS;i++){if(!form.has('title'+i))continue;rows.push({id:form.get('id'+i)||'',icon:form.get('icon'+i),title:form.get('title'+i),cost:form.get('cost'+i)});}
  return rows;
 }
+
+// Fête de la récompense : quand une étape est atteinte pour la première fois, une grande ouverture s'affiche une seule fois.
+export const pendingCelebration=p=>{const s=rewardState(p),c=s.celebrated??{};return rewardStatus(p).items.find(r=>r.reached&&!r.claimed&&!c[r.id])??null;};
+export function markCelebrated(p,id){const s=rewardState(p);(s.celebrated??={})[id]=true;}
+export function celebrationMarkup(reward,name='toi'){
+ const confetti=['🎉','⭐','✨','🎈','💖','🌟','🎊','🦄','🌈','🎀','⭐','✨'].map((c,i)=>`<span class="rp-c rp-c${i+1}">${c}</span>`).join('');
+ return `<div class="reward-party" role="dialog" aria-modal="true" aria-label="Récompense obtenue"><img class="rp-photo" src="/icons/voyage-soeurs.webp" alt="" width="1672" height="941"><div class="rp-glow" aria-hidden="true"></div><div class="rp-confetti" aria-hidden="true">${confetti}</div><div class="rp-card"><h1>🎉 Récompense obtenue! 🎉</h1><div class="rp-icon" aria-hidden="true">${esc(reward.icon)}</div><h2>${esc(reward.title)}</h2><p>Bravo ${esc(name)}! Montre-le à un adulte.</p><div class="rp-actions"><button type="button" class="rp-go" data-party-close>Super!</button><button type="button" class="rp-chest" data-party-chest>⭐ Voir mon coffre</button></div></div></div>`;
+}
