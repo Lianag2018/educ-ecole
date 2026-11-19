@@ -1,3 +1,10 @@
+# Effacer réservé à l'adulte — 19 novembre 2026 (America/Toronto)
+
+Branche claude/effacer-adulte (cut de main après #127). Question du parent : « c'est quoi Effacer de cet appareil? ».
+Réponse : ce bouton retirait de la tablette les histoires du livre chargées dans l'app (le dépôt et le site ne changent pas).
+Corrigé : les boutons « Ajouter des histoires ou des mots » et « Effacer de cet appareil » ne s'affichent plus que pour l'adulte (appui long sur « Adulte »); effacer réinitialise aussi le marqueur de chargement, donc les histoires reviennent au prochain démarrage (avant, elles ne revenaient pas).
+Preuves : 636 tests unitaires + 4 suites navigateur OK (table-songs relancée après nettoyage d'un Chromium resté ouvert). Non essayé sur iPad réel.
+
 # Sons étirés et laboratoire des sons — 19 novembre 2026 (America/Toronto)
 
 Branche claude/sons-etires (cut de main après #126). Retour du parent : le son « ch » est trop court et sec, pas reconnaissable; il faut l'étirer sur environ 1 seconde (« chhhh ») et pouvoir changer / enregistrer les sons.
