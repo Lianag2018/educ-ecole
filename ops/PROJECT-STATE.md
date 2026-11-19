@@ -1,3 +1,10 @@
+# Accueil plus vivant — 19 novembre 2026 (America/Toronto)
+
+Branche claude/accueil-vivant. Demande du parent : l'accueil de https://educ-ecole.vercel.app/ doit être plus vivant et animé.
+Livré : couche décorative CSS (.welcome-life, aucun clic) sur l'illustration : étoiles qui scintillent, deux papillons qui traversent, pétales qui tombent, lettres (a, é, ou, ch, on, m) qui s'envolent des livres, boutons « C'est parti » qui pulsent avec un reflet, quatre cartes d'activité qui respirent, reflet qui passe sur le titre. Coupée par la case « Animations douces » et par reduced-motion. Vidéo d'accueil existante inchangée.
+Preuves : rendu local dans Chromium (28 éléments animés au lieu de 1, capture vérifiée); tests unitaires et 4 suites navigateur (voir PR). Je n'ai pas pu ouvrir le site en ligne ni le Chrome du parent (réseau refusé). Non essayé sur iPad réel.
+En attente : retour du parent sur l'intensité; confirmation du déploiement Vercel.
+
 # Livre complet : gestes, import privé et dépôt redevenu public — 19 novembre 2026 (America/Toronto)
 
 Branche claude/livre-complet. Demande du parent : utiliser toutes les pages du livre (histoires, gestes, listes de mots) dans l'app, pour usage familial.
