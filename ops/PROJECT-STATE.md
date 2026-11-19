@@ -1,3 +1,12 @@
+# Histoires et mots du livre dans l'app — 19 novembre 2026 (America/Toronto)
+
+Branche claude/contenu-famille (cut de main après #125). Le parent a passé le dépôt en PRIVÉ (vérifié : gh api private=true) et demandé de tout mettre dans l'app.
+Livré : dossier family/ (histoires-ecole.md : 21 histoires; mots-du-livre.md : 1303 mots classés par son), copié dans dist par le build et chargé automatiquement au démarrage (une fois par version, dans le localStorage de l'appareil : aucune action sur les tablettes). Vérifié dans Chromium : 21 histoires, 1303 mots, 0 erreur JS. La page « Mes histoires » est paginée (6 par page).
+Serveur local : ops/server.mjs sert /family/histoires-ecole.md et /family/mots-du-livre.md seulement (liste blanche).
+Point de vigilance : le dépôt est privé, mais le SITE Vercel (educ-ecole.vercel.app) n'a pas de mot de passe; les deux fichiers family/ y sont lisibles par quiconque connaît leur adresse exacte. Le parent en a été informé et a choisi de continuer. Pour fermer cet accès : protéger le déploiement dans Vercel (Settings > Deployment Protection) ou retirer family/ et revenir à l'import par fichier.
+Preuves : 631 tests unitaires + 4 suites navigateur OK. Non essayé sur iPad réel.
+Non couvert : histoires dont le texte n'a pas été fourni (a, i, o, u, y, b, d, f, g, s, t…); mots h, x, w du livre sans leçon correspondante.
+
 # 25 mystères d'orthographe — 19 novembre 2026 (America/Toronto)
 
 Branche claude/plus-de-mysteres (cut de main après #124). Retour du parent : seulement 9 mystères dans « Pourquoi ça s'écrit comme ça? », pas assez d'aide.
