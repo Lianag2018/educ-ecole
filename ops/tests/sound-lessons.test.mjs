@@ -2,8 +2,8 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {soundStories,soundStoryMarkup,lastStep} from '../../src/sound-stories.js';
 import {gestures,lessonWords,wordsFor,gestureFor,LESSON_STEPS} from '../../src/sound-lessons.js';
 import {loversCards,loverSyllables} from '../../src/sound-games.js';
-test('chaque son a un geste, un bruit et quatre mots découpés en syllabes',()=>{
- for(const s of soundStories){assert.ok(gestures[s.id],'geste manquant '+s.id);assert.match(gestures[s.id][1],/«/);assert.equal(wordsFor(s.id).length,4,'4 mots pour '+s.id);}
+test('chaque son a un geste, un bruit et au moins huit mots découpés en syllabes',()=>{
+ for(const s of soundStories){assert.ok(gestures[s.id],'geste manquant '+s.id);assert.match(gestures[s.id][1],/«/);const w=wordsFor(s.id);assert.ok(w.length>=8,'au moins 8 mots pour '+s.id);assert.equal(new Set(w.map(x=>x.plain)).size,w.length,'doublon '+s.id);for(const x of w)assert.match(x.syllables.join('-'),/^[\p{L}’]+(-[\p{L}’]+)*$/u,x.plain);}
 });
 test('les étapes de leçon (geste, mots) s\'ajoutent avant la fin de l\'histoire',()=>{
  const s=soundStories[0],n=s.pages.length;assert.equal(lastStep(s),n+1+LESSON_STEPS);
@@ -15,4 +15,8 @@ test('les cartes des amoureux ont une seule bonne réponse parmi 3 choix',()=>{
 });
 test('le texte du livre n\'est pas recopié : pas de page citée',()=>{
  const all=JSON.stringify([gestures,lessonWords]);assert.doesNotMatch(all,/Raconte-moi|Laplante|Atouts/i);
+});
+test('les mots se parcourent par pages de 6 avec « Autres mots »',()=>{
+ const s=soundStories[0];const a=soundStoryMarkup(s,{step:s.pages.length+2,round:0}),b=soundStoryMarkup(s,{step:s.pages.length+2,round:1});
+ assert.match(a,/data-lesson-more/);assert.notEqual(a,b);assert.equal((a.match(/data-lesson-word/g)||[]).length,6);
 });
