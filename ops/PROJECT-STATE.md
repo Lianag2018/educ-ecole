@@ -1,3 +1,11 @@
+# Cadeau de la sœur et ouverture captivante — 19 novembre 2026 (America/Toronto)
+
+Branche claude/cadeau-soeur (cut de main après #132). Demandes du parent : (1) seules les étoiles de la gagnante sont dépensées; elle offre un cadeau à sa sœur, qui voit l'ouverture animée avec le cadeau reçu; (2) adapter les vidéos et rendre l'ouverture plus captivante.
+Livré : (a) Fête de la sœur : titre « 🎁 Un cadeau de Mely-Ann! 🎁 », banderole « Cadeau de Mely-Ann pour Liana! », message « Ta sœur Mely-Ann t'offre cette récompense. Dis-lui merci! », ligne « 🎁 Pour toi! » (plus de « 0 étoile »), voix « Surprise Liana! Ta sœur Mely-Ann t'offre un cadeau : … ». La gagnante entend aussi « Tu l'offres aussi à ta sœur! » et lit « Tu offres aussi cette récompense à Liana! ». (b) Ouverture en séquence (≈2,5 s avant le reste) : écran sombre, cadeau qui grossit et tremble avec un halo doré, flash blanc, révélation de la photo des filles (zoom + lumière), puis confettis, avion et banderole, feux d'artifice décalés, carte qui apparaît, compteur d'étoiles; la voix démarre au moment de l'éclat. Avec « reduced motion », l'ouverture est sautée et tout s'affiche directement.
+Vidéos de démonstration (sans son, hors dépôt) : gagnante téléphone, cadeau de la sœur téléphone, gagnante tablette (17 s), enregistrées avec Playwright et converties avec ffmpeg, début coupé pour commencer sur le cadeau; remises au parent dans la conversation.
+Preuves : 653 tests unitaires + 4 suites navigateur OK; captures de la séquence d'ouverture. Non essayé sur iPad réel.
+En attente : fanfare sonore (aucun son de fête dans le dépôt); le parent n'a pas encore confirmé s'il veut McDo repris plusieurs fois.
+
 # Récompenses partagées entre les deux filles — 19 novembre 2026 (America/Toronto)
 
 Branche claude/recompenses-partagees (cut de main après #131). Demande du parent : chaque récompense obtenue par une fille est donnée aux deux filles; montrer la fête en vidéo.

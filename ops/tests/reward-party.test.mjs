@@ -88,7 +88,12 @@ test('un cadeau disparaît si la fille qui l\'avait gagné dépense ses étoiles
 });
 test('la fête nomme les deux filles sur la banderole; la sœur voit un cadeau sans choix',()=>{
  const mine=celebrationMarkup({icon:'🍟',title:'McDo',cost:100},'Mely-Ann',{points:100,tier:1,names:['Mely-Ann','Liana'],next:{icon:'x',title:'y',missing:5}});
- assert.match(mine,/Félicitations Mely-Ann et Liana!/);assert.match(mine,/pour vous deux/);assert.match(mine,/data-party-now/);
+ assert.match(mine,/Félicitations Mely-Ann et Liana!/);assert.match(mine,/Tu offres aussi cette récompense à Liana/);assert.match(mine,/data-party-now/);
  const gift=celebrationMarkup({icon:'🍟',title:'McDo',cost:100},'Liana',{points:0,tier:1,names:['Mely-Ann','Liana'],gift:'Mely-Ann',next:{icon:'x',title:'y',missing:5}});
- assert.match(gift,/Mely-Ann a gagné cette récompense pour vous deux/);assert.match(gift,/data-party-close/);assert.doesNotMatch(gift,/data-party-now|data-party-save|data-party-pick/);
+ assert.match(gift,/Un cadeau de Mely-Ann!/);assert.doesNotMatch(gift,/data-party-count|0 étoiles/);assert.match(gift,/Pour toi!/);assert.match(gift,/Cadeau de Mely-Ann pour Liana!/);assert.match(gift,/Ta sœur Mely-Ann t'offre cette récompense/);assert.match(gift,/data-party-close/);assert.doesNotMatch(gift,/data-party-now|data-party-save|data-party-pick/);
+});
+test('l\'ouverture commence par un cadeau qui éclate dans un flash avant de révéler les filles',()=>{
+ const html=celebrationMarkup({icon:'🍟',title:'McDo'},'Liana',{points:100,tier:1});
+ assert.match(html,/class="rp-intro"/);assert.match(html,/class="rp-box"/);assert.match(html,/class="rp-flash"/);
+ assert.ok(html.indexOf('rp-photo')<html.indexOf('rp-intro'));
 });
