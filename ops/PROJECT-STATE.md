@@ -1,3 +1,11 @@
+# Méthode des syllabes dans la dictée — 19 novembre 2026 (America/Toronto)
+
+Branche claude/methode-syllabes (cut de main après #120). Demande du parent : pour les longs mots (ex. bibliothèque), apprendre à découper en syllabes pour pouvoir l'écrire.
+Livré : src/syllables.js (découpage à l'écrit : « bi-bli-o-thè-que »; d'abord le découpage connu des mots des leçons, sinon règles : voyelles composées et nasales, consonne seule avant la voyelle, deux consonnes séparées sauf bl/br/cl/cr/dr/fl/fr/gl/gr/pl/pr/tr/vr, ch/ph/th/gn/qu comme une lettre, e muet final rattaché).
+La dictée magique ajoute le temps « Découpons en syllabes » : l'app dit chaque syllabe en l'allumant, puis l'enfant touche chaque syllabe dans l'ordre en la disant; l'épellation regroupe les lettres par syllabe (sans couper une syllabe en fin de ligne); la consigne d'écriture donne le nombre de syllabes; le mot s'affiche en syllabes colorées.
+Limite : découpage par règles, des exceptions peuvent exister (ex. nua-ge / nu-a-ge); les mots des leçons ont un découpage écrit à la main.
+Preuves : 624 tests unitaires + 4 suites navigateur OK; parcours bibliothèque (5 syllabes) vérifié dans Chromium, 0 erreur JS. Non essayé sur iPad / Apple Pencil réels.
+
 # Écrire les mots : lire, relire, épeler, magie, écrire — 19 novembre 2026 (America/Toronto)
 
 Branche claude/ecrire-les-mots (cut de main après #119). Demande du parent : tous les mots en jeu d'écriture; je lis le mot, elle le relit, elle l'épelle, il disparaît par magie, elle l'écrit avec l'Apple Pencil.
