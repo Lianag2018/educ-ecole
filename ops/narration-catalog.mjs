@@ -9,6 +9,7 @@ import {ORAL_FEEDBACK,ORAL_WORD_TEXTS} from '../src/oral-check-targets.js';
 import {squishyStages} from '../src/squishy.js';
 import {gardenSounds,gardenWelcome,gardenEncouragement} from '../src/sound-garden.js';
 import {soundCards} from '../src/sound-cards.js';
+import {soundStoryNarrationTexts} from '../src/sound-stories.js';
 import {createHash} from 'node:crypto';
 import {bank} from '../src/content.js';
 import {olderReading,mathsFor,socialFor,storyCards} from '../src/learning.js';
@@ -20,6 +21,8 @@ import {numberWords} from '../src/numbers.js';
 import {spokenActivity} from '../src/speech.js';
 export const MODEL='gpt-4o-mini-tts-2025-12-15',VOICE='coral';
 export const INSTRUCTIONS='Parle en français québécois naturel, avec une voix féminine douce, chaleureuse et rassurante. Lis lentement et articule clairement, sans exagérer l’accent. Respecte les pauses et l’intonation du texte. Lis seulement le texte fourni, sans introduction. Reste exclusivement en français du Québec du début à la fin, y compris pour les mots isolés et les nombres. Ne prononce aucun mot comme un mot anglais. Ne rajoute ni syllabe ni mot. Garde les voyelles françaises distinctes et les voyelles nasales naturelles.';
+// Histoires des sons : narratrice de livre audio pour enfants (voix expressive, pauses, dialogues distincts).
+export const STORY_INSTRUCTIONS='Tu es une narratrice de livres audio pour enfants, haut de gamme. Parle en français québécois naturel, avec une voix féminine chaude, chaleureuse et vivante. Raconte avec expression : ralentis légèrement aux moments doux, fais de petites pauses aux virgules et aux points, donne une voix distincte et expressive aux dialogues entre guillemets, mets de la joie dans les points d’exclamation et prononce les onomatopées avec amusement. Reste claire et naturelle, sans exagérer ni chanter. Lis uniquement le texte donné, sans rien ajouter.';
 export const NATURAL_INSTRUCTIONS=INSTRUCTIONS.replace('Lis lentement et articule clairement', 'Lis à un rythme naturel et fluide, avec une articulation claire, sans étirer les syllabes');
 export function narrationCatalog(){
  // Alignment uses the activity's source collection, not number/operator words
@@ -55,6 +58,7 @@ export function narrationCatalog(){
  const numericTexts=new Set([...texts].filter(t=>operatorTexts.has(t)||numberNames.has(t)||/ (plus|moins|fois|égale|divisé par|est plus petit que|est plus grand que) /.test(t)));
  for(let n=1;n<=6;n++)for(const op of ['+','−'])for(const q of tablePractice(n,op))texts.add(q.explanation);
  const baseTexts=new Set(texts);
+ const storyTexts=new Set(soundStoryNarrationTexts);for(const text of storyTexts)texts.add(text);
 
  for(const text of rmsNarrationTexts)texts.add(text);
  // Fixed oral feedback and whole-word models contain no child recording.
@@ -88,12 +92,13 @@ export function narrationCatalog(){
  return [...texts].map(text=>{
  const natural=phonics.has(text)||isFrenchWordModel(text)||wordModels.has(text)||blends.has(text)||socialTexts.has(text);
  let instructions=natural?'Lis exclusivement en français, avec une prononciation française du Québec claire et usuelle, une voix féminine douce et un débit naturel. Garde chaque mot entier et ses sons liés. Ne chante pas, ne scande pas et n’étire aucune voyelle. Ne rajoute pas de e final ni de nom de lettre. Fais seulement une courte pause entre les phrases. Lis uniquement le texte fourni.':(naturalTexts.has(text)?NATURAL_INSTRUCTIONS:INSTRUCTIONS);
+ if(storyTexts.has(text))instructions=STORY_INSTRUCTIONS;
  if(natural)instructions+=' Ne bascule jamais en anglais, même pour un mot court. Le u de lune et de lecture est différent du ou de loup. Pain, main et pin ont une voyelle nasale française. Dans choisis, le s entre voyelles se prononce comme z. Dans rapporte, les deux p écrits ne donnent qu’un seul son p. Dans bibliothèque, th se prononce t et que se prononce k. Dans après, le s final est muet et è est une voyelle ouverte.';
  if(text==='Un bateau.')instructions+=' Prononce les deux mots complets : le déterminant « un » puis « bateau ». Fais entendre clairement le déterminant dès le début, sans ajouter de commentaire ni répéter la phrase.';
  if(numericTexts.has(text))instructions+=numericInstructions;
- const speed=natural||naturalTexts.has(text)?1:.85;
+ const speed=storyTexts.has(text)?.92:natural||naturalTexts.has(text)?1:.85;
  // Preserve all unrelated cache keys. Revised phonics use a new key including
  // their natural generation speed, so old defective clips cannot be reused.
- const key=MODEL+'|'+VOICE+'|'+instructions+'|'+text+(natural?'|speed='+speed:'');
+ const key=MODEL+'|'+VOICE+'|'+instructions+'|'+text+(natural?'|speed='+speed:'')+(storyTexts.has(text)?'|story|speed='+speed:'');
  return {text,instructions,speed,numeric:operatorTexts.has(text)||numberNames.has(text)||numericActivityTexts.has(text),align:baseTexts.has(text),file:createHash('sha256').update(key).digest('hex')+'.mp3'};});
 }
