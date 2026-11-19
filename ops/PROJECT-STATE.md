@@ -1,3 +1,11 @@
+# Mon carnet de trucs — 19 novembre 2026 (America/Toronto)
+
+Branche claude/carnet-de-trucs (cut de main après #116). Demande du parent : un système éducatif qui explique aux deux filles qu'on leur donne des trucs à découvrir, en s'amusant.
+Livré : « Mon carnet de trucs » (tuile dans Français, page 3, pour les deux filles). Chaque histoire de son terminée donne le truc du son (geste + bruit); chaque mystère d'orthographe terminé donne ses 3 astuces.
+Les trucs non découverts restent cachés (🔒 « Truc secret »); toucher un truc le lit à voix haute; 4 par page, compteur « x / 39 » (Mely-Ann) ou plus pour Liana. La page « Bravo » annonce le nouveau truc.
+Preuves : 617 tests unitaires + 4 suites navigateur OK; capture de rendu téléphone. Pas d'appareil réel.
+En attente : jeux « Syllabe secrète », « Disparition », « Cachottier »; retour du parent.
+
 # Leçon en 5 temps et jeu des amoureux — 19 novembre 2026 (America/Toronto)
 
 Branche claude/systeme-lecon-jeux (cut de main après #115). Demande du parent : un vrai système d'éducation sous forme de jeu, en se servant des premières pages du livre (démarche, gestes, difficultés, jeux).
