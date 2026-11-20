@@ -3,7 +3,8 @@
 Branche claude/defi-3-secondes (même PR). Demande du parent : une roue façon machine à sous, avec toutes les tuiles et tous les liens de sites, où la fille choisit la matière, tourne la roue et entre directement où elle s'arrête; bien imagée, avec un aperçu à côté; au bas de la page d'accueil de chaque fille, remodelée pour chacune.
 Livré : src/activity-wheel.js + .css; section « Ma roue des surprises » au bas de l'écran de chaque fille; elle lit les vraies tuiles de l'écran (aucune liste en double); choix de la matière (Tout, Lire et écrire, Les maths, Écouter, École); un rouleau défile et ralentit (3,4 s) puis s'arrête sur une activité, un panneau d'aperçu à côté montre l'image, la matière et une phrase; « Y aller ! » ouvre l'activité (les liens de l'école s'ouvrent dans un nouvel onglet), « Encore » retourne. Mely-Ann : rose et papillon; Liana : violet et licorne. Sans animation si le système demande moins de mouvement. Aucun son pour l'instant.
 Preuves : essai Chromium pour les deux filles (tirage, entrée dans l'activité, 0 erreur JS); test unitaire du rouleau (arrêt sur la cible, pas de doublon voisin); vidéos d'aperçu remises au parent. Non essayé sur iPad réel.
-En attente : retour du parent (sons de machine à sous, tirage qui évite les activités déjà faites, place dans la page).
+Sons : tic-tic synchronisés avec le ralentissement du rouleau (courbe du CSS), ronron qui descend, « ding » à l'arrêt puis petite fanfare do-mi-sol-do (src/wheel-sound.js, Web Audio, aucun fichier); bouton 🔊/🔇 dans la roue, même interrupteur que les sons de fête; rendu hors ligne vérifié (crête 0,30, pas de silence pendant la rotation). Non écoutés par un humain.
+En attente : retour du parent (volume, tirage qui évite les activités déjà faites).
 
 # Accueil de chaque fille en un seul écran, accès directs — 20 novembre 2026 (America/Toronto)
 
