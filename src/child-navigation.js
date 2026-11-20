@@ -68,15 +68,16 @@ export function subjectHome(p,subject,page=0){
  const older=advanced(p),french=subject==='french';
  // Pages de quatre grandes tuiles pour l'enfant : rien n'est retiré, tout reste atteignable avec « Encore ».
  // L'adulte voit toutes les pages d'un coup.
- const vid=tile('Vidéos et petits défis','Maître Lucas · Prof à la guitare','🎬','data-action="videos-french"'),songs=tile('Le français en chansons','Écouter, jouer et comprendre','🎵','data-action="songs-french"'),trip=tile('Nos histoires de voyage','La carte de notre voyage','🏝️','data-action="adventure"'),world=tile('Découvrir le monde','Mon école et mon quartier','🌍','data-subject="3"'),ecole=tile('Les histoires de l’école','Mes histoires du livre','📚','data-action="private-stories"'),carnet=tile('Mon carnet de trucs','Les trucs secrets que je découvre','🎁','data-action="trick-book"'),dict=tile('Dictée magique','Regarder, écouter, écrire mes mots','✍️','data-action="dictation"');
+ const defi=tile('Défi 3 secondes','Lire les mots vite','⏱️','data-action="word-challenge"'),vid=tile('Vidéos et petits défis','Maître Lucas · Prof à la guitare','🎬','data-action="videos-french"'),songs=tile('Le français en chansons','Écouter, jouer et comprendre','🎵','data-action="songs-french"'),trip=tile('Nos histoires de voyage','La carte de notre voyage','🏝️','data-action="adventure"'),world=tile('Découvrir le monde','Mon école et mon quartier','🌍','data-subject="3"'),ecole=tile('Les histoires de l’école','Mes histoires du livre','📚','data-action="private-stories"'),carnet=tile('Mon carnet de trucs','Les trucs secrets que je découvre','🎁','data-action="trick-book"'),dict=tile('Dictée magique','Regarder, écouter, écrire mes mots','✍️','data-action="dictation"');
  const groups=french?(older?[
-  [tile('Mes mots','Vocabulaire et orthographe','🦋','data-action="words"'),tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"'),tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"'),tile('Pourquoi ça s’écrit comme ça?','Les sons, les lettres et les astuces','🔎','data-action="spelling-lab"')],
+  [tile('Mes mots','Vocabulaire et orthographe','🦋','data-action="words"'),tile('Les histoires','Lire et comprendre','🦄','data-scene="reading"'),tile('Les sons et syllabes','Assembler et relire','📖','data-scene="syllables"'),defi],
   [vid,songs,tile('Mon archipel Squishy','12 compagnons · 3 chemins','🫧','data-action="squishy"'),trip],
-  [world,dict,carnet,ecole]
+  [tile('Pourquoi ça s’écrit comme ça?','Les sons, les lettres et les astuces','🔎','data-action="spelling-lab"'),world,dict,carnet],
+  [ecole]
  ]:[
-  [tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"'),tile('Les syllabes','Des mots de deux ou trois syllabes','🦋','data-scene="syllables"'),tile('Je lis de petites histoires','Lire et comprendre','📖','data-scene="reading"'),vid],
+  [tile('Les sons','Écouter et découvrir','🌸','data-action="rms-course"'),tile('Les syllabes','Des mots de deux ou trois syllabes','🦋','data-scene="syllables"'),tile('Je lis de petites histoires','Lire et comprendre','📖','data-scene="reading"'),defi],
   [songs,tile('Toutes mes cartes de sons','Écouter et découvrir','🔤','data-action="sound-garden"'),trip,world],
-  [dict,carnet,ecole]
+  [dict,carnet,ecole,vid]
  ]):[
   [tile('Les nombres',older?'Compter jusqu’à 9 999':'Compter jusqu’à 99','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
    tile('Les calculs',older?'Ajouter, enlever et grouper':'Ajouter et enlever',islandIcon('palmiers'),older?'data-illustrated-calculation':'data-subject="2"'),

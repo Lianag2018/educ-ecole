@@ -1,3 +1,11 @@
+# Défi 3 secondes (mots fréquents) — 20 novembre 2026 (America/Toronto)
+
+Branche claude/defi-3-secondes. Demande du parent : prendre les mots de https://www.pedagonet.com/other/liste.htm et en faire un défi de lecture, 3 secondes par mot.
+Source : la page ne contient que deux listes en images (Giasson, mots qui font 50 % des textes, p. 172; Nadon, mots utiles en 1re année, p. 137), lues et saisies à la main (src/word-challenge.js; les élisions seules j', l', qu'... sont exclues; 100+ mots Nadon, Giasson pour la plus grande).
+Livré : tuile « Défi 3 secondes » (1re page du français des deux filles); tours de 10 mots; un mot, une barre de 3 s, « Je l'ai lu ! » à toucher; temps écoulé = le mot est dit par la voix de l'appareil et compté à revoir; mots ratés reviennent en premier, puis les moins réussis; 8 mots sur 10 = +5 étoiles (3 tours par jour au plus; un événement defi:jour:n dans l'historique du profil); Mely-Ann = liste Nadon, Liana = Nadon + Giasson. La lecture est dite à voix haute par l'enfant : l'app ne l'évalue pas (aucune reconnaissance vocale), un adulte peut écouter.
+Preuves : 662 tests unitaires; essai Chromium pour les deux filles (tour complet, +5 étoiles dans le bon profil, 0 erreur JS); suites navigateur (voir PR). Non essayé sur iPad réel; voix de l'appareil non écoutée par un humain.
+En attente : retour du parent (durée 3 s, nombre de mots par tour, étoiles); déploiement Vercel (limite de 100 déploiements par jour atteinte le 19 novembre).
+
 # Code secret retiré, blocage Vercel — 19 novembre 2026 (America/Toronto)
 
 Branche claude/retire-code-secret. Demande du parent : enlever le code d'accès (mot de passe) des filles. Les PR du code secret et du « code oublié » sont annulées (src/pin-gate.js, styles, tests et clics de test retirés). L'entrée dans le monde de chaque fille est de nouveau directe. Comme ces deux versions n'ont jamais été déployées, la version en ligne ne change pas.
