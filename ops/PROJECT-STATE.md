@@ -1,3 +1,11 @@
+# Accueil de chaque fille en un seul écran, accès directs — 20 novembre 2026 (America/Toronto)
+
+Branche claude/defi-3-secondes (même PR que le défi). Demande du parent : trop de menus et de sous-menus, accès difficiles à trouver (ex. Météormath 2, MaZone CEC, défi vitesse); une page d'accueil dédiée à chaque fille, en un clic; le panneau « Lis ce nombre à voix haute » de l'accueil ne sert à rien.
+Livré : (a) page de chaque fille (childHome, src/child-hub.css) : un seul écran, sans défilement à 1180×820, avec « Mon parcours » et « Mon aventure du jour » en haut, puis trois blocs (Lire et écrire, Les maths, Écouter et découvrir) où chaque tuile ouvre directement l'activité, et un bloc « Mes jeux de l'école » (Météormath 2 pour les deux; Nougat pour Mely-Ann; MaZone CEC et Voca pour Liana; liens externes, nouvel onglet); « Tout le français » et « Tous les maths » gardent l'ancien menu complet. Mely-Ann et Liana ont chacune leur liste (1re / 3e année). (b) Accueil illustré : le panneau « Lis ce nombre » est remplacé par « Défi 3 secondes » avec un bouton par fille; la lecture d'un nombre avec la maîtresse (voix en direct) reste dans « Les maths » (« Lire un nombre avec la maîtresse »). (c) Les papillons de l'accueil ne passent plus sur les visages.
+Preuves : essai Chromium qui clique chaque tuile des deux filles dans un navigateur neuf (27 et 29 accès, 0 problème, 0 erreur JS; Pop-it s'ouvre en fenêtre); le défi démarre depuis l'accueil pour la bonne fille; tests unitaires et suites navigateur (tests de navigation et de voix mis à jour pour la nouvelle architecture). Non essayé sur iPad réel ni en téléphone.
+Limites : liens externes non ouverts ici (aucun accès réseau vers ces sites), seulement vérifiés comme adresses https; l'écran tient en une vue sur tablette paysage, mais défile sur téléphone.
+En attente : retour du parent sur l'organisation et les images; déploiement Vercel (limite de 100 déploiements par jour).
+
 # Défi 3 secondes (mots fréquents) — 20 novembre 2026 (America/Toronto)
 
 Branche claude/defi-3-secondes. Demande du parent : prendre les mots de https://www.pedagonet.com/other/liste.htm et en faire un défi de lecture, 3 secondes par mot.

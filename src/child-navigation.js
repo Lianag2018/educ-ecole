@@ -66,6 +66,7 @@ export function childHome(p,day){
   hubTile('Les nombres','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
   hubTile('Les calculs','➕',older?'data-illustrated-calculation':'data-subject="2"'),
   hubTile('Défi vitesse','🚀','data-action="speed-math"'),
+  hubTile('Lire un nombre avec la maîtresse','🎤','data-welcome-voice="number"'),
   older?hubTile('Mes tables','🔢','data-action="weekly"'):hubTile('Mes mini-défis','🌻','data-action="mini-garden"'),
   hubTile('Bonds de nombres','🐸','data-action="skip-counting"'),
   older?hubTile('Tables en chansons','🎵','data-action="table-songs"'):hubTile('Mon Pop-it','🔴','data-popit')
