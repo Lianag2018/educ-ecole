@@ -1,3 +1,11 @@
+# Anglais, histoire, sciences — 20 novembre 2026 (America/Toronto)
+
+Branche claude/matieres-anglais-histoire-sciences (inclut le défi 3 secondes, le nouvel écran des filles et la roue). Demande du parent : ajouter anglais, histoire et sciences pour les deux filles; le parent donnera la matière.
+Livré : src/subjects.js + .css; bloc « Mes autres matières » (🇬🇧 Anglais, 🏛️ Histoire, 🔬 Sciences) sur l'écran de chaque fille et dans la roue (catégorie « Autres matières »). Page d'une matière : liste de leçons; chaque paragraphe a un bouton 🔊 (voix de l'appareil; les phrases marquées « en: » se disent en anglais, en-US); questions à choix une à la fois (« Essaie encore ! » sans pénalité de forme, « Bravo ! » puis la suivante); +5 étoiles une seule fois par leçon si toutes les réponses sont justes du premier coup (événement matiere:matière:n dans l'historique du profil). Sans contenu, la page dit « arrive bientôt » (rien de faux ni de vide). Contenu gardé sur l'appareil par fille et par matière (atelier-mots-subjects-v1), jamais dans le dépôt.
+Format d'un fichier de matière (import adulte sur la page de la matière, mode Adulte) : « # Anglais » (ou Histoire, Sciences); « pour: Liana » ou « pour: Mely-Ann » (sinon les deux); « ## Titre de la leçon »; des paragraphes; « en: phrase anglaise »; « ? Question | bonne réponse | autre | autre ».
+Preuves : 3 tests unitaires du format; essai Chromium pour les deux filles : page vide, import simulé dans le stockage, leçon, quiz, +5 étoiles, 0 erreur JS. Import par le sélecteur de fichier non essayé de bout en bout (même code que celui des histoires). Non essayé sur iPad réel.
+En attente : la matière du parent (anglais, histoire, sciences; par année).
+
 # Roue des surprises (machine à sous) — 20 novembre 2026 (America/Toronto)
 
 Branche claude/defi-3-secondes (même PR). Demande du parent : une roue façon machine à sous, avec toutes les tuiles et tous les liens de sites, où la fille choisit la matière, tourne la roue et entre directement où elle s'arrête; bien imagée, avec un aperçu à côté; au bas de la page d'accueil de chaque fille, remodelée pour chacune.

@@ -18,13 +18,14 @@
 .child-hub .hub-tile strong{font-family:inherit;font-size:.95rem;line-height:1.1}
 .child-hub .hub-more{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 0}
 .child-hub .hub-more button{min-height:44px;padding:6px 16px;border:2px solid #24163f;border-radius:16px;background:#fff;color:#3b2466;font-weight:700;cursor:pointer}
-@media(max-width:900px){.child-hub .hub-secs{grid-template-columns:1fr}.child-hub .hub-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.child-hub .hub-secs{grid-template-columns:1fr}.child-hub .hub-secs>*{grid-column:auto!important}.child-hub .hub-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:560px){.child-hub .hub-hero{grid-template-columns:1fr!important}.child-hub .hub-grid{grid-template-columns:repeat(2,1fr)}}
 .child-hub .hub-hero .journey-door{width:100%;height:100%;min-height:88px}
 .child-hub .hub-hero .daily-door{grid-column:auto!important;width:auto!important;height:96px!important;min-height:0!important;max-height:96px!important;aspect-ratio:auto!important}
 .child-hub .hub-hero .journey-door{height:96px!important;min-height:0!important}
 .child-hub .hub-hero .daily-door .daily-copy b{font-size:1.2rem}.child-hub .hub-hero .daily-door small{font-size:.8rem}
-.child-hub .hub-school{grid-column:1/-1;background:#e3eefb}.child-hub .hub-school .hub-grid{grid-template-columns:repeat(4,1fr)}
+.child-hub .hub-secs{grid-template-columns:repeat(6,1fr)}.child-hub .hub-secs>.hub-read,.child-hub .hub-secs>.hub-math,.child-hub .hub-secs>.hub-play{grid-column:span 2}
+.child-hub .hub-other{grid-column:span 3;background:#e6f6e0}.child-hub .hub-school{grid-column:span 3;background:#e3eefb}.child-hub .hub-other .hub-grid,.child-hub .hub-school .hub-grid{grid-template-columns:repeat(3,1fr)}
 .child-hub a.hub-tile{text-decoration:none}
 @media(max-width:900px){.child-hub .hub-school .hub-grid{grid-template-columns:repeat(2,1fr)}}
 .child-hub .hub-tile{min-height:68px!important;padding:4px 6px!important}.child-hub .hub-art{font-size:1.7rem!important}
@@ -32,3 +33,4 @@
 .child-hub .hub-hero{margin:4px 0 8px!important}.child-hub .hub-hero .daily-door,.child-hub .hub-hero .journey-door{height:76px!important;max-height:76px!important}
 .child-hub .hub-sec{padding:8px 10px 10px!important;margin:0!important}.child-hub .hub-sec h2{font-size:1rem!important;margin:0 0 6px!important}
 .child-hub .hub-secs{gap:8px!important}.child-hub .hub-more{margin:4px 0 0!important}
+@media(max-width:900px){.child-hub .hub-secs{grid-template-columns:1fr!important}.child-hub .hub-secs>*{grid-column:auto!important}.child-hub .hub-other .hub-grid,.child-hub .hub-school .hub-grid{grid-template-columns:repeat(2,1fr)}}

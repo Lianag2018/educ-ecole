@@ -11,6 +11,7 @@ import {childName,schoolMathLinks} from './worlds.js';
 import {schoolVocabularyLinks,vocabularyURL} from './school-vocabulary.js';
 import {travelPoints,weeklyTravel} from './voyage.js';
 import {wheelMarkup} from './activity-wheel.js';
+import {SUBJECTS} from './subjects.js';
 
 const e=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const card=(q,p,subject)=>{const adapted=beginnerCard(q,p,subject);return {...adapted,travelSubject:adapted.travelSubject||subject};};
@@ -78,12 +79,13 @@ export function childHome(p,day){
  ];
  let voca='';try{voca=String(vocabularyURL(p)||'');}catch{}
  const school=[hubLink('Météormath 2','☄️','https://www.alloprof.qc.ca/fr/eleves/bv/jeux/meteormath-2'),...(older?[hubLink('MaZone CEC','📘','https://app.mazonecec.com/login?return_url=https%3A%2F%2Fmazonecec.com%2Fapplication'),...(/^https:\/\//.test(voca)?[hubLink('Voca · mes mots','🧩',voca)]:[])]:[hubLink('Nougat · mon livre','🐱','https://www.iplusinteractif.com/primaire/login?lang=fr_CA')])];
+ const other=SUBJECTS.map(s=>hubTile(s.label,s.icon,`data-action="subject-${s.id}"`));
  const sec=(cls,icon,title,tiles)=>`<section class="hub-sec ${cls}" aria-label="${title}"><h2><span aria-hidden="true">${icon}</span> ${title}</h2><div class="hub-grid">${tiles.join('')}</div></section>`;
  return `<section class="simple-world child-hub hub-${who}" aria-label="Mon monde">
  <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="rewards" class="hub-stars">✦ ${travelPoints(p)} étoiles · Mon coffre</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
  <div class="hub-hero">${journeyDoorMarkup(p,older)}<button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong></span></button></div>
- <div class="hub-secs">${sec('hub-read','📖','Lire et écrire',read)}${sec('hub-math','🔢','Les maths',maths)}${sec('hub-play','🎵','Écouter et découvrir',play)}${sec('hub-school','🏫','Mes jeux de l’école (nouvel onglet)',school)}</div>
+ <div class="hub-secs">${sec('hub-read','📖','Lire et écrire',read)}${sec('hub-math','🔢','Les maths',maths)}${sec('hub-play','🎵','Écouter et découvrir',play)}${sec('hub-other','🌍','Mes autres matières',other)}${sec('hub-school','🏫','Mes jeux de l’école (nouvel onglet)',school)}</div>
  <p class="hub-more"><button data-action="french">Tout le français</button><button data-action="maths">Tous les maths</button>${s.tasks.length?'<button data-action="school-plan">Mes étapes de la semaine</button>':''}</p>
  ${wheelMarkup(who)}
  </section>`;
