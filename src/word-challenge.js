@@ -1,11 +1,19 @@
 // Défi 3 secondes : lire chaque mot fréquent à voix haute avant la fin du temps.
 // Listes : J. Giasson (La lecture, de la théorie à la pratique) et Y. Nadon (Lire et écrire en première année), telles que
 // publiées sur pedagonet.com. La lecture est dite par l'enfant; l'app ne l'évalue pas (un adulte peut écouter).
+import {lessonWords} from './lesson-words-data.js';
 const NADON='à amour aimer aller ami amie après au aussi avec avoir beau beaucoup bébé belle bien blanc blanche bleu bleue bon bonne bonbon ton bouche bras brun brune chat chatte cher chère chez chien chienne cinq classe cou dans de des deux dimanche dire dix du école elle elles en et été être faim faire fête fille fin frère garçon grand grande gros grosse huit il ils j’ai jamais jaune je jeu jeudi joue jupe le la les livre long longue main maison malade maman me mère midi mon ma mes neuf noir noire nom non nous on orange ou oui papa par pas père petit petite pied plus pomme porte poule poupée pour premier première puis quatre robe rose rouge rue samedi sept si six sœur son sa ses souris sous souvent sur table te terre tête ta tes toujours très trois tu un une vache vert verte vite vous yeux';
 const GIASSON='à au aux aller autre avec avoir bien ce cet cette ces comme de du des dans dire donner elle elles en et être faire il ils je me moi jour le la les leur leurs lui mais mon ma mes ne où par pas plus pour pouvoir prendre que qui se sans savoir si soi son sa ses sur te tu toi ton ta tes tout tous un une uns unes venir voir votre vos vouloir vous y';
 const uniq=t=>[...new Set(t.split(/\s+/).filter(Boolean))];
 export const nadonWords=uniq(NADON),giassonWords=uniq(GIASSON);
-export const wordsForChild=older=>older?uniq(NADON+' '+GIASSON):nadonWords;
+// Pour une enfant de 8 ans : on enlève les petits mots faciles (elle, les, plus, à, a…) et on garde les mots à sons doubles
+// ou complexes (ou, on, an, en, in, ch, gn, oi, eu, au, eau, ai, ill, ph, qu, gu, tion…) ou longs, avec les mots des leçons de sons.
+const COMPLEX=/(ou|on|an|en|in|un|ch|gn|oi|eu|œu|au|eau|ai|ei|ph|qu|gu|ill|tion|oin|ein|ain|ien|ç|sc)/;
+const plain=w=>w.toLowerCase().replace(/[’']/g,'');
+export const isHardWord=w=>{const p=plain(w);return p.length>=6||(p.length>=4&&COMPLEX.test(p));};
+const lessonPlain=uniq(Object.values(lessonWords).join(' ').replace(/-/g,''));
+export const olderWords=uniq([...uniq(NADON+' '+GIASSON),...lessonPlain.filter(w=>plain(w).length>=5&&plain(w).length<=10)].filter(isHardWord).join(' '));
+export const wordsForChild=older=>older?olderWords:nadonWords;
 export const ROUND=10,TIME_MS=3000,MAX_STAR_ROUNDS=3,PASS=8;
 const KEY='atelier-mots-defi-v1';
 const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch{return {};}};

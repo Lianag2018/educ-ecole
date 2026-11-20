@@ -1,3 +1,10 @@
+# Défi 3 secondes : liste plus difficile pour Liana — 20 novembre 2026 (America/Toronto)
+
+Demande du parent : enlever ce qui est trop simple pour une enfant de 8 ans (elle, les, plus, à, a…), garder les sons doubles et plus (comme « avion »).
+Livré : Liana n'a plus les petits mots faciles; sa liste garde les mots à sons doubles ou complexes (ou, on, an, en, in, ch, gn, oi, eu, au, eau, ai, ill, ph, qu, gu, tion…) ou de 6 lettres et plus, tirés de Nadon, de Giasson et des mots des leçons de sons (5 à 10 lettres) : 217 mots. Mely-Ann garde la liste Nadon complète (152 mots). Règle dans src/word-challenge.js (isHardWord, olderWords); mots du livre importés non inclus pour l'instant.
+Preuves : test unitaire (elle, les, plus, à, a, le, la, un, et, je, tu, il, son, sa, ma absents; avion, vouloir, prendre, pouvoir, donner, maison, jamais présents; Mely-Ann inchangée).
+En attente : retour du parent sur le niveau (trop facile ou trop difficile) et sur le temps de 3 secondes.
+
 # Anglais, histoire, sciences — 20 novembre 2026 (America/Toronto)
 
 Branche claude/matieres-anglais-histoire-sciences (inclut le défi 3 secondes, le nouvel écran des filles et la roue). Demande du parent : ajouter anglais, histoire et sciences pour les deux filles; le parent donnera la matière.
