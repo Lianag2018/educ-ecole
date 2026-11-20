@@ -1,0 +1,17 @@
+.sj{max-width:760px;margin:0 auto;padding:12px}
+.sj-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}.sj-top h2{margin:0;font-family:inherit;font-size:1.7rem;color:#3b2466}
+.sj-top button{width:54px;height:54px;border:3px solid #24163f;border-radius:50%;background:#fff;font-size:1.6rem;font-weight:800;color:#3b2466;cursor:pointer}
+.sj-card{display:grid;gap:12px;padding:18px;border-radius:26px;background:linear-gradient(#fffdf4,#f6efff);border:3px solid #e4d6f5;box-shadow:0 8px 30px #41305a22;color:#3b2466}
+.sj-card h3{margin:0;font-family:inherit;font-size:1.5rem}.sj-card p{margin:0;font-size:1.1rem}
+.sj-list{display:grid;gap:10px}.sj-lesson{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center;text-align:left;min-height:68px;padding:8px 14px;border:3px solid #24163f;border-radius:20px;background:#fff;color:#3b2466;box-shadow:0 4px 0 #24163f;cursor:pointer}
+.sj-lesson span{grid-row:span 2;font-size:2rem}.sj-lesson strong{font-size:1.15rem}.sj-lesson small{color:#6b5a80}
+.sj-empty{display:grid;gap:6px;text-align:center}.sj-empty span{font-size:3.4rem}.sj-empty strong{font-size:1.4rem}
+.sj-para{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}.sj-para p{font-size:1.25rem;line-height:1.4}
+.sj-say{width:48px;height:48px;border:3px solid #24163f;border-radius:50%;background:#fff;font-size:1.3rem;cursor:pointer}
+.sj-opts{display:grid;gap:10px}.sj-opts button{min-height:60px;border:3px solid #24163f;border-radius:18px;background:#fff;color:#3b2466;font-size:1.25rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #24163f}
+.sj-opts button:disabled{opacity:.55}.sj-count{font-weight:700}.sj-msg{min-height:1.4em;font-weight:800;color:#2b9a7f}
+.sj-star{font-size:2rem!important;font-weight:800;color:#d49a00}
+button.sj-go{min-height:60px;border:0;border-radius:20px;background:#8358a8;color:#fff;font-size:1.3rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #5a2e87}
+button.sj-back{min-height:52px;border:3px solid #24163f;border-radius:18px;background:#fff;color:#3b2466;font-weight:800;font-size:1.1rem;cursor:pointer}
+.sj-import{display:grid;gap:6px;padding:10px;border:2px dashed #8358a8;border-radius:16px;font-weight:700}
+body .sj button.sj-go{background:#8358a8!important;color:#fff!important}body .sj .sj-opts button,body .sj .sj-lesson{background:#fff!important;color:#3b2466!important}

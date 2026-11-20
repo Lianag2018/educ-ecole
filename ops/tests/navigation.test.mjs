@@ -39,8 +39,8 @@ test('only the current child and current school week contribute plan questions',
  a.schoolPlans=b.schoolPlans;assert.ok(!dailyAdventure(a,day).items.some(q=>missions[0].items.some(m=>m.id===q.id)));
  delete b.dailyAdventure;b.schoolPlans[0].week='2026-10-19';assert.ok(!dailyAdventure(b,day).items.some(q=>missions[0].items.some(m=>m.id===q.id)));
 });
-test('child home has three primary choices; vocabulary belongs to French, installation to parents',()=>{
- for(const p of fresh().profiles){const home=childHome(p,day);assert.match(home,/data-action="daily-start"/);assert.match(home,/data-action="french"/);assert.match(home,/data-action="maths"/);assert.doesNotMatch(home,/data-popit|data-scene|photos de devoir|App Store/);
+test('child home: every activity one tap away, no parent tools, school games in a new tab',()=>{
+ for(const p of fresh().profiles){const home=childHome(p,day);assert.match(home,/data-action="daily-start"/);assert.match(home,/data-action="french"/);assert.match(home,/data-action="maths"/);assert.match(home,/data-popit|data-illustrated-calculation/);assert.match(home,/data-scene="reading"/);assert.match(home,/data-action="word-challenge"/);assert.match(home,/data-action="speed-math"/);assert.match(home,/Météormath 2/);assert.match(home,/target="_blank" rel="noopener noreferrer"/);assert.doesNotMatch(home,/photos de devoir|App Store/);
  assert.match(subjectHome(p,'maths'),/data-popit/);assert.doesNotMatch(subjectHome(p,'maths'),/Alloprof.*vocabulaire|App Store/);
  assert.doesNotMatch(subjectHome(p,'french'),/App Store|data-popit/);}
 });

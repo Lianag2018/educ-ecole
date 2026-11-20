@@ -1,3 +1,42 @@
+# Défi 3 secondes : liste plus difficile pour Liana — 20 novembre 2026 (America/Toronto)
+
+Demande du parent : enlever ce qui est trop simple pour une enfant de 8 ans (elle, les, plus, à, a…), garder les sons doubles et plus (comme « avion »).
+Livré : Liana n'a plus les petits mots faciles; sa liste garde les mots à sons doubles ou complexes (ou, on, an, en, in, ch, gn, oi, eu, au, eau, ai, ill, ph, qu, gu, tion…) ou de 6 lettres et plus, tirés de Nadon, de Giasson et des mots des leçons de sons (5 à 10 lettres) : 217 mots. Mely-Ann garde la liste Nadon complète (152 mots). Règle dans src/word-challenge.js (isHardWord, olderWords); mots du livre importés non inclus pour l'instant.
+Preuves : test unitaire (elle, les, plus, à, a, le, la, un, et, je, tu, il, son, sa, ma absents; avion, vouloir, prendre, pouvoir, donner, maison, jamais présents; Mely-Ann inchangée).
+En attente : retour du parent sur le niveau (trop facile ou trop difficile) et sur le temps de 3 secondes.
+
+# Anglais, histoire, sciences — 20 novembre 2026 (America/Toronto)
+
+Branche claude/matieres-anglais-histoire-sciences (inclut le défi 3 secondes, le nouvel écran des filles et la roue). Demande du parent : ajouter anglais, histoire et sciences pour les deux filles; le parent donnera la matière.
+Livré : src/subjects.js + .css; bloc « Mes autres matières » (🇬🇧 Anglais, 🏛️ Histoire, 🔬 Sciences) sur l'écran de chaque fille et dans la roue (catégorie « Autres matières »). Page d'une matière : liste de leçons; chaque paragraphe a un bouton 🔊 (voix de l'appareil; les phrases marquées « en: » se disent en anglais, en-US); questions à choix une à la fois (« Essaie encore ! » sans pénalité de forme, « Bravo ! » puis la suivante); +5 étoiles une seule fois par leçon si toutes les réponses sont justes du premier coup (événement matiere:matière:n dans l'historique du profil). Sans contenu, la page dit « arrive bientôt » (rien de faux ni de vide). Contenu gardé sur l'appareil par fille et par matière (atelier-mots-subjects-v1), jamais dans le dépôt.
+Format d'un fichier de matière (import adulte sur la page de la matière, mode Adulte) : « # Anglais » (ou Histoire, Sciences); « pour: Liana » ou « pour: Mely-Ann » (sinon les deux); « ## Titre de la leçon »; des paragraphes; « en: phrase anglaise »; « ? Question | bonne réponse | autre | autre ».
+Preuves : 3 tests unitaires du format; essai Chromium pour les deux filles : page vide, import simulé dans le stockage, leçon, quiz, +5 étoiles, 0 erreur JS. Import par le sélecteur de fichier non essayé de bout en bout (même code que celui des histoires). Non essayé sur iPad réel.
+En attente : la matière du parent (anglais, histoire, sciences; par année).
+
+# Roue des surprises (machine à sous) — 20 novembre 2026 (America/Toronto)
+
+Branche claude/defi-3-secondes (même PR). Demande du parent : une roue façon machine à sous, avec toutes les tuiles et tous les liens de sites, où la fille choisit la matière, tourne la roue et entre directement où elle s'arrête; bien imagée, avec un aperçu à côté; au bas de la page d'accueil de chaque fille, remodelée pour chacune.
+Livré : src/activity-wheel.js + .css; section « Ma roue des surprises » au bas de l'écran de chaque fille; elle lit les vraies tuiles de l'écran (aucune liste en double); choix de la matière (Tout, Lire et écrire, Les maths, Écouter, École); un rouleau défile et ralentit (3,4 s) puis s'arrête sur une activité, un panneau d'aperçu à côté montre l'image, la matière et une phrase; « Y aller ! » ouvre l'activité (les liens de l'école s'ouvrent dans un nouvel onglet), « Encore » retourne. Mely-Ann : rose et papillon; Liana : violet et licorne. Sans animation si le système demande moins de mouvement. Aucun son pour l'instant.
+Preuves : essai Chromium pour les deux filles (tirage, entrée dans l'activité, 0 erreur JS); test unitaire du rouleau (arrêt sur la cible, pas de doublon voisin); vidéos d'aperçu remises au parent. Non essayé sur iPad réel.
+Sons : tic-tic synchronisés avec le ralentissement du rouleau (courbe du CSS), ronron qui descend, « ding » à l'arrêt puis petite fanfare do-mi-sol-do (src/wheel-sound.js, Web Audio, aucun fichier); bouton 🔊/🔇 dans la roue, même interrupteur que les sons de fête; rendu hors ligne vérifié (crête 0,30, pas de silence pendant la rotation). Non écoutés par un humain.
+En attente : retour du parent (volume, tirage qui évite les activités déjà faites).
+
+# Accueil de chaque fille en un seul écran, accès directs — 20 novembre 2026 (America/Toronto)
+
+Branche claude/defi-3-secondes (même PR que le défi). Demande du parent : trop de menus et de sous-menus, accès difficiles à trouver (ex. Météormath 2, MaZone CEC, défi vitesse); une page d'accueil dédiée à chaque fille, en un clic; le panneau « Lis ce nombre à voix haute » de l'accueil ne sert à rien.
+Livré : (a) page de chaque fille (childHome, src/child-hub.css) : un seul écran, sans défilement à 1180×820, avec « Mon parcours » et « Mon aventure du jour » en haut, puis trois blocs (Lire et écrire, Les maths, Écouter et découvrir) où chaque tuile ouvre directement l'activité, et un bloc « Mes jeux de l'école » (Météormath 2 pour les deux; Nougat pour Mely-Ann; MaZone CEC et Voca pour Liana; liens externes, nouvel onglet); « Tout le français » et « Tous les maths » gardent l'ancien menu complet. Mely-Ann et Liana ont chacune leur liste (1re / 3e année). (b) Accueil illustré : le panneau « Lis ce nombre » est remplacé par « Défi 3 secondes » avec un bouton par fille; la lecture d'un nombre avec la maîtresse (voix en direct) reste dans « Les maths » (« Lire un nombre avec la maîtresse »). (c) Les papillons de l'accueil ne passent plus sur les visages.
+Preuves : essai Chromium qui clique chaque tuile des deux filles dans un navigateur neuf (27 et 29 accès, 0 problème, 0 erreur JS; Pop-it s'ouvre en fenêtre); le défi démarre depuis l'accueil pour la bonne fille; tests unitaires et suites navigateur (tests de navigation et de voix mis à jour pour la nouvelle architecture). Non essayé sur iPad réel ni en téléphone.
+Limites : liens externes non ouverts ici (aucun accès réseau vers ces sites), seulement vérifiés comme adresses https; l'écran tient en une vue sur tablette paysage, mais défile sur téléphone.
+En attente : retour du parent sur l'organisation et les images; déploiement Vercel (limite de 100 déploiements par jour).
+
+# Défi 3 secondes (mots fréquents) — 20 novembre 2026 (America/Toronto)
+
+Branche claude/defi-3-secondes. Demande du parent : prendre les mots de https://www.pedagonet.com/other/liste.htm et en faire un défi de lecture, 3 secondes par mot.
+Source : la page ne contient que deux listes en images (Giasson, mots qui font 50 % des textes, p. 172; Nadon, mots utiles en 1re année, p. 137), lues et saisies à la main (src/word-challenge.js; les élisions seules j', l', qu'... sont exclues; 100+ mots Nadon, Giasson pour la plus grande).
+Livré : tuile « Défi 3 secondes » (1re page du français des deux filles); tours de 10 mots; un mot, une barre de 3 s, « Je l'ai lu ! » à toucher; temps écoulé = le mot est dit par la voix de l'appareil et compté à revoir; mots ratés reviennent en premier, puis les moins réussis; 8 mots sur 10 = +5 étoiles (3 tours par jour au plus; un événement defi:jour:n dans l'historique du profil); Mely-Ann = liste Nadon, Liana = Nadon + Giasson. La lecture est dite à voix haute par l'enfant : l'app ne l'évalue pas (aucune reconnaissance vocale), un adulte peut écouter.
+Preuves : 662 tests unitaires; essai Chromium pour les deux filles (tour complet, +5 étoiles dans le bon profil, 0 erreur JS); suites navigateur (voir PR). Non essayé sur iPad réel; voix de l'appareil non écoutée par un humain.
+En attente : retour du parent (durée 3 s, nombre de mots par tour, étoiles); déploiement Vercel (limite de 100 déploiements par jour atteinte le 19 novembre).
+
 # Code secret retiré, blocage Vercel — 19 novembre 2026 (America/Toronto)
 
 Branche claude/retire-code-secret. Demande du parent : enlever le code d'accès (mot de passe) des filles. Les PR du code secret et du « code oublié » sont annulées (src/pin-gate.js, styles, tests et clics de test retirés). L'entrée dans le monde de chaque fille est de nouveau directe. Comme ces deux versions n'ont jamais été déployées, la version en ligne ne change pas.
