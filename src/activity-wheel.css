@@ -1,0 +1,25 @@
+/* Roue des surprises (machine à sous) en bas de l'écran de chaque fille. */
+.hub-wheel{margin:14px 0 6px;padding:14px;border-radius:28px;border:4px solid #24163f;box-shadow:0 6px 0 #24163f;color:#3b2466}
+.hub-wheel.wh-0{background:linear-gradient(135deg,#ffe3ee,#fff0f6 55%,#ffe9c9)}.hub-wheel.wh-1{background:linear-gradient(135deg,#e9defa,#f6f0ff 55%,#d9ecff)}
+.wh-head h2{margin:0;font-family:inherit;font-size:1.5rem}.wh-head p{margin:2px 0 10px}
+.wh-body{display:grid;grid-template-columns:minmax(150px,200px) minmax(260px,340px) 1fr;gap:14px;align-items:start}
+.wh-cats{display:grid;gap:8px}.wh-cats button{min-height:50px;border:3px solid #24163f;border-radius:16px;background:#fff;color:#3b2466;font-weight:800;font-size:1rem;text-align:left;padding:4px 12px;cursor:pointer}
+.wh-cats button[aria-pressed=true]{background:#8358a8;color:#fff}.wh-0 .wh-cats button[aria-pressed=true]{background:#e0527f}
+.wh-machine{display:grid;gap:10px}
+.wh-window{position:relative;height:258px;overflow:hidden;border:5px solid #24163f;border-radius:22px;background:#fff;box-shadow:inset 0 0 0 3px #ffd166}
+.wh-strip{will-change:transform}.wh-item{display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:2px dashed #e4d6f5;box-sizing:border-box}
+.wh-art{display:grid;place-items:center;width:52px;font-size:2.2rem}.wh-art .number-art{font-size:1.1rem;font-weight:800;line-height:1.1}.wh-item b{font-size:1.1rem;line-height:1.1}
+.wh-frame{position:absolute;left:0;right:0;top:86px;height:86px;border:4px solid #e0527f;border-radius:14px;box-shadow:0 0 0 3px #fff,0 0 18px #ffd166;pointer-events:none}.wh-1 .wh-frame{border-color:#8358a8}
+.wh-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(#fff 0,#fff0 28%,#fff0 72%,#fff 100%)}
+button.wh-spin,button.wh-go{min-height:60px;border:0;border-radius:20px;font-size:1.35rem;font-weight:800;color:#fff;cursor:pointer;box-shadow:0 4px 0 #0003;background:#e0527f}.wh-1 .wh-spin,.wh-1 .wh-go{background:#8358a8}
+.wh-spinning .wh-spin{opacity:.6;pointer-events:none}.wh-spinning .wh-window{animation:wh-shake .25s linear infinite}
+@keyframes wh-shake{50%{transform:translateX(1px)}}
+.wh-preview{min-height:258px;display:grid;align-content:center}.wh-hint{display:grid;gap:4px;text-align:center;font-size:1.1rem}.wh-hint span{font-size:3rem}.wh-hint small{color:#6b5a80}
+.wh-card{display:grid;gap:6px;text-align:center;padding:14px;border-radius:22px;background:#fff;border:3px solid #24163f;animation:wh-pop .5s cubic-bezier(.2,1.6,.4,1)}
+.wh-card .wh-big{font-size:4rem;line-height:1}.wh-card .wh-big .number-art{font-size:1.6rem}.wh-card small{color:#6b5a80;font-weight:700}.wh-card strong{font-size:1.6rem;font-family:inherit}.wh-card p{margin:0;font-size:1.05rem}
+.wh-actions{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:6px}.wh-again{min-height:60px;border:3px solid #24163f;border-radius:20px;background:#fff;color:#3b2466;font-weight:800;font-size:1.1rem;cursor:pointer}
+@keyframes wh-pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media(max-width:900px){.wh-body{grid-template-columns:1fr}.wh-cats{grid-template-columns:repeat(2,1fr)}.wh-preview{min-height:0}}
+@media(prefers-reduced-motion:reduce){.wh-spinning .wh-window{animation:none}.wh-card{animation:none}}
+body .hub-wheel button.wh-spin,body .hub-wheel button.wh-go{background:#e0527f!important;color:#fff!important}body .hub-wheel.wh-1 button.wh-spin,body .hub-wheel.wh-1 button.wh-go{background:#8358a8!important}
+body .hub-wheel .wh-cats button{background:#fff!important;color:#3b2466!important}body .hub-wheel.wh-0 .wh-cats button[aria-pressed=true]{background:#e0527f!important;color:#fff!important}body .hub-wheel.wh-1 .wh-cats button[aria-pressed=true]{background:#8358a8!important;color:#fff!important}

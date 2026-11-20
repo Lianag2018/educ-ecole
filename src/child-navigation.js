@@ -10,6 +10,7 @@ import {weekKey} from './garden.js';
 import {childName,schoolMathLinks} from './worlds.js';
 import {schoolVocabularyLinks,vocabularyURL} from './school-vocabulary.js';
 import {travelPoints,weeklyTravel} from './voyage.js';
+import {wheelMarkup} from './activity-wheel.js';
 
 const e=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const card=(q,p,subject)=>{const adapted=beginnerCard(q,p,subject);return {...adapted,travelSubject:adapted.travelSubject||subject};};
@@ -84,6 +85,7 @@ export function childHome(p,day){
  <div class="hub-hero">${journeyDoorMarkup(p,older)}<button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong></span></button></div>
  <div class="hub-secs">${sec('hub-read','📖','Lire et écrire',read)}${sec('hub-math','🔢','Les maths',maths)}${sec('hub-play','🎵','Écouter et découvrir',play)}${sec('hub-school','🏫','Mes jeux de l’école (nouvel onglet)',school)}</div>
  <p class="hub-more"><button data-action="french">Tout le français</button><button data-action="maths">Tous les maths</button>${s.tasks.length?'<button data-action="school-plan">Mes étapes de la semaine</button>':''}</p>
+ ${wheelMarkup(who)}
  </section>`;
 }
 export function subjectHome(p,subject,page=0){
