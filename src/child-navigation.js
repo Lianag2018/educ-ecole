@@ -8,7 +8,7 @@ import {illustratedCards} from './illustrated-games.js';
 import {planMissions,missionOpen} from './school-plan.js';
 import {weekKey} from './garden.js';
 import {childName,schoolMathLinks} from './worlds.js';
-import {schoolVocabularyLinks} from './school-vocabulary.js';
+import {schoolVocabularyLinks,vocabularyURL} from './school-vocabulary.js';
 import {travelPoints,weeklyTravel} from './voyage.js';
 
 const e=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -50,18 +50,39 @@ export function advanceDaily(p,day,index){
 
 function heading(p,title){return `<div class="simple-heading"><div class="portrait face-${p.id==='p1'?0:1}" aria-hidden="true"></div><div><span class="simple-level">${e(childName(p))} · ${gradeFor(p)}${gradeFor(p)===1?'re':'e'} année</span><h1>${title}</h1></div></div>`;}
 function tile(label,description,art,attrs){return `<button class="simple-tile" ${attrs}><span class="simple-art" aria-hidden="true">${art}</span><span><strong>${label}</strong><small>${description}</small></span><span class="simple-arrow" aria-hidden="true">→</span></button>`;}
+// Page d'accueil de chaque fille : tout est à un seul toucher, rien n'est caché derrière un sous-menu.
+const hubLink=(label,art,href)=>`<a class="hub-tile hub-link" data-school-resource href="${e(href)}" target="_blank" rel="noopener noreferrer"><span class="hub-art" aria-hidden="true">${art}</span><strong>${label}</strong></a>`;
+const hubTile=(label,art,attrs)=>`<button class="hub-tile" ${attrs}><span class="hub-art" aria-hidden="true">${art}</span><strong>${label}</strong></button>`;
 export function childHome(p,day){
- const route=p.dailyAdventure,progress=route?.day===day&&route.profileId===p.id&&route.grade===gradeFor(p)?Math.min(3,route.index):0,s=weeklyTravel(p);
- return `<section class="simple-world" aria-label="Mon monde">
- <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="parent">Parents</button></nav>
+ const route=p.dailyAdventure,progress=route?.day===day&&route.profileId===p.id&&route.grade===gradeFor(p)?Math.min(3,route.index):0,s=weeklyTravel(p),older=advanced(p),who=p.id==='p1'?0:1;
+ const read=older?[
+  hubTile('Mes mots','🦋','data-action="words"'),hubTile('Les histoires','🦄','data-scene="reading"'),hubTile('Sons et syllabes','📖','data-scene="syllables"'),hubTile('Dictée magique','✍️','data-action="dictation"'),
+  hubTile('Défi 3 secondes','⏱️','data-action="word-challenge"'),hubTile('Histoires de l’école','📚','data-action="private-stories"'),hubTile('Pourquoi ça s’écrit?','🔎','data-action="spelling-lab"'),hubTile('Mon carnet de trucs','🎁','data-action="trick-book"')
+ ]:[
+  hubTile('Les sons','🌸','data-action="rms-course"'),hubTile('Mes cartes de sons','🔤','data-action="sound-garden"'),hubTile('Les syllabes','🦋','data-scene="syllables"'),hubTile('Je lis','📖','data-scene="reading"'),
+  hubTile('Dictée magique','✍️','data-action="dictation"'),hubTile('Défi 3 secondes','⏱️','data-action="word-challenge"'),hubTile('Histoires de l’école','📚','data-action="private-stories"'),hubTile('Mon carnet de trucs','🎁','data-action="trick-book"')
+ ];
+ const maths=[
+  hubTile('Les nombres','<span class="number-art">1 2<br>3 4</span>','data-scene="numbers"'),
+  hubTile('Les calculs','➕',older?'data-illustrated-calculation':'data-subject="2"'),
+  hubTile('Défi vitesse','🚀','data-action="speed-math"'),
+  older?hubTile('Mes tables','🔢','data-action="weekly"'):hubTile('Mes mini-défis','🌻','data-action="mini-garden"'),
+  hubTile('Bonds de nombres','🐸','data-action="skip-counting"'),
+  older?hubTile('Tables en chansons','🎵','data-action="table-songs"'):hubTile('Mon Pop-it','🔴','data-popit')
+ ];
+ const play=[
+  hubTile('Chansons','🎵','data-action="songs-world"'),hubTile('Vidéos et défis','🎬','data-action="videos-french"'),hubTile('Un prof et sa guitare','🎸','data-action="videos-prof"'),hubTile('Maître Lucas','🎓','data-action="videos-lucas"'),
+  hubTile('Notre voyage','🏝️','data-action="adventure"'),...(older?[hubTile('Mon archipel Squishy','🫧','data-action="squishy"')]:[]),hubTile('Mon coffre','🎁','data-action="rewards"')
+ ];
+ let voca='';try{voca=String(vocabularyURL(p)||'');}catch{}
+ const school=[hubLink('Météormath 2','☄️','https://www.alloprof.qc.ca/fr/eleves/bv/jeux/meteormath-2'),...(older?[hubLink('MaZone CEC','📘','https://app.mazonecec.com/login?return_url=https%3A%2F%2Fmazonecec.com%2Fapplication'),...(/^https:\/\//.test(voca)?[hubLink('Voca · mes mots','🧩',voca)]:[])]:[hubLink('Nougat · mon livre','🐱','https://www.iplusinteractif.com/primaire/login?lang=fr_CA')])];
+ const sec=(cls,icon,title,tiles)=>`<section class="hub-sec ${cls}" aria-label="${title}"><h2><span aria-hidden="true">${icon}</span> ${title}</h2><div class="hub-grid">${tiles.join('')}</div></section>`;
+ return `<section class="simple-world child-hub hub-${who}" aria-label="Mon monde">
+ <nav class="simple-top" aria-label="Mon profil"><button data-action="choose-child">‹ Changer de personnage</button><button data-action="rewards" class="hub-stars">✦ ${travelPoints(p)} étoiles · Mon coffre</button><button data-action="parent">Parents</button></nav>
  ${heading(p,'À toi de jouer!')}
- ${journeyDoorMarkup(p,advanced(p))}
- <button class="story-door" data-action="private-stories"><span aria-hidden="true">📚</span><span>Mes histoires<small>Les histoires de l’école et des sons</small></span><span class="sd-go" aria-hidden="true">▶</span></button>
- <div class="simple-doors" aria-label="Mes activités">
- <button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong><span>${progress===3?'Continuer mon aventure':progress?'Je continue':'C’est parti!'} →</span></span></button>
- ${tile('Français',advanced(p)?'Mes mots et mes histoires':'Les sons et les mots','<span class="book-art">Aa</span>','data-action="french"')}
- ${tile('Maths','Les nombres et les calculs','<span class="number-art">1 2<br>3 4</span>','data-action="maths"')}
- </div><div class="video-entry simple-chips"><button data-action="videos-prof">🎸 Un prof et sa guitare</button><button data-action="videos-lucas">🎓 Maître Lucas</button><button data-action="songs-world">🎵 Chansons</button><details class="simple-treasure"><summary>✦ ${travelPoints(p)} étoiles · Mon coffre</summary><p>${s.reward?'Tes ailes de la semaine sont dans ton coffre!':'Chaque petit effort fait avancer ton voyage.'}</p><button data-action="rewards">🎁 Mes récompenses</button>${s.tasks.length?`<p>${s.done} / ${s.tasks.length} étapes du plan confirmées avec ton parent.</p>`:''}<button data-action="adventure">La carte de notre voyage</button><button data-action="school-plan">Mes étapes de la semaine</button></details></div>
+ <div class="hub-hero">${journeyDoorMarkup(p,older)}<button class="daily-door" data-action="daily-start"><img src="/icons/dominicaine-bateau.webp" alt="" width="1672" height="941"><span class="daily-copy"><b class="kid-label">${progress&&progress<3?'Je continue !':'Jouer !'}</b><small>${progress===3?'Une série terminée · La suite t’attend':progress?`Étape ${progress+1} sur 3`:'3 petits jeux · À ton rythme'}</small><strong>Mon aventure du jour</strong></span></button></div>
+ <div class="hub-secs">${sec('hub-read','📖','Lire et écrire',read)}${sec('hub-math','🔢','Les maths',maths)}${sec('hub-play','🎵','Écouter et découvrir',play)}${sec('hub-school','🏫','Mes jeux de l’école (nouvel onglet)',school)}</div>
+ <p class="hub-more"><button data-action="french">Tout le français</button><button data-action="maths">Tous les maths</button>${s.tasks.length?'<button data-action="school-plan">Mes étapes de la semaine</button>':''}</p>
  </section>`;
 }
 export function subjectHome(p,subject,page=0){
