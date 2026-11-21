@@ -35,6 +35,9 @@ export class PhonemePlayer {
   src.start();this.onState('playing');
  }
  clearCache(){this.cache.clear();}
+ // iPhone : un contexte audio ouvert peut rendre le micro muet. On le ferme avant d'enregistrer; il se rouvre tout seul à la prochaine écoute.
+ release(){this.stop();try{this.ctx?.close?.();}catch{}this.ctx=null;}
+ async playSamples(samples,rate){this.stop();const ctx=this.context(),buf=ctx.createBuffer(1,samples.length,rate);buf.copyToChannel(samples,0);const src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);this.source=src;src.onended=()=>{this.onState('ended');};src.start();this.onState('playing');}
  async play(id,ms){
   this.stop();const epoch=this.epoch;
   if(!/^[a-z][a-z-]*$/.test(id)){this.onState('error');return;}

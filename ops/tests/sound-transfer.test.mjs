@@ -17,3 +17,14 @@ test('un fichier qui n’est pas à nous, ou avec un son inconnu, est refusé ou
  const big='A'.repeat(900),r=await importSounds({app:'atelier-mots-sons',version:1,sounds:{zzz:btoa(big),ou:btoa('x'.repeat(100))}},['ou']);
  assert.equal(r.saved,0);assert.equal(r.skipped,2);
 });
+const {trimSilence,normalize,peakOf,isEmptyTake}=await import('../../src/sound-stretch.js');
+test('un enregistrement très faible (micro d’iPhone) n’est plus coupé en entier',()=>{
+ const rate=44100,s=new Float32Array(rate);for(let i=0;i<rate/2;i++)s[rate/4+i]=0.01*Math.sin(i/20); // crête 0,01 : sous l’ancien seuil fixe de 0,02
+ const t=trimSilence(s,rate);assert.ok(t.length>rate/3,'le son faible est gardé, pas réduit à un seul échantillon');
+ const n=normalize(t);assert.ok(peakOf(n)>0.85,'puis amplifié');assert.equal(isEmptyTake(s,rate),false);
+});
+test('un enregistrement muet ou trop court est reconnu comme vide',()=>{
+ assert.equal(isEmptyTake(new Float32Array(44100),44100),true);
+ assert.equal(isEmptyTake(new Float32Array(1000).fill(0.5),44100),true);
+ assert.equal(isEmptyTake(new Float32Array(44100).fill(0.2),44100),false);
+});
