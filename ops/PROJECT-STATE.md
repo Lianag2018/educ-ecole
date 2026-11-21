@@ -1,3 +1,10 @@
+# Sensibilité du micro — 21 novembre 2026 (America/Toronto)
+
+Branche claude/sensibilite-micro. Demande du parent : pouvoir régler la sensibilité du micro sur l'appareil.
+Livré : dans le laboratoire des sons, « Sensibilité du micro » : Normale (×1), Forte (×3), Très forte (×8), mémorisée sur l'appareil (atelier-mots-mic-gain), et « Tester le micro » : 6 secondes de barre de niveau sans rien enregistrer, puis un verdict (rien entendu / très peu / entend bien). Le réglage matériel du micro n'est pas modifiable depuis une page web : le son est amplifié numériquement (gain puis compresseur contre la saturation, src/mic-graph.js) avant d'être enregistré; la barre montre le niveau après amplification. Si l'appareil ne sait pas faire ce montage audio, le micro est enregistré tel quel.
+Preuves : essai Chromium avec un micro simulé très faible (0,01) : barre 2 % (×1), 5 % (×3), 14 % (×8), verdicts corrects, enregistrement amplifié proposé, réglage mémorisé, 0 erreur JS; 2 tests unitaires. Non essayé sur iPhone/Safari réels (création du flux amplifié à confirmer).
+En attente : le parent essaie « Tester le micro » sur l'iPhone et dit quelle sensibilité convient.
+
 # Enregistrement : fin des sons vides sur iPhone — 21 novembre 2026 (America/Toronto)
 
 Branche claude/micro-son-vide. Signalement du parent (iPhone) : « pas de message, simplement un nouveau son vide ».
