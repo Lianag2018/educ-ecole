@@ -1,3 +1,10 @@
+# Raison du repli de la voix en ligne affichée à la lecture — 21 novembre 2026 (America/Toronto)
+
+Branche claude/raison-repli-voix. Le parent constate que « Tester la voix » (voix de l'appareil, panneau « Aide pour la voix », voix Shelley fr-CA) est parfaite, mais que les histoires de l'école restent lues par la voix de l'appareil : la voix en ligne n'est pas utilisée et la cause était invisible.
+Livré : en mode adulte, pendant la lecture d'une histoire de l'école, le message de lecture ajoute « Voix en ligne non utilisée : <cause> » (tablette non reconnue, serveur non prêt, budget, limite, fournisseur, réseau). La cause est gardée par src/story-voice.js (storyVoiceIssue).
+Preuves : test unitaire (cause gardée, effacée à la remise à zéro); suite 700 réussie; 4 suites navigateur relancées. Non vérifié : affichage sur la tablette; cause réelle du refus encore inconnue.
+En attente : le parent relit une histoire de l'école en mode adulte et transmet le message affiché.
+
 # Bouton « Tester la voix en ligne » — 21 novembre 2026 (America/Toronto)
 
 Branche claude/test-voix-en-ligne. Le parent ne perçoit aucune différence entre « Les histoires » et « Histoires de l'école » après le redéploiement 686d119 : la lecture retombe probablement sur la voix de l'appareil, et rien n'indiquait pourquoi.
