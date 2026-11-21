@@ -1,3 +1,12 @@
+# Transfert des voix enregistrées entre appareils — 21 novembre 2026 (America/Toronto)
+
+Branche claude/transfert-sons. Signalement du parent : « elle ne s'enregistre pas sur le serveur quand je le refais » (voix enregistrées dans le laboratoire des sons).
+Constat : par conception (src/sound-bank.js), les voix ne sont gardées que dans l'appareil (IndexedDB), jamais sur un serveur; une voix faite sur l'iPhone n'existe donc pas sur les tablettes. Aucun stockage serveur pour les sons n'existe dans le code (le serveur ne gère que la sauvegarde des réponses, avec compte parent). Je n'ai pas pu en créer un : le seul projet Supabase accessible depuis cette session est « Luxura's Project » (service professionnel, non touché, AGENTS.md); la base familiale n'est pas accessible d'ici (voir ACCESS-RUNBOOK.md).
+Livré : transfert sans serveur : « Envoyer mes sons à une autre tablette » (fichier sons-atelier-AAAA-MM-JJ.json partagé par la feuille de partage de l'appareil ou téléchargé) et « Recevoir des sons » (importe le fichier sur l'autre tablette, durées d'étirement comprises). L'import ne garde que les sons connus, de taille raisonnable, et refuse tout fichier qui n'est pas de l'Atelier. Le contenu reste privé : jamais dans le dépôt.
+Preuves : 2 tests unitaires (aller-retour identique, fichier refusé); essai Chromium avec deux profils : enregistrement sur A, export, réception sur B (↩ présent), fichier invalide refusé, 0 erreur JS. Non essayé sur iPhone/iPad réels (feuille de partage iOS).
+Piste serveur (non faite) : stockage des voix avec le compte parent sur la base familiale; exige l'accès à la base de l'école (Supabase personnel) et un point d'entrée authentifié.
+En attente : le parent confirme si le transfert par fichier suffit, ou s'il veut le stockage serveur (accès à la base de l'école à fournir).
+
 # Enregistrement des sons sur iPhone — 21 novembre 2026 (America/Toronto)
 
 Branche claude/enregistrement-sons-iphone. Signalement du parent (capture iPhone, laboratoire des sons) : « les sons ne s'enregistrent pas ».

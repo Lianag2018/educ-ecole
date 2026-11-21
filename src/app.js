@@ -49,8 +49,8 @@ import {gestureText,tipFor,wordsFor} from './sound-lessons.js';
 import {seedFamilyContent} from './family-content.js';
 import {parseBookWords,saveBookWords,loadBookWords} from './book-words.js';
 import {parseGestures,saveBookGestures} from './book-gestures.js';
-import {soundLabParent,soundLabMarkup,nextMs} from './sound-lab.js';
-import {getRecording,saveRecording,deleteRecording,listRecorded,loadStretchSettings,saveStretchMs} from './sound-bank.js';
+import {soundLabParent,soundLabMarkup,nextMs,labSounds} from './sound-lab.js';
+import {getRecording,saveRecording,deleteRecording,listRecorded,loadStretchSettings,saveStretchMs,exportSounds,importSounds} from './sound-bank.js';
 import {startPartySound,partyMuted,setPartyMuted} from './party-sound.js';
 import {psPages,privateStoriesMarkup,parseStories,savePrivate,clearPrivate} from './private-stories.js';
 import {loversCards} from './sound-games.js';
@@ -422,6 +422,28 @@ function bindSoundGarden(){
   document.querySelectorAll('[data-lab-play]').forEach(b=>b.onclick=()=>phonemePlayer.play(b.dataset.labPlay));
   document.querySelectorAll('[data-lab-ms]').forEach(b=>b.onclick=()=>{const id=b.dataset.labMs,cur=loadStretchSettings()[id]??1000;saveStretchMs(id,nextMs(cur,Number(b.dataset.delta)));phonemePlayer.clearCache();render();phonemePlayer.play(id);});
   document.querySelectorAll('[data-lab-reset]').forEach(b=>b.onclick=async()=>{const id=b.dataset.labReset;await deleteRecording(id);labRecorded.delete(id);phonemePlayer.clearCache();render();phonemePlayer.play(id);});
+  // Transfert des voix vers une autre tablette (fichier JSON, sans serveur).
+  document.querySelector('[data-lab-export]')?.addEventListener('click',async()=>{
+   try{
+    const data=await exportSounds(),n=Object.keys(data.sounds).length;
+    if(!n){say('Tu n’as encore enregistré aucun son sur cet appareil.');return;}
+    const day=new Date().toISOString().slice(0,10),file=new File([JSON.stringify(data)],`sons-atelier-${day}.json`,{type:'application/json'});
+    if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Mes sons de l’Atelier des mots'});say('✓ '+n+' son'+(n>1?'s':'')+' prêt'+(n>1?'s':'')+' à envoyer.');return;}catch(e){if(e?.name==='AbortError')return;}}
+    const url=URL.createObjectURL(file),link=document.createElement('a');link.href=url;link.download=file.name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+    say('✓ '+n+' son'+(n>1?'s':'')+' enregistré'+(n>1?'s':'')+' dans le fichier « '+file.name+' ». Envoie-le sur l’autre tablette, puis touche « Recevoir des sons ».');
+   }catch(err){say('Impossible de préparer le fichier ('+(err?.name||err?.message||'erreur')+').');}
+  });
+  document.querySelector('[data-lab-import]')?.addEventListener('change',async e=>{
+   const f=e.target.files?.[0];if(!f)return;
+   try{
+    if(f.size>20000000)throw Error('trop');
+    const r=await importSounds(JSON.parse(await f.text()),labSounds().map(s=>s.id));
+    for(const id of await listRecorded())labRecorded.add(id);phonemePlayer.clearCache();
+    labMsg=r.saved?'✓ '+r.saved+' son'+(r.saved>1?'s reçus':' reçu')+(r.skipped?' ('+r.skipped+' ignoré'+(r.skipped>1?'s':'')+')':'')+'.':'Aucun son utilisable dans ce fichier.';
+    render();
+   }catch{say('Ce fichier n’est pas un fichier de sons de l’Atelier des mots.');}
+   e.target.value='';
+  });
   // Enregistrer sa voix : format choisi selon l'appareil (mp4 sur Safari/iPhone), chaque étape est annoncée, et l'enregistrement
   // n'est gardé que s'il se relit vraiment. Rien n'est avalé en silence.
   document.querySelectorAll('[data-lab-rec]').forEach(b=>b.onclick=async()=>{
