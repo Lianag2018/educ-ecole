@@ -1,3 +1,11 @@
+# Roue : arrêt sur du blanc (Safari) — 21 novembre 2026 (America/Toronto)
+
+Branche claude/roue-arret-juste. Signalement du parent (capture, probablement Safari : emojis Apple) : « les cases sont vides, certaines arrivent toujours dans le blanc de la roulette » : le résultat s'affiche à côté mais le rouleau est vide.
+Constat : dans Chromium, 48 arrêts testés (4 tailles d'écran, 4 catégories, densités 1 à 3) tombent tous sur la bonne case, 3 cases visibles. Le défaut n'est donc pas reproductible ici; cause probable : Safari n'actualise pas toujours l'affichage d'un long rouleau animé par transition CSS (couche composée vide après la transition). Aucun moteur WebKit n'est disponible dans cet environnement : correction non prouvée sur Safari.
+Livré : (a) animation dessinée image par image (requestAnimationFrame, même courbe que les tic-tic du son, translate3d) au lieu d'une transition CSS; (b) à l'arrêt, le rouleau est reconstruit avec seulement les 3 cases visibles (précédente, tirée, suivante) et remis à zéro : plus de grand décalage à afficher; (c) filet de sécurité : l'arrêt se règle aussi par minuterie si l'animation est interrompue (onglet en arrière-plan); (d) hauteur des cases fixée, couche d'affichage isolée (isolation, translateZ), backface-visibility.
+Preuves : 48 arrêts vérifiés dans Chromium (case au centre = résultat annoncé, 3 cases visibles); tests unitaires et suites navigateur (voir PR). Non essayé sur Safari/iPad réels.
+En attente : le parent confirme sur Safari si le rouleau s'arrête maintenant toujours sur une case visible.
+
 # Feuilles de l'école à colorier : doubles et compléments de 10 — 21 novembre 2026 (America/Toronto)
 
 Branche claude/feuilles-ecole-doubles-complements. Retour du parent sur les jeux de cartes : « ça doit être représenté comme à l'école, comme sur les photos ». Les cartes restent (jeux pour la mémoire) mais l'entrée principale est maintenant la feuille de l'école.
