@@ -1,3 +1,11 @@
+# Réduction du bruit ambiant — 21 novembre 2026 (America/Toronto)
+
+Branche claude/bruit-ambiant. Demande du parent : isolation du bruit ambiant pour les enregistrements.
+Livré : laboratoire des sons : « Réduction du bruit ambiant » Aucune / Normale (défaut) / Forte, mémorisée sur l'appareil (atelier-mots-denoise). Deux étages : (1) suppression de bruit demandée au navigateur (contrainte noiseSuppression) quand la réduction est active; (2) soustraction spectrale maison (src/denoise.js) : coupe-bas à 90 Hz, profil de bruit appris dans les moments les plus calmes de la prise, gain par fréquence avec plancher −22 dB, lissage; la prise nettoyée est coupée aux silences, normalisée et gardée en WAV 16 bits (lisible partout, indépendant du format de l'appareil). Si le nettoyage échoue ou vide la prise, la prise d'origine est gardée. Tout est local à l'appareil.
+Preuves : signal de test (souffle + voyelle) : bruit −16 dB et voix −0,5 dB en Normale, −22 dB et −0,7 dB en Forte; essai Chromium avec un micro simulé bruyant : écart voix/bruit de fond 23 dB (Aucune), 56 dB (Normale), 63 dB (Forte), fichier WAV de 236 Ko, 0 erreur JS; 2 tests unitaires. Non essayé sur iPhone réel; non écouté par un humain (risque d'une voix un peu « métallique » en Forte).
+Limites : un bruit qui ressemble à la voix (autre personne, télévision) n'est pas retiré; la prise doit contenir quelques instants calmes pour apprendre le bruit.
+En attente : le parent essaie sur l'iPhone et dit s'il préfère Normale ou Forte.
+
 # Sensibilité du micro — 21 novembre 2026 (America/Toronto)
 
 Branche claude/sensibilite-micro. Demande du parent : pouvoir régler la sensibilité du micro sur l'appareil.
