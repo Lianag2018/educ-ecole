@@ -71,7 +71,8 @@ export function childHome(p,day){
   hubTile('Lire un nombre avec la maîtresse','🎤','data-welcome-voice="number"'),
   older?hubTile('Mes tables','🔢','data-action="weekly"'):hubTile('Mes mini-défis','🌻','data-action="mini-garden"'),
   hubTile('Bonds de nombres','🐸','data-action="skip-counting"'),
-  older?hubTile('Tables en chansons','🎵','data-action="table-songs"'):hubTile('Mon Pop-it','🔴','data-popit')
+  older?hubTile('Tables en chansons','🎵','data-action="table-songs"'):hubTile('Mon Pop-it','🔴','data-popit'),
+  ...(older?[hubTile('Mémoire des nombres','🧠','data-action="memory-games"')]:[])
  ];
  const play=[
   hubTile('Chansons','🎵','data-action="songs-world"'),hubTile('Vidéos et défis','🎬','data-action="videos-french"'),hubTile('Un prof et sa guitare','🎸','data-action="videos-prof"'),hubTile('Maître Lucas','🎓','data-action="videos-lucas"'),

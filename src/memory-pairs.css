@@ -1,0 +1,30 @@
+.mp{max-width:820px;margin:0 auto;padding:10px 12px;color:#3b2466}
+.mp-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}.mp-top h2{margin:0;font-family:inherit;font-size:1.5rem}
+.mp-top button{width:54px;height:54px;border:3px solid #24163f;border-radius:50%;background:#fff;font-size:1.6rem;font-weight:800;color:#3b2466;cursor:pointer}
+.mp-intro{margin:0 0 10px;font-size:1.1rem}
+.mp-menu{display:grid;gap:12px}.mp-game{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;align-items:center;text-align:left;min-height:84px;padding:10px 16px;border:3px solid #24163f;border-radius:22px;background:linear-gradient(135deg,#f3e8ff,#ffe9f3);color:#3b2466;box-shadow:0 5px 0 #24163f;cursor:pointer}
+.mp-game span{grid-row:span 2;font-size:2.6rem}.mp-game strong{font-size:1.3rem}.mp-game small{color:#6b5a80;font-size:1rem}.mp-learn{background:linear-gradient(135deg,#e6f6e0,#fff3c4)}
+.mp-msg{margin:4px 0 8px;min-height:1.5em;font-weight:800;font-size:1.15rem;text-align:center}
+.mp-bar{height:14px;border-radius:10px;background:#e9def7;overflow:hidden;margin-bottom:8px}.mp-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#8358a8,#e0527f);transform-origin:left;animation:mp-drain linear forwards}
+@keyframes mp-drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.mp-grid{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:10px;perspective:900px;width:min(100%,calc(var(--cols)*var(--w,150px)));margin:0 auto}
+.mp-card{position:relative;aspect-ratio:3/4;min-height:96px;padding:0;border:0;background:none;cursor:pointer}
+.mp-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .45s}
+.mp-card.up .mp-in,.mp-card.done .mp-in{transform:rotateY(180deg)}
+.mp-back,.mp-front{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:3px solid #24163f;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 4px 0 #24163f}
+.mp-back{background:repeating-linear-gradient(45deg,#8358a8,#8358a8 8px,#9a72bd 8px,#9a72bd 16px);font-size:2.2rem}.mp-front{background:#fff;transform:rotateY(180deg);padding:4px}
+.mp-front b{font-size:clamp(1.3rem,5vw,2rem);line-height:1}.mp-card.done .mp-front{background:#e6f6e0;border-color:#2b9a7f}
+.mp-card.hint .mp-back{animation:mp-pulse .7s ease-in-out infinite alternate;box-shadow:0 0 0 4px #ffd166,0 0 22px #ffd166}
+@keyframes mp-pulse{to{transform:scale(1.06)}}
+.mp-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:92%}.mp-dots i{width:9px;height:9px;border-radius:50%;background:#e0527f}
+.mp-frame{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;width:82%}.mp-frame i{aspect-ratio:1;border-radius:3px;border:1.5px solid #c9b9e3;background:#fff}.mp-frame.a i.on{background:#4a90e2;border-color:#4a90e2}.mp-frame.b i.on{background:#f5a623;border-color:#f5a623}
+.mp-actions{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}.mp-actions button{min-height:52px;padding:6px 18px;border:3px solid #24163f;border-radius:18px;background:#fff;color:#3b2466;font-weight:800;font-size:1.05rem;cursor:pointer}
+.mp-learnlist{display:grid;gap:8px}.mp-learnlist h3{margin:10px 0 0}.mp-tip{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:left;padding:8px 14px;border:3px solid #24163f;border-radius:18px;background:#fff;color:#3b2466;cursor:pointer;min-height:64px}
+.mp-tip span:first-child{font-size:2rem}.mp-tip b{display:block;font-size:1.15rem}.mp-tip small{color:#6b5a80;font-size:1rem}
+.mp-card2{display:grid;gap:10px;text-align:center;padding:18px;border-radius:26px;background:linear-gradient(#fffdf4,#f6efff);border:3px solid #e4d6f5}.mp-card2 p{margin:0;font-size:1.1rem}.mp-score{font-size:1.4rem!important;font-weight:800}.mp-star{font-size:2rem!important;font-weight:800;color:#d49a00}
+.mp-pairs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.mp-pairs span{padding:4px 10px;border-radius:12px;background:#e6f6e0;font-weight:700}.mp-pairs span.miss{background:#ffe3ea}
+button.mp-go{min-height:60px;border:0;border-radius:20px;background:#8358a8;color:#fff;font-size:1.3rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #5a2e87}button.mp-alt{min-height:52px;border:3px solid #24163f;border-radius:18px;background:#fff;color:#3b2466;font-weight:800;font-size:1.05rem;cursor:pointer}
+body .mp button.mp-go{background:#8358a8!important;color:#fff!important}body .mp .mp-game,body .mp .mp-tip{color:#3b2466!important}body .mp .mp-front{background:#fff!important}body .mp .mp-card.done .mp-front{background:#e6f6e0!important}
+@media(max-width:520px){.mp-card{min-height:100px}.mp-dots i{width:7px;height:7px}}
+@media(prefers-reduced-motion:reduce){.mp-in{transition:none}.mp-card.hint .mp-back{animation:none}.mp-bar i{animation-duration:2s!important}}
+.mp-top{margin-bottom:2px}.mp-msg{margin:2px 0 6px}
