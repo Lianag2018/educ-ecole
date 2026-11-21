@@ -24,3 +24,5 @@ button.wh-spin,button.wh-go{min-height:60px;border:0;border-radius:20px;font-siz
 body .hub-wheel button.wh-spin,body .hub-wheel button.wh-go{background:#e0527f!important;color:#fff!important}body .hub-wheel.wh-1 button.wh-spin,body .hub-wheel.wh-1 button.wh-go{background:#8358a8!important}
 body .hub-wheel .wh-cats button{background:#fff!important;color:#3b2466!important}body .hub-wheel.wh-0 .wh-cats button[aria-pressed=true]{background:#e0527f!important;color:#fff!important}body .hub-wheel.wh-1 .wh-cats button[aria-pressed=true]{background:#8358a8!important;color:#fff!important}
 .wh-head{position:relative}.wh-sound{position:absolute;right:0;top:0;width:48px;height:48px;border:3px solid #24163f;border-radius:50%;background:#fff;font-size:1.4rem;cursor:pointer}
+.wh-window{isolation:isolate;transform:translateZ(0)}.wh-strip{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.wh-item{flex:none;min-height:86px;max-height:86px}
