@@ -51,6 +51,7 @@ import {parseBookWords,saveBookWords,loadBookWords} from './book-words.js';
 import {parseGestures,saveBookGestures} from './book-gestures.js';
 import {soundLabParent,soundLabMarkup,nextMs,labSounds} from './sound-lab.js';
 import {getRecording,saveRecording,deleteRecording,listRecorded,loadStretchSettings,saveStretchMs,exportSounds,importSounds} from './sound-bank.js';
+import {trimSilence,normalize,peakOf,isEmptyTake} from './sound-stretch.js';
 import {startPartySound,partyMuted,setPartyMuted} from './party-sound.js';
 import {psPages,privateStoriesMarkup,parseStories,savePrivate,clearPrivate} from './private-stories.js';
 import {loversCards} from './sound-games.js';
@@ -446,9 +447,10 @@ function bindSoundGarden(){
   });
   // La prise n'est gardée qu'après l'avoir écoutée : écouter, garder (enregistrement final) ou jeter.
   const stopTake=()=>{try{labTakeAudio?.pause();}catch{}if(labTakeAudio?.src)URL.revokeObjectURL(labTakeAudio.src);labTakeAudio=null;};
-  document.querySelector('[data-lab-take-play]')?.addEventListener('click',()=>{if(!labTake)return;stopTake();phonemePlayer.stop();
-   const url=URL.createObjectURL(new Blob([labTake.buf],{type:labTake.mime}));labTakeAudio=new Audio(url);labTakeAudio.onended=()=>stopTake();
-   labTakeAudio.play().catch(()=>say('Je n’arrive pas à jouer la prise. Vérifie le volume et le mode silencieux de l’appareil.'));});
+  document.querySelector('[data-lab-take-play]')?.addEventListener('click',async()=>{if(!labTake)return;stopTake();phonemePlayer.stop();
+   try{const ctx=phonemePlayer.context(),dec=await new Promise((res,rej)=>{const p=ctx.decodeAudioData(labTake.buf.slice(0),res,rej);p?.catch?.(rej);});
+    await phonemePlayer.playSamples(normalize(trimSilence(dec.getChannelData(0),dec.sampleRate)),dec.sampleRate);}
+   catch{say('Je n’arrive pas à jouer la prise. Vérifie le volume et le mode silencieux de l’appareil.');}});
   document.querySelector('[data-lab-take-keep]')?.addEventListener('click',async()=>{if(!labTake)return;const t=labTake;stopTake();
    try{await saveRecording(t.id,t.buf);labRecorded.add(t.id);phonemePlayer.clearCache();labTake=null;labMsg='✓ Ta voix est enregistrée pour « '+t.id+' ».';render();phonemePlayer.play(t.id);}
    catch(err){say('Impossible de garder l’enregistrement ('+(err?.name||err?.message||'erreur')+'). Si tu es en navigation privée, ouvre l’application dans une fenêtre normale.');}});
@@ -462,8 +464,8 @@ function bindSoundGarden(){
    const mime=['audio/mp4;codecs=mp4a.40.2','audio/mp4','audio/webm;codecs=opus','audio/webm'].find(t=>window.MediaRecorder.isTypeSupported?.(t))||'';
    let stream=null;
    try{
-    phonemePlayer.stop();stopTake();labTake=null;say('Autorise le micro si l’appareil le demande…');
-    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    phonemePlayer.release();stopTake();labTake=null;say('Autorise le micro si l’appareil le demande…');
+    stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:true}});
     const rec=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream),chunks=[];
     rec.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data);};
     rec.onerror=e=>say('Erreur du micro : '+(e.error?.name||'inconnue'));
@@ -472,15 +474,20 @@ function bindSoundGarden(){
      try{
       const buf=await new Blob(chunks,{type:rec.mimeType||mime}).arrayBuffer();
       if(buf.byteLength<=500)throw Object.assign(Error('vide'),{kind:'empty'});
-      const C=window.AudioContext||window.webkitAudioContext,ctx=new C();
-      try{await new Promise((res,rej)=>{const p=ctx.decodeAudioData(buf.slice(0),res,rej);p?.catch?.(rej);});}catch{ctx.close?.();throw Object.assign(Error('illisible'),{kind:'decode'});}
+      const C=window.AudioContext||window.webkitAudioContext,ctx=new C();let dec;
+      try{dec=await new Promise((res,rej)=>{const p=ctx.decodeAudioData(buf.slice(0),res,rej);p?.catch?.(rej);});}catch{ctx.close?.();throw Object.assign(Error('illisible'),{kind:'decode'});}
       ctx.close?.();
+      if(isEmptyTake(dec.getChannelData(0),dec.sampleRate))throw Object.assign(Error('silence'),{kind:'silence',peak:peakOf(dec.getChannelData(0))});
       labTake={id,buf,mime:rec.mimeType||mime||'audio/mp4'};
       labMsg='🎧 Écoute ta prise. Si elle te plaît, touche ✓ Garder. Sinon, refais-la avec 🎙️.';
-     }catch(err){labMsg=err.kind==='empty'?'Rien n’a été enregistré. Parle plus près du micro, puis touche 🎙️ et réessaie.':err.kind==='decode'?'L’enregistrement est fait, mais cet appareil ne sait pas le relire. Je ne le garde pas : réessaie.':'Impossible de garder l’enregistrement ('+(err.name||err.message||'erreur')+'). Si tu es en navigation privée, ouvre l’application dans une fenêtre normale.';}
+     }catch(err){labMsg=err.kind==='silence'?'Je n’entends aucune voix dans cet enregistrement (le micro est peut-être coupé ou couvert). Parle près du micro en bas de l’appareil, regarde la barre de niveau qui bouge, puis réessaie.':err.kind==='empty'?'Rien n’a été enregistré. Parle plus près du micro, puis touche 🎙️ et réessaie.':err.kind==='decode'?'L’enregistrement est fait, mais cet appareil ne sait pas le relire. Je ne le garde pas : réessaie.':'Impossible de garder l’enregistrement ('+(err.name||err.message||'erreur')+'). Si tu es en navigation privée, ouvre l’application dans une fenêtre normale.';}
      if(view==='sound-lab')render();
     };
-    labRec={id,rec};rec.start(250);labMsg='🔴 Je t’écoute… parle maintenant (4 secondes). Touche ⏹ pour arrêter.';render();
+    // Barre de niveau : on voit tout de suite si le micro entend quelque chose.
+    try{const C=window.AudioContext||window.webkitAudioContext,lc=new C(),src=lc.createMediaStreamSource(stream),an=lc.createAnalyser();an.fftSize=512;src.connect(an);const data=new Float32Array(an.fftSize);let quiet=0;
+     const t=setInterval(()=>{an.getFloatTimeDomainData(data);let m=0;for(const v of data)m=Math.max(m,Math.abs(v));const bar=document.querySelector('[data-lab-level]');if(bar)bar.style.width=Math.min(100,Math.round(m*400))+'%';quiet=m<0.004?quiet+1:0;if(quiet===16)say('Je n’entends rien pour l’instant… parle plus près du micro.');},100);
+     rec.addEventListener('stop',()=>{clearInterval(t);try{lc.close();}catch{}});}catch{}
+    labRec={id,rec};rec.start();labMsg='🔴 Je t’écoute… parle maintenant (4 secondes). Touche ⏹ pour arrêter.';render();
     setTimeout(()=>{if(labRec?.rec===rec&&rec.state==='recording')rec.stop();},4000);
    }catch(err){stream?.getTracks().forEach(t=>t.stop());labRec=null;
     labMsg=err?.name==='NotAllowedError'||err?.name==='SecurityError'?'Le micro n’est pas autorisé. Dans Safari : touche « aA » dans la barre d’adresse, Réglages du site, Micro, Autoriser. Puis réessaie.':err?.name==='NotFoundError'?'Aucun micro trouvé sur cet appareil.':'Impossible de démarrer l’enregistrement ('+(err?.name||err?.message||'erreur')+').';

@@ -6,7 +6,13 @@ export const isStretchable=id=>!STOP_SOUNDS.includes(id);
 export const defaultStretchMs=id=>isStretchable(id)?DEFAULT_STRETCH_MS:0;
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 // Retire le silence au début et à la fin (utile pour les enregistrements de la famille).
+// Seuil relatif : un enregistrement faible (micro d'iPhone) ne doit jamais être coupé en entier. Le seuil ne dépasse pas 6 % de la crête.
+export function peakOf(samples){let m=0;for(let i=0;i<samples.length;i++){const v=Math.abs(samples[i]);if(v>m)m=v;}return m;}
+// Un son est « vide » si sa crête est presque nulle (micro coupé) ou s'il dure moins de 0,25 s.
+export const SILENT_PEAK=0.003;
+export const isEmptyTake=(samples,rate)=>peakOf(samples)<SILENT_PEAK||samples.length/rate<0.25;
 export function trimSilence(samples,rate,{threshold=0.02,keepMs=15}={}){
+ threshold=Math.min(threshold,Math.max(1e-5,peakOf(samples)*0.06));
  let a=0,b=samples.length-1;
  while(a<b&&Math.abs(samples[a])<threshold)a++;
  while(b>a&&Math.abs(samples[b])<threshold)b--;

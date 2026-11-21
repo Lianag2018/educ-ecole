@@ -1,3 +1,11 @@
+# Enregistrement : fin des sons vides sur iPhone — 21 novembre 2026 (America/Toronto)
+
+Branche claude/micro-son-vide. Signalement du parent (iPhone) : « pas de message, simplement un nouveau son vide ».
+Cause probable trouvée : la coupe automatique du silence (trimSilence, src/sound-stretch.js) avait un seuil fixe de 0,02; un enregistrement faible (micro d'iPhone) était coupé en entier et il restait un son d'un échantillon, sans message. Autres risques traités : un contexte audio encore ouvert peut rendre le micro muet sur iOS; fragments mp4 de Safari avec la livraison toutes les 250 ms.
+Livré : seuil relatif (jamais plus de 6 % de la crête) puis amplification; détection d'un enregistrement muet ou de moins de 0,25 s avec un message clair, sans proposer de prise vide; barre de niveau en direct pendant l'enregistrement (on voit si le micro entend) et message « Je n'entends rien… » après 1,6 s de silence; contexte audio de lecture fermé avant d'enregistrer (PhonemePlayer.release); micro demandé sans suppression de bruit ni annulation d'écho, gain automatique gardé; plus de livraison par tranches de 250 ms; la prise s'écoute avec le même traitement que le son final (ce qu'on entend est ce qui sera gardé).
+Preuves : essai Chromium avec trois micros simulés : normal (barre 53 %, prise proposée), très faible 0,01 (barre 2 %, prise proposée et audible après amplification), muet (aucune prise, message clair); 2 tests unitaires; tests et suites navigateur (voir PR). Non essayé sur iPhone/Safari réels : cause iOS à confirmer par le parent (barre de niveau et message).
+En attente : le parent réessaie sur l'iPhone et dit si la barre de niveau bouge et quel message s'affiche.
+
 # Enregistrement en deux temps et voix douces — 21 novembre 2026 (America/Toronto)
 
 Branche claude/prise-et-voix-douce. Demande du parent : bouton d'enregistrement à droite, un bouton pour écouter, et si satisfaite on rappuie pour l'enregistrer pour de bon; les sons d'origine ne sont pas bons; s'assurer que toutes les voix de l'app sont la voix douce.

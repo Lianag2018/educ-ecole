@@ -779,3 +779,4 @@ body.kid-simple .simple-world .daily-copy .kid-label{padding:4px 30px;border:3px
 .sound-lab-page{overflow-x:hidden}.sl-row{grid-template-columns:54px 46px minmax(0,1fr) 46px 46px!important;gap:6px!important;padding:8px 8px!important}
 .sl-row .sl-ms{min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;font-size:.85rem}.sl-row .sl-ms button{min-width:38px!important;width:38px;min-height:44px}
 .sl-row>button{min-width:0!important;padding:0!important}.sl-take{flex-wrap:wrap}.sl-take button{min-width:0;padding:6px 8px!important}
+.sl-level{height:16px;margin:4px 0 8px;border-radius:10px;background:#e9def7;border:2px solid #24163f;overflow:hidden;position:sticky;top:64px;z-index:6}.sl-level i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2b9a7f,#ffd166 70%,#e0527f);transition:width .08s}
