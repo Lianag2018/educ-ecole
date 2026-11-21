@@ -8,7 +8,7 @@ export const nextMs=(current,delta)=>Math.min(MAX_STRETCH_MS,Math.max(MIN_STRETC
 export function soundLabParent(){
  return `<section class="panel" data-parent-group="sounds"><h2>🎛️ Laboratoire des sons</h2><p>Écoute chaque son, allonge-le ou remplace-le par ta propre voix. Les changements restent sur cet appareil.</p><button class="primary" data-action="sound-lab">Ouvrir le laboratoire</button></section>`;
 }
-export function soundLabMarkup({recorded=new Set(),ms={},recordingId=''}={}){
+export function soundLabMarkup({recorded=new Set(),ms={},recordingId='',message=''}={}){
  const rows=labSounds().map(s=>{
   const stretch=isStretchable(s.id),cur=ms[s.id]??defaultStretchMs(s.id),mine=recorded.has(s.id),rec=recordingId===s.id;
   return `<li class="sl-row" data-lab-row="${esc(s.id)}"><b class="sl-snd">${esc(s.label)}</b><button type="button" data-lab-play="${esc(s.id)}" aria-label="Écouter ${esc(s.label)}">▶</button>`
@@ -16,5 +16,5 @@ export function soundLabMarkup({recorded=new Set(),ms={},recordingId=''}={}){
   +`<button type="button" class="${rec?'rec':''}" data-lab-rec="${esc(s.id)}" aria-label="${rec?'Arrêter':'Enregistrer ma voix'}">${rec?'⏹':'🎙️'}</button>`
   +(mine?`<button type="button" data-lab-reset="${esc(s.id)}" aria-label="Rétablir le son d’origine">↩</button>`:'<span></span>')+`</li>`;
  }).join('');
- return `<section class="sound-lab-page" aria-label="Laboratoire des sons"><div class="tb-top"><button data-action="parent">‹ Espace adulte</button><span>🎛️ Les sons</span></div><p class="tb-intro">▶ écouter · − + durée · 🎙️ enregistrer ta voix (4 secondes max, touche encore pour arrêter) · ↩ remettre le son d’origine.</p><p class="sl-msg" role="status" data-lab-msg></p><ul class="sl-list">${rows}</ul></section>`;
+ return `<section class="sound-lab-page" aria-label="Laboratoire des sons"><div class="tb-top"><button data-action="parent">‹ Espace adulte</button><span>🎛️ Les sons</span></div><p class="tb-intro">▶ écouter · − + durée · 🎙️ enregistrer ta voix (4 secondes max, touche encore pour arrêter) · ↩ remettre le son d’origine.</p><p class="sl-msg" role="status" aria-live="polite" data-lab-msg>${esc(message)}</p><ul class="sl-list">${rows}</ul></section>`;
 }

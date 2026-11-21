@@ -1,3 +1,11 @@
+# Enregistrement des sons sur iPhone — 21 novembre 2026 (America/Toronto)
+
+Branche claude/enregistrement-sons-iphone. Signalement du parent (capture iPhone, laboratoire des sons) : « les sons ne s'enregistrent pas ».
+Constat : l'enregistrement fonctionne dans Chromium avec un micro simulé (enregistré dans IndexedDB, bouton ↩ affiché). Je n'ai pas pu reproduire le défaut sur Safari/iPhone (aucun appareil). Défauts trouvés dans le code : toutes les erreurs étaient avalées en silence et le message d'état était effacé par le rafraîchissement de la page; aucun format choisi pour Safari; aucune vérification que l'enregistrement se relit.
+Livré : format choisi selon l'appareil (audio/mp4 sur Safari, webm sinon), données reçues toutes les 250 ms; chaque étape est annoncée dans un bandeau fixe (« Autorise le micro… », « Je t'écoute… », « Je range ta voix… », « ✓ Ta voix est enregistrée »); l'enregistrement n'est gardé que s'il se relit vraiment (décodage vérifié), sinon message clair; messages d'erreur précis (micro refusé avec les étapes Safari, aucun micro, enregistrement vide, impossible de garder, navigation privée, ouverture dans une autre application).
+Preuves : essai Chromium (micro simulé) : démarrage, arrêt, enregistrement gardé, message final; tests unitaires et suites navigateur (voir PR). Non essayé sur iPhone/Safari réel : à confirmer par le parent avec le message affiché.
+En attente : le parent réessaie sur l'iPhone et donne le message affiché si ça ne marche toujours pas.
+
 # Défi 3 secondes : liste plus difficile pour Liana — 20 novembre 2026 (America/Toronto)
 
 Demande du parent : enlever ce qui est trop simple pour une enfant de 8 ans (elle, les, plus, à, a…), garder les sons doubles et plus (comme « avion »).
