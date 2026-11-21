@@ -1,6 +1,7 @@
 // Jeux de mémoire des nombres : « Les doubles » (4 + 4 ↔ 8) et « Les compléments de 10 » (3 ↔ 7), façon Memory.
 // Pensé pour une enfant qui oublie vite : regard de départ, cartes qui reviennent tant qu'elles ne sont pas retenues (boîtes de Leitner),
 // images pour retenir, indices, aucune punition. Les progrès restent dans l'appareil.
+import {KINDS,SCHOOL_PAGES,generatePage,mountSheet} from './worksheets.js';
 const KEY='atelier-mots-paires-v1';
 const store=()=>{try{return globalThis.localStorage||null;}catch{return null;}};
 const readAll=()=>{try{return JSON.parse(store()?.getItem(KEY)||'{}')||{};}catch{return {};}};
@@ -39,13 +40,15 @@ const face=side=>`<b>${esc(side.big)}</b>${side.frame!==undefined?frame(side.fra
 export const memoryMarkup=()=>'<section class="mp" data-mp aria-label="Mémoire des nombres"></section>';
 export function mountMemory(root,{profile,speak,award,onExit}){
  const box=root.querySelector('[data-mp]');if(!box)return {destroy(){}};
- let alive=true,timers=[],cur=null;
+ let alive=true,timers=[],cur=null,sub=null;
  const later=(f,ms)=>{const t=setTimeout(()=>{if(alive)f();},ms);timers.push(t);return t;};
- const clear=()=>{timers.forEach(clearTimeout);timers=[];};
+ const clear=()=>{timers.forEach(clearTimeout);timers=[];if(sub){sub.destroy();sub=null;}};
  const say=t=>{try{speak(t);}catch{}};
  const top=(t,back)=>`<div class="mp-top"><button type="button" data-mp-${back}>‹</button><h2>${t}</h2></div>`;
  const menu=()=>{clear();cur=null;
-  box.innerHTML=`${top('🧠 Mémoire des nombres','exit')}<p class="mp-intro">Des jeux de cartes pour retenir les doubles et les compléments de 10, sans stress : les cartes difficiles reviennent jusqu’à ce que tu les connaisses.</p><div class="mp-menu">${gameIds.map(g=>{const G=GAMES[g],n=G.pairs().length,k=knownCount(profile.id,g);return `<button type="button" class="mp-game" data-mp-game="${g}"><span aria-hidden="true">${G.icon}</span><strong>${esc(G.title)}</strong><small>${k?`Tu en connais ${k} sur ${n}`:`${n} paires à retenir`}</small></button>`;}).join('')}<button type="button" class="mp-game mp-learn" data-mp-learn="all"><span aria-hidden="true">📖</span><strong>Mes trucs pour retenir</strong><small>Des images pour ne plus oublier</small></button></div>`;};
+  box.innerHTML=`${top('🧠 Mémoire des nombres','exit')}<p class="mp-intro">Comme à l’école : les feuilles à colorier. Et des jeux de cartes pour mieux retenir.</p>
+  <h3 class="mp-h">📄 Les feuilles de l’école, à colorier</h3><div class="mp-menu">${Object.keys(KINDS).map(k=>`<div class="mp-sheetrow"><button type="button" class="mp-game" data-mp-sheet="${k}:school"><span aria-hidden="true">${KINDS[k].icon}</span><strong>${esc(KINDS[k].title)}</strong><small>La feuille de l’école</small></button><button type="button" class="mp-new" data-mp-sheet="${k}:new">🔄 Nouvelle feuille</button></div>`).join('')}</div>
+  <h3 class="mp-h">🃏 Jeux de cartes pour la mémoire</h3><div class="mp-menu">${gameIds.map(g=>{const G=GAMES[g],n=G.pairs().length,k=knownCount(profile.id,g);return `<button type="button" class="mp-game" data-mp-game="${g}"><span aria-hidden="true">${G.icon}</span><strong>${esc(G.title)}</strong><small>${k?`Tu en connais ${k} sur ${n}`:`${n} paires à retenir`}</small></button>`;}).join('')}<button type="button" class="mp-game mp-learn" data-mp-learn="all"><span aria-hidden="true">📖</span><strong>Mes trucs pour retenir</strong><small>Des images pour ne plus oublier</small></button></div>`;};
  const learn=(g)=>{clear();const list=g==='all'?gameIds:[g];
   box.innerHTML=`${top('📖 Mes trucs pour retenir','menu')}<div class="mp-learnlist">${list.map(id=>`<h3>${GAMES[id].icon} ${esc(GAMES[id].title)}</h3>${GAMES[id].pairs().map(p=>`<button type="button" class="mp-tip" data-mp-say="${esc(p.say)}"><span aria-hidden="true">${p.icon}</span><span><b>${esc(p.a.big)} ↔ ${esc(p.b.big)}</b><small>${esc(p.tip)}</small></span><i aria-hidden="true">🔊</i></button>`).join('')}`).join('')}</div>`;};
  const start=g=>{clear();const st=state(profile.id,g),G=GAMES[g],pairs=choosePairs(g,profile.id,st.level);
@@ -71,6 +74,8 @@ export function mountMemory(root,{profile,speak,award,onExit}){
  const click=e=>{const b=e.target.closest('button');if(!b||!alive)return;
   if(b.hasAttribute('data-mp-exit')){clear();return onExit();}
   if(b.hasAttribute('data-mp-menu'))return menu();
+  if(b.dataset.mpSheet){const [kind,which]=b.dataset.mpSheet.split(':');clear();box.innerHTML='';
+   sub=mountSheet(box,{kind,grids:which==='school'?SCHOOL_PAGES[kind]:generatePage(kind),profile,speak,award:g=>award('feuille-'+g),label:KINDS[kind].title+(which==='school'?'':' · nouvelle feuille'),onBack:()=>menu()});return;}
   if(b.dataset.mpGame)return start(b.dataset.mpGame);
   if(b.dataset.mpLearn)return learn(b.dataset.mpLearn);
   if(b.dataset.mpSay)return say(b.dataset.mpSay);

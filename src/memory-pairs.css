@@ -28,3 +28,6 @@ body .mp button.mp-go{background:#8358a8!important;color:#fff!important}body .mp
 @media(max-width:520px){.mp-card{min-height:100px}.mp-dots i{width:7px;height:7px}}
 @media(prefers-reduced-motion:reduce){.mp-in{transition:none}.mp-card.hint .mp-back{animation:none}.mp-bar i{animation-duration:2s!important}}
 .mp-top{margin-bottom:2px}.mp-msg{margin:2px 0 6px}
+.mp-h{margin:12px 0 6px;font-size:1.15rem;color:#3b2466}.mp-sheetrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:stretch}.mp-new{min-width:130px;border:3px solid #24163f;border-radius:20px;background:#fff;color:#3b2466;font-weight:800;font-size:1rem;cursor:pointer;padding:6px 12px}
+.mp-menu{margin-bottom:6px}
+@media(max-width:520px){.mp-sheetrow{grid-template-columns:1fr}}

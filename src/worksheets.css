@@ -1,0 +1,25 @@
+/* Feuilles de l'école à colorier. */
+.ws-top{display:flex;align-items:center;gap:12px;margin-bottom:4px}.ws-top h2{margin:0;font-family:inherit;font-size:1.4rem;color:#3b2466}
+.ws-top button{width:54px;height:54px;border:3px solid #24163f;border-radius:50%;background:#fff;font-size:1.6rem;font-weight:800;color:#3b2466;cursor:pointer}
+.ws-page{background:#fff;border:2px solid #cfd4dc;border-radius:6px;padding:10px 16px 14px;box-shadow:0 6px 20px #0002;color:#111;text-align:center}
+.ws-head{text-align:right;font-family:"Times New Roman",Georgia,serif;font-size:1.05rem;margin-bottom:2px}.ws-page h3{margin:0 0 2px;font-family:"Times New Roman",Georgia,serif;font-size:1.5rem;font-weight:800}
+.ws-page.hand h3{font-family:"Segoe Print","Bradley Hand","Chalkboard SE","Comic Sans MS",cursive;font-size:1.9rem}
+.ws-instr{margin:0 auto 8px;max-width:560px;font-family:"Times New Roman",Georgia,serif;font-weight:800;font-size:1.02rem;line-height:1.25}
+.ws-grids{display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
+.ws-grid{display:grid;grid-template-columns:repeat(5,64px);grid-auto-rows:54px;border:2px solid #000;background:#000;gap:2px}
+.ws-cell{border:0;background:#fff;color:#000;font-family:"Times New Roman",Georgia,serif;font-weight:900;font-size:1.75rem;line-height:1;cursor:pointer;padding:0;position:relative}
+.hand .ws-cell{font-family:"Segoe Print","Bradley Hand","Chalkboard SE","Comic Sans MS",cursive;font-weight:600;font-size:1.65rem}
+.ws-dark{background:#3a3a3a}
+.ws-cell.sel{background:color-mix(in srgb,var(--c) 45%,#fff);box-shadow:inset 0 0 0 3px var(--c)}
+.ws-cell.lk{background:var(--c);color:#fff;text-shadow:0 1px 2px #0008;cursor:default}
+.ws-cell.hint{animation:ws-pulse .7s ease-in-out infinite alternate;box-shadow:inset 0 0 0 4px #ffd166}
+@keyframes ws-pulse{to{background:#fff3c4}}
+.ws-msg{margin:6px 0;min-height:1.5em;text-align:center;font-weight:800;font-size:1.1rem;color:#3b2466}
+.ws-tools{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.ws-crayons{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.ws-crayons button{width:38px;height:44px;border:3px solid #24163f;border-radius:10px 10px 4px 4px;background:var(--c);cursor:pointer;padding:0}.ws-crayons button.on{transform:translateY(-6px);box-shadow:0 5px 0 #24163f}
+.ws-tools>button{min-height:48px;padding:4px 16px;border:3px solid #24163f;border-radius:16px;background:#fff;color:#3b2466;font-weight:800;font-size:1rem;cursor:pointer}.ws-count{font-weight:800;color:#3b2466}
+.ws-done{display:grid;gap:10px;text-align:center;padding:20px;border-radius:26px;background:linear-gradient(#fffdf4,#f6efff);border:3px solid #e4d6f5;color:#3b2466}.ws-done p{margin:0;font-size:1.1rem}.ws-score{font-size:1.5rem!important;font-weight:800}.ws-star{font-size:2rem!important;font-weight:800;color:#d49a00}
+button.ws-go{min-height:60px;border:0;border-radius:20px;background:#8358a8;color:#fff;font-size:1.3rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #5a2e87}
+body .ws-page .ws-cell{background:#fff!important;color:#000!important}body .ws-page .ws-cell.sel{background:color-mix(in srgb,var(--c) 45%,#fff)!important}body .ws-page .ws-cell.lk{background:var(--c)!important;color:#fff!important}
+@media(max-width:700px){.ws-grid{grid-template-columns:repeat(5,52px);grid-auto-rows:46px}.ws-cell{font-size:1.45rem}.ws-grids{gap:14px}}
+@media(prefers-reduced-motion:reduce){.ws-cell.hint{animation:none}}
