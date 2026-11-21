@@ -23,3 +23,12 @@ test('réponses invalides ou texte hors limites : rien n’est gardé ni envoyé
  for(const bad of [new Response(JSON.stringify({audio:'AAAA',audioType:'audio/mpeg'})),new Response(JSON.stringify({audio:mp3,audioType:'text/html'})),new Response('pas du json'),new Response('{}',{status:401})]){resetStoryVoice();assert.equal(await getStoryAudio('Texte valide.','p1',{fetcher:async()=>bad}),null);}
  resetStoryVoice();const neterr=await getStoryAudio('Encore une page.','p1',{fetcher:async()=>{throw new TypeError('réseau');}});assert.equal(neterr,null);assert.equal(storyVoicePaused(),true);resetStoryVoice();
 });
+test('test du parent : explique la cause du refus et relance la voix en ligne',async()=>{
+ const {testStoryVoice}=await import('../../src/story-voice.js');
+ const r1=await testStoryVoice({fetcher:async()=>new Response('{"code":"story_voice_unavailable"}',{status:503})});
+ assert.equal(r1.ok,false);assert.equal(r1.code,'story_voice_unavailable');assert.match(r1.message,/EDUC_STORY_VOICE_CONFIG/);
+ const r2=await testStoryVoice({fetcher:async()=>new Response('{"code":"parent_login_required"}',{status:401})});assert.match(r2.message,/tablette de la famille/);
+ const r3=await testStoryVoice({fetcher:async()=>good()});assert.equal(r3.ok,true);
+ const r4=await testStoryVoice({fetcher:async()=>{throw new TypeError('x');}});assert.equal(r4.code,'network');
+ resetStoryVoice();
+});

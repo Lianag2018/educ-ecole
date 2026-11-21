@@ -1,3 +1,10 @@
+# Bouton « Tester la voix en ligne » — 21 novembre 2026 (America/Toronto)
+
+Branche claude/test-voix-en-ligne. Le parent ne perçoit aucune différence entre « Les histoires » et « Histoires de l'école » après le redéploiement 686d119 : la lecture retombe probablement sur la voix de l'appareil, et rien n'indiquait pourquoi.
+Livré : en mode adulte, page des histoires de l'école, bloc « Voix de la conteuse » : bouton « 🔎 Tester la voix en ligne » (un seul appel court, texte « Il était une fois. ») qui affiche la cause : tablette non reconnue (activer « tablette de la famille »), serveur non prêt (variable EDUC_STORY_VOICE_CONFIG, clé, tarifs EDUC_VOICE_CONFIG ou registre budgétaire), budget, limite, fournisseur, réseau; ou « fonctionne ». Relance aussi la voix en ligne (efface la pause après refus).
+Preuves : test unitaire des 4 cas (refus serveur, tablette non reconnue, succès, réseau); suite 699 réussie; deux suites navigateur réussies. Non vérifié : affichage sur la tablette.
+En attente : le parent appuie sur le bouton et transmet le message affiché.
+
 # Activation de la voix de conteuse : redéploiement — 21 novembre 2026 (America/Toronto)
 
 Branche claude/activation-voix-conteuse. Le parent a saisi la variable EDUC_STORY_VOICE_CONFIG (Production) sur Vercel; la production affichait encore le commit 912952c (créé avant la variable). Cette PR ne change aucun code : elle sert à provoquer un nouveau déploiement de production, qui lit les variables d'environnement.

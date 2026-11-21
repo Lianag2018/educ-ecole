@@ -29,3 +29,22 @@ export async function getStoryAudio(text,profileId,{fetcher=globalThis.fetch,now
 }
 // Prépare la page suivante en arrière-plan, pour qu'il n'y ait pas d'attente en tournant la page.
 export const prefetchStoryAudio=(text,profileId,opts)=>{if(text)getStoryAudio(text,profileId,opts).catch(()=>{});};
+
+// Test du parent : un seul appel court au serveur (hors mémoire de l'appareil) pour savoir pourquoi la voix en ligne marche ou non.
+export const STORY_VOICE_REASONS={
+ ok:'La voix de conteuse en ligne fonctionne sur cette tablette.',
+ parent_login_required:'Le serveur ne reconnaît pas cette tablette : connecte-toi en mode parent et active « tablette de la famille ».',
+ story_voice_unavailable:'Le serveur n’est pas prêt : la variable EDUC_STORY_VOICE_CONFIG, la clé de voix, les tarifs de EDUC_VOICE_CONFIG ou le registre du budget manque sur Vercel (puis redéployer).',
+ budget_unavailable:'Le registre du budget de la famille ne répond pas (fonction famille_reserve_voice).',
+ rate_limit:'La limite de voix payante est atteinte pour le moment.',
+ voice_unavailable:'Le fournisseur de voix n’a pas répondu. Réessaie dans un moment.',
+ invalid_request:'Le serveur a refusé la demande de test.',
+ network:'Pas de réseau.'};
+export async function testStoryVoice({fetcher=globalThis.fetch}={}){
+ resetStoryVoice();
+ let r;try{r=await fetcher('/api/voice/story',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'Il était une fois.',profileId:'p1'})});}
+ catch{return {ok:false,status:0,code:'network',message:STORY_VOICE_REASONS.network};}
+ if(r.ok)return {ok:true,status:r.status,code:'ok',message:STORY_VOICE_REASONS.ok};
+ let code='';try{code=(await r.json())?.code||'';}catch{}
+ return {ok:false,status:r.status,code,message:STORY_VOICE_REASONS[code]||'Refus du serveur (code '+r.status+').'};
+}
