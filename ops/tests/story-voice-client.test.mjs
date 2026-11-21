@@ -32,3 +32,10 @@ test('test du parent : explique la cause du refus et relance la voix en ligne',a
  const r4=await testStoryVoice({fetcher:async()=>{throw new TypeError('x');}});assert.equal(r4.code,'network');
  resetStoryVoice();
 });
+test('la raison du repli est gardée pour l’affichage en mode adulte',async()=>{
+ const {storyVoiceIssue}=await import('../../src/story-voice.js');
+ resetStoryVoice();store.clear();assert.equal(storyVoiceIssue(),null);
+ await getStoryAudio('Une page de test.','p1',{fetcher:async()=>new Response('{"code":"story_voice_unavailable"}',{status:503})});
+ assert.deepEqual(storyVoiceIssue(),{status:503,code:'story_voice_unavailable'});
+ resetStoryVoice();await getStoryAudio('Une autre page.','p1',{fetcher:async()=>{throw new TypeError('x');}});assert.equal(storyVoiceIssue().code,'network');resetStoryVoice();assert.equal(storyVoiceIssue(),null);
+});

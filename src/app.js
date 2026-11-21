@@ -26,7 +26,7 @@ import {mountWheel} from './activity-wheel.js';
 import {SUBJECTS,subjectMarkup,mountSubject} from './subjects.js';
 import {memoryMarkup,mountMemory} from './memory-pairs.js';
 import {tell as tellSegments} from './storyteller.js';
-import {getStoryAudio,prefetchStoryAudio,storyVoicePaused,testStoryVoice} from './story-voice.js';
+import {getStoryAudio,prefetchStoryAudio,storyVoicePaused,testStoryVoice,storyVoiceIssue,STORY_VOICE_REASONS} from './story-voice.js';
 import {sceneFor,sceneMarkup,mountScene,updateAudioSurface,illustratedCards} from './illustrated-games.js';
 import {scheduleSuccess} from './success-step.js';
 import {mountWelcomeVideo} from './welcome-video.js';
@@ -323,7 +323,7 @@ function tellText(text,onEnded,nextText){syllablePlayer.stop();oralCheck.stop();
  const surface=(st,msg)=>{speaking=st==='starting'||st==='speaking';readingPaused=st==='paused';voiceMessage=msg;if(st==='ended'||st==='error'){readingProgress=null;updateReadingCue(app,text,{charIndex:-1});}updateAudioSurface(app,{speaking,message:voiceMessage});app.querySelectorAll('[data-action="reading-pause"]').forEach(el=>{el.disabled=!speaking&&!readingPaused;el.textContent=readingPaused?'▶ Reprendre':'Ⅱ Pause';});};
  const device=()=>{if(token!==tellToken)return;tellHandle=tellSegments(text,{speakOne:(seg,cb)=>reader.speak(seg.text,{preferredURI:state.readingVoiceURI||'',natural:false,systemVoice:false,speed:seg.rate,pitch:seg.pitch,volume:seg.volume,onProgress:cb.onProgress,onState:cb.onState}),
   onProgress:event=>{readingProgress=event;updateReadingCue(app,text,event);},
-  onState:(st,msg)=>{surface(st,msg||'Lecture en cours — voix de conteuse (appareil).');if(st==='ended')onEnded?.();}});};
+  onState:(st,msg)=>{const why=adultTools&&storyVoiceIssue();surface(st,(msg||'Lecture en cours — voix de conteuse (appareil).')+(why?' · Voix en ligne non utilisée : '+(STORY_VOICE_REASONS[why.code]||'refus du serveur (code '+(why.status||'réseau')+')'):''));if(st==='ended')onEnded?.();}});};
  // 1) la vraie voix de conteuse (gardée dans l'appareil), 2) sinon la voix de conteuse de l'appareil
  const pid=profile().id;const fast=!storyVoicePaused();
  if(fast)surface('starting','La conteuse prépare la page…');
