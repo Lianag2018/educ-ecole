@@ -19,6 +19,15 @@ export function chooseReadingVoice(voices, preferredURI='') {
  return french.slice().sort((a,b)=>score(b)-score(a))[0];
 }
 
+// Voix anglaise douce pour les leçons d'anglais : anglais canadien ou américain, voix naturelles et féminines connues d'abord.
+export function chooseEnglishVoice(voices){
+ const en=voices.filter(v=>/^en(?:-|_)/i.test(v.lang));
+ const score=v=>(/^en[-_]CA$/i.test(v.lang)?60:/^en[-_]US$/i.test(v.lang)?40:/^en[-_]GB$/i.test(v.lang)?20:0)
+  +(/natural|neural|online/i.test(v.name)?60:0)+(/enhanced|premium|siri/i.test(v.name)?30:0)
+  +(/samantha|karen|moira|serena|allison|ava|susan|zira|jenny|aria|google us english|tessa|fiona|catherine/i.test(v.name)?40:0)
+  -(/alex|daniel|fred|tom|david|mark|guy|ryan|compact|espeak|whisper|bad|bells|boing|cellos|good news|jester|organ|trinoids|zarvox/i.test(v.name)?80:0);
+ return en.slice().sort((a,b)=>score(b)-score(a))[0]||null;
+}
 export const playbackSpeed = value => value==='very-slow' ? .8 : Number.isFinite(Number(value)) && Number(value)>0 ? Math.max(.6,Math.min(1.5,Number(value))) : 1;
 // A system voice reads a little slower than its native rate: soft and clear for a child. No speed control is shown.
 export const GENTLE_SYSTEM_SPEED = .88;

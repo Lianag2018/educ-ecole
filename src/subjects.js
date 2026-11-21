@@ -1,5 +1,6 @@
 // Anglais, histoire, sciences : leçons à lire et à écouter, puis petites questions. Le contenu arrive plus tard
 // (importé par un adulte, par fille ou pour les deux); tant qu'il manque, la page le dit simplement.
+import {chooseEnglishVoice,GENTLE_SYSTEM_SPEED,GENTLE_SYSTEM_PITCH,GENTLE_SYSTEM_VOLUME} from './speech.js';
 export const SUBJECTS=[{id:'english',label:'Anglais',icon:'🇬🇧',lang:'en-US',hint:'Écoute, répète et réponds.'},{id:'history',label:'Histoire',icon:'🏛️',lang:'fr-CA',hint:'Découvre le passé, une leçon à la fois.'},{id:'science',label:'Sciences',icon:'🔬',lang:'fr-CA',hint:'Observe, comprends, expérimente.'}];
 const KEY='atelier-mots-subjects-v1';
 const store=()=>{try{return globalThis.localStorage||null;}catch{return null;}};
@@ -33,7 +34,7 @@ export function mountSubject(root,{subject,profile,speak,award,onExit,adult=fals
  const box=root.querySelector('[data-sj]');if(!box)return {destroy(){}};
  const S=SUBJECTS.find(x=>x.id===subject)||SUBJECTS[0];let alive=true,li=0,qi=0,order=[],wrong=0,perfect=true;
  const lessons=()=>lessonsFor(S.id,profile.id);
- const say=(p)=>{try{if(p.en||S.lang==='en-US'&&p.en!==false&&/^[\x20-\x7e’]+$/.test(p.t)){const u=new SpeechSynthesisUtterance(p.t);u.lang='en-US';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u);}else speak(p.t);}catch{}};
+ const say=(p)=>{try{if(p.en||S.lang==='en-US'&&p.en!==false&&/^[\x20-\x7e’]+$/.test(p.t)){const u=new SpeechSynthesisUtterance(p.t),v=chooseEnglishVoice(speechSynthesis.getVoices?.()||[]);if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-US';u.rate=GENTLE_SYSTEM_SPEED-.03;u.pitch=GENTLE_SYSTEM_PITCH;u.volume=GENTLE_SYSTEM_VOLUME;speechSynthesis.cancel();speechSynthesis.speak(u);}else speak(p.t);}catch{}};
  const top=()=>`<div class="sj-top"><button type="button" data-sj-exit aria-label="Retour">‹</button><h2><span aria-hidden="true">${S.icon}</span> ${esc(S.label)}</h2></div>`;
  const importUi=()=>adult?`<label class="sj-import">Ajouter la matière (fichier .md ou .txt)<input type="file" accept=".md,.txt,text/plain,text/markdown" data-sj-file></label>`:'';
  const list=()=>{const L=lessons();

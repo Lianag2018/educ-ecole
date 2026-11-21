@@ -1,3 +1,11 @@
+# Enregistrement en deux temps et voix douces — 21 novembre 2026 (America/Toronto)
+
+Branche claude/prise-et-voix-douce. Demande du parent : bouton d'enregistrement à droite, un bouton pour écouter, et si satisfaite on rappuie pour l'enregistrer pour de bon; les sons d'origine ne sont pas bons; s'assurer que toutes les voix de l'app sont la voix douce.
+Livré : (a) laboratoire des sons : le micro est à droite de chaque ligne; un enregistrement devient une « prise » qui n'est PAS gardée : « ▶ Écouter ma prise », « ✓ Garder » (enregistrement final, vérifié lisible), « ✕ » pour jeter; refaire avec le micro remplace la prise; la ligne tient sur un écran de 390 px. (b) Voix douces : audit de toutes les voix. Narration MP3 : voix « coral », consignes féminine douce (narration-catalog.mjs); contrôle vocal serveur : « nova » à 0,85; tuteur IA en direct : consigne « ton féminin doux » (pedagogy.mjs); voix de l'appareil (mots du défi, roue, matières) : français canadien naturel et féminin d'abord, débit .88, hauteur .94, volume .9 (speech.js). Corrigé : l'anglais utilisait une voix brute; il choisit maintenant une voix anglaise douce (canadienne ou américaine, naturelle, féminine) avec les mêmes réglages doux.
+Non vérifié : la voix en direct du tuteur IA (identifiant de voix fixé chez le fournisseur, non lisible d'ici); les sons d'origine (MP3) restent ceux de l'app tant que le parent ne les remplace pas par sa voix.
+Preuves : essai Chromium (micro simulé) : enregistrer, prise écoutable, rien gardé avant « ✓ Garder », gardé ensuite, prise jetée = rien gardé; tests de choix des voix; tests et suites navigateur (voir PR). Non essayé sur iPhone/iPad réels.
+En attente : le parent réenregistre les sons d'origine à sa voix puis les envoie aux tablettes (Envoyer / Recevoir des sons).
+
 # Transfert des voix enregistrées entre appareils — 21 novembre 2026 (America/Toronto)
 
 Branche claude/transfert-sons. Signalement du parent : « elle ne s'enregistre pas sur le serveur quand je le refais » (voix enregistrées dans le laboratoire des sons).

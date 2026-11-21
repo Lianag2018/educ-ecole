@@ -11,3 +11,15 @@ test('le contenu est gardé par fille et par matière',()=>{
  const r=parseSubject('# Sciences\n## Les plantes\nUne plante a des racines.\n');assert.equal(r.subject,'science');assert.deepEqual(r.pids,['p1','p2']);
  saveLessons('science',['p1'],r.lessons);assert.equal(lessonsFor('science','p1').length,1);assert.equal(lessonsFor('science','p2').length,0);assert.equal(lessonsFor('history','p1').length,0);
 });
+const {chooseEnglishVoice}=await import('../../src/speech.js');
+const {chooseReadingVoice,GENTLE_SYSTEM_SPEED,GENTLE_SYSTEM_PITCH,GENTLE_SYSTEM_VOLUME}=await import('../../src/speech.js');
+test('la voix anglaise est douce : voix naturelle féminine d’abord, jamais une voix robotique ou masculine connue',()=>{
+ const v=n=>({name:n,lang:n.includes('GB')?'en-GB':n.includes('CA')?'en-CA':'en-US',voiceURI:n});
+ assert.equal(chooseEnglishVoice([v('Alex'),v('Samantha'),v('Zarvox')]).name,'Samantha');
+ assert.equal(chooseEnglishVoice([v('Fred'),v('Daniel GB'),v('Moira CA')]).name,'Moira CA');
+ assert.equal(chooseEnglishVoice([]),null);assert.equal(chooseEnglishVoice([{name:'Amélie',lang:'fr-CA',voiceURI:'a'}]),null);
+});
+test('toutes les voix de l’appareil sont réglées doucement (plus lent, un peu plus grave, un peu moins fort)',()=>{
+ assert.ok(GENTLE_SYSTEM_SPEED<1&&GENTLE_SYSTEM_PITCH<1&&GENTLE_SYSTEM_VOLUME<1);
+ const f=n=>({name:n,lang:'fr-CA',voiceURI:n});assert.equal(chooseReadingVoice([f('Thomas'),f('Amélie')]).name,'Amélie');
+});

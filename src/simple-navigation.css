@@ -774,3 +774,8 @@ body.kid-simple .simple-world .daily-copy .kid-label{padding:4px 30px;border:3px
 .rp-mute{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));right:10px;z-index:12;width:48px;height:48px;border:3px solid #24163f;border-radius:50%;background:#fffaf0cc;font-size:22px;cursor:pointer}
 .sl-msg{position:sticky;top:8px;z-index:6;margin:6px 0;padding:0;font-weight:800;color:#3b2466}.sl-msg:not(:empty){padding:12px 14px;border-radius:16px;background:#fff;border:3px solid #8358a8;box-shadow:0 4px 14px #0003}
 .sl-transfer{display:grid;gap:8px;margin:8px 0}.sl-transfer button,.sl-import{display:block;min-height:50px;padding:10px 14px;border:3px solid #24163f;border-radius:16px;background:#fff;color:#3b2466;font-weight:800;font-size:1rem;cursor:pointer;text-align:center}.sl-import input{display:block;width:100%;margin-top:6px;font-size:.9rem;font-weight:600}
+.sl-take{grid-column:1/-1;display:flex;gap:8px;margin-top:6px}.sl-take button{flex:1;min-height:56px;font-size:1.05rem}.sl-take button.keep{flex:1.2;background:#2b9a7f!important;color:#fff!important}.sl-take button[data-lab-take-drop]{flex:.4}
+.sl-row{grid-template-columns:70px 52px 1fr 52px 52px}
+.sound-lab-page{overflow-x:hidden}.sl-row{grid-template-columns:54px 46px minmax(0,1fr) 46px 46px!important;gap:6px!important;padding:8px 8px!important}
+.sl-row .sl-ms{min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;font-size:.85rem}.sl-row .sl-ms button{min-width:38px!important;width:38px;min-height:44px}
+.sl-row>button{min-width:0!important;padding:0!important}.sl-take{flex-wrap:wrap}.sl-take button{min-width:0;padding:6px 8px!important}
