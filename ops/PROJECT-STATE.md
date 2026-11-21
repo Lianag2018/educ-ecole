@@ -1,3 +1,9 @@
+# Activation de la voix de conteuse : redéploiement — 21 novembre 2026 (America/Toronto)
+
+Branche claude/activation-voix-conteuse. Le parent a saisi la variable EDUC_STORY_VOICE_CONFIG (Production) sur Vercel; la production affichait encore le commit 912952c (créé avant la variable). Cette PR ne change aucun code : elle sert à provoquer un nouveau déploiement de production, qui lit les variables d'environnement.
+Preuves : capture du parent (déploiement Ready sur 912952c). À vérifier après fusion : statut Vercel « success » du nouveau commit, puis essai sur la tablette.
+En attente : le parent confirme que la variable est bien sauvegardée (liste Environment Variables); tablette de la famille activée; essai d'une histoire de l'école. Si la voix reste celle de l'appareil : vérifier le code de refus (401 non connecté, 503 variable absente, tarifs de EDUC_VOICE_CONFIG, registre famille_reserve_voice).
+
 # Compléments de 10 : assembler 2 chiffres ou plus — 21 novembre 2026 (America/Toronto)
 
 Branche claude/complements-assembler-10. Précision du parent sur la feuille « Les compléments de 10 » : « elle doit assembler les chiffres qui donnent 10, ex. 7 et 3, et 5, 3, 2 donne 10 ». Cela remplace mon hypothèse précédente (seulement deux cases).
