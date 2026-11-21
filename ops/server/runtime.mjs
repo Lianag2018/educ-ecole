@@ -6,6 +6,7 @@ import {supabaseConfig} from './supabase-config.mjs';
 import {planEndpoint} from './plans.mjs';
 import {createTurnEndpoint,ready,maximumUsd,TurnProvider} from './turn.mjs';
 import {quote} from './budget.mjs';
+import {createStoryVoiceEndpoint} from './story-voice.mjs';
 import {createOralCheckEndpoint,oralCheckReady,OralCheckProvider} from './oral-check.mjs';
 import {learningEndpoint,learningStore} from './learning.mjs';
 import {githubJobVerifier} from './github-job.mjs';
@@ -44,6 +45,8 @@ export function runtime(env=process.env,fetcher=fetch){
   const p={id:slot,schoolPlans:[]};for(const plan of (await planStore.list(parent,slot)).reverse())installPlan(p,plan,{append:true});
   return p.schoolPlans.flatMap(plan=>planMissions(plan).missions.flatMap(m=>m.items)).find(q=>q.id===id);
  },provider:new TurnProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher})});
+ let storyConfig;try{storyConfig=JSON.parse(env.EDUC_STORY_VOICE_CONFIG||'null');}catch{}
+ const storyVoice=createStoryVoiceEndpoint({auth,storyConfig,voiceConfig:c,ledger,apiKey:env.EDUC_OPENAI_API_KEY,fetcher});
  const learning=learningEndpoint({auth,profiles,config:c,ledger,store:memory,apiKey:env.EDUC_OPENAI_API_KEY,fetcher,parentId:env.EDUC_PARENT_ID,verifyJob:githubJobVerifier({fetcher})});
  const oralCheck=createOralCheckEndpoint({auth,profiles,config:c,ledger,provider:env.EDUC_OPENAI_API_KEY?new OralCheckProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher}):null});
  const planStore={
@@ -98,6 +101,7 @@ export function runtime(env=process.env,fetcher=fetch){
   }
   if(req.path==='/api/voice/turn')return turn(req);
   if(req.path==='/api/voice/check')return oralCheck(req);
+  if(req.path==='/api/voice/story')return storyVoice(req);
   return {status:404,body:{code:'not_found'}};
  };
 }
