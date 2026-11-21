@@ -1,3 +1,11 @@
+# Compléments de 10 : assembler 2 chiffres ou plus — 21 novembre 2026 (America/Toronto)
+
+Branche claude/complements-assembler-10. Précision du parent sur la feuille « Les compléments de 10 » : « elle doit assembler les chiffres qui donnent 10, ex. 7 et 3, et 5, 3, 2 donne 10 ». Cela remplace mon hypothèse précédente (seulement deux cases).
+Livré : (a) règle : un groupe = 2 à 5 cases dont la somme fait exactement 10 (7 et 3; 5, 3 et 2; 4, 4 et 2; 0 et 10); la somme en cours s'affiche à mesure (« 5 + 3 = 8 »); dès que la somme fait 10 le groupe se colorie de la même couleur et la voix dit « 5 plus 3 plus 2 égale 10 »; si la somme dépasse 10, message d'aide (« 9 + 8 = 17 : ça dépasse 10 ») et la sélection s'efface. (b) Consigne affichée : « Assemble les chiffres qui font 10 ensemble et colorie-les de la même couleur (par exemple 7 et 3, ou 5, 3 et 2). » (c) L'indice propose d'abord une paire, puis 3, 4 ou 5 cases; la feuille est finie quand plus aucun groupe de 2 cases ou plus ne fait 10. (d) « Nouvelle feuille » fabrique des groupes de 2 ou 3 chiffres. Les cases d'un groupe n'ont pas à se toucher (non précisé par le parent).
+Preuves : tests unitaires (groupes valides et invalides, recherche de groupes de 2 à 5 cases); essai Chromium : 5 + 3 + 2 et 4 + 4 + 2 acceptés, 9 + 8 refusé avec conseil, les deux feuilles (école et nouvelle) jouées jusqu'au bout (33 et 27 groupes, +5 étoiles), 0 erreur JS. Non essayé sur iPad ni au crayon.
+Note : le jeu de cartes « Les compléments de 10 » (Memory) reste en paires (3 ↔ 7); à étendre aux trios si le parent le souhaite.
+En attente : le parent confirme si les cases d'un groupe doivent se toucher; Apple Pencil.
+
 # Vraie voix de conteuse pour les histoires de l'école (en ligne, à activer) — 21 novembre 2026 (America/Toronto)
 
 Branche claude/voix-conteuse-serveur. Le parent a choisi la « vraie voix de conteuse » (la voix douce « coral » des autres narrations) pour les histoires de l'école, pour les deux filles, et accepte l'envoi du texte d'une page au fournisseur de voix. Le dépôt humanize-kit (examiné) ne traite que du texte écrit : aucun apport pour la voix.
