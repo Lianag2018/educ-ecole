@@ -6,13 +6,17 @@ import {randomUUID} from 'node:crypto';
 import {quote} from './budget.mjs';
 import {MODEL,VOICE,STORY_INSTRUCTIONS,storyCue} from '../narration-catalog.mjs';
 export const MAX_STORY_CHARS=600;
-export const storyVoiceReady=(story,voice)=>story?.enabled===true&&story.parentConsent===true&&Number.isSafeInteger(voice?.rates?.ttsMillionCharsMicros)&&voice.rates.ttsMillionCharsMicros>0&&Boolean(voice?.pricing);
+// Tarif propre à la voix de conteuse (EDUC_STORY_VOICE_CONFIG) sinon celui de EDUC_VOICE_CONFIG : la conteuse n'oblige pas à toucher aux autres services payants.
+export const storyBilling=(story,voice)=>({rates:story?.rates?.ttsMillionCharsMicros?story.rates:voice?.rates,pricing:story?.pricing||voice?.pricing,otherCostsMicros:story?.otherCostsMicros??voice?.otherCostsMicros});
+export const storyVoiceReady=(story,voice)=>{const b=storyBilling(story,voice);return story?.enabled===true&&story.parentConsent===true&&Number.isSafeInteger(b.rates?.ttsMillionCharsMicros)&&b.rates.ttsMillionCharsMicros>0&&Boolean(b.pricing)&&Number.isSafeInteger(b.otherCostsMicros)&&b.otherCostsMicros>0&&b.otherCostsMicros<40000000;};
 // Noms seulement (jamais de valeur) des éléments qui manquent, pour que le parent sache quoi ajouter.
 export const storyMissing=(story,voice,apiKey,ledger)=>{const m=[];
  if(!(story?.enabled===true&&story.parentConsent===true))m.push('EDUC_STORY_VOICE_CONFIG');
  if(!apiKey)m.push('EDUC_OPENAI_API_KEY');
- if(!(Number.isSafeInteger(voice?.rates?.ttsMillionCharsMicros)&&voice.rates.ttsMillionCharsMicros>0))m.push('EDUC_VOICE_CONFIG.rates.ttsMillionCharsMicros');
- if(!voice?.pricing)m.push('EDUC_VOICE_CONFIG.pricing');
+ const b=storyBilling(story,voice);
+ if(!(Number.isSafeInteger(b.rates?.ttsMillionCharsMicros)&&b.rates.ttsMillionCharsMicros>0))m.push('rates.ttsMillionCharsMicros');
+ if(!b.pricing)m.push('pricing');
+ if(!(Number.isSafeInteger(b.otherCostsMicros)&&b.otherCostsMicros>0&&b.otherCostsMicros<40000000))m.push('otherCostsMicros');
  if(!ledger?.durable)m.push('registre du budget (Supabase)');
  return m;};
 export const storyRequest=text=>({model:MODEL,voice:VOICE,input:text,instructions:STORY_INSTRUCTIONS+storyCue(text),response_format:'mp3',speed:.88});
@@ -27,8 +31,8 @@ export function createStoryVoiceEndpoint({auth,storyConfig,voiceConfig,ledger,ap
    const text=b.text.normalize('NFC').trim();if(text.length<2||text.length>MAX_STORY_CHARS||/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(text))throw Error('invalid_request');
    phase='config';if(!apiKey||!storyVoiceReady(storyConfig,voiceConfig)||!ledger?.durable){missing=storyMissing(storyConfig,voiceConfig,apiKey,ledger);throw Error('story_voice_unavailable');}
    // Montant réservé = borne haute du prix du texte (tarif par million de caractères de la configuration); jamais remboursé, comme les autres voix.
-   const usd=Math.max(1,Math.ceil(text.length*voiceConfig.rates.ttsMillionCharsMicros/1e6)),amount=quote(voiceConfig.pricing,usd);phase='budget';
-   await ledger.reserve({family:who.id,profileId:b.profileId,id:randomUUID(),amount,otherCostsMicros:voiceConfig.otherCostsMicros});
+   const bill=storyBilling(storyConfig,voiceConfig),usd=Math.max(1,Math.ceil(text.length*bill.rates.ttsMillionCharsMicros/1e6)),amount=quote(bill.pricing,usd);phase='budget';
+   await ledger.reserve({family:who.id,profileId:b.profileId,id:randomUUID(),amount,otherCostsMicros:bill.otherCostsMicros});
    phase='provider';const signal=AbortSignal.any([req.signal||new AbortController().signal,AbortSignal.timeout(45000)]);
    const r=await fetcher('https://api.openai.com/v1/audio/speech',{method:'POST',redirect:'error',signal,headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},body:JSON.stringify(storyRequest(text))});
    if(!r.ok){await r.body?.cancel?.();throw Error('provider_unavailable');}

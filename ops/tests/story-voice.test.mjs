@@ -40,6 +40,15 @@ test('serveur non prêt : indique les noms des éléments manquants, sans valeur
  const ep=createStoryVoiceEndpoint({auth:{authenticateLearner:async()=>({id:'x',csrfVerified:true})},storyConfig:{enabled:true,parentConsent:true},voiceConfig:{rates:{}},ledger:{durable:true},apiKey:'sk-secret',fetcher:async()=>{throw Error('non');}});
  const r=await ep({method:'POST',body:{text:'Il était une fois.',profileId:'p1'}});
  assert.equal(r.status,503);assert.equal(r.body.code,'story_voice_unavailable');
- assert.deepEqual(r.body.missing,['EDUC_VOICE_CONFIG.rates.ttsMillionCharsMicros','EDUC_VOICE_CONFIG.pricing']);
+ assert.deepEqual(r.body.missing,['rates.ttsMillionCharsMicros','pricing','otherCostsMicros']);
  assert.ok(!JSON.stringify(r.body).includes('sk-secret'));
+});
+test('le tarif propre à EDUC_STORY_VOICE_CONFIG suffit : EDUC_VOICE_CONFIG n’a pas à être modifiée',async()=>{
+ const {createStoryVoiceEndpoint,storyVoiceReady}=await import('../server/story-voice.mjs');
+ const own={enabled:true,parentConsent:true,rates:{ttsMillionCharsMicros:20000000},pricing:voiceConfig.pricing,otherCostsMicros:1000000};
+ assert.equal(storyVoiceReady(own,{}),true);assert.equal(storyVoiceReady({...own,parentConsent:false},{}),false);assert.equal(storyVoiceReady({...own,otherCostsMicros:40000000},{}),false);
+ const reserved=[];const mp3=Buffer.concat([Buffer.from('ID3'),Buffer.alloc(3000,7)]);
+ const ep=createStoryVoiceEndpoint({auth:{authenticateLearner:async()=>({id:'x',csrfVerified:true})},storyConfig:own,voiceConfig:{},ledger:{durable:true,reserve:async r=>{reserved.push(r);}},apiKey:'k',fetcher:async()=>new Response(mp3,{status:200})});
+ const r=await ep({method:'POST',body:{text:'Il était une fois.',profileId:'p1'}});
+ assert.equal(r.status,200);assert.equal(reserved.length,1);assert.equal(reserved[0].otherCostsMicros,1000000);
 });

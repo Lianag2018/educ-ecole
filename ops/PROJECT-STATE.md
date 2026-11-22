@@ -1,3 +1,11 @@
+# Voix de conteuse : tarif propre à EDUC_STORY_VOICE_CONFIG — 22 novembre 2026 (America/Toronto)
+
+Branche claude/tarif-voix-conteuse. Le test du parent affiche : « Il manque : EDUC_VOICE_CONFIG.rates.ttsMillionCharsMicros, EDUC_VOICE_CONFIG.pricing ». Les variables EDUC_OPENAI_API_KEY, EDUC_VOICE_CONFIG et EDUC_STORY_VOICE_CONFIG existent sur Vercel (Production); la tablette est reconnue par le serveur.
+Livré : le serveur de la conteuse lit rates.ttsMillionCharsMicros, pricing et otherCostsMicros d'abord dans EDUC_STORY_VOICE_CONFIG, sinon dans EDUC_VOICE_CONFIG. EDUC_VOICE_CONFIG (conversation, séances, vérification orale) n'a donc pas à être modifiée pour activer la conteuse. otherCostsMicros doit rester < 40 000 000 (plafond mensuel du code). Le message du test nomme les champs manquants (rates.ttsMillionCharsMicros, pricing, otherCostsMicros).
+Preuves : tests unitaires (tarif propre suffisant, consentement requis, plafond respecté, réservation avec otherCostsMicros de la conteuse); suite 702 réussie. Non vérifié : appel réel au fournisseur de voix et au registre du budget.
+Décision du parent requise (montants financiers; aucun taux inventé) : fxPpm (taux CA/USD maximal), bufferPpm (marge), feeMicros (frais par appel), pricingReviewedAt, validUntil (échéance future), rates.ttsMillionCharsMicros (USD micro par million de caractères), otherCostsMicros (coûts fixes mensuels prévus).
+En attente : le parent approuve ou corrige les montants; mise à jour de EDUC_STORY_VOICE_CONFIG sur Vercel; redéploiement; nouveau test.
+
 # Redéploiement après l'ajout de EDUC_STORY_VOICE_CONFIG — 22 novembre 2026 (America/Toronto)
 
 Branche claude/redeploiement-voix. Capture du parent : la variable EDUC_STORY_VOICE_CONFIG (Production) n'a été ajoutée que « il y a 2 minutes »; les déploiements précédents ne la contenaient donc pas (cause probable du refus « story_voice_unavailable »). Cette PR ne change aucun code : elle provoque un déploiement de production qui lit la variable.
