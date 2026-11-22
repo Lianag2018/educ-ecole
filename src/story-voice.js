@@ -22,7 +22,7 @@ export async function getStoryAudio(text,profileId,{fetcher=globalThis.fetch,now
  if(storyVoicePaused(now()))return null;
  let r;try{r=await fetcher('/api/voice/story',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t,profileId})});}
  catch{until=now()+PAUSE_MS.net;issue={status:0,code:'network'};return null;}
- if(!r.ok){until=now()+(PAUSE_MS[r.status]||PAUSE_MS[503]);let code='';try{code=(await r.json())?.code||'';}catch{}issue={status:r.status,code};return null;}
+ if(!r.ok){until=now()+(PAUSE_MS[r.status]||PAUSE_MS[503]);let code='',missing;try{const j=await r.json();code=j?.code||'';missing=Array.isArray(j?.missing)?j.missing.slice(0,6).map(String):undefined;}catch{}issue={status:r.status,code,missing};return null;}
  let data;try{data=await r.json();}catch{return null;}
  if(typeof data?.audio!=='string'||data.audioType!=='audio/mpeg')return null;
  const bytes=unb64(data.audio);if(bytes.byteLength<1000||bytes.byteLength>3000000)return null;
@@ -46,6 +46,6 @@ export async function testStoryVoice({fetcher=globalThis.fetch}={}){
  let r;try{r=await fetcher('/api/voice/story',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'Il était une fois.',profileId:'p1'})});}
  catch{return {ok:false,status:0,code:'network',message:STORY_VOICE_REASONS.network};}
  if(r.ok)return {ok:true,status:r.status,code:'ok',message:STORY_VOICE_REASONS.ok};
- let code='';try{code=(await r.json())?.code||'';}catch{}
- return {ok:false,status:r.status,code,message:STORY_VOICE_REASONS[code]||'Refus du serveur (code '+r.status+').'};
+ let code='',missing=[];try{const j=await r.json();code=j?.code||'';if(Array.isArray(j?.missing))missing=j.missing.slice(0,6).map(String);}catch{}
+ return {ok:false,status:r.status,code,missing,message:(STORY_VOICE_REASONS[code]||'Refus du serveur (code '+r.status+').')+(missing.length?' Il manque : '+missing.join(', ')+'.':'')};
 }

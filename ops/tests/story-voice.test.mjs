@@ -35,3 +35,11 @@ test('activation : il faut le consentement du parent et des tarifs valides',()=>
  assert.equal(storyVoiceReady(storyConfig,voiceConfig),true);assert.equal(storyVoiceReady(null,voiceConfig),false);assert.equal(storyVoiceReady(storyConfig,{}),false);assert.equal(storyVoiceReady({enabled:true,parentConsent:false},voiceConfig),false);
  assert.equal(storyRequest('Bonjour').speed,.88);
 });
+test('serveur non prêt : indique les noms des éléments manquants, sans valeur',async()=>{
+ const {createStoryVoiceEndpoint}=await import('../server/story-voice.mjs');
+ const ep=createStoryVoiceEndpoint({auth:{authenticateLearner:async()=>({id:'x',csrfVerified:true})},storyConfig:{enabled:true,parentConsent:true},voiceConfig:{rates:{}},ledger:{durable:true},apiKey:'sk-secret',fetcher:async()=>{throw Error('non');}});
+ const r=await ep({method:'POST',body:{text:'Il était une fois.',profileId:'p1'}});
+ assert.equal(r.status,503);assert.equal(r.body.code,'story_voice_unavailable');
+ assert.deepEqual(r.body.missing,['EDUC_VOICE_CONFIG.rates.ttsMillionCharsMicros','EDUC_VOICE_CONFIG.pricing']);
+ assert.ok(!JSON.stringify(r.body).includes('sk-secret'));
+});
