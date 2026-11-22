@@ -1,3 +1,10 @@
+# Récompenses lues par la conteuse; test de la voix en ligne plus précis — 22 novembre 2026 (America/Toronto)
+
+Branche claude/recompense-voix-conteuse. Constat du parent : (1) l'écran « Récompense obtenue » est lu par une voix différente de la narratrice douce; (2) le test « Tester la voix en ligne », une fois la tablette reconnue (connexion parent), répond « story_voice_unavailable » : le serveur n'est pas prêt.
+Livré : (a) l'écran de récompense et son message « On continue pour… » utilisent la lecture de conteuse (tellText : voix en ligne quand elle est active, sinon voix de l'appareil avec expression); fermer l'écran arrête la lecture. Les phrases contiennent le prénom et le nombre d'étoiles : la voix en ligne les génère donc à la demande (texte court, gardé ensuite dans l'appareil). La voix préenregistrée « Narratrice IA » n'existe que pour un catalogue fixe de textes. (b) le serveur renvoie, avec « story_voice_unavailable », la liste des NOMS des éléments manquants (EDUC_STORY_VOICE_CONFIG, EDUC_OPENAI_API_KEY, EDUC_VOICE_CONFIG.rates.ttsMillionCharsMicros, EDUC_VOICE_CONFIG.pricing, registre du budget), sans aucune valeur; le test du parent les affiche (« Il manque : … »).
+Preuves : tests unitaires (noms manquants, aucune valeur secrète dans la réponse); suite 701 réussie; 4 suites navigateur réussies. Non vérifié : écran de récompense avec la voix en ligne; tablette réelle.
+En attente : le parent relance « Tester la voix en ligne » (après déploiement) et transmet la liste « Il manque : … »; ajout du ou des éléments sur Vercel puis redéploiement.
+
 # Raison du repli de la voix en ligne affichée à la lecture — 21 novembre 2026 (America/Toronto)
 
 Branche claude/raison-repli-voix. Le parent constate que « Tester la voix » (voix de l'appareil, panneau « Aide pour la voix », voix Shelley fr-CA) est parfaite, mais que les histoires de l'école restent lues par la voix de l'appareil : la voix en ligne n'est pas utilisée et la cause était invisible.
