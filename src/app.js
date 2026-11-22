@@ -73,6 +73,7 @@ import {schoolVocabularyLinks,activateVocabulary} from './school-vocabulary.js';
 import {progressPanel,adaptiveCards} from './progress.js';
 import {guidedMarkup,updateReadingCue} from './guided-reading.js';
 import {NarrationSpeaker} from './narration.js';
+import {OnlineNarrator} from './online-narrator.js';
 import {schoolWeek,tablePractice} from './week-plan.js';
 import {numberWords} from './numbers.js';
 import {ADVANCED_ORDER,createGrid,select as selectCell,markDone,nextIndex,isFinished,gridMarkup,paintGrid} from './read-aloud.js';
@@ -89,7 +90,7 @@ import {skills,bank} from './content.js';
 import {fresh,load,save,select,answer,generate,today,KEY} from './engine.js';
 const app=document.querySelector('#app');
 const tutorVoice=new VoiceController();
-const reader=new NarrationSpeaker({fallback:new ReadingSpeaker()});
+const reader=new NarrationSpeaker({fallback:new OnlineNarrator({device:new ReadingSpeaker(),getAudio:t=>getStoryAudio(t,profile().id),canUse:()=>!state.readingVoiceURI})});
 let photoMount=null,autoPhotoMount=null;
 let rmsMount=null,welcomeMount=null,unmountScene=()=>{};
 let speedMount=null,planMount=null,libraryMount=null,libraryImportMount=null,oralMount=null;
@@ -321,7 +322,7 @@ function speakText(text,systemVoice=false,onEnded,fromOralCheck=false){syllableP
 // Voix de conteuse pour les histoires de l'école : phrase par phrase, avec expression et pauses (voir storyteller.js).
 function tellText(text,onEnded,nextText){syllablePlayer.stop();oralCheck.stop();phonemePlayer.stop();clearTimeout(nextWordTimer);nextWordTimer=null;lastReadingText=text;readingProgress=null;conversation.stop();stopTelling();reader.stop();const token=++tellToken;
  const surface=(st,msg)=>{speaking=st==='starting'||st==='speaking';readingPaused=st==='paused';voiceMessage=msg;if(st==='ended'||st==='error'){readingProgress=null;updateReadingCue(app,text,{charIndex:-1});}updateAudioSurface(app,{speaking,message:voiceMessage});app.querySelectorAll('[data-action="reading-pause"]').forEach(el=>{el.disabled=!speaking&&!readingPaused;el.textContent=readingPaused?'▶ Reprendre':'Ⅱ Pause';});};
- const device=()=>{if(token!==tellToken)return;tellHandle=tellSegments(text,{speakOne:(seg,cb)=>reader.speak(seg.text,{preferredURI:state.readingVoiceURI||'',natural:false,systemVoice:false,speed:seg.rate,pitch:seg.pitch,volume:seg.volume,onProgress:cb.onProgress,onState:cb.onState}),
+ const device=()=>{if(token!==tellToken)return;tellHandle=tellSegments(text,{speakOne:(seg,cb)=>reader.speak(seg.text,{deviceOnly:true,preferredURI:state.readingVoiceURI||'',natural:false,systemVoice:false,speed:seg.rate,pitch:seg.pitch,volume:seg.volume,onProgress:cb.onProgress,onState:cb.onState}),
   onProgress:event=>{readingProgress=event;updateReadingCue(app,text,event);},
   onState:(st,msg)=>{const why=adultTools&&storyVoiceIssue();surface(st,(msg||'Lecture en cours — voix de conteuse (appareil).')+(why?' · Voix en ligne non utilisée : '+(STORY_VOICE_REASONS[why.code]||'refus du serveur (code '+(why.status||'réseau')+')'):''));if(st==='ended')onEnded?.();}});};
  // 1) la vraie voix de conteuse (gardée dans l'appareil), 2) sinon la voix de conteuse de l'appareil

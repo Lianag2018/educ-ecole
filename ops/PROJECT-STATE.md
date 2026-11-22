@@ -1,3 +1,12 @@
+# Même narratrice partout — 22 novembre 2026 (America/Toronto)
+
+Branche claude/meme-narratrice-partout. Demande du parent : « même narrateur partout ». Constat : la narratrice douce préenregistrée (voix « coral ») ne lit que les textes du catalogue; tout autre texte (mots, consignes, retours, messages) passait par la voix de l'appareil.
+Livré : src/online-narrator.js, branché comme voix de secours du lecteur (reader) : pour un texte hors catalogue, l'app essaie d'abord la voix de conteuse en ligne (la même que les histoires de l'école; gardée dans l'appareil après la première fois), puis la voix de l'appareil si elle tarde (700 ms pour un mot ou une courte phrase, 2,5 s pour un texte plus long), est refusée ou échoue; la version en ligne arrivée en retard est gardée pour la fois suivante. Exclus : si le parent a choisi une voix de l'appareil dans « Voix de lecture » (la liste par défaut « Narratrice IA » reste le choix recommandé); les textes de moins de 2 ou plus de 600 caractères; la lecture phrase par phrase de repli des histoires (qui a déjà essayé la page entière).
+Condition : même que les histoires de l'école — tablette autorisée (« Appareil familial », 90 jours) et configuration serveur valide (EDUC_STORY_VOICE_CONFIG avec tarif). Sinon tout reste en voix de l'appareil, sans erreur.
+Coût : chaque texte distinct est payé une seule fois (gardé ensuite dans l'appareil), sous le plafond mensuel du code (40 $ CA).
+Preuves : 6 tests unitaires (voix en ligne prête, serveur muet, retard, exclusions, arrêt, erreur audio); suite 708 réussie; 4 suites navigateur réussies. NON vérifié : voix en ligne réelle (le test du parent n'a pas encore été rapporté), Safari/iPad (lecture déclenchée après une attente réseau : le navigateur peut la bloquer, auquel cas la voix de l'appareil prend le relais).
+En attente : résultat du test « Tester la voix en ligne » et écoute sur la tablette.
+
 # Redéploiement après la mise à jour du tarif de la conteuse — 22 novembre 2026 (America/Toronto)
 
 Branche claude/redeploiement-tarif. Le parent a approuvé les montants (taux CA/USD max 1,40; marge 10 %; frais 0,001 $; tarif voix 15 $ US par million de caractères; coûts fixes mensuels 1 $; validité jusqu'au 22 février 2027; plafond mensuel du code 40 $ CA) et a mis à jour EDUC_STORY_VOICE_CONFIG sur Vercel (capture : « Updated 1m ago », Production). Cette PR ne change aucun code : elle provoque le déploiement de production qui lit la nouvelle valeur.
