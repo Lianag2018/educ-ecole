@@ -39,3 +39,8 @@ test('la raison du repli est gardée pour l’affichage en mode adulte',async()=
  assert.deepEqual(storyVoiceIssue(),{status:503,code:'story_voice_unavailable',missing:undefined});
  resetStoryVoice();await getStoryAudio('Une autre page.','p1',{fetcher:async()=>{throw new TypeError('x');}});assert.equal(storyVoiceIssue().code,'network');resetStoryVoice();assert.equal(storyVoiceIssue(),null);
 });
+test('mémoire de la session : une page connue est disponible tout de suite',async()=>{
+ const {peekPage}=await import('../../src/story-voice.js');
+ resetStoryVoice();store.clear();assert.equal(peekPage('Une page mémoire.'),null);
+ await getStoryAudio('Une page mémoire.','p1',{fetcher:good});assert.ok(peekPage(' Une page mémoire. ').byteLength>1000);
+});

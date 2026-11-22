@@ -12,13 +12,16 @@ export async function clearPages(){try{await tx('readwrite',st=>st.clear());}cat
 const unb64=t=>{const s=atob(t),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u.buffer;};
 // Quand le serveur dit non (pas activé, pas connecté, budget), on cesse d'insister un moment : la lecture de secours est immédiate.
 const PAUSE_MS={401:600000,429:3600000,503:1800000,400:60000,net:120000};
+// Mémoire de la session : permet de jouer tout de suite (au moment du toucher) une page déjà connue, sans attendre la base de l'appareil.
+const mem=new Map();const norm=t=>String(t||'').normalize('NFC').trim();
+export const peekPage=text=>mem.get(norm(text))||null;
 let until=0,issue=null;
 export const storyVoiceIssue=()=>issue;
 export const storyVoicePaused=(now=Date.now())=>now<until;
 export const resetStoryVoice=()=>{until=0;issue=null;};
 export async function getStoryAudio(text,profileId,{fetcher=globalThis.fetch,now=Date.now}={}){
  const t=String(text||'').trim();if(t.length<2||t.length>600)return null;
- const hit=await cachedPage(t);if(hit)return {bytes:hit,cached:true};
+ const hit=await cachedPage(t);if(hit){mem.set(norm(t),hit);return {bytes:hit,cached:true};}
  if(storyVoicePaused(now()))return null;
  let r;try{r=await fetcher('/api/voice/story',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t,profileId})});}
  catch{until=now()+PAUSE_MS.net;issue={status:0,code:'network'};return null;}
@@ -26,7 +29,7 @@ export async function getStoryAudio(text,profileId,{fetcher=globalThis.fetch,now
  let data;try{data=await r.json();}catch{return null;}
  if(typeof data?.audio!=='string'||data.audioType!=='audio/mpeg')return null;
  const bytes=unb64(data.audio);if(bytes.byteLength<1000||bytes.byteLength>3000000)return null;
- await savePage(t,bytes);return {bytes,cached:false};
+ mem.set(norm(t),bytes);await savePage(t,bytes);return {bytes,cached:false};
 }
 // Prépare la page suivante en arrière-plan, pour qu'il n'y ait pas d'attente en tournant la page.
 export const prefetchStoryAudio=(text,profileId,opts)=>{if(text)getStoryAudio(text,profileId,opts).catch(()=>{});};

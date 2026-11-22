@@ -1,3 +1,11 @@
+# Son immédiat : la narratrice ne retarde plus la lecture — 22 novembre 2026 (America/Toronto)
+
+Branche claude/son-immediat-narratrice. Le parent demande s'il doit y avoir du son dans la Dictée magique (syllabes et lettres touchées). Oui : chaque syllabe et chaque lettre touchée est lue. Hypothèse : mon changement « Même narratrice partout » faisait attendre la voix en ligne jusqu'à 0,7 s avant de laisser la voix de l'appareil parler; Safari peut refuser une lecture démarrée après un délai (la lecture doit démarrer dans le geste de l'enfant, comme le note speech.js).
+Livré : OnlineNarrator ne fait plus aucune attente. Texte déjà connu de la narratrice douce (mémoire de la session, remplie par la lecture ou la préparation) : elle joue au moment du toucher. Texte inconnu : la voix de l'appareil parle immédiatement (synchrone) et la narratrice se prépare en arrière-plan pour la fois suivante. Mémoire de session : peekPage (story-voice.js).
+Conséquence honnête : la première lecture de chaque texte, après chaque rechargement de l'app, est encore à la voix de l'appareil (sauf textes du catalogue préenregistré et pages des histoires de l'école, qui attendent la narratrice).
+Preuves : tests unitaires (jeu synchrone, repli immédiat, exclusions, erreur audio, lecture refusée, arrêt, mémoire de session); suite 709 réussie; 4 suites navigateur réussies. NON vérifié : iPhone/iPad réels (cause réelle de l'absence de son non confirmée).
+En attente : le parent réessaie la Dictée magique après rechargement et dit si le son revient; sinon vérifier le commutateur silencieux/volume de l'appareil, puis chercher une autre cause.
+
 # Même narratrice partout — 22 novembre 2026 (America/Toronto)
 
 Branche claude/meme-narratrice-partout. Demande du parent : « même narrateur partout ». Constat : la narratrice douce préenregistrée (voix « coral ») ne lit que les textes du catalogue; tout autre texte (mots, consignes, retours, messages) passait par la voix de l'appareil.
