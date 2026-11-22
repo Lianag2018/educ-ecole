@@ -1,3 +1,9 @@
+# Redéploiement après l'ajout de EDUC_STORY_VOICE_CONFIG — 22 novembre 2026 (America/Toronto)
+
+Branche claude/redeploiement-voix. Capture du parent : la variable EDUC_STORY_VOICE_CONFIG (Production) n'a été ajoutée que « il y a 2 minutes »; les déploiements précédents ne la contenaient donc pas (cause probable du refus « story_voice_unavailable »). Cette PR ne change aucun code : elle provoque un déploiement de production qui lit la variable.
+Preuves : capture Vercel (liste des variables). À vérifier : statut Vercel du nouveau commit, puis « Tester la voix en ligne » sur la tablette.
+En attente : résultat du test; si « Il manque : … » persiste, ajouter l'élément nommé (EDUC_VOICE_CONFIG tarifs, clé de voix, registre) puis redéployer.
+
 # Récompenses lues par la conteuse; test de la voix en ligne plus précis — 22 novembre 2026 (America/Toronto)
 
 Branche claude/recompense-voix-conteuse. Constat du parent : (1) l'écran « Récompense obtenue » est lu par une voix différente de la narratrice douce; (2) le test « Tester la voix en ligne », une fois la tablette reconnue (connexion parent), répond « story_voice_unavailable » : le serveur n'est pas prêt.
