@@ -1,3 +1,10 @@
+# Redéploiement après la mise à jour du tarif de la conteuse — 22 novembre 2026 (America/Toronto)
+
+Branche claude/redeploiement-tarif. Le parent a approuvé les montants (taux CA/USD max 1,40; marge 10 %; frais 0,001 $; tarif voix 15 $ US par million de caractères; coûts fixes mensuels 1 $; validité jusqu'au 22 février 2027; plafond mensuel du code 40 $ CA) et a mis à jour EDUC_STORY_VOICE_CONFIG sur Vercel (capture : « Updated 1m ago », Production). Cette PR ne change aucun code : elle provoque le déploiement de production qui lit la nouvelle valeur.
+Preuves : capture Vercel. À vérifier : statut du déploiement, puis « Tester la voix en ligne » sur la tablette, puis lecture d'une histoire de l'école.
+Tarif de 15 $ US par million de caractères : estimation à vérifier sur la page de prix du fournisseur. Les montants expirent le 22 février 2027 (renouveler pricing.validUntil et pricingReviewedAt).
+En attente : résultat du test sur la tablette; qualité de la voix à l'écoute.
+
 # Voix de conteuse : tarif propre à EDUC_STORY_VOICE_CONFIG — 22 novembre 2026 (America/Toronto)
 
 Branche claude/tarif-voix-conteuse. Le test du parent affiche : « Il manque : EDUC_VOICE_CONFIG.rates.ttsMillionCharsMicros, EDUC_VOICE_CONFIG.pricing ». Les variables EDUC_OPENAI_API_KEY, EDUC_VOICE_CONFIG et EDUC_STORY_VOICE_CONFIG existent sur Vercel (Production); la tablette est reconnue par le serveur.
