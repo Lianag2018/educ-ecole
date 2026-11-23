@@ -11,6 +11,7 @@ import {createOralCheckEndpoint,oralCheckReady,OralCheckProvider} from './oral-c
 import {learningEndpoint,learningStore} from './learning.mjs';
 import {githubJobVerifier} from './github-job.mjs';
 import {familyDevice} from './family-device.mjs';
+import {soundsEndpoint} from './sounds.mjs';
 import {activateParent,provisionParent} from './parent-activation.mjs';
 import {installPlan,planMissions} from '../../src/school-plan.js';
 // Server-only: no env value, provider error or request body is logged.
@@ -46,6 +47,16 @@ export function runtime(env=process.env,fetcher=fetch){
   return p.schoolPlans.flatMap(plan=>planMissions(plan).missions.flatMap(m=>m.items)).find(q=>q.id===id);
  },provider:new TurnProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher})});
  let storyConfig;try{storyConfig=JSON.parse(env.EDUC_STORY_VOICE_CONFIG||'null');}catch{}
+ const enc=encodeURIComponent;
+ const soundStore={
+  async list(parent){return (await sb(`/rest/v1/famille_sounds?parent_id=eq.${enc(parent)}&select=sound_id,updated_at&order=sound_id`)).map(r=>({id:r.sound_id,updatedAt:r.updated_at}));},
+  async settings(parent){const rows=await sb(`/rest/v1/famille_sound_settings?parent_id=eq.${enc(parent)}&select=ms`);return rows[0]?.ms||{};},
+  async get(parent,id){const rows=await sb(`/rest/v1/famille_sounds?parent_id=eq.${enc(parent)}&sound_id=eq.${enc(id)}&select=data_b64,updated_at`);return rows[0]?{audio:rows[0].data_b64,updatedAt:rows[0].updated_at}:null;},
+  async put(parent,id,audio){return sb('/rest/v1/rpc/famille_put_sound',{p_parent:parent,p_id:id,p_data:audio});},
+  async remove(parent,id){await sb('/rest/v1/rpc/famille_delete_sound',{p_parent:parent,p_id:id});},
+  async saveSettings(parent,ms){await sb('/rest/v1/rpc/famille_put_sound_settings',{p_parent:parent,p_ms:ms});}
+ };
+ const sounds=soundsEndpoint({auth,store:soundStore,origin});
  const storyVoice=createStoryVoiceEndpoint({auth,storyConfig,voiceConfig:c,ledger,apiKey:env.EDUC_OPENAI_API_KEY,fetcher});
  const learning=learningEndpoint({auth,profiles,config:c,ledger,store:memory,apiKey:env.EDUC_OPENAI_API_KEY,fetcher,parentId:env.EDUC_PARENT_ID,verifyJob:githubJobVerifier({fetcher})});
  const oralCheck=createOralCheckEndpoint({auth,profiles,config:c,ledger,provider:env.EDUC_OPENAI_API_KEY?new OralCheckProvider({apiKey:env.EDUC_OPENAI_API_KEY,fetchImpl:fetcher}):null});
@@ -78,6 +89,10 @@ export function runtime(env=process.env,fetcher=fetch){
     if(!parent&&(all||!await device.authenticate(req)))return {status:401,body:{code:'parent_login_required'}};
     return {status:200,headers:{'Set-Cookie':await device.revoke(req,all)},body:{ok:true}};
    }catch{return {status:503,body:{code:'device_unavailable'}};}
+  }
+  if(req.path.startsWith('/api/sounds/')){
+   if(!authConfigured())return {status:503,body:{code:'sounds_unavailable'}};
+   return sounds(req);
   }
   if(req.path.startsWith('/api/learning/'))return learning(req);
   if(req.path.startsWith('/api/plans/')){
