@@ -3,7 +3,7 @@
 // la version isolée (sans les voyelles autour) : « chhhh », « ssss », « mmmm ». Les originaux restent inchangés (voir solo-sources.json).
 export const SOLO_PHONEMES=Object.freeze(['ch','s','z','j','f','v','m','n','r']);
 export const phonemeSrc=id=>SOLO_PHONEMES.includes(id)?`/icons/phonemes/${id}-solo.mp3`:`/icons/phonemes/${id}.mp3`;
-import {stretchSamples,trimSilence,normalize,defaultStretchMs} from './sound-stretch.js';
+import {stretchSamples,trimSilence,normalize,defaultStretchMs,isStretchable} from './sound-stretch.js';
 import {getRecording,stretchMsFor} from './sound-bank.js';
 // Lecture : les sons se jouent étirés (environ 1 s) quand le navigateur sait faire du Web Audio; sinon on joue l'enregistrement tel quel.
 // Un enregistrement de la famille (laboratoire des sons) remplace celui de l'application.
@@ -21,7 +21,7 @@ export class PhonemePlayer {
  async prepare(id,ms){
   const {samples,rate,custom}=await this.decode(id);
   const base=custom?normalize(trimSilence(samples,rate)):samples;
-  const target=custom?0:(ms??stretchMsFor(id,defaultStretchMs(id)));
+  const target=custom||!isStretchable(id)?0:(ms??stretchMsFor(id,defaultStretchMs(id)));
   return {out:target>0?stretchSamples(base,rate,target):Float32Array.from(base),rate};
  }
  async playWebAudio(id,epoch,ms){

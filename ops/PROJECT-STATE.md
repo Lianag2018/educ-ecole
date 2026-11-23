@@ -1,3 +1,11 @@
+# Voyelles sans répétition (« e-e-e ») — 23 novembre 2026 (America/Toronto)
+
+Branche claude/sons-voyelles-sans-repetition. Le parent entend une répétition du « e » quand il touche la lettre dans les histoires (et dans les autres histoires), et pointe la page « Les sons » (durée « 1,0 s »).
+Cause : le lecteur de sons (phoneme-player + sound-stretch) étire chaque son enregistré à environ 1 s en répétant le milieu (30 % à 70 %) avec fondu. Les voyelles sont courtes (e 0,47 s, ou 0,55 s, a 0,53 s, i 0,37 s) : le milieu répété 2 à 3 fois s'entend « e-e-e ». Convient aux sons continus (chhhh, ssss, mmmm), pas aux voyelles.
+Livré : seuls ch, s, z, j, f, v, m, n, r, l sont étirés (STEADY_SOUNDS). Toutes les voyelles (e, é, è, eu, a, i, o, u, ou, on, an, in, un, ui, y, w…) et les consonnes qui éclatent (p b t d k g) sont jouées telles qu'enregistrées; le réglage de durée a disparu pour elles dans « Les sons » et un ancien réglage enregistré est ignoré. Les enregistrements de la famille ne sont jamais étirés (inchangé).
+Preuves : test unitaire (voyelles non étirables, consonnes continues à 1 s); suite 709 réussie; 4 suites navigateur réussies. NON écouté : la correction de l'oreille reste à confirmer par le parent sur l'appareil. Diagnostic fait par calcul (durées des fichiers, algorithme), pas à l'écoute.
+En attente : le parent retouche le « e » dans une histoire et dit si la répétition a disparu; si elle reste, vérifier le mot « e » lu par la voix de l'appareil et l'enchaînement « Bravo » + page suivante.
+
 # Son immédiat : la narratrice ne retarde plus la lecture — 22 novembre 2026 (America/Toronto)
 
 Branche claude/son-immediat-narratrice. Le parent demande s'il doit y avoir du son dans la Dictée magique (syllabes et lettres touchées). Oui : chaque syllabe et chaque lettre touchée est lue. Hypothèse : mon changement « Même narratrice partout » faisait attendre la voix en ligne jusqu'à 0,7 s avant de laisser la voix de l'appareil parler; Safari peut refuser une lecture démarrée après un délai (la lecture doit démarrer dans le geste de l'enfant, comme le note speech.js).
