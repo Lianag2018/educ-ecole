@@ -2,7 +2,10 @@
 // On garde le début et la fin du son tels quels et on répète le milieu avec un fondu enchaîné : pas de changement de hauteur ni de « robot ».
 export const STOP_SOUNDS=Object.freeze(['p','b','t','d','k','g']);
 export const DEFAULT_STRETCH_MS=1000,MIN_STRETCH_MS=300,MAX_STRETCH_MS=2000;
-export const isStretchable=id=>!STOP_SOUNDS.includes(id);
+// Seuls les sons continus et réguliers (« chhhh », « ssss », « mmmm ») supportent d'être étirés en répétant leur milieu.
+// Une voyelle (e, ou, a, i, on…) est courte et change de timbre : la répéter donne « e-e-e ». Elle est donc jouée telle qu'enregistrée.
+export const STEADY_SOUNDS=Object.freeze(['ch','s','z','j','f','v','m','n','r','l']);
+export const isStretchable=id=>STEADY_SOUNDS.includes(id);
 export const defaultStretchMs=id=>isStretchable(id)?DEFAULT_STRETCH_MS:0;
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 // Retire le silence au début et à la fin (utile pour les enregistrements de la famille).

@@ -16,7 +16,8 @@ test('un son déjà long reste tel quel; les bornes de durée sont respectées',
 });
 test('les consonnes qui éclatent (p b t d k g) ne s\'étirent pas',()=>{
  for(const id of STOP_SOUNDS){assert.equal(isStretchable(id),false);assert.equal(defaultStretchMs(id),0);}
- for(const id of ['ch','s','z','a','ou','on'])assert.equal(defaultStretchMs(id),1000);
+ for(const id of ['ch','s','z','m','r'])assert.equal(defaultStretchMs(id),1000);
+ for(const id of ['a','e','i','ou','on','an','eacute','y','w'])assert.equal(isStretchable(id),false,id+' est une voyelle : jouée telle qu’enregistrée, sans répétition');
 });
 test('on retire le silence autour d\'un enregistrement et on le normalise',()=>{
  const body=noise(200,0.5),src=new Float32Array(RATE);src.set(body,Math.round(RATE*0.3));
